@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rmbank.supervision.dao.StatisticMapper">
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.StatisticModel">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="org_id" jdbcType="INTEGER" property="orgId" />
+    <result column="status" jdbcType="INTEGER" property="status" />
+    <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="totalCount" jdbcType="INTEGER" property="totalCount" />
+    <result column="comCount" jdbcType="INTEGER" property="comCount" />
+    <result column="unComCount" jdbcType="INTEGER" property="unComCount" />
+    <result column="overUnComCount" jdbcType="INTEGER" property="overUnComCount" />
+    <result column="overComCount" jdbcType="INTEGER" property="overComCount" /> 
+  </resultMap> 
+  <select id="loadTotalCount"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
+   
+	SELECT DISTINCT
+		(SELECT count(t1.id)
+	FROM
+		t_item t1
+	WHERE t1.`status` != 9 and t1.`status` != 0
+	AND	t1.item_type = 0) as totalCount,
+	
+		(SELECT count(t2.id)
+	FROM
+		t_item t2
+	WHERE t2.`status` = 4
+	AND	t2.item_type = 0 ) as comCount,
+	
+		(SELECT count(*)
+	FROM
+		t_item
+	WHERE (`status` = 1 or `status` = 2)
+	AND	item_type = 0 ) as unComCount,
+	
+		(SELECT count(*)
+	FROM
+		t_item
+	WHERE `status` = 3
+	AND	item_type = 0 ) as overUnComCount,
+	
+		(SELECT count(*)
+	FROM
+		t_item
+	WHERE `status` = 5
+	AND	item_type = 0 ) as overComCount from t_item
+  </select> 
+  
+  <select id="loadTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
+  	SELECT
+		t.`status` as status,o.`name` as org_name,COUNT(t.id) as totalCount,
+
+		(SELECT count(t1.id)
+		FROM
+			t_item t1
+		WHERE t1.`status` = 4
+		AND	t1.item_type = 0 AND t1.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t1.supervision_org_id = o.id
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+		) AS comCount,
+		(SELECT count(t2.id)
+		FROM
+			t_item t2
+		WHERE (t2.`status` = 1 or t2.`status` = 2 )
+		AND	t2.item_type = 0 AND t2.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t2.supervision_org_id = o.id
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+		) AS unComCount,
+		
+		(SELECT count(t3.id)
+		FROM
+			t_item t3
+		WHERE  t3.`status` = 3 
+		AND	t3.item_type = 0 AND t3.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t3.supervision_org_id = o.id
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+		) AS overUnComCount,
+		(SELECT count(t4.id)
+		FROM
+			t_item t4
+		WHERE  t4.`status` = 5
+		AND	t4.item_type = 0 AND t4.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t4.supervision_org_id = o.id
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+		) AS overComCount
+	FROM
+		t_item t
+	LEFT JOIN t_org o ON t.supervision_org_id = o.id
+	WHERE t.`status` != 9 and t.`status` != 0 
+		AND	t.item_type = 0
+	<if test="supervisionTypeId != null ">
+		AND	t.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER }
+	</if> 
+  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+     </if>
+	GROUP BY o.`name` 
+  </select>  
+  
+   
+   
+  <select id="loadBranchTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
+  	SELECT
+		t.`status` as status, org.name  as org_name,COUNT(t.id) as totalCount,
+
+		(SELECT count(t1.id)
+		FROM
+			t_item t1
+		LEFT JOIN t_org o1 on t1.preparer_org_id = o1.id
+		WHERE t1.`status` = 4
+		AND	t1.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t1.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t1.supervision_org_id = org.id AND o1.org_type = 47) AS comCount,
+		(SELECT count(t2.id)
+		FROM
+			t_item t2
+		LEFT JOIN t_org o2 on t2.preparer_org_id = o2.id
+		WHERE (t2.`status` = 1 or t2.`status` = 2 or t2.`status` = 0 )
+		AND	t2.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t2.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t2.supervision_org_id = org.id AND o2.org_type = 47) AS unComCount,
+		
+		(SELECT count(t3.id)
+		FROM
+			t_item t3
+		LEFT JOIN t_org o3 on t3.preparer_org_id = o3.id
+		WHERE  t3.`status` = 3 
+		AND	t3.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t3.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t3.supervision_org_id = org.id AND o3.org_type = 47) AS overUnComCount,
+		(SELECT count(t4.id)
+		FROM
+			t_item t4
+		LEFT JOIN t_org o4 on t4.preparer_org_id = o4.id
+		WHERE  t4.`status` = 5
+		AND	t4.item_type = 1
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t4.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			 and t4.supervision_org_id = org.id AND o4.org_type = 47) AS overComCount
+	FROM
+		t_item t
+	LEFT JOIN t_org  o on t.preparer_org_id = o.id
+	LEFT JOIN t_org org on t.supervision_org_id = org.id
+	WHERE t.`status` != 9   AND	t.item_type = 1 
+		AND o.org_type = 47
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+		<if test="preparerOrgId != null ">
+			AND	t.preparer_org_id = #{preparerOrgId,jdbcType=INTEGER }
+		</if>  
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	GROUP BY org.name
+	ORDER BY org.org_type asc,org.id asc
+  </select>  
+  <select id="loadSupportTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
+  	SELECT
+		 t.`status`  as status,org.name as org_name,count(t.id) as totalCount,
+
+		(SELECT count(t1.id)
+		FROM
+			t_item t1
+		LEFT JOIN t_org o1 on t1.preparer_org_id = o1.id
+		WHERE t1.`status` = 4
+		AND	t1.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t1.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t1.supervision_org_id = org.id AND o1.org_type = 43) AS comCount,
+		(SELECT count(t2.id)
+		FROM
+			t_item t2
+		LEFT JOIN t_org o2 on t2.preparer_org_id = o2.id
+		WHERE (t2.`status` = 1 or t2.`status` = 2 or t2.`status` = 0 )
+		AND	t2.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t2.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t2.supervision_org_id = org.id AND o2.org_type = 43) AS unComCount,
+		
+		(SELECT count(t3.id)
+		FROM
+			t_item t3
+		LEFT JOIN t_org o3 on t3.preparer_org_id = o3.id
+		WHERE  t3.`status` = 3 
+		AND	t3.item_type = 1 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t3.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			AND t3.supervision_org_id = org.id AND o3.org_type = 43) AS overUnComCount,
+		(SELECT count(t4.id)
+		FROM
+			t_item t4
+		LEFT JOIN t_org o4 on t4.preparer_org_id = o4.id
+		WHERE  t4.`status` = 5
+		AND	t4.item_type = 1
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t4.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if> 
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+			 and t4.supervision_org_id = org.id AND o4.org_type = 43) AS overComCount
+	FROM
+		t_item t
+	LEFT JOIN t_org o ON t.preparer_org_id = o.id
+	LEFT JOIN t_org org on t.supervision_org_id = org.id
+	WHERE  t.`status` != 9  
+		AND	t.item_type = 1
+		AND o.org_type = 43 
+		<if test="supervisionTypeId != null and supervisionTypeId >0">
+			AND t.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } 
+		</if>
+	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
+	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	GROUP BY org.name
+  </select>  
+</mapper>

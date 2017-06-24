@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.User" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="pwd" property="pwd" jdbcType="VARCHAR" />
+    <result column="salt" property="salt" jdbcType="VARCHAR" />
+    <result column="used" property="used" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name,account, pwd, salt, used
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+
+  <select id="getUserByAccount" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.User" >
+    select <include refid="Base_Column_List" /> 
+    from t_user
+    where 1 = 1
+    <if test="account != null">
+      and account = #{account,jdbcType=VARCHAR}
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.User" useGeneratedKeys="true" keyProperty="id">
+    insert into t_user (id, name, account,pwd, 
+      salt, used)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
+      #{salt,jdbcType=VARCHAR}, #{used,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.User" >
+    insert into t_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="pwd != null" >
+        pwd,
+      </if>
+      <if test="salt != null" >
+        salt,
+      </if>
+      <if test="used != null" >
+        used,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="used != null" >
+        #{used,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.User" >
+    update t_user
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="pwd != null" >
+        pwd = #{pwd,jdbcType=VARCHAR},
+      </if>
+      <if test="salt != null" >
+        salt = #{salt,jdbcType=VARCHAR},
+      </if>
+      <if test="used != null" >
+        used = #{used,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.User" >
+    update t_user
+    set account = #{account,jdbcType=VARCHAR}, 
+    name = #{name,jdbcType=VARCHAR},
+      pwd = #{pwd,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      used = #{used,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  
+  
+  <sql id="sql_query">
+  	from t_user as user
+  	where 1=1 
+	<if test="searchName != null and searchName != ''">
+		and (
+			user.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			or user.account like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+  </sql>  
+  
+  <select id="getUserList" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.User">
+	SELECT u.* , 
+	(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id`
+	WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id`
+	WHERE ur.`user_id` = u.id) AS roleName 	
+	FROM t_user u
+	<if test="searchName != null and searchName != ''">
+	 WHERE 1=1 and (
+			u.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			or u.account like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+	order by u.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>
+  
+  <!-- <select id="getUserList" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.User">
+  	select <include refid="Base_Column_List" />
+   	<include refid="sql_query" />
+	order by user.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select> -->
+  <select id="getUserCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.User">
+  	select count(*) 
+  	<include refid="sql_query"></include>
+  </select>
+  <select id="getUserById" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.User" >
+   SELECT u.* , 
+	(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id`
+	WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id`
+	WHERE ur.`user_id` = u.id) AS roleName
+	FROM t_user u
+	where u.id =  #{id,jdbcType=INTEGER} 
+  </select>
+  <select id="getExistUser" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.User" >
+    select <include refid="Base_Column_List" />			
+	from t_user 
+	where 1=1	
+	<if test="name != null">
+		and name = #{name,jdbcType=VARCHAR} 
+	</if> 
+	<if test="account != null">
+		or account = #{account,jdbcType=VARCHAR} 
+	</if> 
+  </select>
+  <delete id="deleteUserById" parameterType="java.lang.Integer">
+    delete from t_user
+    where ID = #{id,jdbcType=INTEGER}   
+  </delete>
+  <update id="updateUserUsedById"> 
+  	update t_user set used=#{used,jdbcType=INTEGER} 
+  	where id=#{id,jdbcType=INTEGER}
+  </update>
+  
+  
+ <select id="getUserListByLgUser" parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
+  	SELECT u.*,(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id` WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id` WHERE ur.`user_id` = u.id) AS roleName	
+  	FROM t_user AS u WHERE u.id IN(
+	  SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id IN
+	  (SELECT uo.org_id FROM `t_user_org` AS uo WHERE uo.user_id =#{id,jdbcType=INTEGER})
+	)
+	
+  </select>
+  <select id="getUserCountByOrgId" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.User">
+  	select count(*)	FROM t_user AS u WHERE u.id IN(
+	  SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id IN
+	  (SELECT uo.org_id FROM `t_user_org` AS uo WHERE uo.user_id =#{id,jdbcType=INTEGER})
+	)
+  </select>
+  
+  
+  <select id="getUserByOrgids" resultMap="BaseResultMap">
+  	SELECT u.*,(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id` WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id` WHERE ur.`user_id` = u.id) AS roleName	
+	FROM t_user AS u WHERE u.id IN(
+	SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>  
+	)
+  </select>
+  <select id="getUserListByOrgId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT u.*,(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id` WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id` WHERE ur.`user_id` = u.id) AS roleName	
+	FROM t_user AS u WHERE u.id IN(
+		SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id =#{orgId,jdbcType=INTEGER} 
+	)
+	order by u.id DESC 
+  </select>
+  
+</mapper>

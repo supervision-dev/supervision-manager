@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.RoleMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.Role" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_role
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_role
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.Role" >
+    insert into t_role (id, name, description) 
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.Role" >
+    insert into t_role
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.Role" >
+    update t_role
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.Role" >
+    update t_role
+    set name = #{name,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <sql id="sql_query">
+  	from t_role as role
+  	where 1=1 
+	<if test="searchName != null and searchName != ''">
+		and (role.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		OR role.description like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')		
+		)
+	</if>
+  </sql>  
+  <select id="getRoleList" parameterType="com.rmbank.supervision.model.Role" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+  	<include refid="sql_query" />
+	order by role.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>
+  <select id="getRoleCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.Role">
+  	select count(*) 
+  	<include refid="sql_query"></include>
+  </select>
+  <select id="getRoleById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> 
+  	from t_role r
+	where r.id =  #{id,jdbcType=INTEGER} 
+  </select>
+  <select id="getExistRole" parameterType="com.rmbank.supervision.model.Role" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" /> 
+  	from t_role r where 1=1
+  	<if test="name != null">
+		and r.name = #{name,jdbcType=VARCHAR} 
+	</if>
+  </select>
+  <delete id="deleteRoleById" parameterType="java.lang.Integer">
+    delete from t_role
+    where ID = #{id,jdbcType=INTEGER}   
+  </delete>
+</mapper>

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.ResourceConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.ResourceConfig" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="moudle_id" property="moudleId" jdbcType="INTEGER" />
+    <result column="xtype" property="xtype" jdbcType="INTEGER" />
+    <result column="resource" property="resource" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, moudle_id, xtype, resource
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_resource
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_resource
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.ResourceConfig" >
+    insert into t_resource (id, name, xtype, 
+      resource)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{xtype,jdbcType=INTEGER}, 
+      #{resource,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.ResourceConfig" >
+    insert into t_resource
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="moudleId != null" >
+        moudle_id,
+      </if>
+      <if test="xtype != null" >
+        xtype,
+      </if>
+      <if test="resource != null" >
+        resource,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleId != null" >
+       #{moudleId,jdbcType=INTEGER},
+      </if>
+      <if test="xtype != null" >
+        #{xtype,jdbcType=INTEGER},
+      </if>
+      <if test="resource != null" >
+        #{resource,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.ResourceConfig" >
+    update t_resource
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleId != null" >
+        moudle_id = #{moudleId,jdbcType=INTEGER},
+      </if>
+      <if test="xtype != null" >
+        xtype = #{xtype,jdbcType=INTEGER},
+      </if>
+      <if test="resource != null" >
+        resource = #{resource,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.ResourceConfig" >
+    update t_resource
+    set name = #{name,jdbcType=VARCHAR},
+      xtype = #{xtype,jdbcType=INTEGER},
+      resource = #{resource,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="sql_query">
+  	from t_resource as resource
+  	where 1=1   	
+	<if test="searchName != null and searchName != ''">
+		and (resource.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			OR resource.resource like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')		
+		)
+	</if>
+  </sql>  
+  <select id="getResourceList" parameterType="com.rmbank.supervision.model.ResourceConfig" resultMap="BaseResultMap">
+  	select r.*, f.name AS functionName   	
+  	FROM t_resource r, t_function f WHERE r.`moudle_id`=f.`id`
+  	<if test="searchName != null and searchName != ''">
+		and (r.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			OR r.resource like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')				
+		)
+	</if>  	
+	order by r.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>
+  <select id="getResourceCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.ResourceConfig">
+  	select count(*) 
+  	<include refid="sql_query"></include>
+  </select>
+  <select id="getResourceById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select r.*, f.name AS functionName   	
+  	FROM t_resource r, t_function f 
+  	WHERE r.`moudle_id`=f.`id`
+  	and r.id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getExistRresource" parameterType="com.rmbank.supervision.model.ResourceConfig" resultMap="BaseResultMap">
+  	SELECT <include refid="Base_Column_List" />
+  	FROM `t_resource` re WHERE 1=1
+  	<if test="name != null">
+		and re.name = #{name,jdbcType=VARCHAR} 
+	</if>
+	<if test="resource != null">
+		and re.resource = #{resource,jdbcType=VARCHAR} 
+	</if>  	
+  </select>
+  <select id="getResourceListBymoudleId" parameterType="com.rmbank.supervision.model.ResourceConfig" resultMap="BaseResultMap">
+  	SELECT r.*,f.name AS functionName 
+  	FROM t_resource r, t_function f 
+  	where moudle_id=#{moudleId,jdbcType=VARCHAR}
+  </select>
+  <select id="getResourceConfigsByUserRoles" parameterType="java.util.List" resultMap="BaseResultMap">
+  
+  select DISTINCT r.* from t_role_permission rp
+	left join t_permission p on rp.permission_id = p.id
+	left join t_permission_resource pr on p.id = pr.permission_id
+	left join t_resource r on pr.resource_id = r.id
+	where rp.role_id in 
+<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  #{item.id,jdbcType=INTEGER}  
+	</foreach>  
+  	<!-- SELECT r.*,f.`name` AS functionName,f.`parent_id` AS parentId,f.url,
+	(SELECT ff.name FROM t_function ff WHERE ff.id = f.`parent_id`)AS parentName
+	FROM t_role_resource rr
+	LEFT JOIN t_resource r ON rr.`resource_id` = r.`id`
+	LEFT JOIN t_function f ON r.`moudle_id` = f.`id`
+	WHERE rr.`role_id` in
+	<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+	  #{item.id,jdbcType=INTEGER}  
+	</foreach>  
+	AND r.name IS NOT NULL
+	ORDER BY f.`sort` ASC -->
+  </select>
+</mapper>

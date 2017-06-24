@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.FunctionMenuMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.FunctionMenu" >
+    <id column="id" property="id" jdbcType="INTEGER" /> 
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="parent_id" property="parentId" jdbcType="INTEGER" />
+    <result column="leaf" property="leaf" jdbcType="INTEGER" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="used" property="used" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id,name, parent_id, leaf, url, sort, used
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_function
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_function
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.FunctionMenu" >
+    insert into t_function (id,name, parent_id, leaf, 
+      url, sort, used)
+    values (#{id,jdbcType=INTEGER},#{name,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{leaf,jdbcType=INTEGER}, 
+      #{url,jdbcType=VARCHAR}, #{sort,jdbcType=INTEGER}, #{used,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.FunctionMenu" >
+    insert into t_function
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="parentId != null" >
+        parent_id,
+      </if>
+      <if test="leaf != null" >
+        leaf,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="used != null" >
+        used,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="leaf != null" >
+        #{leaf,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="used != null" >
+        #{used,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.FunctionMenu" >
+    update t_function
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null" >
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="leaf != null" >
+        leaf = #{leaf,jdbcType=INTEGER},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=INTEGER},
+      </if>
+      <if test="used != null" >
+        used = #{used,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.FunctionMenu" >
+    update t_function
+    set name = #{name,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      leaf = #{leaf,jdbcType=INTEGER},
+      url = #{url,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=INTEGER},
+      used = #{used,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <!-- 超级管理员获取资源 -->
+   <select id="getFunctionMenuByCondition" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.FunctionMenu" >
+    select
+    <include refid="Base_Column_List" /> 
+    from t_function 
+    where  used = 1
+    <if test="parentId != null">
+      AND  parent_id = #{parentId,jdbcType=INTEGER}
+    </if> 
+    order by sort asc
+  </select>
+  
+  <sql id="sql_query">
+	from t_function as fun
+	where 1=1
+	<if test="parentId != null">
+		and fun.parent_id=#{parentId,jdbcType=INTEGER}
+	</if>
+	<if test="searchName != null and searchName != ''">
+		and (fun.name like
+		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		)
+	</if>
+  </sql>
+  <select id="getFunctionMenuByParentId" parameterType="com.rmbank.supervision.model.FunctionMenu" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+	<include refid="sql_query" /> 
+  </select>
+  <select id="getFunctionMenuList" parameterType="com.rmbank.supervision.model.FunctionMenu" resultMap="BaseResultMap">
+  	select
+  	<include refid="Base_Column_List" />
+	<include refid="sql_query" /> 
+  </select>
+  <select id="getFunctionMenusById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+  	from t_function where id=#{id,jdbcType=INTEGER}
+  </select>
+  <select id="getFunctionByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  
+  	SELECT DISTINCT f.*
+    FROM 
+    (SELECT r.resource src,p.moudle_id
+    FROM t_resource r
+    LEFT JOIN t_permission_resource pr ON r.id=pr.resource_id
+    LEFT JOIN t_permission p ON pr.permission_id = p.id
+    LEFT JOIN t_role_permission rp ON pr.permission_id=rp.permission_id
+    LEFT JOIN t_user_role ur ON ur.role_id=rp.role_id
+    WHERE ur.user_id=#{id,jdbcType=INTEGER} ) AS  sou 
+     LEFT JOIN  t_function f  ON sou.src=f.url AND f.id = sou.moudle_id
+    WHERE   (sou.src IS NOT NULL AND f.leaf=1) OR (sou.src IS NULL AND f.leaf=0) 
+    ORDER BY parent_id,sort 
+  </select>
+</mapper>

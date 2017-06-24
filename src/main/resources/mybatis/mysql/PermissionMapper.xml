@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.Permission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="moudle_id" property="moudleId" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, moudle_id, description
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select p.*,f.name as fName 
+    from t_permission as p 
+    LEFT JOIN `t_function` AS f ON p.`moudle_id`=f.`id`       
+    where p.id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.Permission" >
+    insert into t_permission (id, name, moudle_id, 
+      description)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{moudleId,jdbcType=INTEGER}, 
+      #{description,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.Permission" >
+    insert into t_permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="moudleId != null" >
+        moudle_id,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleId != null" >
+        #{moudleId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.Permission" >
+    update t_permission
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="moudleId != null" >
+        moudle_id = #{moudleId,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.Permission" >
+    update t_permission
+    set name = #{name,jdbcType=VARCHAR},
+      moudle_id = #{moudleId,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getPermissionList" parameterType="com.rmbank.supervision.model.Permission"  resultMap="BaseResultMap">
+  	SELECT p.*,f.name AS fName FROM `t_permission` AS p
+	LEFT JOIN `t_function` AS f ON f.id=p.moudle_id
+	where 1=1 
+	<if test="searchName != null and searchName != ''">
+		and (p.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		OR p.description like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')		
+		)
+	</if>
+	order by p.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>
+   <select id="getPermissionCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.Permission">
+  	select count(*) FROM `t_permission` as p
+  	where 1=1 
+	<if test="searchName != null and searchName != ''">
+		and (p.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		OR p.description like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')		
+		)
+	</if>
+  </select>
+  <select id="getExistPermission"  parameterType="com.rmbank.supervision.model.Permission" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+	from t_permission where name=#{name,jdbcType=VARCHAR}
+  </select>
+</mapper>

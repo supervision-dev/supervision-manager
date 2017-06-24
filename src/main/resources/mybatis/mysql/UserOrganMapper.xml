@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.UserOrganMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.UserOrgan" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="org_id" property="orgId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="post_id" property="postId" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, user_id, org_id, post_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_org
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_user_org
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.UserOrgan" >
+    insert into t_user_org (id, user_id, org_id, post_id
+      )
+    values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{orgId,jdbcType=INTEGER}, #{postId,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.UserOrgan" >
+    insert into t_user_org
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="postId != null" >
+        post_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        #{postId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.UserOrgan" >
+    update t_user_org
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=INTEGER},
+      </if>
+      <if test="postId != null" >
+        post_id = #{postId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.UserOrgan" >
+    update t_user_org
+    set user_id = #{userId,jdbcType=INTEGER},
+      org_id = #{orgId,jdbcType=INTEGER},
+      post_id = #{postId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getOrgsByUserId" resultType="com.rmbank.supervision.model.Organ" parameterType="java.lang.Integer" >
+  	SELECT o.* FROM t_user_org uo
+     LEFT JOIN t_org o ON uo.org_id = o.id
+     WHERE 1 = 1 
+      AND  uo.user_id =#{userId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByUserId" parameterType="java.lang.Integer">
+  	 delete from t_user_org
+    where user_id = #{userId,jdbcType=INTEGER}
+  </delete>
+  <select id="getPostsByUserId" parameterType="java.lang.Integer" resultType="com.rmbank.supervision.model.Meta">
+  	SELECT m.* FROM t_user_org uo
+     LEFT JOIN t_meta m ON uo.Post_id = m.id
+     WHERE 1 = 1 
+      AND  uo.user_id =#{userId,jdbcType=INTEGER}
+  </select>
+  <select id="getUserOrgIdsByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+  	SELECT uo.org_id FROM t_user_org AS uo WHERE uo.user_id =#{id,jdbcType=INTEGER}
+  </select>
+</mapper>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.ItemProcessFileMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.ItemProcessFile" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_process_Id" property="itemProcessId" jdbcType="INTEGER" />
+    <result column="file_name" property="fileName" jdbcType="VARCHAR" />
+    <result column="file_ext" property="fileExt" jdbcType="VARCHAR" />
+    <result column="file_path" property="filePath" jdbcType="VARCHAR" />
+    <result column="preparer_org_id" property="preparerOrgId" jdbcType="INTEGER" />
+    <result column="preparer_id" property="preparerId" jdbcType="INTEGER" />
+    <result column="preparer_time" property="preparerTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_process_Id, file_name, file_ext, file_path, preparer_org_id, preparer_id, 
+    preparer_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_item_process_file
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_item_process_file
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.ItemProcessFile" >
+    insert into t_item_process_file (id, item_process_Id, file_name, 
+      file_ext, file_path, preparer_org_id, 
+      preparer_id, preparer_time)
+    values (#{id,jdbcType=INTEGER}, #{itemProcessId,jdbcType=INTEGER}, #{fileName,jdbcType=VARCHAR}, 
+      #{fileExt,jdbcType=VARCHAR}, #{filePath,jdbcType=VARCHAR}, #{preparerOrgId,jdbcType=INTEGER}, 
+      #{preparerId,jdbcType=INTEGER}, #{preparerTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.ItemProcessFile" >
+    insert into t_item_process_file
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemProcessId != null" >
+        item_process_Id,
+      </if>
+      <if test="fileName != null" >
+        file_name,
+      </if>
+      <if test="fileExt != null" >
+        file_ext,
+      </if>
+      <if test="filePath != null" >
+        file_path,
+      </if>
+      <if test="preparerOrgId != null" >
+        preparer_org_id,
+      </if>
+      <if test="preparerId != null" >
+        preparer_id,
+      </if>
+      <if test="preparerTime != null" >
+        preparer_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemProcessId != null" >
+        #{itemProcessId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileExt != null" >
+        #{fileExt,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="preparerOrgId != null" >
+        #{preparerOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="preparerId != null" >
+        #{preparerId,jdbcType=INTEGER},
+      </if>
+      <if test="preparerTime != null" >
+        #{preparerTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.ItemProcessFile" >
+    update t_item_process_file
+    <set >
+      <if test="itemProcessId != null" >
+        item_process_Id = #{itemProcessId,jdbcType=INTEGER},
+      </if>
+      <if test="fileName != null" >
+        file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="fileExt != null" >
+        file_ext = #{fileExt,jdbcType=VARCHAR},
+      </if>
+      <if test="filePath != null" >
+        file_path = #{filePath,jdbcType=VARCHAR},
+      </if>
+      <if test="preparerOrgId != null" >
+        preparer_org_id = #{preparerOrgId,jdbcType=INTEGER},
+      </if>
+      <if test="preparerId != null" >
+        preparer_id = #{preparerId,jdbcType=INTEGER},
+      </if>
+      <if test="preparerTime != null" >
+        preparer_time = #{preparerTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.ItemProcessFile" >
+    update t_item_process_file
+    set item_process_Id = #{itemProcessId,jdbcType=INTEGER},
+      file_name = #{fileName,jdbcType=VARCHAR},
+      file_ext = #{fileExt,jdbcType=VARCHAR},
+      file_path = #{filePath,jdbcType=VARCHAR},
+      preparer_org_id = #{preparerOrgId,jdbcType=INTEGER},
+      preparer_id = #{preparerId,jdbcType=INTEGER},
+      preparer_time = #{preparerTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <select id="getFileListByItemId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_item_process_file
+    where item_process_Id = #{id,jdbcType=INTEGER}
+  </select>
+  
+  
+</mapper>

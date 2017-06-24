@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.GradeSchemeDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.GradeSchemeDetail" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="grade_id" property="gradeId" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="leafed" property="leafed" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, grade_id, pid, level, path, leafed, name, grade
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_grade_scheme_detail
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_grade_scheme_detail
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" >
+    insert into t_grade_scheme_detail (id, grade_id, pid, 
+      level, path, leafed, 
+      name, grade)
+    values (#{id,jdbcType=INTEGER}, #{gradeId,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, 
+      #{level,jdbcType=INTEGER}, #{path,jdbcType=VARCHAR}, #{leafed,jdbcType=INTEGER}, 
+      #{name,jdbcType=VARCHAR}, #{grade,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" >
+    insert into t_grade_scheme_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="gradeId != null" >
+        grade_id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="leafed != null" >
+        leafed,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="gradeId != null" >
+        #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="leafed != null" >
+        #{leafed,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" >
+    update t_grade_scheme_detail
+    <set >
+      <if test="gradeId != null" >
+        grade_id = #{gradeId,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        pid = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="leafed != null" >
+        leafed = #{leafed,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" >
+    update t_grade_scheme_detail
+    set grade_id = #{gradeId,jdbcType=INTEGER},
+      pid = #{pid,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      path = #{path,jdbcType=VARCHAR},
+      leafed = #{leafed,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <sql id="sql_query">
+  	from t_grade_scheme_detail as gsd
+  	where 1=1 
+  	<if test="pid != null">
+		and gsd.pid=#{pid,jdbcType=INTEGER}
+	</if>
+	<if test="searchName != null and searchName != ''">
+		and (
+			gsd.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+  </sql>  
+  <select id="getGradeSchemeDetailListByPid" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	SELECT gsd.*,gs.name AS schemaName,gsd1.name AS pName 
+	FROM t_grade_scheme_detail AS gsd
+	LEFT JOIN t_grade_scheme AS gs ON gsd.grade_id=gs.id
+	LEFT JOIN t_grade_scheme_detail AS gsd1 ON gsd1.id=gsd.pid
+	WHERE gsd.pid=#{pid,jdbcType=INTEGER}  
+  </select>
+  <select id="getGradeSchemeDetailListByGradeId" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	SELECT gsd.*,gs.name AS schemaName,gsd1.name AS pName 
+	FROM t_grade_scheme_detail AS gsd
+	LEFT JOIN t_grade_scheme AS gs ON gsd.grade_id=gs.id
+	LEFT JOIN t_grade_scheme_detail AS gsd1 ON gsd1.id=gsd.pid
+	WHERE gsd.grade_id=#{gradeId,jdbcType=INTEGER}  
+	<if test="level != null ">
+	 	and  gsd.level = #{level,jdbcType=INTEGER}
+	</if>
+  </select>
+  <select id="getGradeSchemeDetailList" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	SELECT gsd.*,gs.name AS schemaName,gsd1.name AS pName 
+	FROM t_grade_scheme_detail AS gsd
+	LEFT JOIN t_grade_scheme AS gs ON gsd.grade_id=gs.id
+	LEFT JOIN t_grade_scheme_detail AS gsd1 ON gsd1.id=gsd.pid
+	<if test="searchName != null and searchName != ''">
+	 	and (
+			gsd.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+  </select>
+  
+   <select id="getGradeSchemeDetailCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.GradeSchemeDetail">
+  	select count(*)
+  	<include refid="sql_query"></include>
+  </select>
+  <select id="getSchemeDetailListByPidAndGradeId" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	SELECT gsd.*,gs.name AS schemaName,gsd1.name AS pName 
+	FROM t_grade_scheme_detail AS gsd
+	LEFT JOIN t_grade_scheme AS gs ON gsd.grade_id=gs.id
+	LEFT JOIN t_grade_scheme_detail AS gsd1 ON gsd1.id=gsd.pid
+	WHERE gsd.pid=#{pid,jdbcType=INTEGER} 
+	and gsd.grade_id=#{gradeId,jdbcType=INTEGER}
+  </select>
+  <select id="getGradeSchemeDetailTreeByPid" parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	<include refid="sql_query"/>
+  </select>
+  <select id="getExistDetail"  parameterType="com.rmbank.supervision.model.GradeSchemeDetail" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from t_grade_scheme_detail where name=#{name,jdbcType=VARCHAR} 
+  </select>
+  <select id="getGradeSchemeDetailById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List"/>
+  	from t_grade_scheme_detail where id=#{id,jdbcType=INTEGER}
+  </select>
+</mapper>

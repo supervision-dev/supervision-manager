@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.MetaMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.Meta" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="pid" property="pid" jdbcType="INTEGER" />
+    <result column="level" property="level" jdbcType="INTEGER" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="leafed" property="leafed" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="key" property="key" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="used" property="used" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+     `id` `pid`, `level`, `path`, `leafed`, `name`, `key`, `description`, `used`
+  </sql>
+  <sql id="sql_query">
+  	from t_meta as meta  	
+  	where 1=1 
+  	<if test="pid != null">
+		and meta.pid=#{pid,jdbcType=INTEGER}
+	</if>
+	<if test="searchName != null and searchName != ''">
+		and (meta.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		OR meta.key like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		OR meta.used like CONCAT('%',#{searchName,jdbcType=INTEGER},'%')		
+		)
+	</if>
+  </sql>  
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select * from t_meta   
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_meta
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.Meta" >
+    insert into t_meta (`id`, `pid`, `level`, `path`, `leafed`, `name`, `key`, `description`, `used`      )
+    values (#{id,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER}, #{level,jdbcType=INTEGER}, 
+      #{path,jdbcType=VARCHAR}, #{leafed,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, 
+      #{key,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{used,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.Meta" >
+    insert into t_meta
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="pid != null" >
+        pid,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="leafed != null" >
+        leafed,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="key != null" >
+        key,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="used != null" >
+        used,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="pid != null" >
+        #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="leafed != null" >
+        #{leafed,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="used != null" >
+        #{used,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.Meta" >
+    update t_meta
+    <set >
+      <if test="pid != null" >
+        `pid` = #{pid,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        `level` = #{level,jdbcType=INTEGER},
+      </if>
+      <if test="path != null" >
+        `path` = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="leafed != null" >
+        `leafed` = #{leafed,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        `name` = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="key != null" >
+        `key` = #{key,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        `description` = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="used != null" >
+        `used` = #{used,jdbcType=INTEGER},
+      </if>
+    </set>
+    where `id` = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.Meta" >
+    update t_meta
+    set pid = #{pid,jdbcType=INTEGER},
+      level = #{level,jdbcType=INTEGER},
+      path = #{path,jdbcType=VARCHAR},
+      leafed = #{leafed,jdbcType=INTEGER},
+      name = #{name,jdbcType=VARCHAR},
+      key = #{key,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      used = #{used,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <select id="getMetaList" parameterType="com.rmbank.supervision.model.Meta" resultMap="BaseResultMap">
+  	select *
+  	<include refid="sql_query" />
+	order by meta.id DESC 
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>  
+  <select id="getConfigCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.Meta">
+  	select count(*) 
+  	<include refid="sql_query"></include>
+  </select>
+  <select id="getMeatListByKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+  	select m1.* from t_meta m 
+	LEFT JOIN t_meta m1 on m.id = m1.pid
+	where m.`key` = #{key,jdbcType=VARCHAR}
+  </select>
+  <update id="MetaStateById" parameterType="java.lang.Integer">
+  	update t_meta set used=#{used,jdbcType=INTEGER} where id=#{id,jdbcType=INTEGER}
+  </update>
+  <select id="getConfigListByPid" parameterType="com.rmbank.supervision.model.Meta" resultMap="BaseResultMap">
+  	select meta.*, 
+		(select count(*) from t_meta as m where m.pid = meta.id ) as childrenCount 
+	from t_meta as meta where used=1 and meta.pid=#{pid,jdbcType=INTEGER}  	
+	<if test="searchName != null and searchName != ''">
+		and (meta.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			OR meta.key like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			OR meta.used like CONCAT('%',#{searchName,jdbcType=INTEGER},'%')		
+		)
+	</if>	
+	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
+        limit #{pageStart}, #{pageSize}
+    </if>
+  </select>
+  <select id="getExistMeta" parameterType="com.rmbank.supervision.model.Meta" resultMap="BaseResultMap">
+  	select * from t_meta where name=#{name,jdbcType=VARCHAR}	
+  </select>
+  <select id="getUserPost" resultMap="BaseResultMap">
+  	SELECT m.name FROM t_user u, t_meta m, t_user_org uo WHERE u.id=uo.user_id AND uo.post_id = m.id;
+  </select>
+</mapper>

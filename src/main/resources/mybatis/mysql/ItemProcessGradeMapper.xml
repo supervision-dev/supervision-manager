@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.ItemProcessGradeMapper" >
+  <resultMap id="BaseResultMap" type="com.rmbank.supervision.model.ItemProcessGrade" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="item_process_id" property="itemProcessId" jdbcType="INTEGER" />
+    <result column="grade_detail_id" property="gradeDetailId" jdbcType="INTEGER" />
+    <result column="grade_shcme_id" property="gradeSchemeId" jdbcType="INTEGER" />
+    <result column="grade" property="grade" jdbcType="DOUBLE" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, item_process_id,grade_shcme_id, grade_detail_id, grade
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_item_process_grade
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_item_process_grade
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.rmbank.supervision.model.ItemProcessGrade" >
+    insert into t_item_process_grade (id, item_process_id, grade_shcme_id,grade_detail_id, 
+      grade)
+    values (#{id,jdbcType=INTEGER}, #{itemProcessId,jdbcType=INTEGER},#{gradeSchemeId,jdbcType=INTEGER}, #{gradeDetailId,jdbcType=INTEGER}, 
+      #{grade,jdbcType=DOUBLE})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rmbank.supervision.model.ItemProcessGrade" >
+    insert into t_item_process_grade
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemProcessId != null" >
+        item_process_id,
+      </if>
+      <if test="gradeSchemeId != null" >
+        grade_shcme_id,
+      </if>
+      <if test="gradeDetailId != null" >
+        grade_detail_id,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="itemProcessId != null" >
+        #{itemProcessId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeSchemeId != null" >
+        #{gradeSchemeId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeDetailId != null" >
+        #{gradeDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=DOUBLE},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.ItemProcessGrade" >
+    update t_item_process_grade
+    <set >
+      <if test="itemProcessId != null" >
+        item_process_id = #{itemProcessId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeSchemeId != null" >
+        grade_shcme_id = #{gradeSchemeId,jdbcType=INTEGER},
+      </if>
+      <if test="gradeDetailId != null" >
+        grade_detail_id = #{gradeDetailId,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=DOUBLE},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.ItemProcessGrade" >
+    update t_item_process_grade
+    set item_process_id = #{itemProcessId,jdbcType=INTEGER},
+      grade_shcme_id = #{gradeSchemeId,jdbcType=INTEGER},
+      grade_detail_id = #{gradeDetailId,jdbcType=INTEGER},
+      grade = #{grade,jdbcType=DOUBLE}
+    where id = #{id,jdbcType=INTEGER}
+  </update> 
+  <insert id="insertGradeList"  parameterType="java.util.List">
+    insert into t_item_process_grade (id, item_process_id, grade_shcme_id,grade_detail_id, 
+      grade)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id,jdbcType=INTEGER}, #{item.itemProcessId,jdbcType=INTEGER}, #{item.gradeSchemeId,jdbcType=INTEGER},#{item.gradeDetailId,jdbcType=INTEGER}, #{item.grade,jdbcType=INTEGER})
+    </foreach>
+  </insert>
+  <select id="getGradeListByItemProcessId" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_item_process_grade
+    where item_process_id = #{id,jdbcType=INTEGER}
+  
+  </select>
+</mapper>

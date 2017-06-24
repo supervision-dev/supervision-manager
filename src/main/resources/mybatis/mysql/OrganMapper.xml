@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rmbank.supervision.dao.OrganMapper">
+	<resultMap id="BaseResultMap" type="com.rmbank.supervision.model.Organ">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="pid" property="pid" jdbcType="INTEGER" />
+		<result column="level" property="level" jdbcType="INTEGER" />
+		<result column="path" property="path" jdbcType="VARCHAR" />
+		<result column="leaf" property="leaf" jdbcType="INTEGER" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="sort" property="sort" jdbcType="INTEGER" />
+		<result column="used" property="used" jdbcType="INTEGER" />
+		<result column="supervision" property="supervision" jdbcType="INTEGER" />
+		<result column="org_type" property="orgtype" jdbcType="INTEGER" />
+		<result column="childrenCount" property="childrenCount" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		id, pid, level, path, leaf, name, sort, used, supervision, org_type
+	</sql>
+	<sql id="Query_Column_List">
+		org.id, org.pid, org.level, org.path, org.leaf, org.name, org.sort, org.used, org.supervision, org.org_type
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from t_org
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from t_org
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.rmbank.supervision.model.Organ">
+		insert into t_org (id, pid,
+		level,
+		path, leaf, name, sort,
+		used, supervision,org_type)
+		values
+		(#{id,jdbcType=INTEGER}, #{pid,jdbcType=INTEGER},
+		#{level,jdbcType=INTEGER},
+		#{path,jdbcType=VARCHAR},
+		#{leaf,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR},
+		#{sort,jdbcType=INTEGER},
+		#{used,jdbcType=INTEGER},
+		#{supervision,jdbcType=INTEGER},
+		#{orgtype,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.rmbank.supervision.model.Organ">
+		insert into t_org
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="pid != null">
+				pid,
+			</if>
+			<if test="level != null">
+				level,
+			</if>
+			<if test="path != null">
+				path,
+			</if>
+			<if test="leaf != null">
+				leaf,
+			</if>
+			<if test="name != null">
+				name,
+			</if>
+			<if test="sort != null">
+				sort,
+			</if>
+			<if test="used != null">
+				used,
+			</if>
+			<if test="supervision != null">
+				supervision,
+			</if>
+			<if test="orgtype != null">
+				org_type,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="pid != null">
+				#{pid,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				#{level,jdbcType=INTEGER},
+			</if>
+			<if test="path != null">
+				#{path,jdbcType=VARCHAR},
+			</if>
+			<if test="leaf != null">
+				#{leaf,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				#{sort,jdbcType=INTEGER},
+			</if>
+			<if test="used != null">
+				#{used,jdbcType=INTEGER},
+			</if>
+			<if test="supervision != null">
+				#{supervision,jdbcType=INTEGER},
+			</if>
+			<if test="orgtype != null">
+				#{orgtype,jdbcType=INTEGER},				
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.rmbank.supervision.model.Organ">
+		update t_org
+		<set>
+			<if test="pid != null">
+				pid = #{pid,jdbcType=INTEGER},
+			</if>
+			<if test="level != null">
+				level = #{level,jdbcType=INTEGER},
+			</if>
+			<if test="path != null">
+				path = #{path,jdbcType=VARCHAR},
+			</if>
+			<if test="leaf != null">
+				leaf = #{leaf,jdbcType=INTEGER},
+			</if>
+			<if test="name != null">
+				name = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="sort != null">
+				sort = #{sort,jdbcType=INTEGER},
+			</if>
+			<if test="used != null">
+				used = #{used,jdbcType=INTEGER},
+			</if>
+			<if test="supervision != null">
+				supervision = #{supervision,jdbcType=INTEGER},
+			</if>
+			<if test="orgtype != null">
+				org_type = #{orgtype,jdbcType=INTEGER},				
+			</if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.rmbank.supervision.model.Organ">
+		update t_org
+		set
+		pid = #{pid,jdbcType=INTEGER},
+		level = #{level,jdbcType=INTEGER},
+		path =
+		#{path,jdbcType=VARCHAR},
+		leaf = #{leaf,jdbcType=INTEGER},
+		name =
+		#{name,jdbcType=VARCHAR},
+		sort = #{sort,jdbcType=INTEGER},
+		used =
+		#{used,jdbcType=INTEGER},
+		org_type =
+		#{orgtype,jdbcType=INTEGER},	
+		supervision = #{supervision,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<sql id="sql_query">
+		from t_org as org
+		where 1=1
+		<if test="pid != null">
+			and org.pid=#{pid,jdbcType=INTEGER}
+		</if>
+		<if test="searchName != null and searchName != ''">
+			and (org.name like
+			CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			)
+		</if>
+	</sql>
+	<select id="getOrganCount" resultType="java.lang.Integer"
+		parameterType="com.rmbank.supervision.model.Organ">
+		select count(*)
+		<include refid="sql_query"></include>
+	</select>
+	
+	<select id="getOrganList" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
+		select
+		<include refid="Base_Column_List" />
+		<include refid="sql_query" />		
+		order by org.id asc
+		<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">			
+			limit #{pageStart}, #{pageSize}
+		</if>
+	</select>
+	<select id="getOrganListByPid" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
+		SELECT o.*,o1.name AS parentName FROM t_org o
+		LEFT JOIN t_org o1 ON o.pid=o1.id
+		WHERE o.pid=#{pid,jdbcType=INTEGER}
+		<if test="searchName != null and searchName != ''">
+			and (o.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')	
+			)
+		</if>	
+		<!--order by o.id asc
+		<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">			
+			limit #{pageStart}, #{pageSize}
+		</if> -->
+	</select>
+	
+	<select id="getOrganByPId" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
+		select
+		<include refid="Query_Column_List" />, 
+			(select count(*) from t_org as o where o.pid = org.id ) as childrenCount
+		<include refid="sql_query" /> 
+	</select> 
+	<!-- <select id="getOrganByPId" parameterType="com.rmbank.supervision.model.Organ" resultMap="BaseResultMap">
+		SELECT org.*,o.name AS organName  
+		FROM t_org AS org, t_org AS o WHERE org.pid=#{id,jdbcType=INTEGER};  
+	</select> -->
+	<select id="getExistOrgan" parameterType="com.rmbank.supervision.model.Organ" resultMap="BaseResultMap">
+		select <include refid="Base_Column_List" />
+		from t_org where name=#{name,jdbcType=VARCHAR}
+	</select>
+	
+	<select id="getUserOrgIdsByList" resultType="java.lang.Integer">
+		SELECT o.id FROM t_org AS o WHERE o.pid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>  
+	</select>
+	<select id="getUserOrgByList" resultMap="BaseResultMap">
+		SELECT o.* FROM t_org AS o WHERE o.pid IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>  
+	</select>
+	<select id="getOrganByOrgIds" resultMap="BaseResultMap">
+		SELECT o.*,(select count(*) from t_org as org where org.pid = o.id ) as childrenCount
+		 FROM t_org AS o WHERE o.id IN
+		<foreach item="item" index="index" collection="list" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach> 
+	</select>
+	<select id="getUserOrgByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+		SELECT * FROM t_org WHERE id IN(
+			SELECT uo.org_id FROM `t_user_org` AS uo WHERE uo.user_id =#{id,jdbcType=INTEGER}
+		)
+	</select>
+</mapper>
