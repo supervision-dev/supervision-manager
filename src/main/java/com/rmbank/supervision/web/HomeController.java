@@ -104,35 +104,9 @@ public class HomeController extends SystemAction {
 			organ.setPid(pid);
 		} else {
 			organ.setPid(0);
-		}
-
+		} 
 		//获取用户所属的机构  
 		List<Organ> list = organService.getOrganByPId(organ);	 
-		// 加载子节点，方式一，无子节点则无展开按钮
-		for (Organ a : list) {
-			a.setText(a.getName()); 
-			if(a.getChildrenCount()>0){
-				a.setState("closed");
-			}else{
-				a.setState("open");
-			}
-		}
-//		for(Organ a:list){
-//			a.setText(a.getName());
-//			Organ org = new Organ();
-//			org.setPid(a.getId());
-//			List<Organ> list1 = new ArrayList<Organ>();
-//			list1 = organService.getOrganByPId(org);
-//			if(list1.size() > 0){
-//				setChildrenList(list1);
-//				a.setChildren(list1);
-//				a.setState("open");
-//			}else{
-//				a.setChildren(new ArrayList<Organ>());
-//				a.setState("open");
-//			}
-//		}
-		
 		return list;// json.toString();
 	}
 	 private void setChildrenList(List<Organ> list) {
