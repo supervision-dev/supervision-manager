@@ -39,9 +39,9 @@ import com.rmbank.supervision.web.controller.SystemAction;
  * @author DELL
  *
  */
-@Scope("prototype")
-@Controller
-@RequestMapping("/manage/casemanage")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/manage/casemanage")
 public class CasemanageAction extends SystemAction {
 
 	@Resource

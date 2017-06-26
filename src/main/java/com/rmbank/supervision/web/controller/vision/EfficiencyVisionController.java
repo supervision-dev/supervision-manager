@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
@@ -45,10 +46,10 @@ import com.rmbank.supervision.web.controller.SystemAction;
  *
  */ 
 
-//@Scope("prototype")
-//@Controller
-//@RequestMapping("/vision/efficiency")
-public class EfficiencyVisionAction extends SystemAction {
+@Scope("prototype")
+@Controller
+@RequestMapping("/vision/efficiency")
+public class EfficiencyVisionController extends SystemAction {
 	
 	@Resource
 	private ItemService itemService;
@@ -71,10 +72,14 @@ public class EfficiencyVisionAction extends SystemAction {
      * @return
 	 * @throws UnsupportedEncodingException 
      */
+	@ResponseBody
     @RequestMapping(value = "/efficiencyList.do")
-    @RequiresPermissions("vision/efficiency/efficiencyList.do")
-    public String efficiencyList(Item item, 
+//  @RequiresPermissions("vision/efficiency/efficiencyList.do")
+    public DataListResult<Item> efficiencyList(Item item, 
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { 
+    	
+    	DataListResult<Item> dr = new DataListResult<Item>();
+    	
     	// 判断搜索名是否为空，不为空则转为utf-8编码
 		if (item.getSearchName() != null && item.getSearchName() != "") {
 			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
@@ -87,7 +92,9 @@ public class EfficiencyVisionAction extends SystemAction {
 		int totalCount = 0;
 		
 		//获取当前登录用户
-		User loginUser = this.getLoginUser();
+//		User loginUser = this.getLoginUser();
+		User loginUser =new User();
+		loginUser.setId(1);
 		//获取当前用户对应的机构列表
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		//获取当前用户对应的第一个机构
@@ -134,15 +141,18 @@ public class EfficiencyVisionAction extends SystemAction {
 			}
 		}
 		// 通过request对象传值到前台
-		item.setTotalCount(totalCount);
-		request.setAttribute("Item", item);
-		request.setAttribute("userOrg", userOrg);
-		request.setAttribute("itemList", itemList);
+//		request.setAttribute("Item", item);
+//		request.setAttribute("userOrg", userOrg);
+//		request.setAttribute("itemList", itemList);
 
     	
 		String ip = IpUtil.getIpAddress(request);		
 		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了效能监察列表查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-    	return "web/vision/efficiency/efficiencyList";
+    	
+		item.setTotalCount(totalCount);
+		dr.setData(item);
+		dr.setDatalist(itemList); 
+    	return dr;
     }
     
     /**

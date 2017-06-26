@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
@@ -51,10 +52,10 @@ import com.rmbank.supervision.web.controller.SystemAction;
  * @author DELL
  *
  */
-//@Scope("prototype")
-//@Controller
-//@RequestMapping("/manage/support")
-public class SupportAction extends SystemAction {
+@Scope("prototype")
+@Controller
+@RequestMapping("/manage/support")
+public class SupportController extends SystemAction {
 
 	/**
 	 * 资源注入
@@ -85,27 +86,33 @@ public class SupportAction extends SystemAction {
 	 * @return
 	 * @throws UnsupportedEncodingException 
 	 */
+	@ResponseBody
 	@RequestMapping("/supportList.do")
-	@RequiresPermissions("manage/support/supportList.do")
-	public String branchList(Item item,
+//	@RequiresPermissions("manage/support/supportList.do")
+	public DataListResult<Item> supportList(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
-		if (item.getSearchName() != null && item.getSearchName() != "") {
-			String searchName = new String(item.getSearchName().getBytes(
+		DataListResult<Item> dr = new DataListResult<Item>();
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
 					"iso8859-1"), "utf-8");
 			item.setSearchName(searchName);
-		}		
-		if (item.getPageNo() == null){
+		}
+		//设置页面初始值及页面大小
+		if (item.getPageNo() == null)
 			item.setPageNo(1);
-		}		
-		item.setPageSize(Constants.DEFAULT_PAGE_SIZE);
-		int totalCount = 0;		
-		item.setTotalCount(totalCount);
+		item.setPageSize(Constants.DEFAULT_PAGE_SIZE);  
+		int totalCount =  0;	
+		
+		
 		//获取项目分类的集合		
 		List<Meta> meatListByKey = configService.getMeatListByKey(Constants.META_PROJECT_KEY);
 		request.setAttribute("meatListByKey", meatListByKey);
 
 		//当前登录用户所属的机构
-		User loginUser = this.getLoginUser();
+//		User loginUser = this.getLoginUser();
+		User loginUser =new User();
+		loginUser.setId(1);
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Integer logUserOrg = userOrgByUserId.get(0).getId(); //当前登录用户所属的机构ID
 		Organ organ = userOrgByUserId.get(0);
@@ -142,14 +149,11 @@ public class SupportAction extends SystemAction {
 				it.setLasgTag(ip.getContentTypeId());
 			} 
 		}
+	
 		item.setTotalCount(totalCount);
-		request.setAttribute("itemList", itemList);
-		request.setAttribute("Item", item);
-		request.setAttribute("UserOrgId", logUserOrg);
-		request.setAttribute("UserOrg", organ);
-		String ip = IpUtil.getIpAddress(request);		
-		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了中支立项列表查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-		return "web/manage/support/supportList";
+		dr.setData(item);
+		dr.setDatalist(itemList); 
+    	return dr;
 	}
 	
 	/**

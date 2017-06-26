@@ -38,9 +38,9 @@ import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 
-@Scope("prototype")
-@Controller
-@RequestMapping("/system/role")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/system/role")
 public class RoleAction extends SystemAction {
 
 	/**
@@ -58,6 +58,7 @@ public class RoleAction extends SystemAction {
 	private SysLogService logService;
 	@Resource
 	private PermissionService permissionService;
+	
 	/**
 	 * 角色列表
 	 * 
@@ -67,8 +68,8 @@ public class RoleAction extends SystemAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	@RequestMapping(value = "/roleList.do")
-	@RequiresPermissions("system/role/roleList.do")
+//	@RequestMapping(value = "/roleList.do")
+//	@RequiresPermissions("system/role/roleList.do")
 	public String roleList(Role role, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
 		// 判断搜索名是否为空，不为空则转为utf-8编码

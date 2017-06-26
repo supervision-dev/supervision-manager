@@ -27,9 +27,9 @@ import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 
-@Scope("prototype")
-@Controller
-@RequestMapping("/system/resource")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/system/resource")
 public class ResourceAction extends SystemAction {
 	
 	@Resource

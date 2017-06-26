@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>角色列表</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 
@@ -19,22 +19,22 @@ function getDataList(pageNo){
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/user/userList.do",
+       url: "/supervision/system/permission/permissionList.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		$("#tb_userList").html("");
-       		var userHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
+       		$("#tb_roleList").html("");
+       		var permissionHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
 	       if(req.datalist != null && req.datalist.length >0){
-	       		userHtml = "";
+	       		permissionHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
-	       			userHtml +="<tr>";
-				    userHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    userHtml +="<td>"+req.datalist[i].name+"</td>";
-				    userHtml +="<td>"+req.datalist[i].account+"</td>";
-				    userHtml +="<td>"+req.datalist[i].orgName+"</td>";
-				    userHtml +="<td>"+req.datalist[i].roleName+"</td>"; 
-			        userHtml +="</tr>";
+	       			permissionHtml +="<tr>";
+				    permissionHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+				    permissionHtml +="<td>"+req.datalist[i].name+"</td>";				    
+				    permissionHtml +="<td>"+req.datalist[i].description+"</td>";
+				    permissionHtml +="<td>"+req.datalist[i].fName+"</td>";
+				    permissionHtml +="<td>资源分配</td>";
+			        permissionHtml +="</tr>";
 	       		}
 	       }
 	       if(req.data != null){
@@ -67,16 +67,17 @@ function getDataList(pageNo){
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
-	       $("#tb_userList").html(userHtml);
+	       $("#tb_roleList").html(permissionHtml);
+	      
        }
 	});
 }
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
+		$("#showmessage").html("请选择要编辑的角色！");
 		$("#confirm_tip").fadeIn(200);
 	}else{
-		$("#showmessage").html("请选择要删除的用户！");
+		$("#showmessage").html("请选择要删除的角色！");
 		$("#confirm_tip").fadeIn(200);
 	}
 }
@@ -102,7 +103,7 @@ function clearForm(){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">基础数据管理</a></li>
-    <li><a href="#">用户管理</a></li>
+    <li><a href="#">权限管理</a></li>
     </ul>
     </div>
     
@@ -123,13 +124,13 @@ function clearForm(){
     	<thead>
     		<tr>
 		        <th></th>
-		        <th>用户名称</th>
-				<th>用户账号</th>
-				<th>所属机构</th>	
-				<th>所属角色</th>	  
+		        <th>权限名称</th>
+				<th>权限描述</th>
+				<th>所属模块</th>	
+				<th>资源分配</th>						  
         	</tr>
         </thead>
-        <tbody id="tb_userList">  
+        <tbody id="tb_roleList">  
         </tbody>
     </table>
     

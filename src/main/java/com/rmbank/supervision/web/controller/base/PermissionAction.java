@@ -40,9 +40,9 @@ import com.rmbank.supervision.service.RoleService;
 import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
-@Scope("prototype")
-@Controller
-@RequestMapping("/system/permission")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/system/permission")
 public class PermissionAction extends SystemAction {
 
 	@Resource

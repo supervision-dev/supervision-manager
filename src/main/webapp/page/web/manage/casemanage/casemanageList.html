@@ -19,22 +19,21 @@ function getDataList(pageNo){
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/user/userList.do",
+       url: "/supervision/manage/casemanage/casemanageList.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tb_userList").html("");
-       		var userHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
+       		var manageHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
 	       if(req.datalist != null && req.datalist.length >0){
-	       		userHtml = "";
+	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
-	       			userHtml +="<tr>";
-				    userHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    userHtml +="<td>"+req.datalist[i].name+"</td>";
-				    userHtml +="<td>"+req.datalist[i].account+"</td>";
-				    userHtml +="<td>"+req.datalist[i].orgName+"</td>";
-				    userHtml +="<td>"+req.datalist[i].roleName+"</td>"; 
-			        userHtml +="</tr>";
+	       			manageHtml +="<tr>";
+				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+				    manageHtml +="<td>"+req.datalist[i].used+"</td>";
+				    manageHtml +="<td>"+req.datalist[i].name+"</td>";
+				    manageHtml +="<td>启用或禁用</td>";				    
+			        manageHtml +="</tr>";
 	       		}
 	       }
 	       if(req.data != null){
@@ -67,7 +66,7 @@ function getDataList(pageNo){
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
-	       $("#tb_userList").html(userHtml);
+	       $("#tb_userList").html(manageHtml);
        }
 	});
 }
@@ -101,8 +100,8 @@ function clearForm(){
 	<div class="place">
     <span>位置：</span>
     <ul class="placeul"> 
-    <li><a href="#">基础数据管理</a></li>
-    <li><a href="#">用户管理</a></li>
+    <li><a href="#">综合管理</a></li>
+    <li><a href="#">模型管理</a></li>
     </ul>
     </div>
     
@@ -123,10 +122,10 @@ function clearForm(){
     	<thead>
     		<tr>
 		        <th></th>
-		        <th>用户名称</th>
-				<th>用户账号</th>
-				<th>所属机构</th>	
-				<th>所属角色</th>	  
+		        <th>状态</th>
+		        <th>模型名称</th>
+				<th>操作</th>
+				
         	</tr>
         </thead>
         <tbody id="tb_userList">  
