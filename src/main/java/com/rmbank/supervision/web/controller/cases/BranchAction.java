@@ -53,9 +53,9 @@ import com.rmbank.supervision.web.controller.SystemAction;
  * @author DELL
  *
  */
-@Scope("prototype")
-@Controller
-@RequestMapping("/manage/branch")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/manage/branch")
 public class BranchAction extends SystemAction {
 	
 	/**

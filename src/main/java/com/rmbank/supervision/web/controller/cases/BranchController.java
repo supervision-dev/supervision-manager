@@ -88,7 +88,7 @@ public class BranchController extends SystemAction {
 	 * @throws UnsupportedEncodingException
 	 */
 	@ResponseBody
-    @RequestMapping(value = "/FHList.do")
+    @RequestMapping(value = "/branchFHList.do")
 //	@RequiresPermissions("manage/casemanage/gradeSchemeList.do")
     public DataListResult<Item> branchFHList(Item item, 
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { 
@@ -165,7 +165,7 @@ public class BranchController extends SystemAction {
 	 * @throws UnsupportedEncodingException
 	 */
 	@ResponseBody
-    @RequestMapping(value = "/ZZList.do")
+    @RequestMapping(value = "/branchZZList.do")
 //	@RequiresPermissions("manage/casemanage/gradeSchemeList.do")
     public DataListResult<Item> branchZZList(Item item, 
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { 
