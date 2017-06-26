@@ -93,17 +93,17 @@ h2{font-weight:normal;}
 .leftmenu dd span{float:left;margin:10px 8px 0 12px;}
 .leftmenu dd .menuson{display:none;}  
 .leftmenu dd:first-child .menuson{display:block;}
-.menuson {line-height:30px; font-weight:normal; }
+.menuson {line-height:30px; font-weight:normal; } 
 .menuson li{cursor:pointer;}
 .menuson li.active{position:relative; background:url(/supervision/source/images/libg.png) repeat-x; line-height:30px; color:#fff;}
-.menuson li cite{display:block; float:left; margin-left:12px; background:url(/supervision/source/images/list.gif) no-repeat; width:16px; height:16px; margin-top:7px;}
-.menuson li.active cite{background:url(/supervision/source/images/list1.gif) no-repeat;}
+.menuson li cite{display:block; float:left; margin-left:4px;/*  background:url(/supervision/source/images/list.gif) no-repeat;*/  width:16px; height:16px; margin-top:7px;}
+.menuson li.active cite{/* background:url(/supervision/source/images/list1.gif) no-repeat; */}
 .menuson li.active i{display:block; background:url(/supervision/source/images/sj.png) no-repeat; width:6px; height:11px; position:absolute; right:0;z-index:10000; top:9px; right:-1px;}
-.menuson li a{ display:block; *display:inline; *padding-top:5px;}
+.menuson li a{ display:block; *display:inline; *padding-top:5px;margin-left:25px;}
 .menuson li.active a{color:#fff;}
-.title{cursor:pointer;}
+.title{cursor:pointer;} 
 
-
+ 
 /*right.html*/
 .place{height:40px; background:url(/supervision/source/images/righttop.gif) repeat-x;}
 .place span{line-height:40px; font-weight:bold;float:left; margin-left:12px;}
@@ -301,6 +301,7 @@ h2{font-weight:normal;}
 .classlist li{float:left;margin-right:10px;margin-bottom:10px;padding:12px;border:1px solid #ebebeb; background:#fcfcfc;}
 .classlist li:hover{border:1px solid #3eafe0; cursor:pointer;}
 .classlist li span{float:left;margin-right:18px;border:3px solid #fff;}
+.classlist li span img{width:100px;} 
 .classlist li .lright{float:left;width:150px;}
 .classlist li .lright h2{font-size:12px; font-weight:bold;line-height:30px;}
 .classlist li .lright p{line-height:20px;}
