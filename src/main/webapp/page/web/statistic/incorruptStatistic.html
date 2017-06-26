@@ -5,10 +5,23 @@
 <title>廉政监察统计</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+	<script src="/supervision/source/laydate/laydate.js"></script>
 
 <script type="text/javascript">
 $(document).ready(function(){ 
 	loadStatisticData();
+	
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+	laydate({
+	  elem: '#stTime', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+	  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+	});	
+	laydate({
+	  elem: '#edTime', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+	  event: 'focus' //响应事件。如果没有传入event，则按照默认的clisck
+  	});
 });
 function loadStatisticData(){
 	$.ajax({ 
@@ -16,58 +29,91 @@ function loadStatisticData(){
        url: "/supervision/statistic/incorrupt/incorruptStatistic.do", 
        dataType:"json", //响应数据类型    
        success: function(req) { 
-       		if(req != null){
-       			$("#tb_StatisticModel").html("");
-       			$("#tb_SubStatisticModel").html("");
-       			$("#tb_TotalList").html("");
-       			var modHtml = "";
-       			var subModHtml = "";
-       			var totalHtml = "";
-       			if(req.statisticModel != null){
-       				modHtml += "<tr>";
-       				modHtml += "<td>"+req.statisticModel.totalCount+"</td>";
-       				modHtml += "<td>"+req.statisticModel.comCount+"</td>";
-       				modHtml += "<td>"+req.statisticModel.unComCount+"</td>";
-       				modHtml += "<td>"+req.statisticModel.overUnComCount+"</td>";
-       				modHtml += "<td>"+req.statisticModel.overComCount+"</td>";
-       				modHtml += "</tr>";
-       			}else{
-       				modHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>"; 
-       			}
-       			$("#tb_StatisticModel").html(modHtml);
-       			if(req.subStatisticModel != null){
-       				subModHtml += "<tr>";
-       				subModHtml += "<td>"+req.subStatisticModel.totalCount+"</td>";
-       				subModHtml += "<td>"+req.subStatisticModel.comCount+"</td>";
-       				subModHtml += "<td>"+req.subStatisticModel.unComCount+"</td>";
-       				subModHtml += "<td>"+req.subStatisticModel.overUnComCount+"</td>";
-       				subModHtml += "<td>"+req.subStatisticModel.overComCount+"</td>";
-       				subModHtml += "</tr>";
-       			}else{
-       				subModHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>";
-       			}
-       			$("#tb_SubStatisticModel").html(subModHtml);
-       			if(req.totalList != null && req.totalList.length >0){
-       				for(var i = 0; i<req.totalList.length; i++){
-       					var obj = req.totalList[i]; 
-       					totalHtml += "<tr>";
-	       				totalHtml += "<td>"+obj.orgName+"</td>";
-	       				totalHtml += "<td>"+obj.totalCount+"</td>";
-	       				totalHtml += "<td>"+obj.comCount+"</td>";
-	       				totalHtml += "<td>"+obj.unComCount+"</td>";
-	       				totalHtml += "<td>"+obj.overUnComCount+"</td>";
-	       				totalHtml += "<td>"+obj.overComCount+"</td>";
-	       				totalHtml += "</tr>";
-       				}
-       			}else{
-       				totalHtml += "<tr><td colspan=\"6\">暂无统计数据!</td></tr>";
-       			}
-       			$("#tb_TotalList").html(totalHtml);
-       		}else{
-       		 	parent.window.location.href = "/supervision/logout.do";
-       		}
+       		fillDataList(req);
        }
     }); 
+}
+function search(){
+	if($("#stTime").val()==null || $("#stTime").val()==""){ 
+		$("#showmessage").html("请选择起始日期！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	} 
+	if($("#edTime").val()==null || $("#edTime").val()==""){ 
+		$("#showmessage").html("请选择截止日期！");
+		$("#confirm_tip").fadeIn(200); 
+		return;
+	} 
+	var obj = {};
+	obj.schBeginTime = $("#stTime").val();
+	obj.schEndTime = $("#edTime").val();
+	$.ajax({ 
+       type: "POST", //请求类型
+       data:obj,
+       url: "/supervision/statistic/incorrupt/incorruptStatistic.do", 
+       dataType:"json", //响应数据类型    
+       success: function(req) { 
+       		fillDataList(req);
+       }
+    }); 
+}
+function fillDataList(req){
+	if(req != null){
+		$("#tb_StatisticModel").html("");
+		$("#tb_SubStatisticModel").html("");
+		$("#tb_TotalList").html("");
+		var modHtml = "";
+		var subModHtml = "";
+		var totalHtml = "";
+		if(req.statisticModel != null){
+			modHtml += "<tr>";
+			modHtml += "<td>"+req.statisticModel.totalCount+"</td>";
+			modHtml += "<td>"+req.statisticModel.comCount+"</td>";
+			modHtml += "<td>"+req.statisticModel.unComCount+"</td>";
+			modHtml += "<td>"+req.statisticModel.overUnComCount+"</td>";
+			modHtml += "<td>"+req.statisticModel.overComCount+"</td>";
+			modHtml += "</tr>";
+		}else{
+			modHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>"; 
+		}
+		$("#tb_StatisticModel").html(modHtml);
+		if(req.subStatisticModel != null){
+			subModHtml += "<tr>";
+			subModHtml += "<td>"+req.subStatisticModel.totalCount+"</td>";
+			subModHtml += "<td>"+req.subStatisticModel.comCount+"</td>";
+			subModHtml += "<td>"+req.subStatisticModel.unComCount+"</td>";
+			subModHtml += "<td>"+req.subStatisticModel.overUnComCount+"</td>";
+			subModHtml += "<td>"+req.subStatisticModel.overComCount+"</td>";
+			subModHtml += "</tr>";
+		}else{
+			subModHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>";
+		}
+		$("#tb_SubStatisticModel").html(subModHtml);
+		if(req.totalList != null && req.totalList.length >0){
+			for(var i = 0; i<req.totalList.length; i++){
+				var obj = req.totalList[i]; 
+				totalHtml += "<tr>";
+				totalHtml += "<td>"+obj.orgName+"</td>";
+				totalHtml += "<td>"+obj.totalCount+"</td>";
+				totalHtml += "<td>"+obj.comCount+"</td>";
+				totalHtml += "<td>"+obj.unComCount+"</td>";
+				totalHtml += "<td>"+obj.overUnComCount+"</td>";
+				totalHtml += "<td>"+obj.overComCount+"</td>";
+				totalHtml += "</tr>";
+			}
+		}else{
+			totalHtml += "<tr><td colspan=\"6\">暂无统计数据!</td></tr>";
+		}
+		$("#tb_TotalList").html(totalHtml);
+   		if(req.item.schBeginTime != null){
+   		 	$("#stTime").val(req.item.schBeginTime);
+   		}
+   		if(req.item.schEndTime != null){
+   		 	$("#edTime").val(req.item.schEndTime);
+   		}s
+	}else{
+	 	parent.window.location.href = "/supervision/logout.do";
+	} 
 }
 </script>
 
@@ -88,16 +134,10 @@ function loadStatisticData(){
     <div class="rightinfo">
     
     <div class="tools">
-    
-    	<!-- <ul class="toolbar">
-        <li class="click"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
-        <li><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
-        <li><span><img src="/supervision/source/images/t04.png" /></span>统计</li>
-        </ul> -->
-        
-        <ul class="toolbar">
-        <li><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
+    	<span style="float:left;line-height:34px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:34px;float:left;" />
+     	<span style="float:left;line-height:34px;margin-left:5px;">截止时间：</span><input type="text" id="edTime" name="schEndTime"  class="laydate-icon" style="height:34px;float:left;" />
+    	<ul class="toolbar" style="margin-left:10px;"> 
+        <li onclick="search();" ><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
         </ul>
     </div>
     <table class="tablelist">
@@ -148,6 +188,21 @@ function loadStatisticData(){
 	$('.tablelist tbody tr:odd').addClass('odd');
 	</script>
 
+
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div> 
+    </div>
 </body>
 
 </html>

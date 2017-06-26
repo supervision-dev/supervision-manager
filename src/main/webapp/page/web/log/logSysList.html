@@ -2,9 +2,142 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>系统操作日志</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+	<script src="/supervision/source/laydate/laydate.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+	
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+	laydate({
+	  elem: '#stTime', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+	  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+	});	
+	laydate({
+	  elem: '#edTime', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+	  event: 'focus' //响应事件。如果没有传入event，则按照默认的clisck
+	});
+	$('.tablelist tbody tr:odd').addClass('odd');
+	getDataList(1);
+});
+function getDataList(pageNo){
+	var obj = {};
+	obj.pageNo = pageNo; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/log/logSysList.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		fillDataList(req);
+       }
+	});
+}  
+function fillDataList(req){
+	$("#tb_logList").html("");
+       		var logHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
+	       if(req.datalist != null && req.datalist.length >0){
+	       		logHtml = "";
+	       		for(var i = 0;i<req.datalist.length;i++){
+	       			logHtml +="<tr>";
+				    logHtml +="<td>"+req.datalist[i].description+"</td>";
+				    if(req.datalist[i].operation ==1){
+				    	logHtml +="<td>新增</td>";
+				    }else if(req.datalist[i].operation ==2){
+				    	logHtml +="<td>编辑</td>";
+				    }else if(req.datalist[i].operation ==3){
+				    	logHtml +="<td>删除</td>";
+				    }else{
+				    	logHtml +="<td>系统日志</td>";
+				    }
+				    logHtml +="<td>"+req.datalist[i].operTimes+"</td>";
+				    logHtml +="<td>"+req.datalist[i].orgName+"</td>";
+				    logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
+				    logHtml +="<td>"+req.datalist[i].ip+"</td>"; 
+			        logHtml +="</tr>";
+	       		}
+	       }
+	       if(req.data != null){
+	       		$("#i_totalcount").text(req.data.totalCount);
+	       		$("#i_pageNo").text(req.data.pageNo);
+	       		var count = Math.ceil(req.data.totalCount/10);
+	       		$("#ul_pageList").html("");
+	       		var ulHtml = "";
+	       		if(count == 1){
+	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       		}else{
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
+	       		}
+	       		for(var i = 1;i<=count;i++){
+	       			if(count == 1){
+	       				ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">1</a></li>";
+	       			}else{
+	       				if(i == req.data.pageNo){
+	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       				}else{
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       				}
+	       			}
+	       		} 
+	       		if(count == 1){
+	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       		}else{
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
+	       		}
+	       		
+	       		$("#ul_pageList").html(ulHtml);
+	       		if(req.data.searchName != null){
+	       		 	$("#ipt_searchname").val(req.data.searchName);
+	       		}
+	       		if(req.data.schBeginTime != null){
+	       		 	$("#stTime").val(req.data.schBeginTime);
+	       		}
+	       		if(req.data.schEndTime != null){
+	       		 	$("#edTime").val(req.data.schEndTime);
+	       		}
+	       }
+	       $("#tb_logList").html(logHtml);
+}
+function search(pageNo){
+	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
+		$("#showmessage").html("请选择起始日期！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	} 
+	if(($("#edTime").val()==null || $("#edTime").val()=="") && $("#stTime").val()!=null && $("#stTime").val()!=""){ 
+		$("#showmessage").html("请选择截止日期！");
+		$("#confirm_tip").fadeIn(200); 
+		return;
+	} 
+	var obj = {};
+	obj.searchName = $("#ipt_searchname").val();
+	obj.schBeginTime = $("#stTime").val();
+	obj.schEndTime = $("#edTime").val();
+	obj.pageNo = pageNo;
+	$.ajax({ 
+       type: "POST", //请求类型
+       data:obj,
+       url: "/supervision/system/log/logSysList.do",
+       dataType:"json", //响应数据类型    
+       success: function(req) {
+       		fillDataList(req);
+       }
+    }); 
+}
+</script>
+
 
 </head>
 
@@ -13,70 +146,71 @@
 
 	<div class="place">
     <span>位置：</span>
-    <ul class="placeul">
-    <li><a href="#">首页</a></li>
+    <ul class="placeul"> 
+    <li><a href="#">日志管理</a></li>
+    <li><a href="#">基础数据模块日志</a></li>
     </ul>
     </div>
     
-    <div class="mainindex">
+    <div class="rightinfo">
     
-    
-    <div class="welinfo">
-    <span><img src="/supervision/source/images/sun.png" alt="天气" /></span>
-    <b>Admin早上好，欢迎使用信息管理系统</b> 
-    <a href="#">帐号设置</a>
-    </div>
-    
-    <div class="welinfo">
-    <span><img src="/supervision/source/images/time.png" alt="时间" /></span>
-    <i>您上次登录的时间：2013-10-09 15:22</i> （不是您登录的？<a href="#">请点这里</a>）
-    </div>
-    
-    <div class="xline"></div>
-    
-    <ul class="iconlist">
-    
-    <li><img src="/supervision/source/images/ico01.png" /><p><a href="#">管理设置</a></p></li>
-    <li><img src="/supervision/source/images/ico02.png" /><p><a href="#">发布文章</a></p></li>
-    <li><img src="/supervision/source/images/ico03.png" /><p><a href="#">数据统计</a></p></li>
-    <li><img src="/supervision/source/images/ico04.png" /><p><a href="#">文件上传</a></p></li>
-    <li><img src="/supervision/source/images/ico05.png" /><p><a href="#">目录管理</a></p></li>
-    <li><img src="/supervision/source/images/ico06.png" /><p><a href="#">查询</a></p></li> 
-            
-    </ul>
-    
-    <div class="ibox"><a class="ibtn"><img src="/supervision/source/images/iadd.png" />添加新的快捷功能</a></div>
-    
-    <div class="xline"></div>
-    <div class="box"></div>
-    
-    <div class="welinfo">
-    <span><img src="/supervision/source/images/dp.png" alt="提醒" /></span>
-    <b>Uimaker信息管理系统使用指南</b>
-    </div>
-    
-    <ul class="infolist">
-    <li><span>您可以快速进行文章发布管理操作</span><a class="ibtn">发布或管理文章</a></li>
-    <li><span>您可以快速发布产品</span><a class="ibtn">发布或管理产品</a></li>
-    <li><span>您可以进行密码修改、账户设置等操作</span><a class="ibtn">账户管理</a></li>
-    </ul>
-    
-    <div class="xline"></div>
-    
-    <div class="uimakerinfo"><b>查看Uimaker网站使用指南，您可以了解到多种风格的B/S后台管理界面,软件界面设计，图标设计，手机界面等相关信息</b>(<a href="http://www.uimaker.com" target="_blank">www.uimaker.com</a>)</div>
-    
-    <ul class="umlist">
-    <li><a href="#">如何发布文章</a></li>
-    <li><a href="#">如何访问网站</a></li>
-    <li><a href="#">如何管理广告</a></li>
-    <li><a href="#">后台用户设置(权限)</a></li>
-    <li><a href="#">系统设置</a></li>
-    </ul>
-    
-    
+    <div class="tools">
+    	<span style="float:left;line-height:34px;">关键字：</span><input type="text" name="searchName" id="ipt_searchname" style="height:34px;float:left;border:1px solid #C6C6C6" />
+    	<span style="float:left;line-height:34px;margin-left:5px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:34px;float:left;" />
+     	<span style="float:left;line-height:34px;margin-left:5px;">截止时间：</span><input type="text" id="edTime" name="schEndTime"  class="laydate-icon" style="height:34px;float:left;" />
+    	<ul class="toolbar" style="margin-left:10px;"> 
+        <li onclick="search(1);" ><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
+        </ul>
     </div>
     
     
+    <table class="tablelist">
+    	<thead>
+    		<tr>
+		       <th>日志内容</th>	
+				<th>操作类型</th>
+				<th>操作时间</th>
+				<th>机构</th>		
+				<th>操作员</th>
+				<th>访问ip</th>	  
+        	</tr>
+        </thead>
+        <tbody id="tb_logList">  
+        </tbody>
+    </table>
+    
+   
+    <div class="pagin">
+    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
+        <ul class="paginList" id="ul_pageList">
+        
+        <li class="paginItem"><a href="javascript:;">1</a></li>
+        <li class="paginItem current"><a href="javascript:;">2</a></li>
+        <li class="paginItem"><a href="javascript:;">3</a></li>
+        <li class="paginItem"><a href="javascript:;">4</a></li>
+        <li class="paginItem"><a href="javascript:;">5</a></li>
+        <li class="paginItem more"><a href="javascript:;">...</a></li>
+        <li class="paginItem"><a href="javascript:;">10</a></li>
+        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+        </ul>
+    </div>
+    
+    
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div> 
+    </div>  
+    </div> 
 
 </body>
 

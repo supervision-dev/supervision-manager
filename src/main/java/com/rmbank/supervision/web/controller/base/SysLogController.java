@@ -9,24 +9,22 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.StringUtil;
-import com.rmbank.supervision.model.Role;
 import com.rmbank.supervision.model.SystemLog;
-import com.rmbank.supervision.service.ResourceService;
 import com.rmbank.supervision.service.SysLogService;
 
-/*@Scope("prototype")
+@Scope("prototype")
 @Controller
-@RequestMapping("/system/log")*/
-public class SysLogAction {
+@RequestMapping("/system/log")
+public class SysLogController {
 
-	
 	
 	@Resource
 	private SysLogService logService;
@@ -39,10 +37,12 @@ public class SysLogAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/logList.do")
-	@RequiresPermissions("system/log/logList.do")
-	public String logList(SystemLog systemLog, HttpServletRequest request,
+	public DataListResult<SystemLog> logList(SystemLog systemLog, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
+		DataListResult<SystemLog> dr = new DataListResult<SystemLog>();
+		
 		// 判断搜索名是否为空，不为空则转为utf-8编码
 		if (systemLog.getSearchName() != null && systemLog.getSearchName() != "") {
 			String searchName = URLDecoder.decode(systemLog.getSearchName(),"utf-8");
@@ -77,11 +77,9 @@ public class SysLogAction {
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
-		request.setAttribute("SystemLog", systemLog);
-
-		request.setAttribute("LogList", logList);
-
-		return "web/base/log/logList";
+		dr.setData(systemLog);
+		dr.setDatalist(logList); 
+		return dr;
 	}
 	/**
 	 * 立项管理模块日志列表
@@ -92,10 +90,11 @@ public class SysLogAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/logLXList.do")
-	@RequiresPermissions("system/log/logLXList.do")
-	public String logLXList(SystemLog systemLog, HttpServletRequest request,
+	public DataListResult<SystemLog> logLXList(SystemLog systemLog, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
+		DataListResult<SystemLog> dr = new DataListResult<SystemLog>();
 		// 判断搜索名是否为空，不为空则转为utf-8编码
 		if (systemLog.getSearchName() != null && systemLog.getSearchName() != "") {
 			String searchName = URLDecoder.decode(systemLog.getSearchName(),"utf-8");
@@ -128,11 +127,9 @@ public class SysLogAction {
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
-		request.setAttribute("SystemLog", systemLog);
-
-		request.setAttribute("LogList", logList);
-
-		return "web/base/log/logLXList";
+		dr.setData(systemLog);
+		dr.setDatalist(logList); 
+		return dr;
 	}
 
 	/**
@@ -144,10 +141,11 @@ public class SysLogAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/logJCList.do")
-	@RequiresPermissions("system/log/logJCList.do")
-	public String logJCList(SystemLog systemLog, HttpServletRequest request,
+	public DataListResult<SystemLog> logJCList(SystemLog systemLog, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
+		DataListResult<SystemLog> dr = new DataListResult<SystemLog>();
 		// 判断搜索名是否为空，不为空则转为utf-8编码
 		if (systemLog.getSearchName() != null && systemLog.getSearchName() != "") {
 			String searchName = URLDecoder.decode(systemLog.getSearchName(),"utf-8");
@@ -180,11 +178,9 @@ public class SysLogAction {
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
-		request.setAttribute("SystemLog", systemLog);
-
-		request.setAttribute("LogList", logList);
-
-		return "web/base/log/logJCList";
+		dr.setData(systemLog);
+		dr.setDatalist(logList); 
+		return dr;
 	}
 
 	/**
@@ -196,10 +192,11 @@ public class SysLogAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/logSysList.do")
-	@RequiresPermissions("system/log/logSysList.do")
-	public String logSysList(SystemLog systemLog, HttpServletRequest request,
+	public DataListResult<SystemLog> logSysList(SystemLog systemLog, HttpServletRequest request,
 			HttpServletResponse response) throws UnsupportedEncodingException {
+		DataListResult<SystemLog> dr = new DataListResult<SystemLog>();
 		// 判断搜索名是否为空，不为空则转为utf-8编码
 		if (systemLog.getSearchName() != null && systemLog.getSearchName() != "") {
 			String searchName = URLDecoder.decode(systemLog.getSearchName(),"utf-8");
@@ -232,10 +229,8 @@ public class SysLogAction {
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
-		request.setAttribute("SystemLog", systemLog);
-
-		request.setAttribute("LogList", logList);
-
-		return "web/base/log/logSysList";
+		dr.setData(systemLog);
+		dr.setDatalist(logList); 
+		return dr;
 	}
 }
