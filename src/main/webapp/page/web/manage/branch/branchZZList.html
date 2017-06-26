@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>分行立项分行完成</title>
+<title>分行立项中支完成</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 
@@ -19,7 +19,7 @@ function getDataList(pageNo){
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/manage/branch/FHList.do",
+       url: "/supervision/manage/branch/branchZZList.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {

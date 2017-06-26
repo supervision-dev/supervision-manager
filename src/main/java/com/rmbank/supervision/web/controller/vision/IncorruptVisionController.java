@@ -74,6 +74,7 @@ public class IncorruptVisionController extends SystemAction {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/incorruptList.do")
 	@RequiresPermissions("vision/incorrupt/incorruptList.do")
 	public DataListResult<Item> incorruptList(Item item, HttpServletRequest request,
