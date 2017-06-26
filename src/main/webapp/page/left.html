@@ -9,11 +9,7 @@
 <script type="text/javascript">
 $(function(){
 	loadMenu();	
-	//导航切换
-	$(".menuson li").click(function(){
-		$(".menuson li.active").removeClass("active") 
-		$(this).addClass("active");
-	});
+	//导航切换 
 	 $('.title').click(function(){
 		var $ul = $(this).next('ul');
 		$('dd').find('ul').slideUp();
@@ -22,7 +18,7 @@ $(function(){
 		}else{
 			$(this).next('ul').slideDown(); 
 		}
-	}); 
+	});  
 });
 function loadMenu(){
 	$.ajax({ 
@@ -37,19 +33,25 @@ function loadMenu(){
 				if(req.childMenulist != null && req.childMenulist.length >0){
 					for(var i = 0; i< req.childMenulist.length; i++){
 						var obj = req.childMenulist[i];
-						if(i == 0){
-							menuHtml += "<li class=\"active\"><a href=\"index.html\" target=\"rightFrame\">"+obj.name+"</a><i></i></li>";
+						if(i == 0){ 
+							menuHtml += "<li onclick=\"menuClick(this); \" class=\"active\"><a href=\"/supervision/pageRoute/"+obj.url+"\" target=\"rightFrame\">"+obj.name+"</a><i></i></li>";
+							parent.$("#rightFrame").attr("src","/supervision/pageRoute/"+obj.url);
 						}else{
-							menuHtml += "<li><a href=\"right.html\" target=\"rightFrame\">"+obj.name+"</a><i></i></li>";
+							menuHtml += "<li onclick=\"menuClick(this); \"><a href=\"/supervision/pageRoute/"+obj.url+"\" target=\"rightFrame\">"+obj.name+"</a><i></i></li>";
 						}
 					}
-				}  
+				}   
 				$("#ul_leftmenu").html(menuHtml); 
+				$("#div_model").click();
 			}else{
 				parent.window.location.href = "/supervision/logout.do";
-			}
+			} 
        }
     }); 
+}
+function menuClick(obj){
+	$(".menuson li.active").removeClass("active") 
+	$(obj).addClass("active");
 }
 </script>
 
@@ -60,17 +62,13 @@ function loadMenu(){
 	<div class="lefttop"><span></span>功能模块</div>
     
     <dl class="leftmenu"> 
-    	<dd>
-    		<div class="title">
-    			<span>
-    				<img src="/supervision/source/images/leftico03.png" />
-    			</span>
-    			<label id="sp_title"></label>
-    		</div>
-    		<ul id="ul_leftmenu" class="menuson">
-    			<li></li>
-    		</ul>
-    	</dd>
+     <dd>
+    <div class="title" id="div_model">
+    	<span><img src="/supervision/source/images/leftico01.png" /></span><label id="sp_title"></label>
+    </div>
+    	<ul class="menuson" id="ul_leftmenu">
+        </ul>    
+    </dd>  
     </dl>
 </body>
 </html>
