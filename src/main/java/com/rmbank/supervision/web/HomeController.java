@@ -9,6 +9,7 @@ import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.ReturnResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.FunctionMenu;
 import com.rmbank.supervision.model.Organ; 
 import com.rmbank.supervision.model.Role; 
@@ -23,6 +24,13 @@ import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
  
+
+
+
+
+
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -73,18 +81,78 @@ public class HomeController extends SystemAction {
         ModelAndView mav = new ModelAndView("login"); 
         return mav;
 	}
+
+	@RequestMapping("loginPage")  
+    public ModelAndView loginPage( 
+			HttpServletRequest request, HttpServletResponse response){  
+        //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
+        ModelAndView mav = new ModelAndView("login"); 
+        return mav;
+	}
 	
+
+	@RequestMapping("modelSelect")  
+    public ModelAndView modelSelect( 
+			HttpServletRequest request, HttpServletResponse response){  
+        //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
+        ModelAndView mav = new ModelAndView("modelSelect"); 
+        return mav;
+	}
+
+    //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
+//	FunctionMenu lf = new FunctionMenu();
     /***
-     * 首页 返回至/page/login.html页面 
+     * 单个模块查看主页 
      * @return
      */
     @RequestMapping("index")
-    public ModelAndView index(
+    public ModelAndView SSJCManiPage(
             HttpServletRequest request, HttpServletResponse response){
-        //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
         ModelAndView mav = new ModelAndView("main");
         return mav;
-    } 
+    }    
+
+	@ResponseBody
+    @RequestMapping({"/createSingleSession.do"})
+    public void createSingleSession(
+            @RequestParam(value="key", required=false) String urlkey,
+            HttpServletRequest request, HttpServletResponse response) {
+		FunctionMenu lf = null;
+    	if(!StringUtil.isEmpty(urlkey)){
+	    	if(urlkey.equals("ssjc")){
+	    		lf = getFunctionMenuByKey("vision/efficiency/efficiencyList.do",request);
+	    	}else if(urlkey.equals("zhgl")){
+	    		lf = getFunctionMenuByKey("manage/branch/branchFHList.do",request);
+	    	}else if(urlkey.equals("jcgl")){
+	    		lf = getFunctionMenuByKey("system/user/userList.do",request);
+	    	}else if(urlkey.equals("rzgl")){
+	    		lf = getFunctionMenuByKey("system/log/logList.do",request);
+	    	}else if(urlkey.equals("tjfx")){
+	    		lf = getFunctionMenuByKey("statistic/efficiency/efficencyStatistic.do",request);
+	    	}
+    	}
+    	request.getSession().setAttribute(Constants.USER_SESSION_RESOURCE_SINGL_MODEL, lf);
+    }
+    
+	private FunctionMenu getFunctionMenuByKey(String urlKey,HttpServletRequest request) {
+		// TODO Auto-generated method stub
+		FunctionMenu fm = null;
+		User loginUser = (User)SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_INFO);
+		if(null != loginUser){
+			List<FunctionMenu> list = (List<FunctionMenu>) request.getSession().getAttribute(Constants.USER_SESSION_RESOURCE);
+			if(null != list && list.size()>0){
+				for(FunctionMenu f : list){
+					if(!StringUtil.isEmpty(f.getUrl())&& f.getUrl().equals(urlKey)){
+						fm = f; 
+						break;
+					}
+				}
+			}
+		}
+		return fm;
+	}
+
+
 	/**
 	 * 加载机构的树
 	 * 
@@ -108,24 +176,7 @@ public class HomeController extends SystemAction {
 		//获取用户所属的机构  
 		List<Organ> list = organService.getOrganByPId(organ);	 
 		return list;// json.toString();
-	}
-	 private void setChildrenList(List<Organ> list) {
-		// TODO Auto-generated method stub
-		 for(Organ a:list){
-				a.setText(a.getName());
-				Organ org = new Organ();
-				org.setPid(a.getId());
-				List<Organ> list1 = new ArrayList<Organ>();
-				list1 = organService.getOrganByPId(org);
-				if(list1.size() > 0){ 
-					a.setState("closed");
-				}else{
-					a.setChildren(new ArrayList<Organ>());
-					a.setState("open");
-				}
-			}
-	}
-
+	} 
 
 	/**
      * 根据机构ID查询用户
@@ -214,7 +265,7 @@ public class HomeController extends SystemAction {
         }
         return json;
     }
-  
+    
 
     private List<FunctionMenu> getFunctionMenuListByItem(
 			List<FunctionMenu> subList) {
@@ -265,7 +316,43 @@ public class HomeController extends SystemAction {
         }
         return src;
     }
-    
+	 
+	@ResponseBody
+    @RequestMapping({"/loadUserResourceSession.do"})
+    public List<FunctionMenu> loadUserResourceSession(
+            HttpServletRequest request, HttpServletResponse response) {
+		List<FunctionMenu> list = new ArrayList<FunctionMenu>();
+		User loginUser = (User)SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_INFO);
+		if(null != loginUser){
+			list = (List<FunctionMenu>) request.getSession().getAttribute(Constants.USER_SESSION_RESOURCE);
+		}
+        return list;
+    }
+
+	 
+	@ResponseBody
+    @RequestMapping({"/loadUserSingleResourceSession.do"})
+    public FunctionMenu loadUserSingleResourceSession(
+            HttpServletRequest request, HttpServletResponse response) {
+		FunctionMenu fm = new FunctionMenu();
+		User loginUser = (User)SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_INFO);
+		if(null != loginUser){
+			fm = (FunctionMenu) request.getSession().getAttribute(Constants.USER_SESSION_RESOURCE_SINGL_MODEL);
+		}
+        return fm;
+    }
+	 
+	@ResponseBody
+    @RequestMapping({"/logout.do"})
+    public ModelAndView logout(
+            HttpServletRequest request, HttpServletResponse response) {
+		Subject subject = SecurityUtils.getSubject();
+		if (subject.isAuthenticated()) {
+			subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存 
+		}
+		ModelAndView mav = new ModelAndView("login"); 
+        return mav;
+    }
     @ResponseBody
     @RequestMapping({"/jsonLoadSession.do"})
     public JsonResult<User> jsonLoadSession(

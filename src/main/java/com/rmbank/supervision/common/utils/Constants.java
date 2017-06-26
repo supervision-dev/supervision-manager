@@ -13,6 +13,7 @@ public class Constants
   public static final String USER_ADMIN_ACCOUNT = "admin";
   public static final String USER_SUPER_ADMIN_ACCOUNT = "administrator";
   public static final String USER_SESSION_RESOURCE = "userResources";
+  public static final String USER_SESSION_RESOURCE_SINGL_MODEL = "userSingleResources"; 
   public static final String USER_INFO = "userInfo";
   public static final String THE_REALM_NAME = "userRealm";
 

@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>模块选择</title>
+<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<script language="javascript">
+$(function(){	
+	 loadSessionResource();
+});
+function loadSessionResource(){
+	$.ajax({  
+       type: "POST", //请求类型
+       url: "/supervision/loadUserResourceSession.do", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#ul_modelList").html("");
+       		if(req != null && req.length >0){
+       			var mdHtml = "";
+       			for(var i = 0; i< req.length ;i++){
+       				var obj = req[i];
+       				mdHtml += "<li><span>"; 
+       				if(obj.url == "vision/efficiency/efficiencyList.do"){
+       					mdHtml += "<img src=\"/supervision/source/images/model/ssjc.png\" />";
+	       				mdHtml += "</span>";
+	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
+	    				mdHtml += "<p>效能监察<br />廉政监察<br />执法监察</p>"; 
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('ssjc');\">进入模块</a></div></li>";
+       				}else if(obj.url == "manage/branch/branchFHList.do"){
+       					mdHtml += "<img src=\"/supervision/source/images/model/zhgl.png\" />";
+	       				mdHtml += "</span>";
+	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
+	    				mdHtml += "<p>分行立项<br />中支立项<br />量化指标模型</p>"; 
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('zhgl');\">进入模块</a></div></li>"; 
+       				}else if(obj.url == "system/user/userList.do"){
+       					mdHtml += "<img src=\"/supervision/source/images/model/jcgl.png\" />";
+	       				mdHtml += "</span>";
+	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
+	    				mdHtml += "<p>机构用户管理<br />角色权限管理<br />系统预设配置</p>";  
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('jcgl');\">进入模块</a></div></li>";
+       				}else if(obj.url == "system/log/logList.do"){ 
+       					mdHtml += "<img src=\"/supervision/source/images/model/rzgl.png\" />";
+	       				mdHtml += "</span>";
+	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>"; 
+	    				mdHtml += "<p>实时监察日志<br />综合管理日志<br />系统操作日志</p>"; 
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('rzgl');\">进入模块</a></div></li>";
+       				}else if(obj.url == "statistic/efficiency/efficencyStatistic.do"){ 
+       					mdHtml += "<img src=\"/supervision/source/images/model/tjfx.png\" />";
+	       				mdHtml += "</span>";
+	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
+	    				mdHtml += "<p>实时监察统计<br />综合管理统计<br />实时统计</p>"; 
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('tjfx');\">进入模块</a></div></li>";
+       				} 
+       			}
+       			$("#ul_modelList").html(mdHtml); 
+       		}else{
+       			window.location.href = "/supervision/logout.do";
+       		}
+       }
+    });  
+};
+function gotoModel(urlkey){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/createSingleSession.do?key="+urlkey,
+       dataType:"json", //响应数据类型    
+       async:false,
+       success: function(req) {  
+       }
+    });
+	window.location.href = "/supervision/index.do";
+}
+</script> 
+</head>
+
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul"> 
+    <li><a href="#">模块选择</a></li> 
+    </ul> 
+    <ul class="placeul" style="float:right;"> 
+    <li><a href="/supervision/logout.do">退出</a></li> 
+    </ul>
+    </div>
+    
+    <div class="rightinfo">
+    <ul id="ul_modelList" class="classlist">
+    </ul> 
+    <div class="clear"></div>
+    </div>
+    
+
+</body>
+
+</html>
