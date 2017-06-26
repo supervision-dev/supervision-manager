@@ -1,0 +1,153 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>执法监察统计</title>
+<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+	loadStatisticData();
+});
+function loadStatisticData(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/statistic/enforce/enforceStatistic.do", 
+       dataType:"json", //响应数据类型    
+       success: function(req) { 
+       		if(req != null){
+       			$("#tb_StatisticModel").html("");
+       			$("#tb_SubStatisticModel").html("");
+       			$("#tb_TotalList").html("");
+       			var modHtml = "";
+       			var subModHtml = "";
+       			var totalHtml = "";
+       			if(req.statisticModel != null){
+       				modHtml += "<tr>";
+       				modHtml += "<td>"+req.statisticModel.totalCount+"</td>";
+       				modHtml += "<td>"+req.statisticModel.comCount+"</td>";
+       				modHtml += "<td>"+req.statisticModel.unComCount+"</td>";
+       				modHtml += "<td>"+req.statisticModel.overUnComCount+"</td>";
+       				modHtml += "<td>"+req.statisticModel.overComCount+"</td>";
+       				modHtml += "</tr>";
+       			}else{
+       				modHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>"; 
+       			}
+       			$("#tb_StatisticModel").html(modHtml);
+       			if(req.subStatisticModel != null){
+       				subModHtml += "<tr>";
+       				subModHtml += "<td>"+req.subStatisticModel.totalCount+"</td>";
+       				subModHtml += "<td>"+req.subStatisticModel.comCount+"</td>";
+       				subModHtml += "<td>"+req.subStatisticModel.unComCount+"</td>";
+       				subModHtml += "<td>"+req.subStatisticModel.overUnComCount+"</td>";
+       				subModHtml += "<td>"+req.subStatisticModel.overComCount+"</td>";
+       				subModHtml += "</tr>";
+       			}else{
+       				subModHtml += "<tr><td colspan=\"5\">暂无统计数据!</td></tr>";
+       			}
+       			$("#tb_SubStatisticModel").html(subModHtml);
+       			if(req.totalList != null && req.totalList.length >0){
+       				for(var i = 0; i<req.totalList.length; i++){
+       					var obj = req.totalList[i]; 
+       					totalHtml += "<tr>";
+	       				totalHtml += "<td>"+obj.orgName+"</td>";
+	       				totalHtml += "<td>"+obj.totalCount+"</td>";
+	       				totalHtml += "<td>"+obj.comCount+"</td>";
+	       				totalHtml += "<td>"+obj.unComCount+"</td>";
+	       				totalHtml += "<td>"+obj.overUnComCount+"</td>";
+	       				totalHtml += "<td>"+obj.overComCount+"</td>";
+	       				totalHtml += "</tr>";
+       				}
+       			}else{
+       				totalHtml += "<tr><td colspan=\"6\">暂无统计数据!</td></tr>";
+       			}
+       			$("#tb_TotalList").html(totalHtml);
+       		}else{
+       		 	parent.window.location.href = "/supervision/logout.do";
+       		}
+       }
+    }); 
+}
+</script>
+
+
+</head>
+
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+    <li><a href="#">统计分析</a></li>
+    <li><a href="#">执法监察统计</a></li>
+    </ul>
+    </div>
+    
+    <div class="rightinfo">
+    
+    <div class="tools">
+    
+    	<!-- <ul class="toolbar">
+        <li class="click"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
+        <li class="click"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+        <li><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+        <li><span><img src="/supervision/source/images/t04.png" /></span>统计</li>
+        </ul> -->
+        
+        <ul class="toolbar">
+        <li><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
+        </ul>
+    </div>
+    <table class="tablelist">
+    	<thead>
+	    	<tr>
+		        <th>实时监察项目总数</th>	
+				<th>已完成项目</th>
+				<th>未完成项目</th>
+				<th>逾期未完成项目</th>		
+				<th>逾期完成项目</th> 		
+	        </tr> 
+        </thead>
+        <tbody id="tb_StatisticModel">
+             
+        </tbody>
+    </table>
+    <table class="tablelist" style="margin-top:15px;">
+    	<thead>
+	    	<tr>
+		        <th>执法监察项目总数</th>	
+				<th>已完成项目</th>
+				<th>未完成项目</th>
+				<th>逾期未完成项目</th>		
+				<th>逾期完成项目</th> 		
+	        </tr> 
+        </thead>
+        <tbody id="tb_SubStatisticModel">
+             
+        </tbody>
+    </table>
+    <table class="tablelist" style="margin-top:15px;">
+    	<thead>
+	    	<tr>
+	    		<th>机构名称</th>
+		        <th>立项总数</th>
+		        <th>已完成项目</th>
+		        <th>未完成项目</th>
+		        <th>逾期未完成项目</th>
+		        <th>逾期完成项目</th>
+	        </tr> 
+        </thead>
+        <tbody id="tb_TotalList">
+             
+        </tbody>
+    </table>
+    </div>
+    <script type="text/javascript">
+	$('.tablelist tbody tr:odd').addClass('odd');
+	</script>
+
+</body>
+
+</html>

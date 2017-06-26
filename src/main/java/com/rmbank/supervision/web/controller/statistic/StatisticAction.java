@@ -33,9 +33,9 @@ import com.rmbank.supervision.service.StatisticService;
  * @author LQ
  *
  */
-@Scope("prototype")
+/*@Scope("prototype")
 @Controller
-@RequestMapping("/statistic")
+@RequestMapping("/statistic")*/
 public class StatisticAction {
 
 	/**
