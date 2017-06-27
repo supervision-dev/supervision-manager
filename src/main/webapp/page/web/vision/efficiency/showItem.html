@@ -26,8 +26,7 @@ function getDataList(pageNo){
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"2\">没有获取到相关数据</td></tr>";
 	   		if(req.ResultItem != null){
-	       		itemHtml = "";
-	       		
+	       		itemHtml = "";	       		
        			itemHtml +="<tr>";				    
 			    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">工作事项：</td>";  	
 			    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.name+"</td>";		    
@@ -35,16 +34,37 @@ function getDataList(pageNo){
 		        for(var i = 0;i<req.ResultItemProcess[0].fileList.length;i++){
 			        itemHtml +="<tr>";				    
 				    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";  	
-				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile("+req.ResultItemProcess[0].fileList[i].filePath+");\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";		
-				    			
-				    		       
+				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[0].fileList[i].filePath+"\',\'"+req.ResultItemProcess[0].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";			       
 			        itemHtml +="</tr>";
-			       
 		        }
-		       
-	       		
 	       }
-	       
+	       if(req.ResultItemProcess != null){
+	       		for(var i = 0;i<req.ResultItemProcess.length;i++){
+	       			if(req.ResultItemProcess[i].contentTypeId == -1 && req.ResultItemProcess[i].content != null){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察项目：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+				        itemHtml +="</tr>";		        
+				        
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察内容：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">规定完成时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.endTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.orgName+"</td>";			       
+				        itemHtml +="</tr>";
+	       			}
+			        
+		        }
+	       }
 	       $("#tb_userList").html(itemHtml);
        }
 	});

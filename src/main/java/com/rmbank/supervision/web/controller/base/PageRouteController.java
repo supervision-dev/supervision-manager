@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rmbank.supervision.model.ItemProcess;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 
@@ -220,6 +221,7 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/efficiencyList");
     	return mv;
     }
+    
     /**
      * 效能监察查看项目
      * @param request
@@ -235,6 +237,60 @@ public class PageRouteController extends SystemAction {
     	HttpSession session = request.getSession();
     	session.setAttribute("showItemId", id);
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/showItem");
+    	return mv;
+    }
+    
+    /**
+     * 效能监察流程页面跳转
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/efficiency/efficiencyFile.do")
+    public ModelAndView efficiencyFile( 
+    		@RequestParam(value="itemId", required = false) Integer itemId,
+    		@RequestParam(value="tag", required = false) Integer tag,
+    		HttpServletRequest request, HttpServletResponse response
+    		) throws UnsupportedEncodingException { 
+    	
+    	HttpSession session = request.getSession();
+    	session.setAttribute("efficiencyItemId", itemId);
+    	
+    	ModelAndView mv = new ModelAndView();
+    	
+    	if(tag == -1){
+    		mv.setViewName("web/vision/efficiency/itemInfo");
+    		
+    	}
+    	if(tag == 67 ){
+//			ItemProcess itemProcess = itemProcessList.get(itemProcessList.size() - 1); // 获取最后一个元素
+//			Integer contentTypeId = itemProcess.getContentTypeId();
+//			if(contentTypeId==72){
+//				request.setAttribute("contentID", contentTypeId);
+//			}			
+			mv.setViewName("web/vision/efficiency/opinion");
+		}
+		if(tag == 68 ){			
+			mv.setViewName("web/vision/efficiency/opinion");
+		}
+		if(tag == 69 ){
+			mv.setViewName("web/vision/efficiency/resetView");
+			
+		}
+		if(tag==688){
+			mv.setViewName("web/vision/efficiency/jianChaJieLun");
+			
+		}
+		if(tag==777){
+			mv.setViewName("web/vision/efficiency/wenZeView");
+			
+		}
+		if(tag==778){
+			mv.setViewName("web/vision/efficiency/zhengGaiView");
+			
+		}
+		
     	return mv;
     }
     

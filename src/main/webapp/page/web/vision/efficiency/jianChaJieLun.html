@@ -1,0 +1,129 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>效能监察</title>
+<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<script src="/supervision/source/laydate/laydate.js"></script>
+<script type="text/javascript">
+$(document).ready(function(){ 
+	laydate({
+		  elem: '#datepicker', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+		  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+	});	
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+	$('.tablelist tbody tr:odd').addClass('odd');
+	//getDataList(1);
+});
+function getDataList(pageNo){
+	var obj = {};
+	obj.pageNo = pageNo; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/efficiency/showItem.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		
+       }
+	});
+}
+
+
+</script>
+
+
+</head>
+
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul"> 
+    <li><a href="#">实时监察</a></li>
+    <li><a href="#">效能监察</a></li>
+    </ul>
+    </div>
+    
+    <div class="rightinfo">
+    
+    <div class="tools">
+    
+    	<a class="enter" onclick=""  target="rightFrame">返回</a> 
+    	
+    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
+    		
+    	</div> -->
+    </div>
+    
+       
+    <table class="itemTable" >
+    	<tr>
+       		<td width="12%" align="right">监察项目：</td>
+       		<td colspan="3">
+       			<input id="itemName" name="name" type="text" value="" style="width:60%;height:28px;"/> 
+					
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right">监察内容：</td>
+       		<td colspan="3">
+       			<textarea rows="3" cols="5" style="width:60%;" name="content" ></textarea>								
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right">规定完成时间：</td>
+       		<td width="28%">
+       			<input type="text" name="end_time" value="" id="datepicker" class="laydate-icon">
+       		</td>
+       		<td width="12%" style="border: 0px; ">是否分节点监察：</td>
+       		<td>
+       			<select id="supervisionTypeId" name="isStept" style="width:152px;height:28px;">						
+					<option value="0">否</option>
+					<option value="1">是</option>					
+				</select> 
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right">被监察对象：</td>
+       		<td colspan="3"></td>
+       	</tr>
+    </table>
+    
+   
+    
+    
+    
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div> 
+    </div> 
+     <div class="addtip" id="add_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        
+	    
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    </div> 
+
+</body>
+
+</html>

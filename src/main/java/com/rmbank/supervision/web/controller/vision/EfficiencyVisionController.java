@@ -790,9 +790,9 @@ public class EfficiencyVisionController extends SystemAction {
     @ResponseBody
     @RequestMapping(value = "/showItem.do")
     @RequiresPermissions("vision/efficiency/showItem.do")
-    public BaseItemResult showItem(Item item, 
+    public BaseItemResult showItem( 
             HttpServletRequest request, HttpServletResponse response){
-    	
+    	Item item =new Item();
     	HttpSession session = request.getSession();
     	Integer itemId = (Integer) session.getAttribute("showItemId");
     	
@@ -815,29 +815,42 @@ public class EfficiencyVisionController extends SystemAction {
 				if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_0){
 					//request.setAttribute("ItemProcess", ip); //监察内容
 					drIPList.add(ip);
-				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_2){
+				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_00){					
+					//request.setAttribute("ItemProcess2", ip); //立项状态
 					drIPList.add(ip);
+				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_2){					
 					//request.setAttribute("ItemProcess2", ip); //已经上传资料
-				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_3){
-					request.setAttribute("ItemProcess3", ip); //监察意见
+					drIPList.add(ip);
+				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_3){					
+					//request.setAttribute("ItemProcess3", ip); //监察意见
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_4){
-					request.setAttribute("ItemProcess4", ip); //监察室已经给出意见，需要整改，进入到被监察对象录入整改情况
+					//request.setAttribute("ItemProcess4", ip); //监察室已经给出意见，需要整改，进入到被监察对象录入整改情况
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==666){
 					request.setAttribute("ItemProcess5", ip);
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==688){
 					request.setAttribute("ItemProcess10", ip); //不问责，进入监察室给出结论
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==777){
 					request.setAttribute("ItemProcess6", ip); //监察室录入问责资料
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==778){
 					request.setAttribute("ItemProcess7", ip); //再次上传整改情况
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_6){
 					request.setAttribute("ItemProcess8", ip); //给出监察结论项目完结
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==779){ 
 					request.setAttribute("ItemProcess9", ip); //再次整改后项目完结
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==999){ 				
 					ipList.add(ip);					//分节点上传资料
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_11){					
 					ipYJList.add(ip);			  //监察分节点上传资料的意见
+					drIPList.add(ip);
 				}
 			}
 			if(ipList.size()>0){

@@ -82,11 +82,11 @@ function getDataList(pageNo){
 				    }
 				    //流程判断开始
 				    //首先判断登录机构是否是分行监察室或中支监察室
-				    if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
+				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 || req.datalist[i].orgType == 43 && req.datalist[i].status == 0){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且登录用户角色是监察室角色。
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==3 || req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==4 ){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
-				    		itemHtml +="<td width=\"180px;\">立项</td>";
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
@@ -155,6 +155,9 @@ function clearForm(){
 }
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/efficiency/showItem.do?id="+id;
+} 
+function efficiencyFile(itemId,tag){ 
+	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag;
 }
 function test(){ 
 	$("#organ_tip").fadeIn(200);
