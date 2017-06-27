@@ -132,9 +132,9 @@
 	</if>  	
   </select>
   <select id="getResourceListBymoudleId" parameterType="com.rmbank.supervision.model.ResourceConfig" resultMap="BaseResultMap">
-  	SELECT r.*,f.name AS functionName 
-  	FROM t_resource r, t_function f 
-  	where moudle_id=#{moudleId,jdbcType=VARCHAR}
+  	SELECT  * 
+  	FROM t_resource  
+  	where  moudle_id=#{moudleId,jdbcType=VARCHAR}
   </select>
   <select id="getResourceConfigsByUserRoles" parameterType="java.util.List" resultMap="BaseResultMap">
   

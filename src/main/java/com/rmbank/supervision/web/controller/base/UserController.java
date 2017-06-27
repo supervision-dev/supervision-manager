@@ -177,7 +177,7 @@ public class UserController extends SystemAction {
 	 */
     @ResponseBody
     @RequestMapping(value = "/jsonSaveOrUpdateUser.do", method=RequestMethod.POST)
-    @RequiresPermissions("system/user/jsonSaveOrUpdateUser.do")
+    /*@RequiresPermissions("system/user/jsonSaveOrUpdateUser.do")*/
     public JsonResult<User> jsonSaveOrUpdateDevice(User user,
     		HttpServletRequest request, HttpServletResponse response){
     	
@@ -247,7 +247,7 @@ public class UserController extends SystemAction {
      */
     @ResponseBody
 	@RequestMapping(value = "/jsondeleteUserById.do", method = RequestMethod.POST)
-	@RequiresPermissions("system/user/jsondeleteUserById.do")
+	/*@RequiresPermissions("system/user/jsondeleteUserById.do")*/
 	public JsonResult<User> jsondeleteUserById(
 			@RequestParam(value = "id", required = false) Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -280,7 +280,7 @@ public class UserController extends SystemAction {
      */
     @ResponseBody
 	@RequestMapping(value = "/jsonResetUserPwd.do", method = RequestMethod.POST)
-	@RequiresPermissions("system/user/jsonResetUserPwd.do")
+	/*@RequiresPermissions("system/user/jsonResetUserPwd.do")*/
 	public JsonResult<User> jsonResetUserPwd(
 			@RequestParam(value = "id", required = false) Integer id,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -312,11 +312,11 @@ public class UserController extends SystemAction {
     }
 
     /**
-     * 重置密码
+     * 根据Id获取用户主题信息
      */
     @ResponseBody
 	@RequestMapping(value = "/jsonloadUserInfo.do", method = RequestMethod.POST)
-	@RequiresPermissions("system/user/jsonloadUserInfo.do")
+	/*@RequiresPermissions("system/user/jsonloadUserInfo.do")*/
 	public User jsonloadUserInfo(
 			@RequestParam(value = "id", required = false) Integer id,
 			HttpServletRequest request, HttpServletResponse response) {

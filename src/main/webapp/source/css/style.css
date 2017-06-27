@@ -64,7 +64,7 @@ h2{font-weight:normal;}
 
 /*top.html*/ 
 .header{height:88px;}
-.topleft{height:88px;background:url(/supervision/source/images/topleft.jpg) no-repeat;float:left; width:70%;} 
+.topleft{height:88px;background:url(/supervision/source/images/topleft.jpg) no-repeat;float:left; width:60%;} 
 .nav{float:right;}
 .nav li{float:left;width:87px;height:88px; text-align:center;}
 .nav li a{display:block;width:87px;height:88px;-moz-transition: none; transition: background-color 0.3s linear; -moz-transition: background-color 0.3s linear; -webkit-transition: background-color 0.3s linear; -o-transition: background-color 0.3s linear; }
@@ -209,6 +209,7 @@ h2{font-weight:normal;}
 /*tip*/
 .tip{border:1px solid black;width:485px; height:260px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:222222;}
 .addtip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
+.assigntip{border:1px solid #C6C6C6;width:585px; height:460px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .simpletip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:16%; left:40%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .tiptop{height:40px; line-height:40px; background-color:#066cae; cursor:pointer;}
 .tiptop span{font-size:14px; font-weight:bold; color:#fff;float:left; text-indent:20px;}
@@ -307,12 +308,14 @@ h2{font-weight:normal;}
 .classlist li span{float:left;margin-right:18px;border:3px solid #fff;}
 .classlist li span img{width:100px;} 
 .classlist li .lright{float:left;width:150px;}
-.classlist li .lright h2{font-size:12px; font-weight:bold;line-height:30px;}
+.classlist li .lright h2{font-size:12px; font-weight:bold;line-height:30px;} 
 .classlist li .lright p{line-height:20px;}
 .enter{display:block;margin-top:5px;width:94px;height:30px;color:#fff;background:#3eafe0;font-weight:bold; border-radius:2px; text-align:center;line-height:30px; cursor:pointer;}
 .enter:hover{color:#fff; background:#d98c1d;}
 .clear{clear:both;}
 
+.forRec{padding:2px 8px 2px 8px; width:80px;height:22px;color:#fff;background:green;  border-radius:2px; text-align:center;line-height:22px; cursor:pointer;}
+.forRec:hover{color:#fff; background:red;}
 /*seachform*/
 .seachform{ height:42px;} 
 .seachform li{float:left; margin-right:15px;}
