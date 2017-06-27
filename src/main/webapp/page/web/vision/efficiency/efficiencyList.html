@@ -342,6 +342,7 @@ function saveSelectOrg(obj){
 		 selectOrgNameStr = "未选择被监察对象";
 	}
 	$("#ipt_slt_orgName").val(selectOrgNameStr);
+	$("#ipt_slt_orgName").text(selectOrgNameStr);
 	$("#lbl_sltOrg").text(selectOrgIdStr);
 }
 </script>
@@ -461,7 +462,7 @@ function saveSelectOrg(obj){
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
 	    <div class="simpletipinfo">   
-	       <div style="min-height:310px;_height: 310px; overflow:visible;  width:99%;max-heigth:350px;overflow-x:hidden; "> 
+	       <div style="height:320px;width:99%;overflow-x:hidden;"> 
         		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
         		<tr><td></td></tr>  
         		</table> 
@@ -475,7 +476,7 @@ function saveSelectOrg(obj){
     </div>
     <div>
     	测试被监察对象选择，带复选框
-    	<input type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" style="border:1px solid #C6C6C6;width:500px;height:34px;" /> 
+    	<textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="5" cols="6"  style="border:1px solid #C6C6C6;width:500px;height:84px;"></textarea> 
     	<label>选择被监察对象Id ：</label>
     	<label id="lbl_sltOrg"></label>
     </div>
