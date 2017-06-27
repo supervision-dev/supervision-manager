@@ -263,7 +263,7 @@ public class UserAction extends SystemAction  {
 				//如为编辑，则给新建user对象赋传来的设备id值
 				if (user.getId() > 0) {
 					u.setId(user.getId());					
-					State = userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
+					State = true;//userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
 					if(State){
 						User loginUser = this.getLoginUser();
 						String ip = IpUtil.getIpAddress(request);		
@@ -278,7 +278,7 @@ public class UserAction extends SystemAction  {
 				//根据id去数据库匹配，如编辑，则可以直接保存；如新增，则需匹配该账号是否重复
 				List<User> lc = userService.getExistUser(u);
 				if (lc.size() == 0) {  
-					State = userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
+					State = true;// userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
 					if(State){
 						User loginUser = this.getLoginUser();
 						String ip = IpUtil.getIpAddress(request);		

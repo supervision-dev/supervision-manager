@@ -24,7 +24,7 @@ public interface UserService {
 
 	List<User> getExistUser(User u);
 
-	boolean saveOrUpdateUser(User user, Integer [] roleIds , Integer [] orgIds, Integer postId);
+	boolean saveOrUpdateUser(User user, List<Integer> roleIds , List<Integer> orgIds, Integer postId);
 
 	boolean deleteUserById(Integer id);
 
