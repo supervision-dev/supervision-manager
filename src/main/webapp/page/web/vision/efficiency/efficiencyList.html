@@ -80,8 +80,22 @@ function getDataList(pageNo){
 				    }else{
 				    	itemHtml +="<td></td>";
 				    }
+				    //流程判断开始
+				    //首先判断登录机构是否是分行监察室或中支监察室
+				    if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
+				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致。
+				    	if(req.datalist[i].isItemOrg == "true"){
+				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
+				    		itemHtml +="<td width=\"180px;\">立项</td>";
+				    	}else{
+				    		itemHtml +="<td width=\"180px;\"></td>";
+				    	}
+				    }else{
+				    	itemHtml +="<td width=\"180px;\">无操作权限</td>";
+				    }  
 				      
-				    itemHtml +="<td width=\"180px;\">流程操作</td>";  
+				    
+				    //流程判断结束
 				    itemHtml +="<td>删除</td>";  			    
 			        itemHtml +="</tr>";
 	       		}
