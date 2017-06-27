@@ -22,6 +22,14 @@ function getRoleList(){
        url: "/supervision/system/user/getRoleList.do",
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		$("#slt_roleId").html("");
+       		var pHtml = "<option value=\"\">--请选择用户角色--</option>";
+			if(req != null && req.length >0){
+				for(var i = 0; i< req.length; i++){
+					pHtml +=  "<option value='"+req[i].id+"'>"+req[i].name+"</option>";
+				}
+			}
+			$("#slt_roleId").html(pHtml);
        }
     });
 }
@@ -31,6 +39,14 @@ function getPostList(){
        url: "/supervision/system/user/getPostList.do",
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		$("#slt_postId").html("");
+       		var pHtml = "<option value=\"\">--请选择职务名称--</option>";
+			if(req != null && req.length >0){
+				for(var i = 0; i< req.length; i++){
+					pHtml +=  "<option value='"+req[i].id+"'>"+req[i].name+"</option>";
+				}
+			}
+			$("#slt_postId").html(pHtml);
        }
     });
 }
@@ -49,7 +65,7 @@ function getDataList(pageNo){
 	       		userHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			userHtml +="<tr>";
-				    userHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+				    userHtml +="<td><input onclick=\"getSltUser(this);\" name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
 				    userHtml +="<td>"+req.datalist[i].name+"</td>";
 				    userHtml +="<td>"+req.datalist[i].account+"</td>";
 				    userHtml +="<td>"+req.datalist[i].orgName+"</td>";
@@ -66,7 +82,11 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -75,42 +95,135 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		}
+	       		} 
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(userHtml);
+	       
+		  	$("#tb_userList input[type='checkbox']").click(function(){
+			  	$("#tb_userList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_user_id = this.value;
+			}); 
        }
 	});
+} 
+function search(pageNo){
+	getDataList(pageNo);
 }
+var constants_user_id = 0;
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的用户！");
-		$("#confirm_tip").fadeIn(200);
+		if(constants_user_id == 0){
+			$("#showmessage").html("请选择要编辑的用户！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#add_tip").fadeIn(200);
+			showDataField();
+		}
+	}else if(type == "delete"){
+		if(constants_user_id == 0){
+			$("#showmessage").html("请选择要删除的用户！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#delete_confirm_tip").fadeIn(200);
+		}
+	}else if(type == "resetpwd"){
+		if(constants_user_id == 0){
+			$("#showmessage").html("请选择重置密码的用户！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#reset_confirm_tip").fadeIn(200);
+		}
 	}
 }
+function deleteUserAction(){
+	$("#delete_confirm_tip").fadeOut(300);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/jsondeleteUserById.do?id="+constants_user_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req.code == 0){    
+				getDataList(1);   
+				$("#showmessage").html("删除用户成功！");  
+				$("#confirm_tip").fadeIn(200);
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
+}
+function reSetUserAction(){
+	$("#reset_confirm_tip").fadeOut(300);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/jsonResetUserPwd.do?id="+constants_user_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req.code == 0){      
+				$("#showmessage").html("用户重置密码成功！");  
+				$("#confirm_tip").fadeIn(200);
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
+};
 function showAddTip(){
 	$("#add_tip").fadeIn(200);
+	if($("#tr_account").hasClass("displaynone")){
+		$("#tr_account").removeClass("displaynone");
+	}
+	if($("#tr_pwd").hasClass("displaynone")){
+		$("#tr_pwd").removeClass("displaynone");
+	}
+	if($("#tr_rePassword").hasClass("displaynone")){
+		$("#tr_rePassword").removeClass("displaynone");
+	} 
+} 
+function showDataField(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/jsonloadUserInfo.do?id="+constants_user_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req != null){      
+				$("#hid_userId").val(req.id);
+				$("#ipt_name").val(req.name); 
+				$("#hid_orgId").val(req.orgId);
+				$("#ipt_organname").val(req.orgName);
+				$("#slt_postId").val(req.postId);
+				$("#slt_roleId").val(req.roleId); 
+				$("#tr_account").addClass("displaynone");
+				$("#tr_pwd").addClass("displaynone");
+				$("#tr_rePassword").addClass("displaynone"); 
+			 }
+			else{
+				$("#showmessage").html("用户信息加载失败，编辑失败！");  
+				$("#add_tip").fadeOut(200);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
-}
-function clearForm(){
-
-}
-
 function showOrgTip(){
 	$("#slt_postId").addClass("displaynone");
 	$("#slt_roleId").addClass("displaynone");
@@ -238,6 +351,99 @@ function selectOrgan(tag){
 	$("#slt_postId").removeClass("displaynone");
 	$("#slt_roleId").removeClass("displaynone");
 }
+
+function saveOrUpdateUserInfo(){
+	var obj ={};
+	var id = $("#hid_userId").val();
+	obj.id = id;
+	var name = $("#ipt_name").val();
+	if(name == "" || name.length== 0){
+		$("#showmessage").html("请输入用户名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = name;
+	if(obj.id  == 0){
+		var account = $("#ipt_account").val();
+		if(account == "" || account.length== 0){
+			$("#showmessage").html("请输入用户登录账号！");
+			$("#confirm_tip").fadeIn(200);
+			return;
+		}
+		var pwd = $("#ipt_pwd").val();
+		if(pwd == "" || pwd.length== 0){
+			$("#showmessage").html("请输入用户登录密码！");
+			$("#confirm_tip").fadeIn(200);
+			return;
+		}
+		if(pwd.length >22 || pwd.length <6 ){
+			$("#showmessage").html("密码长度为6至22位之间的字母和数字构成！");
+			$("#confirm_tip").fadeIn(200);
+			return;
+		}
+		var rePwd = $("#ipt_rePassword").val();
+		if(rePwd == "" || rePwd.length== 0){
+			$("#showmessage").html("请输入确认密码！");
+			$("#confirm_tip").fadeIn(200);
+			return;
+		}
+		if(pwd != rePwd){
+			$("#showmessage").html("两次密码不一致，请重新输入！");
+			$("#confirm_tip").fadeIn(200);
+			return;
+		}
+		obj.account = account;
+		obj.pwd = pwd;
+		obj.rePassword = rePwd
+	}
+	var orgId = $("#hid_orgId").val();
+	if(orgId == "" || orgId.length== 0){
+		$("#showmessage").html("请选择用户所属机构！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var postId = $("#slt_postId").val();
+	if(postId == "" || postId.length== 0){
+		$("#showmessage").html("请选择用户职位！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var roleId = $("#slt_roleId").val();
+	if(roleId == "" || roleId.length== 0){
+		$("#showmessage").html("请选择用户角色！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.orgId = orgId;
+	obj.roleId = roleId;
+	obj.postId = postId; 
+	 $.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/jsonSaveOrUpdateUser.do", 
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) {
+       		if(req.code == 0){    
+				getDataList(1);   
+				$("#showmessage").html("用户信息保存成功！");
+				$("#add_tip").fadeOut(100);
+				clearForm();
+				$("#confirm_tip").fadeIn(200);
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });  
+}
+function clearForm(){
+	$(".addtip .dfinput").val("");
+	$("#hid_userId").val(0);
+}
+function getSltUser(obj){
+	
+}
 </script>
 
 
@@ -262,6 +468,7 @@ function selectOrgan(tag){
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+        <li onclick="showAlertTip('resetpwd');"><span><img src="/supervision/source/images/t07.png" /></span>重置密码</li> 
         </ul> 
     
     </div>
@@ -309,9 +516,41 @@ function selectOrgan(tag){
       	</div>
         
         <div class="tipbtn">
-        	<input type="button"  class="sure" value="确定" /> 
+        	<input type="button" class="sure" value="确定" /> 
         </div> 
     </div> 
+    <div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认删除当前选择用户？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="deleteUserAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
+     <div class="tip" id="reset_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#reset_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon3.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认重置当前选择用户的登录密码？</p> 
+	        	<cite>如果确认，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="reSetUserAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#reset_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
      <div class="addtip" id="add_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
         
@@ -319,24 +558,16 @@ function selectOrgan(tag){
 	       <div style="height:300px;width:99%;">	
 	        	<form>
 	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="hidden" id="hid_userId" value="0"  /><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号<span style="color:red">(字母和数字)</span>：</span></td><td><input type="text" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr>  
+	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="hidden" id="hid_userId" value="0"  /><input type="text" class="dfinput" name="name" id="ipt_name"  /></td></tr> 
+	        			<tr id="tr_account"><td style="height:30px;"><span >用户账号<span style="color:red">(字母和数字)</span>：</span></td><td><input type="text" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')" name="account" id="ipt_account" /></td></tr> 
+	        			<tr id="tr_pwd"><td style="height:30px;"><span >用户密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')" name="pwd" id="ipt_pwd" /></td></tr> 
+	        			<tr id="tr_rePassword"><td style="height:30px;"><span></span>确认密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')" name="rePassword" id="ipt_rePassword" /></td></tr>  
 	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput" id="ipt_organname" readonly="readonly"  onclick="showOrgTip();" /><input type="hidden" name="orgId" id="hid_orgId" /></td></tr>
 	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td>
 	        				<select name="postId" id="slt_postId"  class="dfinput" >
-								<option value="">--请选择职务名称--</option>
-								<option value="1">效能监察</option>
-								<option value="2">廉政监察</option>
-								<option value="3">实时监察</option>  
 							</select></td></tr>
 	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td>
 	        				<select name="roleId" id="slt_roleId"  class="dfinput" >
-								<option value="">--请选择用户角色--</option>
-								<option value="1">效能监察</option>
-								<option value="2">廉政监察</option>
-								<option value="3">实时监察</option>  
 							</select></td></tr>
 	        			<tr><td colspan="2"></td></tr>
 	        		</table>
@@ -349,28 +580,7 @@ function selectOrgan(tag){
         	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
         </div> 
     </div> 
-     <div class="addtip" id="edit_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="hidden" id="hid_userId" value="0"  /><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
-        </div> 
-    </div>
+      
     </div> 
 
     <div class="simpletip" id="organ_tip"> 

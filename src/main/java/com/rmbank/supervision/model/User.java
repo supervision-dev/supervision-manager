@@ -40,6 +40,12 @@ public class User extends Page{
     private String newPassword;
 
     private String rePassword;
+    
+    private Integer orgId;
+    
+    private Integer postId;
+    
+    private Integer roleId;
 
     public Integer getId() {
         return id;
@@ -183,5 +189,29 @@ public class User extends Page{
 
 	public void setUserOrgID(int userOrgID) {
 		this.userOrgID = userOrgID;
+	}
+
+	public Integer getOrgId() {
+		return orgId;
+	}
+
+	public void setOrgId(Integer orgId) {
+		this.orgId = orgId;
+	}
+
+	public Integer getPostId() {
+		return postId;
+	}
+
+	public void setPostId(Integer postId) {
+		this.postId = postId;
+	}
+
+	public Integer getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Integer roleId) {
+		this.roleId = roleId;
 	}
 }

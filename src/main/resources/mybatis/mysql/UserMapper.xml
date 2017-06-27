@@ -8,6 +8,9 @@
     <result column="pwd" property="pwd" jdbcType="VARCHAR" />
     <result column="salt" property="salt" jdbcType="VARCHAR" />
     <result column="used" property="used" jdbcType="INTEGER" />
+    <result column="orgId" property="orgId" jdbcType="INTEGER" />
+    <result column="roleId" property="roleId" jdbcType="INTEGER" />
+    <result column="postId" property="postId" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name,account, pwd, salt, used
@@ -164,9 +167,18 @@
 	(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
 	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id`
 	WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT org1.id FROM t_org org1
+	LEFT JOIN t_user_org uo1 ON org1.`id` = uo1.`org_id`
+	WHERE uo1.`user_id` = u.id) AS orgId ,
+	(SELECT uo2.post_id FROM t_org org2
+	LEFT JOIN t_user_org uo2 ON org2.`id` = uo2.`org_id`
+	WHERE uo2.`user_id` = u.id) AS postId ,
 	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
 	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id`
-	WHERE ur.`user_id` = u.id) AS roleName
+	WHERE ur.`user_id` = u.id) AS roleName, 
+	(SELECT role1.id FROM t_role role1
+	LEFT JOIN t_user_role ur1 ON role1.`id` = ur1.`role_id`
+	WHERE ur1.`user_id` = u.id) AS roleId
 	FROM t_user u
 	where u.id =  #{id,jdbcType=INTEGER} 
   </select>

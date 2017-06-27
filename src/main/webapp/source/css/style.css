@@ -190,7 +190,7 @@ h2{font-weight:normal;}
 .tooli li p{line-height:35px; text-align:center;}
 
 
-/*form*/
+/*form*/ 
 .formbody{padding:10px 18px;}
 .formtitle{border-bottom:solid 1px #d0dee5; line-height:35px; position:relative; height:35px; margin-bottom:28px;}
 .formtitle span{font-weight:bold;font-size:14px; border-bottom:solid 3px #66c9f3;float:left; position:absolute; z-index:100; bottom:-1px; padding:0 3px; height:30px; line-height:30px;}
@@ -203,9 +203,9 @@ h2{font-weight:normal;}
 .textinput{border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; background:url(/supervision/source/images/inputbg.gif) repeat-x; padding:10px; width:504px; height:135px; line-height:20px; overflow:hidden;}
 .btn{width:137px;height:35px; background:url(/supervision/source/images/btnbg.png) no-repeat; font-size:14px;font-weight:bold;color:#fff; cursor:pointer;}
 
- 
+  
 /*tip*/
-.tip{border:1px solid black;width:485px; height:260px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
+.tip{border:1px solid black;width:485px; height:260px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:222222;}
 .addtip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .simpletip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:16%; left:40%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .tiptop{height:40px; line-height:40px; background-color:#066cae; cursor:pointer;}
@@ -224,6 +224,7 @@ h2{font-weight:normal;}
 .simpletipbtn{margin-top:30px; text-align:center;} 
 .sure ,.cancel{width:96px; height:35px; line-height:35px; color:#fff; background:url(/supervision/source/images/btnbg1.png) repeat-x; font-size:14px; font-weight:bold;border-radius: 3px; cursor:pointer;}
 .saveBtn{width:96px; height:35px; line-height:35px; color:#fff; background:url(/supervision/source/images/btnbg1.png) repeat-x; font-size:14px; font-weight:bold;border-radius: 3px; cursor:pointer;}
+.sureRedic{width:96px; height:35px; line-height:35px; color:#fff; background:url(/supervision/source/images/btnbg1.png) repeat-x; font-size:14px; font-weight:bold;border-radius: 3px; cursor:pointer;}
 .cancel{background:url(/supervision/source/images/btnbg2.png) repeat-x;color:#000;font-weight:normal;}
 
 /*tools*/

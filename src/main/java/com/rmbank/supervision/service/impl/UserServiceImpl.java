@@ -126,7 +126,7 @@ public class UserServiceImpl implements UserService {
 	 * 新增用户/修改用户
 	 */
 	@Override
-	public boolean saveOrUpdateUser(User user, Integer [] roleIds, Integer [] orgIds,Integer postId) {
+	public boolean saveOrUpdateUser(User user, List<Integer> roleIds, List<Integer> orgIds,Integer postId) {
 		boolean isSuccess = false;
 		try{			
 			//id存在则为修改操作
