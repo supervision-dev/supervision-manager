@@ -135,6 +135,7 @@ public class Constants
   
   //效能监察流程
   public static final Integer EFFICIENCY_VISION_0=-1; //新增项目时的初始状态
+  public static final Integer EFFICIENCY_VISION_00=0; //立项状态
   public static final Integer EFFICIENCY_VISION_1=66; //签收
   public static final Integer EFFICIENCY_VISION_2=67; //上传资料
   public static final Integer EFFICIENCY_VISION_3=68; //整改建议和整改建议
