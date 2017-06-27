@@ -13,7 +13,11 @@ $(document).ready(function(){
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
-});
+	getMoudleList();
+}); 
+function search(pageNo){
+	getDataList(pageNo);
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -45,7 +49,11 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -54,41 +62,132 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		}
+	       		} 
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_roleList").html(resourceHtml);
 	      
+		  	$("#tb_roleList input[type='checkbox']").click(function(){
+			  	$("#tb_roleList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_rec_id = this.value;
+			});  
        }
 	});
 }
+function getMoudleList(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/resource/getMoudleList.do",
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#slt_moudleId").html("");
+       		var pHtml = "<option value=\"\">--请选择所属模块--</option>";
+			if(req != null && req.length >0){
+				for(var i = 0; i< req.length; i++){
+					pHtml +=  "<option value='"+req[i].id+"'>"+req[i].name+"</option>";
+				}
+			}
+			$("#slt_moudleId").html(pHtml);
+       }
+    });
+}
+var constants_rec_id = 0;
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的角色！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的角色！");
-		$("#confirm_tip").fadeIn(200);
-	}
+		if(constants_rec_id == 0){
+			$("#showmessage").html("请选择要编辑的资源！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#add_tip").fadeIn(200);
+			showDataField();
+		}
+	} 
 }
 function showAddTip(){
 	$("#add_tip").fadeIn(200);
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
+function showDataField(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/resource/jsonloadResourceInfo.do?id="+constants_rec_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req != null){      
+				$("#hid_recId").val(req.id);
+				$("#ipt_name").val(req.name); 
+				$("#ipt_src").val(req.resource); 
+				$("#slt_moudleId").val(req.moudleId); 
+			 }
+			else{
+				$("#showmessage").html("资源信息加载失败，编辑失败！");  
+				$("#add_tip").fadeOut(200);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
+}
+
+function saveOrUpdateRecInfo(){
+	var obj ={}; 
+	obj.id = $("#hid_recId").val();
+	var name = $("#ipt_name").val();
+	if(name == "" || name.length== 0){
+		$("#showmessage").html("请输入资源名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var recSrc = $("#ipt_src").val();
+	if(recSrc == "" || recSrc.length== 0){
+		$("#showmessage").html("请输入资源地址！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var moudleId = $("#slt_moudleId").val();
+	if(moudleId == "" || moudleId.length== 0){
+		$("#showmessage").html("请选择资源所属模块！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = name;
+	obj.resource = recSrc; 
+	obj.moudleId = moudleId; 
+	 $.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/resource/jsonSaveOrUpdateResource.do", 
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) {
+       		if(req.code == 0){    
+				getDataList(1);   
+				$("#showmessage").html("资源信息保存成功！");
+				$("#add_tip").fadeOut(100);
+				clearForm();
+				$("#confirm_tip").fadeIn(200);
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });  
 }
 function clearForm(){
-
+	$(".addtip .dfinput").val("");
+	$("#hid_recId").val(0);
 }
 </script>
 
@@ -112,8 +211,7 @@ function clearForm(){
     
     	<ul class="toolbar">
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li> 
         </ul> 
     
     </div>
@@ -168,20 +266,23 @@ function clearForm(){
         
 	    <div class="addtipinfo"> 
 	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>资源名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>资源地址：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>所属模块：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
+	        	<form> 
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>资源名称：</span></td><td><input type="hidden" id="hid_recId" value="0" /><input type="text" class="dfinput" id="ipt_name" /></td></tr> 
+	        			<tr><td style="height:30px;"><span>资源地址：</span></td><td><input type="text" class="dfinput" id="ipt_src" /></td></tr> 
+	        			<tr><td style="height:30px;"><span>所属模块：</span></td><td>
+							<select name="moudleId" id="slt_moudleId"  class="dfinput" >
+							</select>
+						</td></tr> 
 	        			
-	        			<tr><td colspan="2"></td></tr>
+	        			<tr><td colspan="2" style="height:200px;"></td></tr>
 	        		</table>
 	        	</form>
 	       </div>
       	</div>
         
         <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateRecInfo();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
         </div> 
     </div> 

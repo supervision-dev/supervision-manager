@@ -130,6 +130,9 @@
 	<if test="parentId != null">
 		and fun.parent_id=#{parentId,jdbcType=INTEGER}
 	</if>
+	<if test="leaf != null">
+		and fun.leaf=#{leaf,jdbcType=INTEGER}
+	</if>
 	<if test="searchName != null and searchName != ''">
 		and (fun.name like
 		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
