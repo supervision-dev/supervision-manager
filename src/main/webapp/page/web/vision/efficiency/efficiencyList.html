@@ -25,22 +25,63 @@ function getDataList(pageNo){
        success: function(req) {
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
+	   		if(req.datalist != null && req.datalist.length >0){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			itemHtml +="<tr>";
 				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
+				    if(req.datalist[i].status == 0){
+				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
+				    }else {
+				    	itemHtml +="<td>已立项</td>";
+				    }
+				    if(req.datalist[i].status == 0){
+				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
+				    }else if(req.datalist[i].status == 1){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 2){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 3){
+				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
+				    }else if(req.datalist[i].status == 4){
+				    	itemHtml +="<td style=\"color:green;\">完成</td>";
+				    }				    
 				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
 				    itemHtml +="<td>查看</td>";
-				    itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
-				    itemHtml +="<td>是否签收</td>";
-				    itemHtml +="<td>是否完成</td>";
-				    itemHtml +="<td>是否完结</td>";	
-				    itemHtml +="<td>"+req.datalist[i].showDate+"</td>";
-				    itemHtml +="<td>状态提醒</td>";  
-				    itemHtml +="<td>流程操作</td>";  
+				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
+				    }
+				    if(req.datalist[i].isSign <= 2){
+				    	itemHtml +="<td>未签收</td>";
+				    }else if(req.datalist[i].isSign > 2){
+				    	itemHtml +="<td>已签收</td>";
+				    }
+				    if(req.datalist[i].status == 4){
+				    	itemHtml +="<td>已完成</td>";
+				    }else if(req.datalist[i].status != 4){
+				    	itemHtml +="<td>未完成</td>";
+				    }
+				    if(req.datalist[i].status == 4){
+				    	itemHtml +="<td>已完结</td>";	
+				    }else if(req.datalist[i].status != 4){
+				    	itemHtml +="<td>未完结</td>";
+				    }
+				    if(req.datalist[i].showDate == null){
+				   		itemHtml +="<td></td>";
+				   	}else{
+				   		itemHtml +="<td>"+req.datalist[i].showDate+"</td>";
+				   	}
+				    if(req.datalist[i].status == 3){
+				    	itemHtml +="<td>已逾期</td>";
+				    }else if(req.datalist[i].status == 4){
+				    	itemHtml +="<td>已完结</td>";
+				    }else{
+				    	itemHtml +="<td></td>";
+				    }
+				      
+				    itemHtml +="<td width=\"180px;\">流程操作</td>";  
 				    itemHtml +="<td>删除</td>";  			    
 			        itemHtml +="</tr>";
 	       		}
@@ -81,10 +122,10 @@ function getDataList(pageNo){
 }
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
+		$("#showmessage").html("请选择要编辑的项目！");
 		$("#confirm_tip").fadeIn(200);
 	}else{
-		$("#showmessage").html("请选择要删除的用户！");
+		$("#showmessage").html("请选择要删除的项目！");
 		$("#confirm_tip").fadeIn(200);
 	}
 }
@@ -123,7 +164,10 @@ function clearForm(){
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
         </ul> 
-    
+    	
+    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
+    		
+    	</div> -->
     </div>
     
     
@@ -141,7 +185,7 @@ function clearForm(){
 				<th>是否完结</th>	
 				<th>规定办理时间</th>	
 				<th>状态提醒</th>
-				<th>操作一</th>
+				<th width="180px">操作一</th>
 				<th>操作二</th>
 				
         	</tr>

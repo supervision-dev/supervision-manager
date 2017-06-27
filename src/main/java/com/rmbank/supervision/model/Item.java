@@ -41,6 +41,12 @@ public class Item extends Page {
     
     private Integer isFollow;
     
+    //用户角色
+    private Integer userRole;
+    
+    //机构类型
+    private Integer orgType;
+    
     //自定义字段供sql查询使用，机构类型A
     private Integer orgTypeA;
     //自定义字段供sql查询使用，机构类型B
@@ -365,5 +371,21 @@ public class Item extends Page {
 
 	public void setContent(String content) {
 		this.content = content;
+	}
+
+	public Integer getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(Integer userRole) {
+		this.userRole = userRole;
+	}
+
+	public Integer getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(Integer orgType) {
+		this.orgType = orgType;
 	}
 }
