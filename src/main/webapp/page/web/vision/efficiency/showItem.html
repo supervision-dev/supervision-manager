@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>效能监察</title>
+<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+	$('.tablelist tbody tr:odd').addClass('odd');
+	getDataList(1);
+});
+function getDataList(pageNo){
+	var obj = {};
+	obj.pageNo = pageNo; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/efficiency/showItem.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tb_userList").html("");
+       		var itemHtml = "<tr><td colspan=\"2\">没有获取到相关数据</td></tr>";
+	   		if(req.ResultItem != null){
+	       		itemHtml = "";
+	       		
+       			itemHtml +="<tr>";				    
+			    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">工作事项：</td>";  	
+			    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.name+"</td>";		    
+		        itemHtml +="</tr>";
+		        for(var i = 0;i<req.ResultItemProcess[0].fileList.length;i++){
+			        itemHtml +="<tr>";				    
+				    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";  	
+				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile("+req.ResultItemProcess[0].fileList[i].filePath+");\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";		
+				    			
+				    		       
+			        itemHtml +="</tr>";
+			       
+		        }
+		       
+	       		
+	       }
+	       
+	       $("#tb_userList").html(itemHtml);
+       }
+	});
+}
+function showAlertTip(type){
+	if(type == 'edit'){
+		$("#showmessage").html("请选择要编辑的项目！");
+		$("#confirm_tip").fadeIn(200);
+	}else{
+		$("#showmessage").html("请选择要删除的项目！");
+		$("#confirm_tip").fadeIn(200);
+	}
+}
+function showAddTip(){
+	$("#add_tip").fadeIn(200);
+}
+function saveOrUpdateUserInfo(){
+	clearForm();
+	$('#add_tip').fadeOut(100);
+}
+function clearForm(){
+
+}
+function downLoadFile(path,name){
+		var filePath = encodeURI(encodeURI(path));
+		var fileName = encodeURI(encodeURI(name));
+		window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+}
+</script>
+
+
+</head>
+
+
+<body>
+
+	<div class="place">
+    <span>位置：</span>
+    <ul class="placeul"> 
+    <li><a href="#">实时监察</a></li>
+    <li><a href="#">效能监察</a></li>
+    </ul>
+    </div>
+    
+    <div class="rightinfo">
+    
+    <div class="tools">
+    
+    	<a class="enter" onclick=""  target="rightFrame">返回</a> 
+    	
+    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
+    		
+    	</div> -->
+    </div>
+    
+       
+    <table class="tablelist" >
+    	<thead>
+    		<tr>
+				<th></th>
+				<th></th>
+        	</tr>
+        	
+        </thead>
+        <tbody id="tb_userList">  
+        </tbody>
+    </table>
+    
+   
+    <!-- <div class="pagin">
+    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
+        <ul class="paginList" id="ul_pageList">
+        
+        <li class="paginItem"><a href="javascript:;">1</a></li>
+        <li class="paginItem current"><a href="javascript:;">2</a></li>
+        <li class="paginItem"><a href="javascript:;">3</a></li>
+        <li class="paginItem"><a href="javascript:;">4</a></li>
+        <li class="paginItem"><a href="javascript:;">5</a></li>
+        <li class="paginItem more"><a href="javascript:;">...</a></li>
+        <li class="paginItem"><a href="javascript:;">10</a></li>
+        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
+        </ul>
+    </div> -->
+    
+    
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div> 
+    </div> 
+     <div class="addtip" id="add_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="height:300px;width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
+	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
+	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
+	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    </div> 
+
+</body>
+
+</html>
