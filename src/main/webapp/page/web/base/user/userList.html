@@ -13,7 +13,27 @@ $(document).ready(function(){
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
+	getRoleList();
+	getPostList();
 });
+function getRoleList(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/getRoleList.do",
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       }
+    });
+}
+function getPostList(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/getPostList.do",
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       }
+    });
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -89,6 +109,134 @@ function saveOrUpdateUserInfo(){
 }
 function clearForm(){
 
+}
+
+function showOrgTip(){
+	$("#slt_postId").addClass("displaynone");
+	$("#slt_roleId").addClass("displaynone");
+	$("#organ_tip").fadeIn(0);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid=0", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tbl_orgList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tbl_orgList").html(tbHtml); 
+       }
+    }); 
+}
+
+function loadSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+
+function loadSubSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+function clickOrganName(orgId,orgName){ 
+	$("#slt_orgName").text(orgName);
+	$("#ipt_organname").val(orgName);
+	$("#hid_orgId").val(orgId);
+}
+
+function showItem(subId,tag){ 
+	loadSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone");
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
+}
+function showSubItem(subId,tag){
+	loadSubSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function showSubSubItem(subId,tag){ 
+	if(tag == 0){
+		$("#tr_sub_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+
+function selectOrgan(tag){
+	$('#organ_tip').fadeOut(200);
+	$("#slt_postId").removeClass("displaynone");
+	$("#slt_roleId").removeClass("displaynone");
 }
 </script>
 
@@ -171,10 +319,44 @@ function clearForm(){
 	       <div style="height:300px;width:99%;">	
 	        	<form>
 	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
+	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="hidden" id="hid_userId" value="0"  /><input type="text" class="dfinput"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>用户账号<span style="color:red">(字母和数字)</span>：</span></td><td><input type="text" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>用户密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span>确认密码<span style="color:red">(字母和数字)</span>：</span></td><td><input type="password" class="dfinput" onkeyup="value=value.replace(/[^a-zA-Z0-9\u4E00-\u9FA5]/g,'')"  /></td></tr>  
+	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput" id="ipt_organname" readonly="readonly"  onclick="showOrgTip();" /><input type="hidden" name="orgId" id="hid_orgId" /></td></tr>
+	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td>
+	        				<select name="postId" id="slt_postId"  class="dfinput" >
+								<option value="">--请选择职务名称--</option>
+								<option value="1">效能监察</option>
+								<option value="2">廉政监察</option>
+								<option value="3">实时监察</option>  
+							</select></td></tr>
+	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td>
+	        				<select name="roleId" id="slt_roleId"  class="dfinput" >
+								<option value="">--请选择用户角色--</option>
+								<option value="1">效能监察</option>
+								<option value="2">廉政监察</option>
+								<option value="3">实时监察</option>  
+							</select></td></tr>
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+     <div class="addtip" id="edit_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="height:300px;width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="hidden" id="hid_userId" value="0"  /><input type="text" class="dfinput"  /></td></tr> 
 	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
 	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
 	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
@@ -188,9 +370,28 @@ function clearForm(){
         	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
         </div> 
-    </div> 
+    </div>
     </div> 
 
+    <div class="simpletip" id="organ_tip"> 
+   		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
+          
+	    <div class="simpletipinfo">   
+	       <div style="min-height:310px;_height: 310px; overflow:visible;  width:99%;max-heigth:350px;overflow-x:hidden; "> 
+        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+        		<tr><td></td></tr>  
+        		</table> 
+	       </div> 
+      	</div>
+        
+        <div class="simpletipbtn">
+        	<div style="width:90%;padding:10px;">
+        		<span style="float:left;margin-left:20px;font-size:16px;font-weight:bold;">当前选择机构：</span> <span  style="float:left;color:blue;font-size:16px;font-weight:bold;" id="slt_orgName" >尚未选择</span>
+        	</div>
+        	<input type="button"  class="saveBtn" value="确定" onclick="selectOrgan();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:$('#slt_postId').removeClass('displaynone');$('#slt_roleId').removeClass('displaynone');$('#organ_tip').fadeOut(100);" /> 
+        </div>  
+    </div>
 </body>
 
 </html>
