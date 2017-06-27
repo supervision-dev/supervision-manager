@@ -57,6 +57,7 @@ public class EfficiencyVisionController extends SystemAction {
 	private UserService userService;
 	@Resource
 	private OrganService organService;
+	
 	@Resource
 	private ItemProcessService itemProcessService;
 	@Resource
@@ -92,9 +93,7 @@ public class EfficiencyVisionController extends SystemAction {
 		int totalCount = 0;
 		
 		//获取当前登录用户
-//		User loginUser = this.getLoginUser();
-		User loginUser =new User();
-		loginUser.setId(1);
+		User loginUser = this.getLoginUser();
 		//获取当前用户对应的机构列表
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		//获取当前用户对应的第一个机构
@@ -107,6 +106,7 @@ public class EfficiencyVisionController extends SystemAction {
 			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
+									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setSupervisionTypeId(2); //2代表效能监察
@@ -139,6 +139,18 @@ public class EfficiencyVisionController extends SystemAction {
 				ItemProcess lastItem = itemprocessList.get(itemprocessList.size()-1);
 				it.setLasgTag(lastItem.getContentTypeId());
 			}
+			
+			//将登录机构的类型，添加到项目中
+			it.setOrgType(userOrg.getOrgtype());
+			
+			//获取添加项目的机构类型和登录机构类型是否相同 
+			Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
+			if(itemOrg.getOrgtype()==userOrg.getOrgtype()){
+				it.setIsItemOrg("true");
+			}else {
+				it.setIsItemOrg("false");
+			}
+			
 		}
 		// 通过request对象传值到前台
 //		request.setAttribute("Item", item);

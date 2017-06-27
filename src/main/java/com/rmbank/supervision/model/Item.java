@@ -44,10 +44,15 @@ public class Item extends Page {
     //用户角色
     private Integer userRole;
     
-    //机构类型
+    //登录机构类型
     private Integer orgType;
     
-    //自定义字段供sql查询使用，机构类型A
+    //添加项目的机构类型和登录机构类型是否相同
+    private String isItemOrg;
+    
+    
+
+	//自定义字段供sql查询使用，机构类型A
     private Integer orgTypeA;
     //自定义字段供sql查询使用，机构类型B
     private Integer orgTypeB;
@@ -388,4 +393,17 @@ public class Item extends Page {
 	public void setOrgType(Integer orgType) {
 		this.orgType = orgType;
 	}
+
+	public String getIsItemOrg() {
+		return isItemOrg;
+	}
+
+	public void setIsItemOrg(String isItemOrg) {
+		this.isItemOrg = isItemOrg;
+	}
+
+	
+	
+
+	
 }
