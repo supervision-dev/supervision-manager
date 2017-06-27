@@ -219,7 +219,7 @@ h2{font-weight:normal;}
 .tipinfo span{width:95px; height:95px;float:left; text-align:right;}
 .addtipinfo{padding-top:30px;margin-left:15px; }
 .addtipinfo span{width:95px;  float:right;} 
-.simpletipinfo{padding-top:10px;margin-left:15px;overflow:hidden; } 
+.simpletipinfo{padding-top:10px;margin-left:15px;width:458px;_height:320px;overflow-y:auto;  } 
 .tipright{float:left;padding-top:15px; padding-left:10px;} 
 .tipright p{font-size:14px; font-weight:bold; line-height:35px;}
 .tipright cite{color:#858686;}
