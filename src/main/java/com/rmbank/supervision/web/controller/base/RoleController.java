@@ -8,14 +8,21 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rmbank.supervision.common.DataListResult;
+import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
+import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.model.Permission;
 import com.rmbank.supervision.model.Role;
+import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.FunctionService;
 import com.rmbank.supervision.service.PermissionService;
 import com.rmbank.supervision.service.ResourceService;
@@ -84,4 +91,83 @@ public class RoleController extends SystemAction {
 		dr.setDatalist(roleList); 
     	return dr;
     }
+
+    /**
+     * 根据Id获取权限主体信息
+     */
+    @ResponseBody
+	@RequestMapping(value = "/jsonloadRoleInfo.do", method = RequestMethod.POST)
+	public Role jsonloadRoleInfo(
+			@RequestParam(value = "id", required = false) Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+    	Role role = null;
+		try{
+			if(id != null && id >0){
+				role = roleService.getRoleById(id);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}			
+		return role;
+    }
+
+	/**
+	 * 新增/编辑角色
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateRole.do", method = RequestMethod.POST)
+	public JsonResult<Role> jsonSaveOrUpdateRole(Role role,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		// 新建一个json对象 并赋初值
+		JsonResult<Role> js = new JsonResult<Role>();
+		js.setCode(new Integer(1));
+		js.setMessage("保存失败!");
+		boolean saveOrUpdateRole = false;
+		try {
+			// 如为新增，则给id置0
+			if (role.getId() == null || role.getId() == 0) {
+				role.setId(0);
+			}
+
+			Role r = new Role();
+			r.setId(role.getId());
+			r.setName(role.getName());
+			// 如为编辑，则给新建role对象赋传来的id值
+			if (role.getId() > 0) {
+				r.setId(role.getId());
+				saveOrUpdateRole = roleService.saveOrUpdateRole(role);
+				if (saveOrUpdateRole) {
+					User loginUser = this.getLoginUser();
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，执行了修改角色信息操作", 2, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(new Integer(0));
+					js.setMessage("保存成功!");
+					return js;
+				} else {
+					return js;
+				}
+			}
+			// 根据设备编号和id去数据库匹配，如编辑，则可以直接保存；如新增，则需匹配设备编号是否重复
+			List<Role> lc = roleService.getExistRole(r);
+			if (lc.size() == 0) {
+				saveOrUpdateRole = roleService.saveOrUpdateRole(role);
+				if (saveOrUpdateRole) {
+					User loginUser = this.getLoginUser();
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，新增了"+role.getName()+"角色", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(new Integer(0));
+					js.setMessage("保存成功!");
+					return js;
+				} else {
+					return js;
+				}
+			} else {
+				js.setMessage("该角色已存在!");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return js;
+	}
 }
