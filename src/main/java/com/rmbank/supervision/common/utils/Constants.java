@@ -79,12 +79,19 @@ public class Constants
   public static final Integer STATIC_ITEM_TYPE_SVISION = 0;
   
   //机构类型
-  public static final Integer ORG_TYPE_1= 45; //行领导
-  public static final Integer ORG_TYPE_2= 46; //依法行政领导办公室
-  public static final Integer ORG_TYPE_3= 47; //监察室
-  public static final Integer ORG_TYPE_4= 48; //分行机关
-  public static final Integer ORG_TYPE_5= 49; //中支机构
-  public static final Integer ORG_TYPE_6= 43; //中支监察室
+  public static final Integer ORG_TYPE_1= 37; //分行行领导
+  public static final Integer ORG_TYPE_2= 38; //分行办公室
+  public static final Integer ORG_TYPE_3= 39; //依法行政领导办公室
+  public static final Integer ORG_TYPE_4= 40; //分行监察室  
+  public static final Integer ORG_TYPE_5= 41; //分行机关
+  public static final Integer ORG_TYPE_6= 42; //中支机构
+  public static final Integer ORG_TYPE_7= 43; //中支监察室
+  public static final Integer ORG_TYPE_8= 44; //中支部门
+  public static final Integer ORG_TYPE_9= 45; //县支行
+  public static final Integer ORG_TYPE_10= 46; //中支办公室
+  public static final Integer ORG_TYPE_11= 47; //中支依法行政领导小组办公室
+  public static final Integer ORG_TYPE_12= 48; //中支领导
+  
   
   //分行立项，分行完成项目进行流程
   public static final Integer CONTENT_TYPE_ID_1= 31; 
