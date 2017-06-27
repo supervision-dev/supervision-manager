@@ -210,4 +210,50 @@ public class PermissionController extends SystemAction {
 		return js;
 	}
 	
+	
+	
+	 /**
+     * 获取权限所属模块列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getRecourceList.do")
+    public FunctionResourceVM  getRecourceList(
+			@RequestParam(value = "id", required = false) Integer id,
+			HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException { 
+    	FunctionResourceVM frvm  = new FunctionResourceVM();
+    	FunctionMenu fm = functionService.getFunctionMenusById(id); 
+		frvm.setId(fm.getId());
+		frvm.setName(fm.getName());
+		List<ResourceConfig> itemList = new ArrayList<ResourceConfig>();
+		ResourceConfig rc = new ResourceConfig();
+		rc.setMoudleId(fm.getId());
+		itemList = resourceService.getResourceListBymoudleId(rc);
+		frvm.setItemList(itemList); 
+		
+    	return frvm;
+    }
+    /**
+     * 获取权限所属模块列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/jsonloadResList.do")
+    public List<PermissionResource>  jsonloadResList(
+			@RequestParam(value = "id", required = false) Integer id,
+			HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException { 
+    	List<PermissionResource> list = permissionResourceService.selectByPermissionId(id);
+    	return list;
+    }
+	
 }
