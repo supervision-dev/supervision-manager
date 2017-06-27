@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.BaseItemResult;
 import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
@@ -30,6 +32,7 @@ import com.rmbank.supervision.model.ItemProcessFile;
 import com.rmbank.supervision.model.Meta;
 import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.OrganVM;
+import com.rmbank.supervision.model.Role;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ConfigService;
 import com.rmbank.supervision.service.ItemProcessFileService;
@@ -37,6 +40,7 @@ import com.rmbank.supervision.service.ItemProcessService;
 import com.rmbank.supervision.service.ItemService;
 import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.SysLogService;
+import com.rmbank.supervision.service.UserRoleService;
 import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
@@ -57,7 +61,8 @@ public class EfficiencyVisionController extends SystemAction {
 	private UserService userService;
 	@Resource
 	private OrganService organService;
-	
+	@Resource
+	private UserRoleService userRoleService;
 	@Resource
 	private ItemProcessService itemProcessService;
 	@Resource
@@ -99,6 +104,10 @@ public class EfficiencyVisionController extends SystemAction {
 		//获取当前用户对应的第一个机构
 		Organ userOrg=userOrgList.get(0);
 		
+		//获取当前用户对应的角色
+		List<Role> rolesByUserId = userRoleService.getRolesByUserId(loginUser.getId());
+		Role userRole = rolesByUserId.get(0);
+		
 		// 分页集合
 		List<Item> itemList = new ArrayList<Item>();
 		try {
@@ -128,20 +137,25 @@ public class EfficiencyVisionController extends SystemAction {
 		}
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 		for (Item it : itemList) {
+			//格式化时间
 			Date endTime = it.getEndTime();
 			if(endTime!=null){
 				String format = formatter.format(endTime);
 				it.setShowDate(format);
 			}
 			
+			//设置流程节点
 			List<ItemProcess> itemprocessList = itemProcessService.getItemProcessItemId(it.getId());
 			if(itemprocessList.size()>0){
 				ItemProcess lastItem = itemprocessList.get(itemprocessList.size()-1);
 				it.setLasgTag(lastItem.getContentTypeId());
 			}
 			
-			//将登录机构的类型，添加到项目中
+			//将登录机构的类型添加到项目中
 			it.setOrgType(userOrg.getOrgtype());
+			
+			//将登陆用户的角色id添加到项目中
+			it.setUserRole(userRole.getId());
 			
 			//获取添加项目的机构类型和登录机构类型是否相同 
 			Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
@@ -773,11 +787,20 @@ public class EfficiencyVisionController extends SystemAction {
     * @param response
     * @return
     */
+    @ResponseBody
     @RequestMapping(value = "/showItem.do")
     @RequiresPermissions("vision/efficiency/showItem.do")
-    public String showItem(Item item, 
+    public BaseItemResult showItem(Item item, 
             HttpServletRequest request, HttpServletResponse response){
-    	item = itemService.selectByPrimaryKey(item.getId());
+    	
+    	HttpSession session = request.getSession();
+    	Integer itemId = (Integer) session.getAttribute("showItemId");
+    	
+    	BaseItemResult showResult = new BaseItemResult();
+    	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();
+    	
+    	item = itemService.selectByPrimaryKey(itemId);
+    	
 		if(item.getEndTime() != null){
 			item.setEndTimes(Constants.DATE_FORMAT1.format(item.getEndTime()));
 		}
@@ -790,9 +813,11 @@ public class EfficiencyVisionController extends SystemAction {
 				fileList = itemProcessFileService.getFileListByItemId(ip.getId());
 				ip.setFileList(fileList);  
 				if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_0){
-					request.setAttribute("ItemProcess", ip); //监察内容
+					//request.setAttribute("ItemProcess", ip); //监察内容
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_2){
-					request.setAttribute("ItemProcess2", ip); //已经上传资料
+					drIPList.add(ip);
+					//request.setAttribute("ItemProcess2", ip); //已经上传资料
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_3){
 					request.setAttribute("ItemProcess3", ip); //监察意见
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_4){
@@ -829,10 +854,14 @@ public class EfficiencyVisionController extends SystemAction {
 		request.setAttribute("User", lgUser);  
 		request.setAttribute("Item", item); 
 		request.setAttribute("ContentTypeId", Constants.CONTENT_TYPE_ID_ZZZZ_OVER);
+		
 		User loginUser = this.getLoginUser();
 		String ip = IpUtil.getIpAddress(request);		
 		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，查看了效能监察的项目", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-		return "web/vision/efficiency/showItem";
+		
+		showResult.setResultItem(item);
+		showResult.setResultItemProcess(drIPList); 
+    	return showResult;
     }
     
     /**

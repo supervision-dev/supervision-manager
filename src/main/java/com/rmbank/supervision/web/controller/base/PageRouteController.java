@@ -3,10 +3,12 @@ import java.io.UnsupportedEncodingException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.rmbank.supervision.web.controller.SystemAction;
@@ -216,6 +218,23 @@ public class PageRouteController extends SystemAction {
     public ModelAndView efficiencyList( HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/efficiencyList");
+    	return mv;
+    }
+    /**
+     * 效能监察查看项目
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/efficiency/showItem.do")
+    public ModelAndView effShowItem( 
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("showItemId", id);
+    	ModelAndView mv = new ModelAndView("web/vision/efficiency/showItem");
     	return mv;
     }
     
