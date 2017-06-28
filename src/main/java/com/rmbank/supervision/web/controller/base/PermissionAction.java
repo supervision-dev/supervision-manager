@@ -301,7 +301,7 @@ public class PermissionAction extends SystemAction {
 	@RequiresPermissions("system/permission/jsonSaveOrUpdateRoleResource.do")
 	public JsonResult<PermissionResource> jsonSaveOrUpdateRoleResource(
 			@RequestParam(value="permissionId", required=false) Integer permissionId,
-			@RequestParam(value="resourceId", required=false) Integer [] resourceIds,
+			@RequestParam(value="resourceId", required=false) List<Integer> resourceIds,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		// 新建一个json对象 并赋初值

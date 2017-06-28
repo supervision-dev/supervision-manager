@@ -25,6 +25,7 @@ import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.FunctionMenu;
 import com.rmbank.supervision.model.FunctionResourceVM;
 import com.rmbank.supervision.model.Meta;
@@ -51,17 +52,13 @@ public class PermissionController extends SystemAction {
 	@Resource
 	private PermissionService permissionService;
 	@Resource
-	private SysLogService logService;
+	private SysLogService logService; 
 	@Resource
-	private PermissionService PermissionService;
-	@Resource
-	private PermissionResourceService PermissionResourceService;
+	private PermissionResourceService permissionResourceService;
 	@Resource
 	private FunctionService functionService;
 	@Resource
-	private ResourceService resourceService;
-	@Resource
-	private PermissionResourceService permissionResourceService;
+	private ResourceService resourceService; 
 	
 	/**
 	 * 加载权限列表
@@ -209,7 +206,47 @@ public class PermissionController extends SystemAction {
 		}
 		return js;
 	}
-	
+
+	/**
+	 * 新增/编辑权限资源分配
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdatePermissionRec.do", method = RequestMethod.POST) 
+	public JsonResult<PermissionResource> jsonSaveOrUpdatePermissionRec(
+			PermissionResource permissionResource,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		// 新建一个json对象 并赋初值
+		JsonResult<PermissionResource> js = new JsonResult<PermissionResource>();
+		js.setCode(1);
+		js.setMessage("保存失败!"); 
+		try {
+			 if(permissionResource.getPermissionId()>0){
+				 if(StringUtil.isEmpty(permissionResource.getResourceIds())){
+					 permissionResourceService.deleteByPermissionId(permissionResource.getPermissionId());
+				 }else{
+					 String[] ids = permissionResource.getResourceIds().split(",");
+					 List<Integer> idList = new ArrayList<Integer>();
+					 if(ids.length>0){ 
+						 for(String id : ids){
+							 if(!StringUtil.isEmpty(id)){
+								 idList.add(Integer.parseInt(id));
+							 }
+						 }
+					 }
+					 permissionResourceService.savePermissionResource(permissionResource.getPermissionId(), idList);
+				 }
+				js.setCode(0);
+				js.setMessage("权限分配资源成功!"); 
+			 }else{
+				js.setMessage("权限分配资源失败，对应权限为空!"); 
+			 }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			js.setMessage("权限分配资源出现异常!"); 
+		}
+		return js;
+	}
 	
 	
 	 /**
@@ -239,7 +276,7 @@ public class PermissionController extends SystemAction {
     	return frvm;
     }
     /**
-     * 获取权限所属模块列表
+     * 根据权限，获取分配的资源列表
      *
      * @param request
      * @param response

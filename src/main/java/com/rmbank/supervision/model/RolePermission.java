@@ -7,6 +7,8 @@ public class RolePermission {
 
     private Integer permissionId;
 
+    private String permissionIds;
+
     private Integer control;
 
     public Integer getId() {
@@ -41,5 +43,13 @@ public class RolePermission {
 
 	public void setPermissionId(Integer permissionId) {
 		this.permissionId = permissionId;
+	}
+
+	public String getPermissionIds() {
+		return permissionIds;
+	}
+
+	public void setPermissionIds(String permissionIds) {
+		this.permissionIds = permissionIds;
 	}
 }

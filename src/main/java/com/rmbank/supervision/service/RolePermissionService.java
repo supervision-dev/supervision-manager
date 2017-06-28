@@ -20,4 +20,6 @@ public interface RolePermissionService {
 	List<RolePermission> selectByRoleId(Integer roleId);
 
 	int deleteByRoleId(Integer roleId);
+
+	void saveRolePermission(Integer roleId, List<Integer> idList);
 }

@@ -18,8 +18,10 @@ public interface PermissionResourceService {
 
     int updateByPrimaryKey(PermissionResource record);
 
-	boolean savePermissionResource(Integer permissionId, Integer[] resourceIds);
+	boolean savePermissionResource(Integer permissionId, List<Integer> resourceIds);
 
 
 	List<PermissionResource> selectByPermissionId(Integer id);
+
+	void deleteByPermissionId(Integer permissionId);
 }

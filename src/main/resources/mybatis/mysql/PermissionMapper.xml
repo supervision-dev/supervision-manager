@@ -95,6 +95,12 @@
         limit #{pageStart}, #{pageSize}
     </if>
   </select>
+  
+  
+  <select id="getPermissionByModelId" parameterType="java.lang.Integer"  resultMap="BaseResultMap">
+  	SELECT p.* FROM `t_permission` AS p
+	where P.moudle_id = #{id,jdbcType=INTEGER}
+  </select>
    <select id="getPermissionCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.Permission">
   	select count(*) FROM `t_permission` as p
   	where 1=1 

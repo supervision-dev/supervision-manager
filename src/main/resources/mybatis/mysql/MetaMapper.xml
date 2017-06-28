@@ -17,7 +17,7 @@
   </sql>
   <sql id="sql_query">
   	from t_meta as meta  	
-  	where 1=1 
+  	where  used=1 
   	<if test="pid != null">
 		and meta.pid=#{pid,jdbcType=INTEGER}
 	</if>

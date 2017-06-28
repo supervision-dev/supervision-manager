@@ -29,9 +29,9 @@ import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
-@Scope("prototype")
+/*@Scope("prototype")
 @Controller
-@RequestMapping("/system/organ")
+@RequestMapping("/system/organ")*/
 public class OrganAction extends SystemAction {
 
 	@Resource

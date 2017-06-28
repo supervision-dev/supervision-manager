@@ -56,14 +56,13 @@ public class PermissionResourceServiceimpl implements PermissionResourceService 
 	}
 
 	@Override
-	public boolean savePermissionResource(Integer permissionId,
-			Integer[] resourceIds) {
+	public boolean savePermissionResource(Integer permissionId,List<Integer> resourceIds) {
 		
 		// TODO Auto-generated method stub
 				boolean isSuccess = false;
 				try {
 					permissionResourceMapper.deleteByPermissionId(permissionId);
-					if(resourceIds!=null){
+					if(resourceIds!=null && resourceIds.size()>0){
 						for (Integer resId : resourceIds) {
 							PermissionResource permissionResource=new PermissionResource();
 							permissionResource.setId(0);
@@ -93,6 +92,12 @@ public class PermissionResourceServiceimpl implements PermissionResourceService 
 	public List<PermissionResource> selectByPermissionId(Integer id) {
 		// TODO Auto-generated method stub
 		return permissionResourceMapper.selectByPermissionId(id);
+	}
+
+	@Override
+	public void deleteByPermissionId(Integer permissionId) {
+		// TODO Auto-generated method stub
+		permissionResourceMapper.deleteByPermissionId(permissionId);
 	}
 
 

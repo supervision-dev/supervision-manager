@@ -118,6 +118,7 @@ function fillDataList(req){
 	       		} 
 	       }
 	       $("#tb_logList").html(logHtml);
+		$('.tablelist tbody tr:odd').addClass('odd');
 }
 function search(pageNo){
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
@@ -306,7 +307,7 @@ function clearForm(){
 			<option value="2">廉政监察</option>
 			<option value="3">实时监察</option>  
 		</select>
-		<span style="float:left;line-height:34px;margin-left:5px;">机构选择：</span>
+		<span style="float:left;line-height:22px;margin-left:5px;">机构选择：</span>
 		<input type="hidden" name="orgId" id="hid_orgId" />
 		<input type="text"  id="ipt_organname" readonly="readonly" value="--请选择操作机构查询--"  onclick="showOrgTip();" style="height:22px;float:left;border:1px solid #C6C6C6;" />
     	<span style="float:left;line-height:22px;margin-left:5px;">关键字：</span><input type="text" name="searchName" id="ipt_searchname" style="height:22px;float:left;border:1px solid #C6C6C6" />

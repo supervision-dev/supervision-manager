@@ -11,85 +11,361 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
-	getDataList(1);
-});
-function getDataList(pageNo){
-	var obj = {};
-	obj.pageNo = pageNo; 
+   getOrgTreeList();
+}); 
+var constants_organ_id = 0;
+var constants_organ_name = "";
+function getOrgTreeList(){
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/permission/permissionList.do",
-       data:obj,//发送到服务器的数据，序列化后的值 
+       url: "/supervision/system/organ/loadOrganTreeList.do?pid=0", 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		$("#tb_roleList").html("");
-       		var permissionHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
-	       		permissionHtml = "";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			permissionHtml +="<tr>";
-				    permissionHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    permissionHtml +="<td>"+req.datalist[i].name+"</td>";				    
-				    permissionHtml +="<td>"+req.datalist[i].description+"</td>";
-				    permissionHtml +="<td>"+req.datalist[i].fName+"</td>";
-				    permissionHtml +="<td>资源分配</td>";
-			        permissionHtml +="</tr>";
-	       		}
-	       }
-	       if(req.data != null){
-	       		$("#i_totalcount").text(req.data.totalCount);
-	       		$("#i_pageNo").text(req.data.pageNo);
-	       		var count = Math.ceil(req.data.totalCount/10);
-	       		$("#ul_pageList").html("");
-	       		var ulHtml = "";
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}
-	       		for(var i = 1;i<=count;i++){
-	       			if(count == 1){
-	       				ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">1</a></li>";
-	       			}else{
-	       				if(i == req.data.pageNo){
-	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}
-	       			}
-	       		}
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}
-	       		
-	       		$("#ul_pageList").html(ulHtml);
-	       }
-	       $("#tb_roleList").html(permissionHtml);
-	      
+       		$("#tbl_orgList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(i == 0){
+       					loadOrganListByOrganId(-1,req[i].childrenCount);
+       				}
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tbl_orgList").html(tbHtml); 
        }
-	});
+    }); 
 }
+
+function loadSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+
+function loadSubSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+
+function showItem(subId,tag){ 
+	loadSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone");
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
+}
+function showSubItem(subId,tag){
+	loadSubSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function showSubSubItem(subId,tag){ 
+	if(tag == 0){
+		$("#tr_sub_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function loadOrganListByOrganId(pId,cct){
+	var reqUrl = "";
+	if(pId == -1){
+		reqUrl = "/supervision/system/organ/jsonLoadAllOrganList.do";
+	}else{
+		if(cct>0){
+			reqUrl = "/supervision/system/organ/loadOrganTreeList.do?pid="+pId; 
+		}else{
+			reqUrl = "/supervision/system/organ/jsonLoadOrganInfo.do?id="+pId;
+		}
+	}
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: reqUrl, 
+       dataType:"json", //响应数据类型      
+       success: function(req) { 
+   			$("#tb_organList").html("");
+       		if(req != null){
+       			var oHtml = "";
+       			if(req.length == undefined){
+       				oHtml += "<tr>";
+       				oHtml += "<td><input name=\"orgChk\" type=\"checkbox\" value=\""+req.id+"\" doc=\""+req.name+"\" /></td>";
+       				oHtml += "<td>"+req.name+"</td>";
+       				if(req.supervision == 0){
+       					oHtml += "<td>否</td> ";
+       				}else{
+       					oHtml += "<td>是</td> ";
+       				}
+       				if(req.orgtype == 37){
+       					oHtml += "<td>分行行领导机构</td>";
+       				}else if(req.orgtype == 38){
+       					oHtml += "<td>分行办公室机构</td>";
+       				} else if(req.orgtype == 39){
+       					oHtml += "<td>依法行政领导办公室</td>";
+       				}else if(req.orgtype == 40){
+       					oHtml += "<td>分行监察室  </td>";
+       				}else if(req.orgtype == 41){
+       					oHtml += "<td>分行机关</td>";
+       				}else if(req.orgtype == 42){
+       					oHtml += "<td>中支机构</td>";
+       				}else if(req.orgtype == 43){
+       					oHtml += "<td>中支监察室</td>";
+       				}else if(req.orgtype == 44){
+       					oHtml += "<td>中支部门</td>";
+       				}else if(req.orgtype == 45){
+       					oHtml += "<td>县支行</td>";
+       				}else if(req.orgtype == 46){
+       					oHtml += "<td>中支办公室机构</td>";
+       				}else if(req.orgtype == 47){
+       					oHtml += "<td>中支依法行政领导小组办公室</td>";
+       				}else if(req.orgtype == 48){
+       					oHtml += "<td>中支领导机构</td>";
+       				}
+       				oHtml += "</tr>";
+       			}else{
+       				if(req.length >0){
+       					for(var i = 0; i< req.length; i++){
+       						var oObj = req[i];
+       						oHtml += "<tr>";
+		       				oHtml += "<td><input name=\"orgChk\" type=\"checkbox\" value=\""+oObj.id+"\" doc=\""+oObj.name+"\"  /></td>";
+		       				oHtml += "<td>"+oObj.name+"</td>";
+		       				if(oObj.supervision == 0){
+		       					oHtml += "<td>否</td> ";
+		       				}else{
+		       					oHtml += "<td>是</td> ";
+		       				}
+		       				if(oObj.orgtype == 37){
+		       					oHtml += "<td>分行行领导机构</td>";
+		       				}else if(oObj.orgtype == 38){
+		       					oHtml += "<td>分行办公室机构</td>";
+		       				} else if(oObj.orgtype == 39){
+		       					oHtml += "<td>依法行政领导办公室</td>";
+		       				}else if(oObj.orgtype == 40){
+		       					oHtml += "<td>分行监察室  </td>";
+		       				}else if(oObj.orgtype == 41){
+		       					oHtml += "<td>分行机关</td>";
+		       				}else if(oObj.orgtype == 42){
+		       					oHtml += "<td>中支机构</td>";
+		       				}else if(oObj.orgtype == 43){
+		       					oHtml += "<td>中支监察室</td>";
+		       				}else if(oObj.orgtype == 44){
+		       					oHtml += "<td>中支部门</td>";
+		       				}else if(oObj.orgtype == 45){
+		       					oHtml += "<td>县支行</td>";
+		       				}else if(oObj.orgtype == 46){
+		       					oHtml += "<td>中支办公室机构</td>";
+		       				}else if(oObj.orgtype == 47){
+		       					oHtml += "<td>中支依法行政领导小组办公室</td>";
+		       				}else if(oObj.orgtype == 48){
+		       					oHtml += "<td>中支领导机构</td>";
+		       				}
+		       				oHtml += "</tr>";
+       					}
+       				}else{
+       					oHtml += "<tr><td colspan=\"5\" style=\"text-align:center;\">未获取到相关机构列表数据！</td></tr>";
+       				}
+       			} 
+       			$("#tb_organList").html(oHtml);
+       		}else{
+   				$("#tb_organList").html("<tr><td colspan=\"5\" style=\"text-align:center;\">未获取到相关机构列表数据！</td></tr>");
+   			}
+   			if(!$("#hid_li_btn").hasClass("displaynone")){
+				$("#hid_li_btn").addClass("displaynone");
+			}
+			$('.tablelist tbody tr:odd').addClass('odd');
+		  	$("#tb_organList input[type='checkbox']").click(function(){
+			  	$("#tb_organList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_organ_id = this.value;
+				constants_organ_name = $(this).attr("doc");
+				$("#hid_li_btn").removeClass("displaynone");
+			}); 
+       }
+    }); 
+}
+
+function showAddTip(type){
+	if(type == 0){
+		$("#hid_organId").val(0);
+		$("#hid_parentId").val(constants_organ_id);
+		$("#ipt_parentName").val(constants_organ_name);
+	}else{
+		$("#hid_organId").val(0);
+		$("#hid_parentId").val(0);
+		$("#ipt_parentName").val("根机构");
+	}
+	$("#add_tip").fadeIn(200); 
+} 
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的角色！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的角色！");
-		$("#confirm_tip").fadeIn(200);
+		if(constants_organ_id == 0){
+			$("#showmessage").html("请选择要编辑的机构！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#add_tip").fadeIn(200); 
+			fillFromData();
+		}
+	}else if(type == "delete"){
+		if(constants_organ_id == 0){
+			$("#showmessage").html("请选择要删除的机构！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#delete_confirm_tip").fadeIn(200);
+		}
 	}
+}  
+function fillFromData(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/organ/jsonLoadOrganInfo.do?id="+constants_organ_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) { 
+       		if(req != null){
+       			$("#hid_organId").val(req.id);
+				$("#ipt_name").val(req.name);
+				$("#hid_parentId").val(req.pid);
+				$("#ipt_parentName").val(req.parentName);
+				$("#slt_orgTypeId").val(req.orgtype);
+				$("#slt_isSuperVision").val(req.supervision);
+       		}
+       }
+    });
 }
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
-}
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
+function saveOrUpdateOrganInfo(){
+	var obj = {};
+	obj.id = $("#hid_organId").val();
+	var oName = $.trim($("#ipt_name").val());
+	if(oName == "" || oName.length== 0){
+		$("#showmessage").html("请输入机构名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = oName;
+	obj.pid = $("#hid_parentId").val();
+	var orgType = $("#slt_orgTypeId").val();
+	if(orgType == null || orgType == ""){
+		$("#showmessage").html("请选择机构类型！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.orgtype = $("#slt_orgTypeId").val();
+	obj.supervision = $("#slt_isSuperVision").val();
+	obj.used = 1;
+	obj.leaf = 1;
+	obj.level = 0;
+	obj.path = "";
+	obj.sort = 1;
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/organ/jsonSaveOrUpdateOrgan.do",
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) { 
+       		 if(req.code == 0){     
+				getOrgTreeList();  
+				$("#showmessage").html("机构信息保存成功！");
+				$("#add_tip").fadeOut(100);
+				clearForm();
+				$("#confirm_tip").fadeIn(200);
+				constants_organ_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
 }
 function clearForm(){
-
+	$("#hid_organId").val(0);
+	$("#ipt_name").val("");
+	$("#hid_parentId").val(0);
+	$("#ipt_parentName").val("");
+	$("#slt_orgTypeId").val("");
+	$("#slt_isSuperVision").val(0);
+}
+function deleteOrganAction(){
+	$("#delete_confirm_tip").fadeOut(200);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/organ/jsonDeleteOrgan.do?id="+constants_organ_id, 
+       dataType:"json", //响应数据类型     
+       success: function(req) { 
+       		 if(req.code == 0){    
+				getOrgTreeList();   
+				$("#showmessage").html("机构删除成功！"); 
+				$("#confirm_tip").fadeIn(200);
+				constants_organ_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
 }
 </script>
 
@@ -100,57 +376,92 @@ function clearForm(){
 <body>
 
 	<div class="place">
-    <span>位置：</span>
-    <ul class="placeul"> 
-    <li><a href="#">基础数据管理</a></li>
-    <li><a href="#">权限管理</a></li>
-    </ul>
+	    <span>位置：</span>
+	    <ul class="placeul"> 
+		    <li><a href="#">基础数据管理</a></li>
+		    <li><a href="#">机构管理</a></li>
+	    </ul>
+    </div>
+    <div class="mainbox">
+      	<div class="tools">
+	    	<ul class="toolbar">
+		        <li class="click" onclick="showAddTip(1);"><span><img src="/supervision/source/images/t01.png" /></span>添加根机构</li>
+		        <li id="hid_li_btn" class="click displaynone" onclick="showAddTip(0);"><span><img src="/supervision/source/images/t01.png" /></span>添加子机构</li>
+		        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+		        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+	        </ul> 
+    	</div>
+	    <div class="mainleft">
+    		<div class="leftinfos">
+    			<div class="infoleft">
+    				<div class="listtitle">所有机构</div>  
+    					<div style=" height:425px;_height:390px;overflow-y:auto; width:90%;">   
+	    					<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+			        			<tr><td></td></tr>  
+			        		</table> 
+		        		</div>
+    				</div>
+    			<div class="inforight">
+    				<div class="listtitle">机构列表</div>
+    					<div style=" height:425px;_height:390px;overflow-y:auto; width:97%;">   
+	    					<table class="tablelist">
+						    	<thead>
+						    		<tr>
+								        <th></th>
+								        <th>机构名称</th>
+										<th>监察部门</th> 
+										<th>机构类型</th> 
+						        	</tr>
+						        </thead>
+						        <tbody id="tb_organList">  
+						        </tbody>
+						    </table> 
+		        		</div>
+    				</div>
+    			</div> 
+    	</div>  
     </div>
     
-    <div class="rightinfo">
-    
-    <div class="tools">
-    
-    	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        </ul> 
-    
-    </div>
-    
-    
-    <table class="tablelist">
-    	<thead>
-    		<tr>
-		        <th></th>
-		        <th>权限名称</th>
-				<th>权限描述</th>
-				<th>所属模块</th>	
-				<th>资源分配</th>						  
-        	</tr>
-        </thead>
-        <tbody id="tb_roleList">  
-        </tbody>
-    </table>
-    
-   
-    <div class="pagin">
-    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
-        <ul class="paginList" id="ul_pageList">
+     <div class="addtip" id="add_tip">
+   		<div class="tiptop"><span>新增/编辑机构</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
         
-        <li class="paginItem"><a href="javascript:;">1</a></li>
-        <li class="paginItem current"><a href="javascript:;">2</a></li>
-        <li class="paginItem"><a href="javascript:;">3</a></li>
-        <li class="paginItem"><a href="javascript:;">4</a></li>
-        <li class="paginItem"><a href="javascript:;">5</a></li>
-        <li class="paginItem more"><a href="javascript:;">...</a></li>
-        <li class="paginItem"><a href="javascript:;">10</a></li>
-        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-        </ul>
-    </div>
-    
-    
+	    <div class="addtipinfo"> 
+	       <div style="height:300px;width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>机构名称：</span></td><td><input type="hidden" id="hid_organId" value="0"  /><input type="text" class="dfinput" id="ipt_name"  /></td></tr> 
+	        			<tr><td style="height:30px;"><span >上级机构：</span></td><td><input type="hidden" id="hid_parentId" value="0"  /><input type="text" class="dfinput" readonly="readonly"  id="ipt_parentName" /></td></tr> 
+        				<tr><td style="height:30px;"><span >监察部门：</span></td><td><select name="roleId" id="slt_isSuperVision"  class="dfinput" >
+	        					<option value="0">否</option>
+	        					<option value="1">是</option>
+							</select></td></tr>
+	        			<tr><td style="height:30px;"><span>机构类型：</span></td><td>
+	        				<select name="roleId" id="slt_orgTypeId"  class="dfinput" >
+	        					<option value="">--请选择机构类型--</option>
+	        					<option value="37">分行行领导机构</option>
+	        					<option value="38">分行办公室机构</option>
+	        					<option value="39">依法行政领导办公室</option>
+	        					<option value="40">分行监察室</option>
+	        					<option value="41">分行机关</option>
+	        					<option value="48">中支领导机构</option>
+	        					<option value="47">中支依法行政领导小组办公室</option>
+	        					<option value="46">中支办公室机构</option>
+	        					<option value="42">中支机构</option>
+	        					<option value="43">中支监察室</option>
+	        					<option value="44">中支部门</option>
+	        					<option value="45">县支行</option>
+							</select></td></tr>
+	        			<tr><td colspan="2" style="height:80px;"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateOrganInfo();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
     <div class="tip" id="confirm_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
         
@@ -162,34 +473,24 @@ function clearForm(){
       	</div>
         
         <div class="tipbtn">
-        	<input type="button"  class="sure" value="确定" /> 
+        	<input type="button" class="sure" value="确定" /> 
         </div> 
     </div> 
-     <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+    <div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
         
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>机构名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>机构类型：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>是否监察部门：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>机构状态：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认删除当前选择机构？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
       	</div>
         
         <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        	<input type="button" class="sure" value="确定" onclick="deleteOrganAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
         </div> 
-    </div> 
-    </div> 
-
+    </div>
 </body>
-
 </html>

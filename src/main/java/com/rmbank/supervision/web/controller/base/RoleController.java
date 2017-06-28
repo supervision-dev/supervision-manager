@@ -20,12 +20,19 @@ import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.common.utils.StringUtil;
+import com.rmbank.supervision.model.FunctionMenu;
+import com.rmbank.supervision.model.FunctionResourceVM;
 import com.rmbank.supervision.model.Permission;
+import com.rmbank.supervision.model.PermissionResource;
+import com.rmbank.supervision.model.ResourceConfig;
 import com.rmbank.supervision.model.Role;
+import com.rmbank.supervision.model.RolePermission;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.FunctionService;
 import com.rmbank.supervision.service.PermissionService;
 import com.rmbank.supervision.service.ResourceService;
+import com.rmbank.supervision.service.RolePermissionService;
 import com.rmbank.supervision.service.RoleResourceService;
 import com.rmbank.supervision.service.RoleService;
 import com.rmbank.supervision.service.SysLogService;
@@ -42,6 +49,8 @@ public class RoleController extends SystemAction {
 	private RoleService roleService;
 	@Resource
 	private RoleResourceService roleResourceService;
+	@Resource
+	private RolePermissionService rolePermissionService;
 	@Resource
 	private FunctionService functionService;
 	@Resource
@@ -170,4 +179,95 @@ public class RoleController extends SystemAction {
 		}
 		return js;
 	}
+
+	/**
+	 * 新增/编辑权限资源分配
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateRolePermission.do", method = RequestMethod.POST) 
+	public JsonResult<RolePermission> jsonSaveOrUpdateRolePermission(
+			RolePermission rolePermission,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		// 新建一个json对象 并赋初值
+		JsonResult<RolePermission> js = new JsonResult<RolePermission>();
+		js.setCode(1);
+		js.setMessage("保存失败!"); 
+		try {
+			 if(rolePermission.getPermissionId()>0){
+				 if(StringUtil.isEmpty(rolePermission.getPermissionIds())){
+					 rolePermissionService.deleteByRoleId(rolePermission.getRoleId());
+				 }else{
+					 String[] ids = rolePermission.getPermissionIds().split(",");
+					 List<Integer> idList = new ArrayList<Integer>();
+					 if(ids.length>0){ 
+						 for(String id : ids){
+							 if(!StringUtil.isEmpty(id)){
+								 idList.add(Integer.parseInt(id));
+							 }
+						 }
+					 }
+					 rolePermissionService.saveRolePermission(rolePermission.getRoleId(), idList);
+				 }
+				js.setCode(0);
+				js.setMessage("角色分配权限成功!"); 
+			 }else{
+				js.setMessage("角色分配权限失败，对应角色为空!"); 
+			 }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			js.setMessage("角色分配权限出现异常!"); 
+		}
+		return js;
+	}
+	
+	
+	 /**
+     * 获取权限所属模块列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/getPermissionList.do")
+    public List<FunctionResourceVM>  getPermissionList(
+			HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException { 
+    	List<FunctionResourceVM> frvmList = new ArrayList<FunctionResourceVM>();
+    	FunctionMenu fm = new FunctionMenu();
+    	fm.setLeaf(1);
+    	List<FunctionMenu> fmList = functionService.getFunctionMenuList(fm);
+    	if(fmList != null && fmList.size()>0 ){
+    		for(FunctionMenu f : fmList){
+    			FunctionResourceVM frvm = new FunctionResourceVM();
+    			frvm.setId(f.getId());
+    			frvm.setName(f.getName());
+    			List<Permission> perList = new ArrayList<Permission>();
+    			perList = permissionService.getPermissionByModelId(f.getId());
+    			frvm.setPermissionList(perList);
+    			frvmList.add(frvm);
+    		}
+    	}
+    	return frvmList;
+    }
+    /**
+     * 根据角色，获取分配的权限列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @ResponseBody
+    @RequestMapping(value = "/jsonloadPermitList.do")
+    public List<RolePermission>  jsonloadPermitList(
+			@RequestParam(value = "id", required = false) Integer id,
+			HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException { 
+    	List<RolePermission> list = rolePermissionService.selectByRoleId(id);
+    	return list;
+    }
+	
 }

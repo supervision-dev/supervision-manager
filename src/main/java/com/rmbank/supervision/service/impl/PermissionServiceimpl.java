@@ -101,6 +101,12 @@ public class PermissionServiceimpl implements PermissionService {
 		}
 		return isSuccess;
 	}
+
+	@Override
+	public List<Permission> getPermissionByModelId(Integer id) {
+		// TODO Auto-generated method stub
+		return permissionMapper.getPermissionByModelId(id);
+	}
 	
 	
 }

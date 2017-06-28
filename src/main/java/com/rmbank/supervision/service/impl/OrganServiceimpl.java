@@ -24,7 +24,7 @@ public class OrganServiceimpl implements OrganService {
 	@Override
 	public int deleteByPrimaryKey(Integer id) {
 		// TODO Auto-generated method stub
-		return 0;
+		return organMapper.deleteByPrimaryKey(id);
 	}
 
 	@Override

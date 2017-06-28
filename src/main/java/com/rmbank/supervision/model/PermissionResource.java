@@ -6,6 +6,8 @@ public class PermissionResource {
     private Integer permissionId;
 
     private Integer resourceId;
+    
+    private String resourceIds;
 
     public Integer getId() {
         return id;
@@ -30,4 +32,12 @@ public class PermissionResource {
     public void setResourceId(Integer resourceId) {
         this.resourceId = resourceId;
     }
+
+	public String getResourceIds() {
+		return resourceIds;
+	}
+
+	public void setResourceIds(String resourceIds) {
+		this.resourceIds = resourceIds;
+	}
 }

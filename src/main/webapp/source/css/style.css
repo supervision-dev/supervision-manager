@@ -110,7 +110,7 @@ h2{font-weight:normal;}
 .placeul li{float:left; line-height:40px; padding-left:7px; padding-right:12px; background:url(/supervision/source/images/rlist.gif) no-repeat right;}
 .placeul li:last-child{background:none;} 
 .rightinfo{padding:8px;}
-.tools{clear:both; height:35px; margin-bottom:8px;}
+.tools{clear:both; height:35px; margin-bottom:1px;}
 .toolbar{float:left;} 
 .toolbar li{background:url(/supervision/source/images/toolbg.gif) repeat-x; line-height:23px; height:23px; border:solid 1px #d3dbde; float:left; padding-right:10px; margin-right:5px;border-radius: 3px; behavior:url(js/pie.htc); cursor:pointer;}
 .toolbar li span{float:left; margin-left:10px; margin-right:5px; margin-top:5px;}
@@ -171,7 +171,7 @@ h2{font-weight:normal;}
 
 /*default*/
 .mainbox{padding:8px;position:relative;}
-.mainleft{padding-right:298px;}
+.mainleft{padding-right:1px;/* padding-right:298px; */}
 .leftinfo{border:#d3dbde solid 1px; height:290px;}
 .mainright{width:298px;position:absolute; top:8px; right:8px;}
 .dflist{border:#d3dbde solid 1px; width:288px; height:290px; float:right;}
@@ -183,9 +183,9 @@ h2{font-weight:normal;}
 .newlist li{line-height:25px; background:url(/supervision/source/images/list2.png) no-repeat 0px 8px; text-indent:11px;}
 .newlist i{width:80px; display:block; float:left; font-style:normal;}
 .newlist b{font-weight:normal; color:#7b7b7b; padding-left:10px;}
-.leftinfos{height:238px;margin-top:8px;}
-.infoleft{border:#d3dbde solid 1px; float:left;height:238px;}
-.inforight{border:#d3dbde solid 1px; float:right;height:238px; }
+.leftinfos{/* height:238px;margin-top:8px; */}
+.infoleft{border:#d3dbde solid 1px; float:left;  height:390px; width:25%;}
+.inforight{border:#d3dbde solid 1px; float:right;  height:390px; width:74%; }
 .tooli{padding:30px 20px;}
 .tooli li{float:left;padding-left:15px; padding-right:15px;margin-bottom:20px;}
 .tooli li span{text-align:center;}
@@ -217,9 +217,11 @@ h2{font-weight:normal;}
 .tiptop a:hover{background:url(/supervision/source/images/close1.png) no-repeat;}
 .tipinfo{padding-top:30px;margin-left:65px; height:95px;}
 .tipinfo span{width:95px; height:95px;float:left; text-align:right;}
-.addtipinfo{padding-top:30px;margin-left:15px; }
+.addtipinfos{padding-top:30px;margin-left:15px;width:558px;_height:320px;overflow-y:auto;  } 
+.addtipinfos span{width:95px;  float:right;} 
+.addtipinfo{padding-top:30px;margin-left:15px;width:458px;_height:300px;overflow-y:auto;  } 
 .addtipinfo span{width:95px;  float:right;} 
-.simpletipinfo{padding-top:10px;margin-left:15px;width:458px;_height:320px;overflow-y:auto;  } 
+.simpletipinfo{padding-top:10px;margin-left:15px;width:458px;_height:300px;overflow-y:auto;  } 
 .tipright{float:left;padding-top:15px; padding-left:10px;} 
 .tipright p{font-size:14px; font-weight:bold; line-height:35px;}
 .tipright cite{color:#858686;}

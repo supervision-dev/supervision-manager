@@ -27,9 +27,9 @@ import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 
-@Scope("prototype")
-@Controller
-@RequestMapping("/system/config")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/system/config")
 public class ConfigAction extends SystemAction {
 	/**
 	 *资源注入

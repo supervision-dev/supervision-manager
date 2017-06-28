@@ -11,7 +11,6 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
 	getMoudleList(); 
 });
@@ -34,8 +33,12 @@ function getDataList(pageNo){
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			permissionHtml +="<tr>";
 				    permissionHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    permissionHtml +="<td>"+req.datalist[i].name+"</td>";				    
-				    permissionHtml +="<td>"+req.datalist[i].description+"</td>";
+				    permissionHtml +="<td>"+req.datalist[i].name+"</td>";	
+				    if(req.datalist[i].description != null){
+				    	permissionHtml +="<td>"+req.datalist[i].description+"</td>";
+			    	}else{
+				    	permissionHtml +="<td></td>";
+				    }		    
 				    permissionHtml +="<td>"+req.datalist[i].fName+"</td>";
 				    permissionHtml +="<td style='text-align:center'><a class=\"forRec\" onclick=\"showAssignTip("+req.datalist[i].id+",'"+req.datalist[i].name+"',"+req.datalist[i].moudleId+");\">资源分配</a></td>";
 			        permissionHtml +="</tr>";
@@ -80,6 +83,7 @@ function getDataList(pageNo){
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_permissionList").html(permissionHtml);
+	$('.tablelist tbody tr:odd').addClass('odd');
 	      	$("#tb_permissionList input[type='checkbox']").click(function(){
 			  	$("#tb_permissionList input[type='checkbox']").removeAttr("checked");  
 				$(this).prop("checked","checked");
@@ -208,7 +212,7 @@ function getRecourceList(pId){
    					recHtml += "<tr><td style=\"height:20px;\"></td><td>";
    					for(var j = 0; j<req.itemList.length; j++){  
    						var obj = req.itemList[j]; 
-   						recHtml += "<label style=\"margin-left:15px;width: 200px;float: left;\" ><input id=\"chk_rec_"+obj.id+"\" type=\"checkbox\" name=\"resId\" />"+obj.name+"</label>";
+   						recHtml += "<label style=\"margin-left:15px;width: 200px;float: left;padding:5px;\" ><input id=\"chk_rec_"+obj.id+"\" type=\"checkbox\" name=\"resId\" value=\""+obj.id+"\" />"+obj.name+"</label>";
    					} 
    					recHtml += "</td></tr> ";
    				}else{
@@ -238,7 +242,45 @@ function loadResourceListByPermissionId(pId){
        }
     });  
 }
+var recIds = "";
 function saveOrUpdateAssignRec(){
+	var resc_collect = $("#tb_recList input[type='checkbox']");
+	recIds = "";
+	$.each(resc_collect,function(index,item){
+		if($(item).attr("checked") != undefined && $(item).attr("checked") =="checked"){
+			recIds += $(item).attr("value") +","
+		}
+	});
+	if(recIds.length == 0 || recIds == ""){
+		$("#empty_confirm_tip").fadeIn(200);
+	}else{
+		recIds = recIds.substring(0,recIds.length -1);
+		saveOrUpdateAssignRecAction();
+	}
+}
+function saveOrUpdateAssignRecAction(){
+	$("#assign_tip").fadeOut(200);
+	$("#empty_confirm_tip").fadeOut(200);
+	var permitId = $("#hid_assign_perId").val();
+	var obj = {};
+	obj.permissionId = permitId;
+	obj.resourceIds = recIds; 
+	 $.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/permission/jsonSaveOrUpdatePermissionRec.do", 
+       dataType:"json", //响应数据类型       
+       data:obj,
+       success: function(req) {
+       		if(req.code == 0){    
+				$("#showmessage").html("权限分配资源成功！");  
+				$("#confirm_tip").fadeIn(200);
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });  
 }
 </script>
 
@@ -344,7 +386,7 @@ function saveOrUpdateAssignRec(){
    		<div class="tiptop"><span>资源授权</span><a  onclick="javascript:$('#assign_tip').fadeOut(100);" ></a></div>
         
 	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
+	       <div style=" width:99%;">	
 	        	 <table style="width:100%"><tr><td style="height:30px;width:80px;font-size:14px; font-weight:bold;">权限名称：<input type="hidden" id="hid_assign_perId" /></td><td id="sp_perName" style="font-size:14px; font-weight:bold;color:red"></td></tr></table>
 	        	 <table style="width:100%" id="tb_recList">
 	        	 </table>
@@ -356,6 +398,23 @@ function saveOrUpdateAssignRec(){
         	<input type="button"  class="cancel" value="取消" onclick="javascript:$('#assign_tip').fadeOut(100);" /> 
         </div> 
     </div> 
+    
+    <div class="tip" id="empty_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#empty_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">当前权限为分配任何资源，是否继续操作？</p> 
+	        	<cite>如果是，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="saveOrUpdateAssignRecAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#empty_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
 </body>
 
 </html>

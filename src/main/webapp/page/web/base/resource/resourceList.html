@@ -11,7 +11,6 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
 	getMoudleList();
 }); 
@@ -79,7 +78,7 @@ function getDataList(pageNo){
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_roleList").html(resourceHtml);
-	      
+	$('.tablelist tbody tr:odd').addClass('odd');
 		  	$("#tb_roleList input[type='checkbox']").click(function(){
 			  	$("#tb_roleList input[type='checkbox']").removeAttr("checked");  
 				$(this).prop("checked","checked");
@@ -265,7 +264,7 @@ function clearForm(){
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
         
 	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
+	       <div style=" width:99%;">	
 	        	<form> 
 	        		<table cellpadding="0" cellspacing="0" style="width:100%;"> 
 	        			<tr><td style="height:30px;width:80px;"><span>资源名称：</span></td><td><input type="hidden" id="hid_recId" value="0" /><input type="text" class="dfinput" id="ipt_name" /></td></tr> 

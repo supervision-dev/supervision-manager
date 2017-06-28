@@ -6,6 +6,7 @@ public class FunctionResourceVM {
 	private Integer id;//所属模块Id；
 	private String name;//所属模块名称；
 	private List<ResourceConfig> itemList;
+	private List<Permission> permissionList;
 	public Integer getId() {
 		return id;
 	}
@@ -23,5 +24,11 @@ public class FunctionResourceVM {
 	}
 	public void setItemList(List<ResourceConfig> itemList) {
 		this.itemList = itemList;
+	}
+	public List<Permission> getPermissionList() {
+		return permissionList;
+	}
+	public void setPermissionList(List<Permission> permissionList) {
+		this.permissionList = permissionList;
 	}
 }

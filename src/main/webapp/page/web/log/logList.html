@@ -118,6 +118,7 @@ function fillDataList(req){
 	       		} 
 	       }
 	       $("#tb_logList").html(logHtml);
+		$('.tablelist tbody tr:odd').addClass('odd');
 }
 function search(pageNo){
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 

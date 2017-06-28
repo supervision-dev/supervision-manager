@@ -26,4 +26,6 @@ public interface PermissionService {
 	List<Permission> getExistPermission(Permission per);
 
 	boolean deletePermissionById(Integer id);
+
+	List<Permission> getPermissionByModelId(Integer id);
 }

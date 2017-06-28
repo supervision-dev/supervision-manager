@@ -23,4 +23,6 @@ public interface PermissionMapper {
 	int getPermissionCount(Permission permission);
 
 	List<Permission> getExistPermission(Permission per);
+
+	List<Permission> getPermissionByModelId(Integer id);
 }
