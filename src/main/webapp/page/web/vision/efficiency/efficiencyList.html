@@ -5,7 +5,10 @@
 <title>效能监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
-
+ <!-- 以下两个引的文件用于layer -->
+	<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+	<script src="/supervision/source/js/layer/layer.js"></script>
+    
 <script type="text/javascript">
 $(document).ready(function(){ 
   	$(".sure").click(function(){
@@ -24,10 +27,13 @@ function getDataList(pageNo){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tb_userList").html("");
-       		var itemHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
+       		var itemHtml = "<tr><td colspan=\"13\">没有获取到相关数据</td></tr>";
 	   		if(req.datalist != null && req.datalist.length >0){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
+	       		/* alert(req.datalist[i].orgType);
+	       		alert(req.datalist[i].isItemOrg);
+	       		alert(req.datalist[i].lasgTag); */
 	       			itemHtml +="<tr>";
 				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
 				    if(req.datalist[i].status == 0){
@@ -53,9 +59,9 @@ function getDataList(pageNo){
 				    }else{
 				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    }
-				    if(req.datalist[i].isSign <= 2){
+				    if(req.datalist[i].isSign <= 3){
 				    	itemHtml +="<td>未签收</td>";
-				    }else if(req.datalist[i].isSign > 2){
+				    }else if(req.datalist[i].isSign > 3){
 				    	itemHtml +="<td>已签收</td>";
 				    }
 				    if(req.datalist[i].status == 4){
@@ -87,6 +93,21 @@ function getDataList(pageNo){
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==3 || req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==4 ){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
 				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    	}else{
+				    		itemHtml +="<td width=\"180px;\"></td>";
+				    	}
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign <= 3 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"sign("+req.datalist[i].id+");\"  target=\"rightFrame\">签收</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 66){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</a></td>";
+				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
+				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
+				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",68);\"  target=\"rightFrame\">录入监察意见</a></td>";
+				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 68){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</a></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
@@ -133,6 +154,7 @@ function getDataList(pageNo){
        }
 	});
 }
+
 function showAlertTip(type){
 	if(type == 'edit'){
 		$("#showmessage").html("请选择要编辑的项目！");
@@ -153,13 +175,47 @@ function saveOrUpdateUserInfo(){
 function clearForm(){
 
 }
+
+function sign(itemId){
+	layer.confirm('是否确认签收项目？', {
+		btn: ['确认','取消'] //按钮
+	}, function(){//点击确认按钮调用
+		layer.close(layer.confirm());//关闭当前弹出层
+		$.ajax({ 
+	       type: "POST", //请求类型
+	       url: "/supervision//vision/efficiency/jsonSignItemById.do?itemId="+itemId,
+	       //data:obj,//发送到服务器的数据，序列化后的值 
+	       dataType:"json", //响应数据类型      
+	       success: function(req) {
+	       		if(req.code==0){    		
+	        		layer.confirm(req.message, {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+						window.location.href ="/supervision/pageRoute/vision/efficiency/efficiencyList.do";
+					});		        		
+	        	}else{
+	        		layer.alert(data.message);	        	
+	        	}	
+	       }
+	    });
+	}, function(){
+		
+	});
+
+}
+
+
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/efficiency/showItem.do?id="+id;
 } 
 function efficiencyFile(itemId,tag){ 
 	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag;
 }
-function test(){ 
+function efficiencyInfo(){
+	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyInfo.do";
+}
+/* function test(){ 
 	$("#organ_tip").fadeIn(200);
 	$.ajax({ 
        type: "POST", //请求类型
@@ -344,7 +400,8 @@ function saveSelectOrg(obj){
 	$("#ipt_slt_orgName").val(selectOrgNameStr);
 	$("#ipt_slt_orgName").text(selectOrgNameStr);
 	$("#lbl_sltOrg").text(selectOrgIdStr);
-}
+} */
+
 </script>
 
 
@@ -369,6 +426,7 @@ function saveSelectOrg(obj){
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+       	<li class="click" onclick="efficiencyInfo();">录入工作事项</li>
         </ul> 
     	
     	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
@@ -431,34 +489,10 @@ function saveSelectOrg(obj){
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
     </div> 
-     <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
-        </div> 
-    </div> 
+    
     </div> 
 
-<div class="simpletip" id="organ_tip"> 
+	<!-- <div class="simpletip" id="organ_tip"> 
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
 	    <div class="simpletipinfo">   
@@ -479,7 +513,7 @@ function saveSelectOrg(obj){
     	<textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="5" cols="6"  style="border:1px solid #C6C6C6;width:500px;height:84px;"></textarea> 
     	<label>选择被监察对象Id ：</label>
     	<label id="lbl_sltOrg"></label>
-    </div>
+    </div> -->
 </body>
 
 </html>

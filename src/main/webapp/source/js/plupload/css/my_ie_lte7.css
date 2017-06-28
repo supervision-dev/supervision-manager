@@ -1,0 +1,22 @@
+/* CSS Document */
+
+#main-menu {
+	position: absolute;
+	position: fixed;	
+}
+
+.menu-item {
+	float: left;	
+}
+
+.span4 {
+	float: left;	
+}
+
+.clearfix {
+	clear: both;	
+}
+
+.btn {
+	zoom: 1;
+}

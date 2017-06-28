@@ -69,6 +69,7 @@ public class EfficiencyVisionController extends SystemAction {
 	private ItemProcessFileService itemProcessFileService;
 	@Resource
 	private SysLogService logService;
+	private HttpSession session;
 	
 	/**
      * 效能监察列表展示
@@ -157,6 +158,9 @@ public class EfficiencyVisionController extends SystemAction {
 			//将登陆用户的角色id添加到项目中
 			it.setUserRole(userRole.getId());
 			
+			//将登陆用户的机构Id添加
+			it.setLogOrgId(userOrg.getId());
+			
 			//获取添加项目的机构类型和登录机构类型是否相同 
 			Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
 			if(itemOrg.getOrgtype()==userOrg.getOrgtype()){
@@ -166,11 +170,6 @@ public class EfficiencyVisionController extends SystemAction {
 			}
 			
 		}
-		// 通过request对象传值到前台
-//		request.setAttribute("Item", item);
-//		request.setAttribute("userOrg", userOrg);
-//		request.setAttribute("itemList", itemList);
-
     	
 		String ip = IpUtil.getIpAddress(request);		
 		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了效能监察列表查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
@@ -181,50 +180,17 @@ public class EfficiencyVisionController extends SystemAction {
     	return dr;
     }
     
-    /**
-     * 跳转到添加工作事项
-     * @param id
-     * @param req
-     * @param res
-     * @return
-     */
-    @RequestMapping(value = "/efficiencyInfo.do")
-	@RequiresPermissions("vision/efficiency/efficiencyInfo.do")
-	public String efficiencyInfo(
-			@RequestParam(value = "id", required = false) Integer id,
-			HttpServletRequest request, HttpServletResponse response) {
-
-    	//获取机构
-		Organ organ=new Organ();
-		List<Organ> organList = organService.getOrganList(organ);		
-    	List<OrganVM> list=new ArrayList<OrganVM>();
-		OrganVM frvm = null;
-		for(Organ rc : organList){
-			if(rc.getPid()==0 && rc.getSupervision()==0){
-				frvm = new OrganVM();
-				List<Organ> itemList = new ArrayList<Organ>();//用于当做OrganVM的itemList
-				frvm.setId(rc.getId());
-				frvm.setName(rc.getName());
-				String path =rc.getId()+".";//当前登录机构的子机构的path都以此开头
-				String substring=null;
-				for(Organ rc1 : organList){
-					if(rc1.getPath().length()>path.length()){
-						substring=rc1.getPath().substring(0, path.length());
-					}
-					if(rc1.getPid() == rc.getId() && rc1.getSupervision()==0){ 
-						itemList.add(rc1);
-					}else if(rc1.getId()==43 && rc1.getPid() == rc.getId()){
-						itemList.add(rc1);
-					}else if(path.equals(substring) && rc1.getSupervision()==0){//添加孙子级节点	
-						itemList.add(rc1);								
-					}
-				}
-				frvm.setItemList(itemList);
-				list.add(frvm);
-			}
-		}
-		
-		//获取当前登录用户所属机构下的所有用户
+	/**
+	 * 加载责任领导
+	 */
+	@ResponseBody
+    @RequestMapping(value = "/getLeader.do")
+//  @RequiresPermissions("vision/efficiency/getLeader.do")
+	 public DataListResult<User> getLeader(
+			 HttpServletRequest request, HttpServletResponse response){
+		DataListResult<User> dr = new DataListResult<User>();
+		 
+		//获取当前登录用户
 		User lgUser = this.getLoginUser();
 		//获取当前用户对应的机构列表
 		List<Organ> userOrgList=userService.getUserOrgByUserId(lgUser.getId());
@@ -232,70 +198,21 @@ public class EfficiencyVisionController extends SystemAction {
 		Integer orgtype = organ2.getOrgtype();
 		List<User> userListByOrgId =null;
 		//如果是中支监察室，加载中支领导
-		if(orgtype == 43){
-			userListByOrgId = userService.getUserListByOrgId(113);
-		}else if (orgtype == 45 || orgtype == 46 || orgtype == 47) {
-			userListByOrgId = userService.getUserListByOrgId(112);
+		if(orgtype == Constants.ORG_TYPE_7){			
+			Integer pid = organ2.getPid();
+			String OrgName="行领导";
+			//获取当前中支的行领导机构下的用户
+			Organ HORG=organService.getOrganByPidAndName(pid,OrgName);
+			userListByOrgId = userService.getUserListByOrgId(HORG.getId());
+		}else if (orgtype == Constants.ORG_TYPE_4) {
+			//分行监察室加载分行领导
+			userListByOrgId = userService.getUserListByOrgId(1);
 		}
-		//request.setAttribute("userOrg", organ2);
-		request.setAttribute("byLgUser", userListByOrgId);
-		request.setAttribute("OrgList", list);		
-		return "web/vision/efficiency/efficiencyInfo";
-	}
-    /**
-     * 跳转到立项页面
-     * @param id
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/itemInfo.do")
-	@RequiresPermissions("vision/efficiency/itemInfo.do")
-	public String itemInfo(
-			@RequestParam(value = "id", required = false) Integer id,
-			HttpServletRequest request, HttpServletResponse response) {
-    	
-    	//获取机构
-		Organ organ=new Organ();
-		List<Organ> organList = organService.getOrganList(organ);		
-    	List<OrganVM> list=new ArrayList<OrganVM>();
-		OrganVM frvm = null;
-		for(Organ rc : organList){
-			if(rc.getPid()==0 && rc.getSupervision()==0){
-				frvm = new OrganVM();
-				List<Organ> itemList = new ArrayList<Organ>();//用于当做OrganVM的itemList
-				frvm.setId(rc.getId());
-				frvm.setName(rc.getName());
-				String path =rc.getId()+".";//当前登录机构的子机构的path都以此开头
-				String substring=null;
-				for(Organ rc1 : organList){
-					if(rc1.getPath().length()>path.length()){
-						substring=rc1.getPath().substring(0, path.length());
-					}
-					if(rc1.getPid() == rc.getId() && rc1.getSupervision()==0){ 
-						itemList.add(rc1);
-					}else if(rc1.getId()==43 && rc1.getPid() == rc.getId()){
-						itemList.add(rc1);
-					}else if(path.equals(substring) && rc1.getSupervision()==0){//添加孙子级节点	
-						itemList.add(rc1);								
-					}
-				}
-				frvm.setItemList(itemList);
-				list.add(frvm);
-			}
-		}
-		
-		//获取当前登录用户所属机构下的所有用户
-		User lgUser = this.getLoginUser();
-		List<User> byLgUser = userService.getUserListByLgUser(lgUser);		
-		request.setAttribute("byLgUser", byLgUser);
-		request.setAttribute("OrgList", list);		
-		request.setAttribute("itemId", id);
-		return "web/vision/efficiency/itemInfo";
-	}
-    
-    
-    
+		dr.setData(lgUser);
+		dr.setDatalist(userListByOrgId); 
+		return dr;
+	 }
+	
     /** 
    	 * 新增项目
    	 * @throws ParseException 
@@ -309,6 +226,7 @@ public class EfficiencyVisionController extends SystemAction {
    		@RequestParam(value = "OrgId", required = false) Integer[] OrgIds,    		
    		HttpServletRequest request, HttpServletResponse response) throws ParseException{
 	  
+	    
 		//将前台传过来的String类型的时间转换为Date类型
 		if (end_time != null) {
 		   	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -367,41 +285,7 @@ public class EfficiencyVisionController extends SystemAction {
    }
    	
    
-   /**
-    * 被监察对象签收项目
-    */
-    @ResponseBody
-	@RequestMapping(value = "/jsonSignItemById.do", method = RequestMethod.POST)
-	@RequiresPermissions("vision/efficiency/jsonSignItemById.do")
-	public JsonResult<Item> jsonSignItemById(
-			@RequestParam(value = "itemId", required = false) Integer itemId,
-			HttpServletRequest request, HttpServletResponse response) {
-		
-		// 新建一个json对象 并赋初值
-		JsonResult<Item> js = new JsonResult<Item>();
-		js.setCode(new Integer(1));
-		js.setMessage("签收项目失败!");			
-		try {
-			Item item=new Item();
-			item.setId(itemId);
-			item.setLasgTag(Constants.EFFICIENCY_VISION_1);//进行到签收状态
-
-			boolean state = itemProcessService.insertItemProcessByItemId(itemId);
-			if(state==true){
-				User loginUser = this.getLoginUser();
-				String ip = IpUtil.getIpAddress(request);		
-				logService.writeLog(Constants.LOG_TYPE_XLJC, "用户："+loginUser.getName()+"，签收了效能监察的工作事项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
-				js.setCode(new Integer(0));
-				js.setMessage("签收项目成功!");
-				return js;
-			}else {
-				return js;
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}	
-		return js;
-	}
+   
    
    
     /**
@@ -421,10 +305,14 @@ public class EfficiencyVisionController extends SystemAction {
 		js.setCode(new Integer(1));
 		js.setMessage("立项失败!");
 		
+		HttpSession session = request.getSession();
+    	Integer sessionItemId =(Integer) session.getAttribute("efficiencyItemId");
+    	
+		
 		// 获取当前登录用户
 		User u = this.getLoginUser();
 		//获取要立项的项目
-		Item item2 = itemService.selectByPrimaryKey(item.getId());
+		Item item2 = itemService.selectByPrimaryKey(sessionItemId);
 		try {
 			// 将前台传过来的String类型的时间转换为Date类型
 			if (end_time != null) {
@@ -440,12 +328,16 @@ public class EfficiencyVisionController extends SystemAction {
 			//获取当前项目的流程，有且只有一个
 			List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(item2.getId()); 
 			ItemProcess getItemProcess = itemProcessList.get(0);
+			String uuid = getItemProcess.getUuid();
 			//获取初始化流程的附件集合
 			List<ItemProcessFile> fileList = itemProcessFileService.getFileListByItemId(itemProcessList.get(0).getId());
 			List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u.getId());	
 			//立项返回的项目ID
 			List<Integer> itemIds= new ArrayList<Integer>();
 			for (Integer orgId : OrgIds) {
+				getItemProcess.setContentTypeId(Constants.EFFICIENCY_VISION_0);
+				getItemProcess.setContent(null);
+				getItemProcess.setUuid(uuid);
 				item2.setId(0);
 				item2.setSupervisionOrgId(orgId);
 				itemService.insertSelective(item2);//根据机构数对项目进行立项
@@ -456,7 +348,7 @@ public class EfficiencyVisionController extends SystemAction {
 				getItemProcess.setItemId(itemId);	
 				getItemProcess.setDefined(false);
 				getItemProcess.setOrgId(userOrgIDs.get(0));
-				getItemProcess.setContent(content);
+				//getItemProcess.setContent(content);
 				itemProcessService.insert(getItemProcess);//将项目的初始化流程赋给立项的项目				
 				Integer itemProcessId = getItemProcess.getId(); //返回的id
 				
@@ -466,19 +358,21 @@ public class EfficiencyVisionController extends SystemAction {
 					itemProcessFileService.insertSelective(itemProcessFile);//将初始化的附件赋给立项项目
 				}
 								
-				//新增立项流程
-//				List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u.getId());					
-//				ItemProcess itemProcess = new ItemProcess();
-//				itemProcess.setUuid(item.getUuid());
-//				itemProcess.setItemId(itemId);
-//				itemProcess.setDefined(false);
-//				itemProcess.setContentTypeId(Constants.ENFORCE_VISION_0);// 监察室立项状态
-//				itemProcess.setPreparerOrgId(orgId); // 制单部门的ID
-//				itemProcess.setOrgId(userOrgIDs.get(0));
-//				itemProcess.setContent(content);
-//				itemProcess.setPreparerId(u.getId());
-//				itemProcess.setPreparerTime(new Date());
-//				itemProcessService.insert(itemProcess);
+				//保存立项时监察项目信息
+				ItemProcess  ItemInformation= getItemProcess;
+				ItemInformation.setId(0);
+				ItemInformation.setUuid(item.getUuid());
+				ItemInformation.setContentTypeId(Constants.EFFICIENCY_VISION_00);
+				ItemInformation.setContent(item.getName());
+				itemProcessService.insert(ItemInformation);//监察项目的信息
+				
+				//保存立项监察内容信息	
+				ItemInformation.setId(0);
+				ItemInformation.setContent(content);
+				ItemInformation.setContentTypeId(Constants.EFFICIENCY_VISION_01);
+				itemProcessService.insert(ItemInformation);//监察内容的信息
+				
+				ItemInformation = new ItemProcess(); //清空
 			}
 			
 			User loginUser = this.getLoginUser();
@@ -495,6 +389,45 @@ public class EfficiencyVisionController extends SystemAction {
 		}
 		return js;
 	}
+    
+    /**
+     * 被监察对象签收项目
+     */
+     @ResponseBody
+ 	@RequestMapping(value = "/jsonSignItemById.do", method = RequestMethod.POST)
+ 	@RequiresPermissions("vision/efficiency/jsonSignItemById.do")
+ 	public JsonResult<Item> jsonSignItemById(
+ 			@RequestParam(value = "itemId", required = false) Integer itemId,
+ 			HttpServletRequest request, HttpServletResponse response) {
+ 		
+ 		// 新建一个json对象 并赋初值
+ 		JsonResult<Item> js = new JsonResult<Item>();
+ 		js.setCode(new Integer(1));
+ 		js.setMessage("签收项目失败!");			
+ 		try {
+ 			Item item=new Item();
+ 			item.setId(itemId);
+ 			item.setLasgTag(Constants.EFFICIENCY_VISION_1);//进行到签收状态
+
+ 			boolean state = itemProcessService.insertItemProcessByItemId(itemId);
+ 			if(state==true){
+ 				User loginUser = this.getLoginUser();
+ 				String ip = IpUtil.getIpAddress(request);		
+ 				logService.writeLog(Constants.LOG_TYPE_XLJC, "用户："+loginUser.getName()+"，签收了效能监察的工作事项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
+ 				js.setCode(new Integer(0));
+ 				js.setMessage("签收项目成功!");
+ 				return js;
+ 			}else {
+ 				return js;
+ 			}
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 		}	
+ 		return js;
+ 	}
+    
+    
+    
     
     /**
      * 删除项目
@@ -533,45 +466,10 @@ public class EfficiencyVisionController extends SystemAction {
 		return js;
 	}
     
-    /**
-     * 跳转到不分节点监察上传资料
-     * @param item
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping("/efficiencyNoFile.do")
-	@RequiresPermissions("vision/efficiency/efficiencyNoFile.do")
-	public String branchFHFile(@RequestParam(value="id",required=false) Integer id,
-			HttpServletRequest request, HttpServletResponse response){
- 
-    	Item item = itemService.selectByPrimaryKey(id);
-		if(item.getPreparerTime() != null){
-			item.setPreparerTimes(Constants.DATE_FORMAT.format(item.getPreparerTime()));
-		}		
-		
-		List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(item.getId()); 
-		ItemProcess itemProcess = new ItemProcess();
-		if(itemProcessList.size()>0){
-			itemProcess = itemProcessList.get(0); 
-		}
-		
-		List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
-		if(itemProcess.getId() != null){
-			fileList = itemProcessFileService.getFileListByItemId(itemProcess.getId());
-		}
-		//获取当前用户
-		User lgUser=this.getLoginUser(); 
-		   
-		request.setAttribute("User", lgUser); 
-		request.setAttribute("ItemProcess", itemProcess);
-		request.setAttribute("Item", item);
-		request.setAttribute("FileList", fileList);		
-		return "web/vision/efficiency/efficiencyNoFile";
-	}
+    
     
     /**
-     * 不分节点上传资料
+     * 上传资料
      */
     @ResponseBody
     @RequestMapping(value = "/jsonSaveOrUpdateItemProcess.do", method=RequestMethod.POST)
@@ -579,6 +477,11 @@ public class EfficiencyVisionController extends SystemAction {
     public JsonResult<ItemProcess> jsonSaveOrUpdateFileItem(ItemProcess itemProcess, 
     		@RequestParam(value="contentID",required=false) Integer contentID,
     		HttpServletRequest request, HttpServletResponse response) throws ParseException{
+    	
+    	HttpSession session = request.getSession();
+    	Integer sessionItemId =(Integer) session.getAttribute("efficiencyItemId");
+    	
+    	
     	//新建一个json对象 并赋初值
 		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
     	//获取当前登录用户
@@ -593,7 +496,7 @@ public class EfficiencyVisionController extends SystemAction {
 	    	itemProcess.setPreparerId(u.getId());
 	    	itemProcess.setPreparerTime(new Date());
 			itemProcess.setDefined(false);		
-			
+			itemProcess.setItemId(sessionItemId);
 			Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
 			if(contentID!=null && contentID==72){
 				itemProcess.setContentTypeId(Constants.EFFICIENCY_VISION_12);//未完结时，上传的资料
@@ -615,36 +518,8 @@ public class EfficiencyVisionController extends SystemAction {
 		return js;
     }
     
-    /**
-     * 跳转到监察室给出监察意见
-     */
-    @RequestMapping(value = "/toOpinion.do")
-    @RequiresPermissions("vision/efficiency/toOpinion.do")
-    public String toOpinion(Item item, 
-            HttpServletRequest request, HttpServletResponse response){
-    	Item it = itemService.selectByPrimaryKey(item.getId());
-    	if(it.getPreparerTime() != null){
-    		it.setPreparerTimes(Constants.DATE_FORMAT.format(it.getPreparerTime()));
-		}
-    	request.setAttribute("Item", it);
-    	return "web/vision/efficiency/opinion";
-    }
+   
     
-    /**
-     * 跳转到整改页面
-     * @param item
-     * @param request
-     * @param response
-     * @return
-     */
-    @RequestMapping(value = "/resetItem.do")
-    @RequiresPermissions("vision/efficiency/resetItem.do")
-    public String resetItem(Item item, 
-        HttpServletRequest request, HttpServletResponse response){
-    	
-     	request.setAttribute("Item", item);
-     	return "web/vision/efficiency/resetView";
-    }
     
     /**
      * 被监察对象整改
@@ -718,6 +593,10 @@ public class EfficiencyVisionController extends SystemAction {
     		@RequestParam(value="wanjie",required = false) Integer wanjie,
     		HttpServletRequest request, HttpServletResponse response) throws ParseException{
     	
+    	HttpSession session = request.getSession();
+    	Integer sessionItemId =(Integer) session.getAttribute("efficiencyItemId");
+    	
+    	
     	//新建一个json对象 并赋初值
 		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
     	//获取当前登录用户
@@ -725,7 +604,7 @@ public class EfficiencyVisionController extends SystemAction {
 		js.setCode(new Integer(1));
 		js.setMessage("保存信息失败!");
 		try {   
-			Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+			Item item = itemService.selectByPrimaryKey(sessionItemId);
 			if(wanjie==null){
 				if(status == null){
 					itemProcess.setContentTypeId(Constants.EFFICIENCY_VISION_6); //监察室给出监察结论，项目完结
@@ -764,7 +643,7 @@ public class EfficiencyVisionController extends SystemAction {
 	    	itemProcess.setPreparerId(u.getId());
 	    	itemProcess.setPreparerTime(new Date());
 			itemProcess.setDefined(false); 
-			
+			itemProcess.setItemId(sessionItemId);
 			User loginUser = this.getLoginUser();
 			String ip = IpUtil.getIpAddress(request);		
 			logService.writeLog(Constants.LOG_TYPE_XLJC, "用户："+loginUser.getName()+"，执行了效能监察流程操作", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
@@ -792,13 +671,14 @@ public class EfficiencyVisionController extends SystemAction {
     @RequiresPermissions("vision/efficiency/showItem.do")
     public BaseItemResult showItem( 
             HttpServletRequest request, HttpServletResponse response){
-    	Item item =new Item();
+    	
     	HttpSession session = request.getSession();
-    	Integer itemId = (Integer) session.getAttribute("showItemId");
+    	Integer itemId = (Integer) session.getAttribute("effshowItemId");
     	
     	BaseItemResult showResult = new BaseItemResult();
     	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();
     	
+    	Item item =new Item();
     	item = itemService.selectByPrimaryKey(itemId);
     	
 		if(item.getEndTime() != null){
@@ -812,11 +692,20 @@ public class EfficiencyVisionController extends SystemAction {
 				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
 				fileList = itemProcessFileService.getFileListByItemId(ip.getId());
 				ip.setFileList(fileList);  
+				if(ip.getPreparerTime() != null){
+					ip.setPreparerTimes(Constants.DATE_FORMAT.format(ip.getPreparerTime()));
+				}
 				if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_0){
 					//request.setAttribute("ItemProcess", ip); //监察内容
 					drIPList.add(ip);
+				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_01){					
+					//request.setAttribute("ItemProcess2", ip); //已经立项，立项项目
+					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_00){					
-					//request.setAttribute("ItemProcess2", ip); //立项状态
+					//request.setAttribute("ItemProcess2", ip); //已经立项，立项内容
+					drIPList.add(ip);
+				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_1){					
+					//request.setAttribute("ItemProcess2", ip); //已签收状态
 					drIPList.add(ip);
 				}else if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_2){					
 					//request.setAttribute("ItemProcess2", ip); //已经上传资料

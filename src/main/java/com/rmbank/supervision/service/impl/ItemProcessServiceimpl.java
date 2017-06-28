@@ -74,6 +74,8 @@ public class ItemProcessServiceimpl implements ItemProcessService{
 			ItemProcess itemProcess = itemProcessItemId.get(0);
 			itemProcess.setContentTypeId(Constants.EFFICIENCY_VISION_1);
 			itemProcess.setId(0);
+			//itemProcess.setOrgId();
+			itemProcess.setContent("已签收");
 			itemProcessMapper.insertSelective(itemProcess);
 			isSuccess = true;
 		}catch(Exception ex){

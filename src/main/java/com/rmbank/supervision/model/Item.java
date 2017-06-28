@@ -47,6 +47,9 @@ public class Item extends Page {
     //登录机构类型
     private Integer orgType;
     
+    //d登录机构的id
+    private Integer logOrgId;
+    
     //添加项目的机构类型和登录机构类型是否相同
     private String isItemOrg;
     
@@ -400,6 +403,14 @@ public class Item extends Page {
 
 	public void setIsItemOrg(String isItemOrg) {
 		this.isItemOrg = isItemOrg;
+	}
+
+	public Integer getLogOrgId() {
+		return logOrgId;
+	}
+
+	public void setLogOrgId(Integer logOrgId) {
+		this.logOrgId = logOrgId;
 	}
 
 	

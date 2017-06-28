@@ -29,14 +29,37 @@ function getDataList(pageNo){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			itemHtml +="<tr>";
-				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
+				    
+				    if(req.datalist[i].status == 0){
+				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
+				    }else {
+				    	itemHtml +="<td>已立项</td>";
+				    }
+				    if(req.datalist[i].status == 0){
+				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
+				    }else if(req.datalist[i].status == 1){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 2){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 3){
+				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
+				    }else if(req.datalist[i].status == 4){
+				    	itemHtml +="<td style=\"color:green;\">完成</td>";
+				    }	
+				    
 				    itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
 				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
-				    itemHtml +="<td>查看</td>";  
-				    itemHtml +="<td>"+req.datalist[i].itemName+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].orgName+"</td>";				    
+				    itemHtml +="<td><a class=\"enter\" onclick=\"showItem("+req.datalist[i].id+");\"  target=\"rightFrame\">查看</a></td>";
+				    if(req.datalist[i].itemName == null || req.datalist[i].itemName ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].itemName+"</td>";  
+				    }	
+				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
+				    }			    
 				    itemHtml +="<td>流程操作</td>";  
 				    itemHtml +="<td>删除</td>";  			    
 			        itemHtml +="</tr>";
@@ -95,6 +118,14 @@ function saveOrUpdateUserInfo(){
 function clearForm(){
 
 }
+
+function showItem(id){ 
+	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id;
+} 
+function efficiencyFile(itemId,tag){ 
+	window.location.href = "/supervision/pageRoute/vision/enforce/enforceFile.do?itemId="+itemId+"&tag="+tag;
+}
+
 </script>
 
 
@@ -127,7 +158,7 @@ function clearForm(){
     <table class="tablelist">
     	<thead>
     		<tr>
-		        <th></th>
+		       
 		        <th>立项情况</th>
 				<th>状态</th>	
 				<th>性质</th>	
