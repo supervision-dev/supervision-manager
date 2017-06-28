@@ -244,4 +244,7 @@
 			SELECT uo.org_id FROM `t_user_org` AS uo WHERE uo.user_id =#{id,jdbcType=INTEGER}
 		)
 	</select>
+	<select id="getOrganByPidAndName" resultMap="BaseResultMap">
+		SELECT * FROM t_org WHERE pid=#{pid,jdbcType=INTEGER} and name=#{orgName,jdbcType=VARCHAR}
+	</select>
 </mapper>

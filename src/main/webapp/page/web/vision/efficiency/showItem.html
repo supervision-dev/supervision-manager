@@ -31,25 +31,37 @@ function getDataList(pageNo){
 			    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">工作事项：</td>";  	
 			    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.name+"</td>";		    
 		        itemHtml +="</tr>";
+		        
+		        itemHtml +="<tr>";
+		        itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
+		        itemHtml +="<td style=\"text-align: left;\">";
 		        for(var i = 0;i<req.ResultItemProcess[0].fileList.length;i++){
-			        itemHtml +="<tr>";				    
-				    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";  	
-				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[0].fileList[i].filePath+"\',\'"+req.ResultItemProcess[0].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";			       
-			        itemHtml +="</tr>";
+				    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[0].fileList[i].filePath+"\',\'"+req.ResultItemProcess[0].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a><br/>";			       
 		        }
+		        itemHtml +="</td>";
+		        itemHtml +="</tr>";
 	       }
 	       if(req.ResultItemProcess != null){
 	       		for(var i = 0;i<req.ResultItemProcess.length;i++){
-	       			if(req.ResultItemProcess[i].contentTypeId == -1 && req.ResultItemProcess[i].content != null){
+	       			if(req.ResultItemProcess[i].contentTypeId == 0){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察项目：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";		        
 				        
-	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
+	       			}else if(req.ResultItemProcess[i].contentTypeId == -2){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察内容：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";
+				        itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
+				        itemHtml +="<td style=\"text-align: left;\">";
+				        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+				        }
+				        itemHtml +="</td>";
 				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
@@ -61,6 +73,73 @@ function getDataList(pageNo){
 					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.orgName+"</td>";			       
 				        itemHtml +="</tr>";
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 66){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">是否签收：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">签收时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 67){
+	       				itemHtml +="<tr>";
+				        itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">上传资料：</td>";
+				        itemHtml +="<td style=\"text-align: left;\">";
+				        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+				        }
+				        itemHtml +="</td>";
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">资料说明：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+				        itemHtml +="</tr>";
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 68){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+	       				itemHtml +="<tr>";
+				        itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
+				        itemHtml +="<td style=\"text-align: left;\">";
+				        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+				        }
+				        itemHtml +="</td>";
+				        itemHtml +="</tr>";			        
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 71){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察结论：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+	       				itemHtml +="<tr>";
+				        itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
+				        itemHtml +="<td style=\"text-align: left;\">";
+				        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+				        }
+				        itemHtml +="</td>";
+				        itemHtml +="</tr>";			        
 	       			}
 			        
 		        }
@@ -93,6 +172,10 @@ function downLoadFile(path,name){
 		var fileName = encodeURI(encodeURI(name));
 		window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 }
+
+function returnPage(){
+	window.location.href="/supervision/pageRoute/vision/efficiency/efficiencyList.do";	
+}
 </script>
 
 
@@ -113,7 +196,7 @@ function downLoadFile(path,name){
     
     <div class="tools">
     
-    	<a class="enter" onclick=""  target="rightFrame">返回</a> 
+    	<a class="enter" onclick="returnPage()"  target="rightFrame">返回</a> 
     	
     	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
     		

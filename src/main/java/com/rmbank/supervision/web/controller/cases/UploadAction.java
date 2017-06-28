@@ -101,6 +101,7 @@ public class UploadAction extends SystemAction {
         	
         	//获取当前用户
         	User loginUser = this.getLoginUser();
+        	
         	List<Integer> ipid=itemProcessService.getItemProcessIdByUuid(uuid);
         	//制单机构
         	List<Integer> orgIds = userService.getUserOrgIdsByUserId(loginUser.getId());
@@ -114,8 +115,7 @@ public class UploadAction extends SystemAction {
         	ipf.setPreparerTime(new Date());
         	ipf.setPreparerOrgId(orgIds.get(0));        	
         	boolean state = itemProcessFileService.insertSelective(ipf,ipid);
-        	if(state){		
-        		
+        	if(state){        		
     			String ip = IpUtil.getIpAddress(request);		
     			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，上传了文件"+fileName, 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
         		js.setCode(Constants.RESULT_SUCCESS);

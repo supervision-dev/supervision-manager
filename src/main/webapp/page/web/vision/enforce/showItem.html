@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>执法监察</title>
+<title>效能监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 
@@ -19,81 +19,51 @@ function getDataList(pageNo){
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/vision/enforce/enforceList.do",
+       url: "/supervision/vision/enforce/showItem.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tb_userList").html("");
-       		var itemHtml = "<tr><td colspan=\"10\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
-	       		itemHtml = "";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			itemHtml +="<tr>";
-				    
-				    if(req.datalist[i].status == 0){
-				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
-				    }else {
-				    	itemHtml +="<td>已立项</td>";
-				    }
-				    if(req.datalist[i].status == 0){
-				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
-				    }else if(req.datalist[i].status == 1){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
-				    }else if(req.datalist[i].status == 2){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
-				    }else if(req.datalist[i].status == 3){
-				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
-				    }else if(req.datalist[i].status == 4){
-				    	itemHtml +="<td style=\"color:green;\">完成</td>";
-				    }	
-				    
-				    itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
-				    itemHtml +="<td><a class=\"enter\" onclick=\"showItem("+req.datalist[i].id+");\"  target=\"rightFrame\">查看</a></td>";
-				    if(req.datalist[i].itemName == null || req.datalist[i].itemName ==""){
-				    	itemHtml +="<td></td>";  
-				    }else{
-				    	itemHtml +="<td>"+req.datalist[i].itemName+"</td>";  
-				    }	
-				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
-				    	itemHtml +="<td></td>";  
-				    }else{
-				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
-				    }			    
-				    itemHtml +="<td>流程操作</td>";  
-				    itemHtml +="<td>删除</td>";  			    
+       		var itemHtml = "<tr><td colspan=\"2\">没有获取到相关数据</td></tr>";
+	   		if(req.ResultItem != null){
+	       		itemHtml = "";	       		
+       			itemHtml +="<tr>";				    
+			    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">工作事项：</td>";  	
+			    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.name+"</td>";		    
+		        itemHtml +="</tr>";
+		        for(var i = 0;i<req.ResultItemProcess[0].fileList.length;i++){
+			        itemHtml +="<tr>";				    
+				    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";  	
+				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[0].fileList[i].filePath+"\',\'"+req.ResultItemProcess[0].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";			       
 			        itemHtml +="</tr>";
-	       		}
+		        }
 	       }
-	       if(req.data != null){
-	       		$("#i_totalcount").text(req.data.totalCount);
-	       		$("#i_pageNo").text(req.data.pageNo);
-	       		var count = Math.ceil(req.data.totalCount/10);
-	       		$("#ul_pageList").html("");
-	       		var ulHtml = "";
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}
-	       		for(var i = 1;i<=count;i++){
-	       			if(count == 1){
-	       				ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">1</a></li>";
-	       			}else{
-	       				if(i == req.data.pageNo){
-	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}
+	       if(req.ResultItemProcess != null){
+	       		for(var i = 0;i<req.ResultItemProcess.length;i++){
+	       			if(req.ResultItemProcess[i].contentTypeId == -1 && req.ResultItemProcess[i].content != null){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察项目：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+				        itemHtml +="</tr>";		        
+				        
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察内容：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">规定完成时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.endTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.orgName+"</td>";			       
+				        itemHtml +="</tr>";
 	       			}
-	       		}
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}
-	       		
-	       		$("#ul_pageList").html(ulHtml);
+			        
+		        }
 	       }
 	       $("#tb_userList").html(itemHtml);
        }
@@ -101,10 +71,10 @@ function getDataList(pageNo){
 }
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
+		$("#showmessage").html("请选择要编辑的项目！");
 		$("#confirm_tip").fadeIn(200);
 	}else{
-		$("#showmessage").html("请选择要删除的用户！");
+		$("#showmessage").html("请选择要删除的项目！");
 		$("#confirm_tip").fadeIn(200);
 	}
 }
@@ -118,14 +88,11 @@ function saveOrUpdateUserInfo(){
 function clearForm(){
 
 }
-
-function showItem(id){ 
-	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id;
-} 
-function efficiencyFile(itemId,tag){ 
-	window.location.href = "/supervision/pageRoute/vision/enforce/enforceFile.do?itemId="+itemId+"&tag="+tag;
+function downLoadFile(path,name){
+		var filePath = encodeURI(encodeURI(path));
+		var fileName = encodeURI(encodeURI(name));
+		window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 }
-
 </script>
 
 
@@ -138,7 +105,7 @@ function efficiencyFile(itemId,tag){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">实时监察</a></li>
-    <li><a href="#">执法监察</a></li>
+    <li><a href="#">效能监察</a></li>
     </ul>
     </div>
     
@@ -146,37 +113,28 @@ function efficiencyFile(itemId,tag){
     
     <div class="tools">
     
-    	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        </ul> 
-    
+    	<a class="enter" onclick=""  target="rightFrame">返回</a> 
+    	
+    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
+    		
+    	</div> -->
     </div>
     
-    
-    <table class="tablelist">
+       
+    <table class="tablelist" >
     	<thead>
     		<tr>
-		       
-		        <th>立项情况</th>
-				<th>状态</th>	
-				<th>性质</th>	
-				<th>工作事项</th>	
-				<th>查看</th>	
-				<th>立项监察</th>	
-				<th>被监察对象</th>
-				<th>操作一</th>
-				<th>操作二</th>	
-				
+				<th></th>
+				<th></th>
         	</tr>
+        	
         </thead>
         <tbody id="tb_userList">  
         </tbody>
     </table>
     
    
-    <div class="pagin">
+    <!-- <div class="pagin">
     	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
         <ul class="paginList" id="ul_pageList">
         
@@ -189,7 +147,7 @@ function efficiencyFile(itemId,tag){
         <li class="paginItem"><a href="javascript:;">10</a></li>
         <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
         </ul>
-    </div>
+    </div> -->
     
     
     <div class="tip" id="confirm_tip">
