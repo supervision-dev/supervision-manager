@@ -11,6 +11,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.BaseItemResult;
 import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
@@ -738,11 +740,20 @@ public class EnforcementVisionController extends SystemAction {
 	 * @param response
 	 * @return
 	 */
+	@ResponseBody
 	@RequestMapping(value = "/showItem.do")
 	@RequiresPermissions("vision/enforce/showItem.do")
-	public String showItem(Item item, HttpServletRequest request,
+	public BaseItemResult showItem(HttpServletRequest request,
 			HttpServletResponse response) {
-		item = itemService.selectByPrimaryKey(item.getId()); // 项目基本信息
+		
+    	HttpSession session = request.getSession();
+    	Integer itemId = (Integer) session.getAttribute("effshowItemId");
+    	
+    	BaseItemResult showResult = new BaseItemResult();
+    	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();
+    	
+    	Item item =new Item();
+		item = itemService.selectByPrimaryKey(itemId); // 项目基本信息		
 		if (item.getPreparerTime() != null) {
 			item.setPreparerTimes(Constants.DATE_FORMAT.format(item
 					.getPreparerTime()));
@@ -752,8 +763,7 @@ public class EnforcementVisionController extends SystemAction {
 		if (itemProcessList.size() > 0) {
 			for (ItemProcess ip : itemProcessList) {
 				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
-				fileList = itemProcessFileService.getFileListByItemId(ip
-						.getId()); // 获取当前流程拥有的附件
+				fileList = itemProcessFileService.getFileListByItemId(ip.getId()); // 获取当前流程拥有的附件						
 				ip.setFileList(fileList);
 				if (ip.getContentTypeId() == Constants.ENFORCE_VISION_0) {
 					request.setAttribute("ItemProcess", ip); // 添加工作事项后的信息
@@ -896,6 +906,8 @@ public class EnforcementVisionController extends SystemAction {
 		String ip = IpUtil.getIpAddress(request);		
 		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了对执法监察项目的查看", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 		
-		return "web/vision/enforce/showItem";
+		showResult.setResultItem(item);
+		showResult.setResultItemProcess(drIPList); 
+    	return showResult;
 	}
 }

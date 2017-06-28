@@ -2,6 +2,8 @@ package com.rmbank.supervision.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.rmbank.supervision.model.Organ;
 @MyBatisRepository
 public interface OrganMapper {
@@ -34,5 +36,7 @@ public interface OrganMapper {
 	List<Organ> getOrganByOrgIds(List<Integer> userOrgIds);
 
 	List<Organ> getUserOrgByUserId(Integer id);
+
+	Organ getOrganByPidAndName(@Param("pid") Integer pid, @Param("orgName")String orgName);
 
 }

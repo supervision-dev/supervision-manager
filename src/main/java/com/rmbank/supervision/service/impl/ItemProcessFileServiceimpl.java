@@ -61,6 +61,7 @@ public class ItemProcessFileServiceimpl implements ItemProcessFileService {
 			for (Integer id : ipid) {
 				ipf.setItemProcessId(id);
 				itemProcessFileMapper.insertSelective(ipf);
+				System.out.println("上传文件信息入库了！！！！！！！！！！！！！！！！！！！！！！！！");
 			}	
 			isSuccess = true;
          

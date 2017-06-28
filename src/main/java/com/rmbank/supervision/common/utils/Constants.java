@@ -135,7 +135,8 @@ public class Constants
   
   //效能监察流程
   public static final Integer EFFICIENCY_VISION_0=-1; //新增项目时的初始状态
-  public static final Integer EFFICIENCY_VISION_00=0; //立项状态
+  public static final Integer EFFICIENCY_VISION_00=0; //立项监察项目
+  public static final Integer EFFICIENCY_VISION_01=-2; //立项监察内容
   public static final Integer EFFICIENCY_VISION_1=66; //签收
   public static final Integer EFFICIENCY_VISION_2=67; //上传资料
   public static final Integer EFFICIENCY_VISION_3=68; //整改建议和整改建议
@@ -194,6 +195,7 @@ public class Constants
   public static final Integer ENFORCE_VISION_1A= 230; //监察室给出监察意见，但是不合规，回到被监察对象上传立项资料前一状态与130相等
   public static final Integer ENFORCE_VISION_3A= 232; //监察室给出监察意见，但是不合规，回到被监察对象上传意见书前一状态与132相等
   public static final Integer ENFORCE_VISION_2A= 234; //监察室给出监察意见，但是不合规，回到被监察对象录入行政处罚意见告知书前一状态与136相等
+
   
   
   

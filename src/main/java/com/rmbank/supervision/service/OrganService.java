@@ -80,6 +80,16 @@ public interface OrganService {
 	 * @return
 	 */
 	List<Organ> getOrganByOrgIds(List<Integer> userOrgIds);
+
+	/**
+	 * 获取和当前中支监察室的pid相同，并且name为行领导的机构。
+	 * @param pid
+	 * @param orgName
+	 * @return
+	 */
+	Organ getOrganByPidAndName(Integer pid, String orgName);
+
+	
     
 
 }

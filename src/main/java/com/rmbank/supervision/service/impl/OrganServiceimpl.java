@@ -150,6 +150,12 @@ public class OrganServiceimpl implements OrganService {
 		return organMapper.getOrganByOrgIds(userOrgIds);
 	}
 
+	@Override
+	public Organ getOrganByPidAndName(Integer pid, String orgName) {
+		// TODO Auto-generated method stub
+		return organMapper.getOrganByPidAndName(pid,orgName);
+	}
+
 	
 	/*
 	 * 自己@Override
