@@ -16,7 +16,12 @@ $(document).ready(function(){
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
+	
 });
+
+
+
+
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -26,11 +31,19 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		var LogOrgType=req.data.orgType;
+       		if(LogOrgType == 38 || LogOrgType == 40 || LogOrgType == 43 ||LogOrgType == 46){
+				$("#InputItemBtn").show();
+			}else{
+				$("#InputItemBtn").hide();
+			}
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"13\">没有获取到相关数据</td></tr>";
 	   		if(req.datalist != null && req.datalist.length >0){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
+	       			
+	       			
 	       		/* alert(req.datalist[i].orgType);
 	       		alert(req.datalist[i].isItemOrg);
 	       		alert(req.datalist[i].lasgTag); */
@@ -51,7 +64,9 @@ function getDataList(pageNo){
 				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td style=\"color:green;\">完成</td>";
-				    }				    
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td style=\"color:green;\">逾期完成</td>";
+				    }					    
 				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
 				    itemHtml +="<td><a class=\"enter\" onclick=\"showItem("+req.datalist[i].id+");\"  target=\"rightFrame\">查看</a></td>";
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
@@ -66,10 +81,14 @@ function getDataList(pageNo){
 				    }
 				    if(req.datalist[i].status == 4){
 				    	itemHtml +="<td>已完成</td>";
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td>逾期完成</td>";
 				    }else if(req.datalist[i].status != 4){
 				    	itemHtml +="<td>未完成</td>";
 				    }
 				    if(req.datalist[i].status == 4){
+				    	itemHtml +="<td>已完结</td>";	
+				    }else if(req.datalist[i].status == 5){
 				    	itemHtml +="<td>已完结</td>";	
 				    }else if(req.datalist[i].status != 4){
 				    	itemHtml +="<td>未完结</td>";
@@ -93,24 +112,33 @@ function getDataList(pageNo){
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==3 || req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==4 ){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
 				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    	}else if(req.datalist[i].isProject == "true" && req.datalist[i].userRole==3 || req.datalist[i].isProject == "true" && req.datalist[i].userRole==4 ){
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign <= 3 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"sign("+req.datalist[i].id+");\"  target=\"rightFrame\">签收</a></td>";
-				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 66){
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 66 ||req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 72){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</a></td>";
 				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",68);\"  target=\"rightFrame\">录入监察意见</a></td>";
-				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 68){
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</a></td>";
+				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 68 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 688 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 778 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 888){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
 				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</a></td>";
+				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 666){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</a>&nbsp;<a onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</a></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
+			    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
+			    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</a></td>";
 				    }else{
 				    	itemHtml +="<td width=\"180px;\">无操作权限</td>";
 				    }  
@@ -120,6 +148,7 @@ function getDataList(pageNo){
 				    itemHtml +="<td>删除</td>";  			    
 			        itemHtml +="</tr>";
 	       		}
+	       			
 	       }
 	       if(req.data != null){
 	       		$("#i_totalcount").text(req.data.totalCount);
@@ -211,6 +240,9 @@ function showItem(id){
 } 
 function efficiencyFile(itemId,tag){ 
 	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag;
+}
+function efficiencyOpinion(itemId,tag,isStept){ 
+	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept;
 }
 function efficiencyInfo(){
 	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyInfo.do";
@@ -426,7 +458,7 @@ function saveSelectOrg(obj){
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-       	<li class="click" onclick="efficiencyInfo();">录入工作事项</li>
+       	<li id="InputItemBtn" style="display: none;" class="click" onclick="efficiencyInfo();">录入工作事项</li>
         </ul> 
     	
     	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">

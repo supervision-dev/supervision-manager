@@ -192,6 +192,10 @@ function returnPage(){
 }
 	function isNull(){
 		setOrgId();	
+		if($("#itemName").val()==null || $("#itemName").val()==""){
+			layer.alert('请录入监察项目！');			
+			return false;
+		}
 		if($("#datepicker").val()==null || $("#datepicker").val()==""){
 			layer.alert('请输入规定完成时间！');			
 			return false;

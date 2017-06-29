@@ -140,6 +140,7 @@ public class Constants
   public static final Integer EFFICIENCY_VISION_1=66; //签收
   public static final Integer EFFICIENCY_VISION_2=67; //上传资料
   public static final Integer EFFICIENCY_VISION_3=68; //整改建议和整改建议
+  public static final Integer EFFICIENCY_VISION_33=888;
   public static final Integer EFFICIENCY_VISION_4=69; //录入整改情况
   public static final Integer EFFICIENCY_VISION_666=666; //整改建议
   public static final Integer EFFICIENCY_VISION_5=70; //跟踪监察
@@ -150,7 +151,7 @@ public class Constants
   public static final Integer EFFICIENCY_VISION_10=688; //监察结论
   public static final Integer EFFICIENCY_VISION_11=72; //项目未完结，继续录入资料
   public static final Integer EFFICIENCY_VISION_12=999; //未完结时，上传的资料
-  
+  public static final Integer EFFICIENCY_VISION_13=800; //不问责
   
   
   //廉政监察流程

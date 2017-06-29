@@ -53,8 +53,9 @@ public class Item extends Page {
     //添加项目的机构类型和登录机构类型是否相同
     private String isItemOrg;
     
+    //供解决办公室录入事项，监察室立项问题
+    private String isProject;
     
-
 	//自定义字段供sql查询使用，机构类型A
     private Integer orgTypeA;
     //自定义字段供sql查询使用，机构类型B
@@ -411,6 +412,14 @@ public class Item extends Page {
 
 	public void setLogOrgId(Integer logOrgId) {
 		this.logOrgId = logOrgId;
+	}
+
+	public String getIsProject() {
+		return isProject;
+	}
+
+	public void setIsProject(String isProject) {
+		this.isProject = isProject;
 	}
 
 	
