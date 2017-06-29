@@ -133,7 +133,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('录入监察意见成功！', {
+         	layer.confirm('再次录入整改情况成功！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -165,64 +165,54 @@ function returnPage(){
 			
 		});
 }
-function isNull(){
-	if($("#content").val()==null || $("#content").val()==""){	
-		layer.alert('请录入监察意见！');				
+	function isNull(){
+		if($("#content").val()==null || $("#content").val()==""){	
+		layer.alert('请录入整改情况！');				
 		return false;
 	} 
-}
-function ajaxPost(){
-	if(isNull()!=false){
-	        $.ajax({
-		        cache: true, //是否缓存当前页面
-		        type: "POST", //请求类型
-		        url: "/supervision/vision/efficiency/jsonSaveOpinion.do",
-		        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
-		        async: true, //发送异步请求	  
-		        dataType:"json", //响应数据类型      
-		        success: function(data) {
-		        	if(data.code==0){   	    	
-			        	
-						var uploader = $('#uploader').plupload('getUploader');
-			        	if(uploader.files.length>0){
-			        		$("#uploader_start").click(); //上传文件
-			        	}else{
-			        		layer.confirm('录入监察意见成功！', {
-								btn: ['确认'] //按钮
-							}, function(){//点击确认按钮调用
-								layer.close(layer.confirm());//关闭当前弹出层
-								window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyList.do";
-							});	        		
-			        	}	
-		        	}else{
-		        		layer.alert(data.message);	        	
-		        	}	
-		        }
-	   		});
-   		}
-}
-
-function saveItem(obj){	
-	layer.confirm('确认信息已经填写完整，并且保存？', {
-		btn: ['确认','取消'] //按钮
-	}, function(){//点击确认按钮调用
-		layer.close(layer.confirm());//关闭当前弹出层
-		ajaxPost();
-	}, function(){
-		
-	});
-	
-}
-
-function show(){		
-	var wanjie=$('input:radio[name="wanjie"]:checked').val();		
-	if(wanjie == 0){
-		$("#yijian").hide();			
-	}else if(wanjie == 1) {			
-		$("#yijian").show();
 	}
-}
+	function ajaxPost(){
+		if(isNull()!=false){
+		        $.ajax({
+			        cache: true, //是否缓存当前页面
+			        type: "POST", //请求类型
+			        url: "/supervision/vision/efficiency/jsonSaveZCZGItem.do",
+			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
+			        async: true, //发送异步请求	  
+			        dataType:"json", //响应数据类型      
+			        success: function(data) {
+			        	if(data.code==0){   	    	
+							var uploader = $('#uploader').plupload('getUploader');
+				        	if(uploader.files.length>0){
+				        		$("#uploader_start").click(); //上传文件
+				        	}else{
+				        		layer.confirm('再次录入整改情况成功！', {
+									btn: ['确认'] //按钮
+								}, function(){//点击确认按钮调用
+									layer.close(layer.confirm());//关闭当前弹出层
+									window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyList.do";
+								});	        		
+				        	}	
+			        	}else{
+			        		layer.alert(data.message);	        	
+			        	}	
+			        }
+		   		});
+	   		}
+	}
 
+	function saveItem(obj){	
+		layer.confirm('确认信息已经填写完整，并且保存？', {
+			btn: ['确认','取消'] //按钮
+		}, function(){//点击确认按钮调用
+			layer.close(layer.confirm());//关闭当前弹出层
+			ajaxPost();
+		}, function(){
+			
+		});
+		
+	}
+	
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -520,8 +510,8 @@ function getDataList(pageNo){
 	       $("#tb_userList").html(itemHtml);
        }
 	});
-}
-
+}	
+	
 </script>
 
 
@@ -543,7 +533,7 @@ function getDataList(pageNo){
     <div class="tools">
     
     </div>
-    <table class="tablelist itemTable" >
+    <table class="tablelist" >
     	<thead>
     		<tr>
 				<th></th>
@@ -557,13 +547,13 @@ function getDataList(pageNo){
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
     	<tr>
-       		<td width="12%" align="right">监察意见：</td>
+       		<td width="12%" align="right">再次录入整改情况：</td>
        		<td colspan="3">
        			<textarea id="content" rows="3" cols="5" style="width:60%;" name="content" ></textarea> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
 				
        		</td>
-       	</tr>       	
+       	</tr>
        	<tr>
 			<td width="12%" align="right" height="129px;">上传附件：</td>
 			<td colspan="3">
@@ -576,28 +566,6 @@ function getDataList(pageNo){
 	                <div id="uploader" style="margin-left: 30px;">
 	                </div>
 			 </td>	
-		</tr>
-        <tr id="isEnd">
-			<td align="right" >是否完结：</td>
-			<td colspan="3">								
-				<label>
-					<input onclick="show()" type="radio" name="wanjie" value="1" checked="checked">完结
-				</label>	
-				<label>
-					<input onclick="show()" type="radio" name="wanjie" value="0" >未完结
-				</label> 							
-			</td>	
-		</tr>
-		<tr>
-			<td align="right" >是否需要整改：</td>
-			<td colspan="3">								
-				<label>
-					<input type="radio" name="status" value="4" checked="checked">不整改
-				</label>	
-				<label>
-					<input type="radio" name="status" value="0" >整改
-				</label> 							
-			</td>	
 		</tr>
        	<tr>
 			<td></td>
