@@ -14,7 +14,6 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
 	
 });
@@ -67,8 +66,13 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].status == 5){
 				    	itemHtml +="<td style=\"color:green;\">逾期完成</td>";
 				    }					    
-				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
-				    itemHtml +="<td><a class=\"enter\" onclick=\"showItem("+req.datalist[i].id+");\"  target=\"rightFrame\">查看</a></td>";
+				    if(req.datalist[i].name.length >6){
+				    	var names = req.datalist[i].name.substring(0,6)+"……"
+				    	itemHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].name+"</td>";
+				    }
+				    itemHtml +="<td><img src=\"/supervision/source/images/t06.png\" title=\"查看\" style=\"width:15px;heigth:15px;cursor:pointer;\" onclick=\"showItem("+req.datalist[i].id+");\"  /></td>";
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
@@ -96,7 +100,7 @@ function getDataList(pageNo){
 				    if(req.datalist[i].showDate == null){
 				   		itemHtml +="<td></td>";
 				   	}else{
-				   		itemHtml +="<td>"+req.datalist[i].showDate+"</td>";
+				   		itemHtml +="<td title=\""+req.datalist[i].showDate+"\">"+req.datalist[i].showDate.substring(5,req.datalist[i].showDate.length)+"</td>";
 				   	}
 				    if(req.datalist[i].status == 3){
 				    	itemHtml +="<td>已逾期</td>";
@@ -180,6 +184,7 @@ function getDataList(pageNo){
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(itemHtml);
+			$('.tablelist tbody tr:odd').addClass('odd');
        }
 	});
 }
@@ -458,7 +463,7 @@ function saveSelectOrg(obj){
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-       	<li id="InputItemBtn" style="display: none;" class="click" onclick="efficiencyInfo();">录入工作事项</li>
+       	<li id="InputItemBtn" style="display: none;" class="click" onclick="efficiencyInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     	
     	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
