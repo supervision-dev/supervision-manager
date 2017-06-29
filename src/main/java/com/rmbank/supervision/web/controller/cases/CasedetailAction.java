@@ -36,9 +36,9 @@ import com.rmbank.supervision.web.controller.SystemAction;
  * @author DELL
  *
  */
-@Scope("prototype")
-@Controller
-@RequestMapping("/manage/casedetail")
+//@Scope("prototype")
+//@Controller
+//@RequestMapping("/manage/casedetail")
 public class CasedetailAction extends SystemAction {
 	@Resource
 	private GradeSchemeDetailService  gradeSchemeDetailService;

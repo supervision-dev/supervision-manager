@@ -31,6 +31,8 @@ public class GradeScheme extends Page {
     
     private List<GradeScheme> children;
     
+    private List<GradeSchemeDetail> fstItemList; 
+    
     public Integer getId() {
         return id;
     }
@@ -133,4 +135,13 @@ public class GradeScheme extends Page {
 	public void setGradeId(Integer gradeId) {
 		this.gradeId = gradeId;
 	}
+
+	public List<GradeSchemeDetail> getFstItemList() {
+		return fstItemList;
+	}
+
+	public void setFstItemList(List<GradeSchemeDetail> fstItemList) {
+		this.fstItemList = fstItemList;
+	}
+ 
 }

@@ -1,0 +1,598 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>角色列表</title>
+<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+   getModelTreeList();
+}); 
+function getModelTreeList(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/caseModelList.do", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tbl_modelList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\">未获取到相关量化模型！</td></tr>";
+       		var mHmtl = "<option value=\"\">--请选择所属模型--</option>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){  
+   					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\"  class=\"displaynone\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+   					tbHtml += "<tr id=\"tr_"+req[i].id+"\" ><td style=\"height:25px;\"></td><td>";
+   					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+   					tbHtml += "<tr style=\"cursor:pointer;\"><td style=\"height:25px;width:18px;\"><td onclick=\"loadFstDetail("+req[i].id+",0);\">一级指标</td></tr>";
+   					tbHtml += "<tr style=\"cursor:pointer;\"><td style=\"height:25px;width:18px;\"><td onclick=\"loadFstDetail("+req[i].id+",1);\">二级指标</td></tr>";
+   					tbHtml += "<tr style=\"cursor:pointer;\"><td style=\"height:25px;width:18px;\"><td onclick=\"loadFstDetail("+req[i].id+",2);\">三级指标</td></tr>";
+   					tbHtml += "</table></td></tr>  "; 
+   					mHmtl += "<option value=\""+req[i].id+"\">"+req[i].name+"</option>";
+       			}
+       		} 
+       		$("#tbl_modelList").html(tbHtml); 
+       		$("#slt_modle").html(mHmtl);  
+       		$("#slt_modle_scd").html(mHmtl);
+       		$("#slt_modle_thd").html(mHmtl);
+       		$("#slt_modle_edit").html(mHmtl);
+       }
+    }); 
+} 
+
+function showItem(subId,tag){  
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone");
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
+}
+var constants_detail_id = 0;
+var constants_detail_name = "";
+var constants_detail_grade = "";
+function loadFstDetail(mid,level){
+	var obj = {};
+	obj.gradeId = mid;
+	obj.level = level;
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/loadDetailByGradeIdAndLevel.do", 
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) {
+       		$("#tb_detailList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\"  colspan=\"5\" >未获取到相关量化指标！</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){  
+   					 tbHtml += "<tr>";
+       				tbHtml += "<td><input name=\"detChk\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\" tag=\""+req[i].grade+"\" /></td>";
+   					if(req[i].pName != null){
+   						tbHtml += "<td>"+req[i].pName+"</td> ";
+   					}else{
+   						tbHtml += "<td></td> ";
+   					}
+       				tbHtml += "<td>"+req[i].name+"</td>"; 
+       				if(level == 2){
+   						tbHtml += "<td>标准分："+req[i].grade+"</td> ";
+       				}else{
+   						tbHtml += "<td>权重："+req[i].grade+"</td> ";
+       				}
+       				if(req[i].schemaName.length > 8){
+   						tbHtml += "<td>"+req[i].schemaName+"</td> ";
+       				}else{
+       					tbHtml += "<td>"+req[i].schemaName+"</td> ";
+       				}
+       				tbHtml += "</tr>"; 
+       			}
+       		} 
+       		$("#tb_detailList").html(tbHtml); 
+			$('.tablelist tbody tr:odd').addClass('odd');
+		  	$("#tb_detailList input[type='checkbox']").click(function(){
+			  	$("#tb_detailList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_detail_id = this.value;
+				constants_detail_name = $(this).attr("doc"); 
+				constants_detail_grade = $(this).attr("tag"); 
+			}); 
+       }
+    });
+}
+function showAddTip(type){
+	if(type == 0){
+		$("#add_tip_fst").fadeIn(200);
+	}else if(type == 1){
+		$("#add_tip_scd").fadeIn(200);
+	}else if(type == 2){
+		$("#add_tip_thd").fadeIn(200);
+	}
+}
+function loadlevel(sourceTag,target,level){ 
+	var tag = {};
+	if($("#"+sourceTag).val() == ""){
+		return;
+	}
+	tag.gradeId = $("#"+sourceTag).val();
+	tag.level = level;
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/loadDetailByGradeIdAndLevel.do", 
+       dataType:"json", //响应数据类型      
+       data:tag,
+       success: function(req) {
+       		$("#"+target).html("");
+       		var tagHTML = "";
+       		if(level == 0){
+       			tagHTML += "<option value=\"\">--请选择一级指标--</option>";
+       		}else{
+       			tagHTML += "<option value=\"\">--请选择二级指标--</option>";
+       		}
+       		if(req != null && req.length >0){
+       			for(var i = 0; i< req.length;i++){
+       				tagHTML += "<option value=\""+req[i].id+"\">"+req[i].name+"</option>";
+       			}
+       		}
+       		$("#"+target).html(tagHTML);
+       }
+    });
+}
+function loadlevelT(obj,target){  
+	if($(obj).val() == ""){
+		return;
+	}
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/loadDetailByPid.do?pid="+$(obj).val(), 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#"+target).html("");
+       		var tagHTML = "<option value=\"\">--请选择二级指标--</option>"; 
+       		if(req != null && req.length >0){
+       			for(var i = 0; i< req.length;i++){
+       				tagHTML += "<option value=\""+req[i].id+"\">"+req[i].name+"</option>";
+       			}
+       		}
+       		$("#"+target).html(tagHTML);
+       }
+    });
+}
+function showAlertTip(type){
+	if(type == 'edit'){
+		if(constants_detail_id == 0){
+			$("#showmessage").html("请选择要编辑的指标！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#edit_tip").fadeIn(200);  
+			$("#ipt_edit_name").val(constants_detail_name);
+			$("#ipt_grade_edit").val(constants_detail_grade);
+		}
+	}else if(type == "delete"){
+		if(constants_detail_id == 0){
+			$("#showmessage").html("请选择要删除的指标！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#delete_confirm_tip").fadeIn(200);
+		}
+	}
+}  
+function deleteDetailAction(){
+	$("#delete_confirm_tip").fadeOut(200);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/jsonDeleteModelDetail.do?id="+constants_detail_id, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		 if(req.code == 0){   
+       		 	getModelTreeList();
+				$("#showmessage").html("量化指标删除成功！");
+				$("#confirm_tip").fadeIn(200);
+				constants_detail_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
+}
+function saveOrUpdateFstDetail(){
+	var obj = {};
+	obj.id = 0;
+	var name = $("#ipt_fst_name").val();
+	if(name == null || name == ""){
+		$("#showmessage").html("请输入一级指标名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = name;
+	var gradeId = $("#slt_modle").val();
+	if(gradeId == null || gradeId == ""){
+		$("#showmessage").html("请选择该一级指标所属模型！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.gradeId = gradeId;
+	var grade = $("#ipt_grade_fst").val();
+	if(grade == null || grade == ""){
+		$("#showmessage").html("请输入该一级指标权重值，只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(isNaN(grade)){
+		$("#showmessage").html("指标权重只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(parseInt(grade) > 100 ){
+		$("#showmessage").html("单项指标权重不能超过100 ！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.grade = grade;
+	obj.pid = 0;
+	obj.level = 0;
+	saveOrUpdateAction(obj,0);
+}
+function saveOrUpdateScdDetail(){
+	var obj = {};
+	obj.id = 0;
+	var name = $("#ipt_scd_name").val();
+	if(name == null || name == ""){
+		$("#showmessage").html("请输入二级指标名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = name;
+	var gradeId = $("#slt_model_scd").val();
+	if(gradeId == null || gradeId == ""){
+		$("#showmessage").html("请选择该指标所属模型！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.gradeId = gradeId;
+	var pid = $("#slt_model_scd_level1").val();
+	if(pid == null || pid == ""){
+		$("#showmessage").html("请选择该二级指标所属一级指标！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.pid = pid;
+	var grade = $("#ipt_grade_scd").val();
+	if(grade == null || grade == ""){
+		$("#showmessage").html("请输入该二级指标权重值，只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(isNaN(grade)){
+		$("#showmessage").html("指标权重只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(parseInt(grade) > 100 ){
+		$("#showmessage").html("单项指标权重不能超过100 ！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.grade = grade; 
+	obj.level = 1;
+	saveOrUpdateAction(obj,1);
+}
+function saveOrUpdateThdDetail(){
+	var obj = {};
+	obj.id = 0;
+	var name = $("#ipt_thd_name").val();
+	if(name == null || name == ""){
+		$("#showmessage").html("请输入三级指标名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.name = name;
+	var gradeId = $("#slt_model_thd").val();
+	if(gradeId == null || gradeId == ""){
+		$("#showmessage").html("请选择该指标所属模型！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.gradeId = gradeId;
+	var fst = $("#slt_detal_level1").val();
+	if(fst == null || fst == ""){
+		$("#showmessage").html("请选择该三级指标所属一级指标！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var scd = $("#slt_detal_level2").val();
+	if(scd == null || scd == ""){
+		$("#showmessage").html("请选择该三级指标所属二级指标！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.pid = scd;
+	var grade = $("#ipt_grade_thd").val();
+	if(grade == null || grade == ""){
+		$("#showmessage").html("请输入该三级指标标准分，只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(isNaN(grade)){
+		$("#showmessage").html("指标标准分只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(parseInt(grade) > 100 ){
+		$("#showmessage").html("单项指标标准分不能超过100 ！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.grade = grade; 
+	obj.level = 2;
+	saveOrUpdateAction(obj,2);
+}
+function saveOrUpdateEditDetail(){
+	var obj  = {};
+	var gradeName = $("#ipt_edit_name").val();
+	if(gradeName == null || gradeName == ""){
+		$("#showmessage").html("请输入指标名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	var grade = $("#ipt_grade_edit").val();
+	if(grade == null || grade == ""){
+		$("#showmessage").html("请输入该指标标准分，只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(isNaN(grade)){
+		$("#showmessage").html("指标标准分只能输入数字！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(parseInt(grade) > 100 ){
+		$("#showmessage").html("单项指标标准分不能超过100 ！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	} 
+	obj.id = constants_detail_id;
+	obj.name = gradeName;
+	obj.grade = grade;
+	saveOrUpdateAction(obj,4);
+}
+function saveOrUpdateAction(obj,lev){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casedetail/saveOrUpdateModelDetail.do", 
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) {
+       		 if(req.code == 0){    
+       		 	clearForm();
+       		 	if(lev == 0){
+					$("#add_tip_fst").fadeOut(200);
+				}else if(type == 1){
+					$("#add_tip_scd").fadeOut(200);
+				}else if(type == 2){
+					$("#add_tip_thd").fadeOut(200);
+				}else{
+					$("#edit_tip").fadeOut(200);
+				}
+       		 	loadFstDetail(obj.gradeId,lev);
+				$("#showmessage").html("量化指标保存成功！");
+				$("#confirm_tip").fadeIn(200);
+				constants_detail_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
+}
+function clearForm(){
+	$(".addtip .dfinput").val("");
+}
+</script>
+
+
+</head>
+
+
+<body>
+
+	<div class="place">
+	    <span>位置：</span>
+	    <ul class="placeul"> 
+		    <li><a href="#">基础数据管理</a></li>
+		    <li><a href="#">量化指标管理</a></li>
+	    </ul>
+    </div>
+    <div class="mainbox">
+      	<div class="tools">
+	    	<ul class="toolbar">
+		        <li class="click" onclick="showAddTip(0);"><span><img src="/supervision/source/images/t01.png" /></span>添加一级指标</li>
+		        <li class="click" onclick="showAddTip(1);"><span><img src="/supervision/source/images/t01.png" /></span>添加二级指标</li>
+		        <li class="click" onclick="showAddTip(2);"><span><img src="/supervision/source/images/t01.png" /></span>添加三级指标</li>
+		        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+		        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+	        </ul> 
+    	</div>
+	    <div class="mainleft">
+    		<div class="leftinfos">
+    			<div class="infoleft">
+    				<div class="listtitle">所有模型</div>  
+    					<div style=" height:425px;_height:390px;overflow-y:auto; width:90%;">   
+	    					<table id="tbl_modelList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+			        			<tr><td></td></tr>  
+			        		</table> 
+		        		</div>
+    				</div>
+    			<div class="inforight">
+    				<div class="listtitle">指标明细列表</div>
+    					<div style=" height:425px;_height:390px;overflow-y:auto; width:97%;">   
+	    					<table class="tablelist">
+						    	<thead>
+						    		<tr>
+								        <th></th>
+										<th>上级指标</th> 	
+								        <th>指标名称</th>
+										<th>权重/标准分</th> 
+										<th>所属模型</th> 	
+						        	</tr>
+						        </thead>
+						        <tbody id="tb_detailList">  
+						        </tbody>
+						    </table> 
+		        		</div>
+    				</div>
+    			</div> 
+    	</div>  
+    </div>
+    <div class="addtip" id="add_tip_fst">
+   		<div class="tiptop"><span>添加一级指标</span><a  onclick="javascript:clearForm();$('#add_tip_fst').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_fst_name" /></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
+	        				<select id="slt_modle"  class="dfinput" >
+							</select></td></tr> 
+						<tr><td style="height:30px;width:80px;"><span>指标权重：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_grade_fst"  /></td></tr> 
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateFstDetail();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip_fst').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    <div class="addtip" id="add_tip_scd">
+   		<div class="tiptop"><span>添加二级指标</span><a  onclick="javascript:clearForm();$('#add_tip_scd').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_scd_name"  /></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
+	        				<select id="slt_modle_scd"  class="dfinput" onchange="loadlevel('slt_modle_scd','slt_modle_scd_level1',0);" >
+							</select></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属一级指标：</span></td><td>
+	        				<select id="slt_modle_scd_level1"  class="dfinput" >
+	        					<option value="">--请选择一级指标--</option>
+							</select></td></tr> 
+						<tr><td style="height:30px;width:80px;"><span>指标权重：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_grade_scd"  /></td></tr> 
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateScdDetail();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip_scd').fadeOut(100);" /> 
+        </div> 
+    </div> 
+        
+    <div class="addtip" id="add_tip_thd">
+   		<div class="tiptop"><span>添加三级指标</span><a  onclick="javascript:clearForm();$('#add_tip_thd').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_thd_name" /></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
+	        				<select id="slt_modle_thd"  class="dfinput"  onchange="loadlevel('slt_modle_thd','slt_detal_level1',0);">
+							</select></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属一级指标：</span></td><td>
+	        				<select id="slt_detal_level1"  class="dfinput"  onchange="loadlevelT(this,'slt_detal_level2');" >
+	        					<option value="">--请选择一级指标--</option>
+							</select></td></tr> 
+	        			<tr><td style="height:30px;width:80px;"><span>所属二级指标：</span></td><td>
+	        				<select id="slt_detal_level2"  class="dfinput" >
+	        					<option value="">--请选择二级指标--</option>
+							</select></td></tr>
+						<tr><td style="height:30px;width:80px;"><span>标准分值：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_grade_thd"  /></td></tr> 
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateThdDetail();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip_thd').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    
+    <div class="addtip" id="edit_tip">
+   		<div class="tiptop"><span>指标编辑</span><a  onclick="javascript:clearForm();$('#edit_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="addtipinfo"> 
+	       <div style="width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
+	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_edit_name" /></td></tr>  
+						<tr><td style="height:30px;width:80px;"><span>标准分值：</span></td><td>
+	        				<input type="text" class="dfinput" id="ipt_grade_edit"  /></td></tr> 
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateEditDetail();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#edit_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" /> 
+        </div> 
+    </div> 
+    <div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认删除当前选择指标？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="deleteDetailAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
+</body>
+</html>

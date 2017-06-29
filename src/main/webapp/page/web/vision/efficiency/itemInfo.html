@@ -493,16 +493,16 @@ function saveSelectOrg(obj){
     <table class="itemTable" >
     	
     	<tr>
-       		<td width="12%" align="right">监察项目：</td>
+       		<td width="15%" align="right">监察项目：</td> 
        		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width:60%;height:28px;"/> 
+       			<input id="itemName" name="name" type="text" value="" style="width:80%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
        		</td>
        	</tr>
        	<tr>
        		<td width="12%" align="right">监察内容：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:60%;" name="content" ></textarea>								
+       			<textarea rows="3" cols="5" style="width:80%;" name="content" ></textarea>								
        		</td>
        	</tr>
        	<tr>
@@ -514,7 +514,7 @@ function saveSelectOrg(obj){
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script>
-	                <div id="uploader" style="margin-left: 30px;">
+	                <div id="uploader" >
 	                </div>
 			 </td>	
 		</tr>
@@ -523,7 +523,7 @@ function saveSelectOrg(obj){
        		<td width="28%">
        			<input type="text" name="end_time" value="" id="datepicker" class="laydate-icon">
        		</td>
-       		<td width="12%" style="border: 0px; ">是否分节点监察：</td>
+       		<td width="12%" style="border: 0px; ">是否分节点：</td>
        		<td>
        			<select id="supervisionTypeId" name="isStept" style="width:152px;height:28px;">						
 					<option value="0">否</option>
@@ -535,7 +535,7 @@ function saveSelectOrg(obj){
        		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
        			<div id="orgID" style="display: none;"></div>
-       			<textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="3" cols="5"  style="width:60%;"></textarea>
+       			<textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="1" cols="5"  style="width:80%;height:50px;"></textarea>
        		</td>
        	</tr>
        	<tr>
@@ -549,8 +549,8 @@ function saveSelectOrg(obj){
        	<tr>
 			<td></td>
 			<td>
-				<span class="enter"  id="saveBtn" onclick="saveItem(this);">提交</span>
-				<span class="enter"  onclick="returnPage();">返回</span>
+				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span>
+				<span class="enter"  onclick="returnPage();" style="float:left; margin-left:15px;" >返回</span>
 			</td>
 		</tr>
     </table>
@@ -584,7 +584,7 @@ function saveSelectOrg(obj){
         </div> 
     </div> 
     </div> 
-	<div class="simpletip" id="organ_tip" style="margin-left: 18%; margin-top: 5px;"> 
+	<div class="simplestip" id="organ_tip" style="margin-left: 18%; margin-top: 5px;"> 
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
 	    <div class="simpletipinfo">   

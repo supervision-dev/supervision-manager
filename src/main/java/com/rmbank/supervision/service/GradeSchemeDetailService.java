@@ -41,5 +41,6 @@ public interface GradeSchemeDetailService {
 
 		GradeSchemeDetail getGradeSchemeDetailById(Integer id);
 
+		 
 		
 }

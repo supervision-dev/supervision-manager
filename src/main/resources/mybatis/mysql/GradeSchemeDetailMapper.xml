@@ -10,6 +10,8 @@
     <result column="leafed" property="leafed" jdbcType="INTEGER" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="grade" property="grade" jdbcType="DOUBLE" />
+    <result column="pName" property="pName" jdbcType="VARCHAR" />
+    <result column="schemaName" property="schemaName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, grade_id, pid, level, path, leafed, name, grade

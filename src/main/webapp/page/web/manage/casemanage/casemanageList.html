@@ -11,9 +11,11 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
 });
+function search(pageNo){
+	getDataList(pageNo);
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -23,16 +25,19 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		$("#tb_userList").html("");
+       		$("#tb_modelList").html("");
        		var manageHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
 	       if(req.datalist != null && req.datalist.length >0){
 	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			manageHtml +="<tr>";
-				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    manageHtml +="<td>"+req.datalist[i].used+"</td>";
+				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" doc=\""+req.datalist[i].name+"\" /></td>";
+				    if(req.datalist[i].used == 1){
+				    	manageHtml +="<td>启用</td>";
+				    }else{
+				    	manageHtml +="<td>禁用</td>";
+				    }
 				    manageHtml +="<td>"+req.datalist[i].name+"</td>";
-				    manageHtml +="<td>启用或禁用</td>";				    
 			        manageHtml +="</tr>";
 	       		}
 	       }
@@ -45,7 +50,11 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -54,40 +63,164 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		}
+	       		} 
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
-	       $("#tb_userList").html(manageHtml);
+	       $("#tb_modelList").html(manageHtml);
+			$('.tablelist tbody tr:odd').addClass('odd');
+		  	$("#tb_modelList input[type='checkbox']").click(function(){
+			  	$("#tb_modelList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_model_id = this.value;
+				constants_model_name = $(this).attr("doc");
+			});
        }
 	});
 }
+var constants_model_id = 0;
+var constants_model_name = "";
+var constants_model_status = 0;
 function showAlertTip(type){
 	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的用户！");
-		$("#confirm_tip").fadeIn(200);
+		if(constants_model_id == 0){
+			$("#showmessage").html("请选择要编辑的量化模型！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#add_tip").fadeIn(200); 
+			$("#hid_modelId").val(constants_model_id);
+			$("#ipt_name").val(constants_model_name); 
+		}
+	}else if(type=='delete'){
+		if(constants_model_id == 0){
+			$("#showmessage").html("请选择要删除的量化模型！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#delete_confirm_tip").fadeIn(200);
+		}
+	}else if(type=='unlock'){
+		if(constants_model_id == 0){
+			$("#showmessage").html("请选择要启用的量化模型！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#showmessage1").html("确认启用当前选择量化模型？");
+			$("#ss").removeAttr("src");
+			$("#ss").attr("src","/supervision/source/images/ticon11.png");
+			constants_model_status = 1;
+			$("#lock_confirm_tip").fadeIn(200);
+		}
+	}else if(type=='lock'){
+		if(constants_model_id == 0){
+			$("#showmessage").html("请选择要禁用的量化模型！");
+			$("#confirm_tip").fadeIn(200);
+		}else{
+			$("#showmessage1").html("确认禁用当前选择量化模型？");
+			$("#ss").removeAttr("src");
+			$("#ss").attr("src","/supervision/source/images/t0f.png");
+			constants_model_status = 0;
+			$("#lock_confirm_tip").fadeIn(200);
+		}
 	}
+}
+function deleteModelAction(){
+	$("#delete_confirm_tip").fadeOut(200);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casemanage/jsonDeleteModel.do?id="+constants_model_id, 
+       dataType:"json", //响应数据类型     
+       success: function(req) { 
+       		 if(req.code == 0){     
+				getDataList(1); 
+				$("#showmessage").html("量化模型删除成功！"); 
+				$("#confirm_tip").fadeIn(200);
+				constants_model_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });
 }
 function showAddTip(){
 	$("#add_tip").fadeIn(200);
+	$("#hid_modelId").val(0);
+	$("#ipt_name").val(""); 
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
+function saveOrUpdateModelInfo(){
+	var obj ={}; 
+	obj.id = $("#hid_modelId").val();
+	var name = $("#ipt_name").val();
+	if(name == "" || name.length== 0){
+		$("#showmessage").html("请输入量化模型名称！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	} 
+	obj.name = name;
+	 $.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/casemanage/jsonSaveOrUpdateModel.do", 
+       dataType:"json", //响应数据类型      
+       data:obj,
+       success: function(req) {
+       		if(req.code == 0){    
+				getDataList(1);   
+				$("#showmessage").html("量化模型信息保存成功！");
+				$("#add_tip").fadeOut(100);
+				clearForm();
+				$("#confirm_tip").fadeIn(200);
+				constants_model_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    });  
 }
 function clearForm(){
-
+	$("#hid_modelId").val(0);
+	$("#ipt_name").val(""); 
+}
+function LockModelAction(){
+	$("#lock_confirm_tip").fadeOut(200);  
+	var reqUrl = "/supervision/manage/casemanage/jsonLockModel.do?id="+constants_model_id;
+	if(constants_model_status == 1){
+		reqUrl = "/supervision/manage/casemanage/jsonEnableGradeScheme.do?id="+constants_model_id;
+	}
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: reqUrl, 
+       dataType:"json", //响应数据类型       
+       success: function(req) {
+       		if(req.code == 0){    
+				getDataList(1);   
+				if(constants_model_status == 0){
+					$("#showmessage").html("量化模型禁用成功！");
+				}else{
+					$("#showmessage").html("量化模型启用成功！");
+				}  
+				$("#confirm_tip").fadeIn(200);
+				constants_model_id = 0;
+			 }
+			else{
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+			}
+       }
+    }); 
 }
 </script>
 
@@ -108,10 +241,11 @@ function clearForm(){
     <div class="rightinfo">
     
     <div class="tools">
-    
     	<ul class="toolbar">
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+        <li class="click" onclick="showAlertTip('unlock');"><span><img src="/supervision/source/images/t012.png" /></span>启用</li>
+        <li class="click" onclick="showAlertTip('lock');"><span><img src="/supervision/source/images/t011.png" /></span>禁用</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
         </ul> 
     
@@ -124,11 +258,9 @@ function clearForm(){
 		        <th></th>
 		        <th>状态</th>
 		        <th>模型名称</th>
-				<th>操作</th>
-				
         	</tr>
         </thead>
-        <tbody id="tb_userList">  
+        <tbody id="tb_modelList">  
         </tbody>
     </table>
     
@@ -163,33 +295,60 @@ function clearForm(){
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
     </div> 
-     <div class="addtip" id="add_tip">
+     <div class="littleaddtip" id="add_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
         
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
+	    <div class="littleaddtipinfos"> 
+	       <div style="width:99%;">	
 	        	<form>
 	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
+	        			<tr><td style="height:30px;width:80px;"><span>模型名称：</span></td><td><input type="hidden"  id="hid_modelId"  /><input type="text" class="dfinput" id="ipt_name"  /></td></tr> 
 	        			<tr><td colspan="2"></td></tr>
 	        		</table>
 	        	</form>
 	       </div>
       	</div>
         
-        <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        <div class="littletipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateModelInfo();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
         </div> 
     </div> 
     </div> 
 
+    <div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p>确认删除当前选择量化模型？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="deleteModelAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
+    
+    <div class="tip" id="lock_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#lock_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img  id="ss" src="/supervision/source/images/t0f.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage1"> </p> 
+	        	<cite>如果是，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="LockModelAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#lock_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
 </body>
 
 </html>
