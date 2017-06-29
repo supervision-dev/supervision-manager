@@ -95,6 +95,19 @@ function saveOrUpdateUserInfo(){
 function clearForm(){
 
 }
+
+function showItem(id){ 
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id;
+} 
+function incorruptFile(itemId,tag){ 
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag;
+}
+function incorruptOpinion(itemId,tag,isStept){ 
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept;
+}
+function incorruptInfo(){
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptInfo.do";
+}
 </script>
 
 
@@ -119,6 +132,7 @@ function clearForm(){
         <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+        <li class="click" onclick="incorruptInfo();">录入工作事项</li>
         </ul> 
     
     </div>

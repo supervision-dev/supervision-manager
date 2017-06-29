@@ -318,7 +318,7 @@ public class PageRouteController extends SystemAction {
     }
     
     /**
-     * 效能监察查看项目
+     * 执法监察查看项目
      * @param request
      * @param response
      * @return
@@ -347,6 +347,39 @@ public class PageRouteController extends SystemAction {
     public ModelAndView incorruptList( HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptList");
+    	return mv;
+    }
+    
+    /**
+     * 到效能监察录入工作事项
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/vision/incorrupt/incorruptInfo.do")
+    public ModelAndView incorruptInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptInfo");
+    	return mv;
+    }
+    
+    /**
+     * 廉政监察查看项目
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/incorrupt/showItem.do")
+    public ModelAndView incShowItem( 
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("enfshowItemId", id);
+    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/showItem");
     	return mv;
     }
     

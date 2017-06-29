@@ -12,7 +12,7 @@ $(document).ready(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
-	getDataList(1);
+	//getDataList(1);
 });
 function getDataList(pageNo){
 	var obj = {};
@@ -69,29 +69,15 @@ function getDataList(pageNo){
        }
 	});
 }
-function showAlertTip(type){
-	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的项目！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的项目！");
-		$("#confirm_tip").fadeIn(200);
-	}
-}
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
-}
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
-}
-function clearForm(){
 
-}
 function downLoadFile(path,name){
 		var filePath = encodeURI(encodeURI(path));
 		var fileName = encodeURI(encodeURI(name));
 		window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+}
+
+function returnPage(){
+	window.location.href="/supervision/pageRoute/vision/efficiency/efficiencyList.do";	
 }
 </script>
 
