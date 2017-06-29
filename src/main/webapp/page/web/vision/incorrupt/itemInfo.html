@@ -50,6 +50,8 @@
     <script src="/supervision/source/js/plupload/html5shiv.js"></script>
     <![endif]-->
   
+
+<script src="/supervision/source/laydate/laydate.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
 	 var len=32;//32长度
@@ -131,7 +133,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('录入工作事项成功！', {
+         	layer.confirm('立项成功！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -144,15 +146,40 @@ $(document).ready(function(){
 
 
 
-	
+	laydate({
+		  elem: '#datepicker', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+		  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+	});	
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
-	
+	getLeader();
 });
 
-
+function getLeader(){
+	var obj = {};
+	$("#leader").html("");
+	var leaderHtml = "";
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/efficiency/getLeader.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       if(req.datalist != null && req.datalist.length >0){
+	       		leaderHtml +="</tr style=\"border: 0;\"><td style=\"border: 0;\">";
+	       		for(var i = 0;i<req.datalist.length;i++){
+	       			leaderHtml +="<label style=\"float: left;\"><input type=\"checkbox\" name=\"leader\" />"+req.datalist[i].name+"</label>";
+		       		
+	       		}
+	       }	leaderHtml +="</td></tr>";
+	       $("#leader").html(leaderHtml);
+       }
+       
+	});
+	
+}
 function returnPage(){
 		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
 			btn: ['确认','取消'] //按钮
@@ -165,16 +192,37 @@ function returnPage(){
 }
 	function isNull(){
 		if($("#itemName").val()==null || $("#itemName").val()==""){	
-			layer.alert('请录入监察项目！');				
+			layer.alert('请输入项目名称！');				
 			return false;
-		} 
+		} 		
+		var superItemType=$("#superItemType").val();
+		if(superItemType<0 || superItemType==null){
+			layer.alert('请选择项目类别！');	
+			return false;
+		}
+		if($("#datepicker").val()==null || $("#datepicker").val()==""){
+			layer.alert('请输入规定完成时间！');			
+			return false;
+		}  
+		var evalue =$("#datepicker").val();
+		
+		var date = new Date();
+		var MM = date.getMonth()+1;
+		var sdate = date.getFullYear()+"-"+MM+"-"+date.getDate(); 
+		
+		var date1 = new Date(evalue.replace(/\-/g, "\/")); 
+		var date2 = new Date(sdate.replace(/\-/g, "\/"));
+		if(date1<date2){
+			layer.alert('规定完成时间不能小于当前时间！');	
+			return false;
+		}
 	}
 	function ajaxPost(){
 		if(isNull()!=false){
 		        $.ajax({
 			        cache: true, //是否缓存当前页面
 			        type: "POST", //请求类型
-			        url: "/supervision/vision/incorrupt/jsonSaveOrUpdateItem.do",
+			        url: "/supervision/vision/efficiency/jsonsetProjectById.do",
 			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
 			        async: true, //发送异步请求	  
 			        dataType:"json", //响应数据类型      
@@ -185,7 +233,7 @@ function returnPage(){
 				        	if(uploader.files.length>0){
 				        		$("#uploader_start").click(); //上传文件
 				        	}else{
-				        		layer.confirm('录入工作事项成功！', {
+				        		layer.confirm('立项成功！', {
 									btn: ['确认'] //按钮
 								}, function(){//点击确认按钮调用
 									layer.close(layer.confirm());//关闭当前弹出层
@@ -215,6 +263,7 @@ function returnPage(){
 
 
 
+
 </script>
 
 
@@ -227,7 +276,7 @@ function returnPage(){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">实时监察</a></li>
-    <li><a href="#">廉政监察</a></li>
+    <li><a href="#">效能监察</a></li>
     </ul>
     </div>
     
@@ -235,44 +284,89 @@ function returnPage(){
     
     <div class="tools">
     
+    	
+    	
+    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
+    		
+    	</div> -->
     </div>
     
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
     	
     	<tr>
-       		<td width="12%" align="right">工作事项：</td>
+       		<td width="15%" align="right">项目名称：</td> 
        		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width:60%;height:28px;"/> 
+       			<input id="itemName" name="name" type="text" value="" style="width:80%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
-				<input type="hidden" name="OrgId" value="0">
        		</td>
        	</tr>
        	
+       	
        	<tr>
-			<td width="12%" align="right" height="129px;">上传附件：</td>
-			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" ></div>
-	                <script>
-	                    $(function() {
-	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
-	                    });
-	                </script>
-	                <div id="uploader" style="margin-left: 30px;">
-	                </div>
-			 </td>	
-		</tr>
+       		<td width="12%" align="right">项目类别：</td>
+       		<td>
+       			<select id="supervisionTypeId" name="superItemType" style="width:152px;height:28px;">						
+									
+				</select> 
+       		</td>
+       	</tr>
+       	
        
        	<tr>
 			<td></td>
 			<td>
-				<span class="enter"  id="saveBtn" onclick="saveItem(this);">提交</span>
-				<span class="enter"  onclick="returnPage();">返回</span>
+				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span>
+				<span class="enter"  onclick="returnPage();" style="float:left; margin-left:15px;" >返回</span>
 			</td>
 		</tr>
     </table>
     </form>
-
+   
+    
+    
+    
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div> 
+    </div> 
+     <div class="addtip" id="add_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        
+	    
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    </div> 
+	<div class="simplestip" id="organ_tip" style="margin-left: 18%; margin-top: 5px;"> 
+   		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
+          
+	    <div class="simpletipinfo">   
+	       <div style="height:320px;width:99%;overflow-x:hidden;"> 
+        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+        		<tr><td></td></tr>  
+        		</table> 
+	       </div> 
+      	</div>
+        
+        <div class="simpletipbtn"> 
+        	<input type="button"  class="saveBtn" value="确定" onclick="selectOrgan();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:$('#slt_postId').removeClass('displaynone');$('#slt_roleId').removeClass('displaynone');$('#organ_tip').fadeOut(100);" /> 
+        </div>  
+    </div>
 </body>
 
 </html>

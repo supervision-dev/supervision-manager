@@ -30,14 +30,46 @@ function getDataList(pageNo){
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			itemHtml +="<tr>";
 				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].status+"</td>";
+				    if(req.datalist[i].status == 0){
+				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
+				    }else {
+				    	itemHtml +="<td>已立项</td>";
+				    }if(req.datalist[i].status == 0){
+				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
+				    }else if(req.datalist[i].status == 1){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 2){
+				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    }else if(req.datalist[i].status == 3){
+				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
+				    }else if(req.datalist[i].status == 4){
+				    	itemHtml +="<td style=\"color:green;\">完成</td>";
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td style=\"color:green;\">逾期完成</td>";
+				    }		
 				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
-				    itemHtml +="<td>查看</td>"; 
-				    itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>"; 
-				    itemHtml +="<td>"+req.datalist[i].itemName+"</td>";
-				    itemHtml +="<td>"+req.datalist[i].orgName+"</td>";				    
-				    itemHtml +="<td>流程操作</td>";  
+				    itemHtml +="<td><img src=\"/supervision/source/images/t06.png\" title=\"查看\" style=\"width:15px;heigth:15px;cursor:pointer;\" onclick=\"showItem("+req.datalist[i].id+");\"  /></td>";
+				   	if(req.datalist[i].itemCategory == null || req.datalist[i].itemCategory ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";  
+				    }
+				  	if(req.datalist[i].itemNmae == null || req.datalist[i].itemNmae ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].itemNmae+"</td>";  
+				    }
+				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
+				    	itemHtml +="<td></td>";  
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
+				    }
+				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 ){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    	
+				    }else{
+			    		itemHtml +="<td width=\"180px;\"></td>";
+			    	}
 				    itemHtml +="<td>删除</td>";  			    
 			        itemHtml +="</tr>";
 	       		}
@@ -129,10 +161,8 @@ function incorruptInfo(){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        <li class="click" onclick="incorruptInfo();">录入工作事项</li>
+        <li id="InputItemBtn" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" />录入工作事项</li>
         </ul> 
     
     </div>

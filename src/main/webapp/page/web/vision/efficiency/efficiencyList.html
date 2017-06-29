@@ -41,11 +41,6 @@ function getDataList(pageNo){
 	   		if(req.datalist != null && req.datalist.length >0){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
-	       			
-	       			
-	       		/* alert(req.datalist[i].orgType);
-	       		alert(req.datalist[i].isItemOrg);
-	       		alert(req.datalist[i].lasgTag); */
 	       			itemHtml +="<tr>";
 				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
 				    if(req.datalist[i].status == 0){
@@ -460,8 +455,6 @@ function saveSelectOrg(obj){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
        	<li id="InputItemBtn" style="display: none;" class="click" onclick="efficiencyInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 

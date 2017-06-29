@@ -30,6 +30,7 @@ import com.rmbank.supervision.model.ItemProcessFile;
 import com.rmbank.supervision.model.Meta;
 import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.OrganVM;
+import com.rmbank.supervision.model.Role;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ConfigService;
 import com.rmbank.supervision.service.ItemProcessFileService;
@@ -37,6 +38,7 @@ import com.rmbank.supervision.service.ItemProcessService;
 import com.rmbank.supervision.service.ItemService;
 import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.SysLogService;
+import com.rmbank.supervision.service.UserRoleService;
 import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
@@ -59,6 +61,8 @@ public class IncorruptVisionController extends SystemAction {
 	private OrganService organService;
 	@Resource
 	private ConfigService configService;
+	@Resource
+	private UserRoleService userRoleService;
 	@Resource
 	private ItemProcessService itemProcessService;
 	@Resource
@@ -94,14 +98,16 @@ public class IncorruptVisionController extends SystemAction {
 		item.setPageSize(Constants.DEFAULT_PAGE_SIZE);
 		int totalCount = 0;
 		// 获取当前登录用户
-//		User loginUser = this.getLoginUser();
-		User loginUser =new User();
-		loginUser.setId(1);
+		User loginUser = this.getLoginUser();
 		// 获取当前用户对应的机构列表
-		List<Organ> userOrgList = userService.getUserOrgByUserId(loginUser
-				.getId());
+		List<Organ> userOrgList = userService.getUserOrgByUserId(loginUser.getId());
+				
 		// 获取当前用户对应的第一个机构
 		Organ userOrg = userOrgList.get(0);
+		
+		//获取当前用户对应的角色
+		List<Role> rolesByUserId = userRoleService.getRolesByUserId(loginUser.getId());
+		Role userRole = rolesByUserId.get(0);
 		// 分页集合
 		List<Item> itemList = new ArrayList<Item>();
 		try {
@@ -127,31 +133,34 @@ public class IncorruptVisionController extends SystemAction {
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
 			}
+			
+			for (Item it : itemList) {
+				//设置流程节点
+				List<ItemProcess> itemprocessList = itemProcessService.getItemProcessItemId(it.getId());		
+				if (itemprocessList.size() > 0) {
+					ItemProcess lastItem = itemprocessList.get(itemprocessList.size() - 1);							
+					it.setLasgTag(lastItem.getContentTypeId());
+				}
+				//将登录机构的类型添加到项目中
+				it.setOrgType(userOrg.getOrgtype());
+				
+				//将登陆用户的角色id添加到项目中
+				it.setUserRole(userRole.getId());
+				
+				//将登陆用户的机构Id添加
+				it.setLogOrgId(userOrg.getId());
+			}
+
+			String ip = IpUtil.getIpAddress(request);		
+			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了对廉政监察项目列表的查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+			
+			item.setTotalCount(totalCount);
+			dr.setData(item);
+			dr.setDatalist(itemList); 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
-		for (Item it : itemList) {
-			List<ItemProcess> itemprocessList = itemProcessService.getItemProcessItemId(it.getId());
-					
-			if (itemprocessList.size() > 0) {
-				ItemProcess lastItem = itemprocessList.get(itemprocessList
-						.size() - 1);
-				it.setLasgTag(lastItem.getContentTypeId());
-			}
-		}
-
-		// 通过request对象传值到前台
-//		request.setAttribute("Item", item);
-//		request.setAttribute("userOrg", userOrg);
-//		request.setAttribute("itemList", itemList);
-		
-		String ip = IpUtil.getIpAddress(request);		
-		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了对廉政监察项目列表的查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-		
-		item.setTotalCount(totalCount);
-		dr.setData(item);
-		dr.setDatalist(itemList); 
     	return dr;
 	}
 
@@ -178,40 +187,10 @@ public class IncorruptVisionController extends SystemAction {
 		return "web/vision/incorrupt/ItemInfo";
 	}
 
-	/**
-	 * 跳转到录入项目
-	 * 
-	 * @param id
-	 * @param req
-	 * @param res
-	 * @return
-	 */
-	@RequestMapping(value = "/incorruptInfo.do")
-	@RequiresPermissions("vision/incorrupt/incorruptInfo.do")
-	public String efficiencyInfo(
-			@RequestParam(value = "id", required = false) Integer id,
-			HttpServletRequest request, HttpServletResponse response) {
-		// 获取当前登录用户所属机构下的所有用户
-		User lgUser = this.getLoginUser();
-		List<User> byLgUser = userService.getUserListByLgUser(lgUser);
-
-		// 获取当前用户对应的机构列表
-		List<Organ> userOrgList = userService
-				.getUserOrgByUserId(lgUser.getId());
-		// 获取当前用户对应的第一个机构
-		Organ userOrg = userOrgList.get(0);
-		request.setAttribute("userOrg", userOrg);
-		// 获取项目类别
-		List<Meta> meatListByKey = configService
-				.getMeatListByKey(Constants.META_ITEMCATEGORY_KEY);
-		request.setAttribute("meatListByKey", meatListByKey);
-		request.setAttribute("byLgUser", byLgUser);
-		request.setAttribute("itemId", id);
-		return "web/vision/incorrupt/incorruptInfo";
-	}
+	
 
 	/**
-	 * 被监察对象添加工作事项
+	 * 被监察对象录入工作事项
 	 * 
 	 * @throws ParseException
 	 */

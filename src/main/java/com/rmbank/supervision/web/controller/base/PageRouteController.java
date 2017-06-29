@@ -336,6 +336,52 @@ public class PageRouteController extends SystemAction {
     }
     
     /**
+     * 廉政监察流程页面跳转
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/incorrupt/incorruptFile.do")
+    public ModelAndView incorruptFile( 
+    		@RequestParam(value="itemId", required = false) Integer itemId,
+    		@RequestParam(value="tag", required = false) Integer tag,
+    		@RequestParam(value="isStept",required = false) Integer isStept,
+    		HttpServletRequest request, HttpServletResponse response
+    		) throws UnsupportedEncodingException { 
+    	
+    	HttpSession session = request.getSession();
+    	session.setAttribute("incorruptItemId", itemId);
+    	
+    	ModelAndView mv = new ModelAndView();
+    	
+    	if(tag == -1){
+    		mv.setViewName("web/vision/incorrupt/itemInfo");
+    	}else if(tag == 67){	//分节点上传资料	
+			mv.setViewName("web/vision/incorrupt/fileView");
+		}
+//    	else if(tag == 67){	//不分节点上传资料	
+//			mv.setViewName("web/vision/efficiency/NoFileView");
+//		}
+//    	else if(tag == 68 && isStept==1){	//分节点录入意见		
+//			mv.setViewName("web/vision/efficiency/opinion");
+//		}else if(tag == 68 && isStept==0){	//不分节点录入意见		
+//			mv.setViewName("web/vision/efficiency/NoOpinion");
+//		}else if(tag == 69 ){
+//			mv.setViewName("web/vision/efficiency/resetView");
+//		} if(tag==688){
+//			mv.setViewName("web/vision/efficiency/jianChaJieLun");
+//		}else if(tag==777){
+//			mv.setViewName("web/vision/efficiency/wenZeView");
+//		}else if(tag==778){
+//			mv.setViewName("web/vision/efficiency/zhengGaiView");
+//		}else if(tag==800){
+//			mv.setViewName("web/vision/efficiency/buWenZeJieLun");
+//		}
+    	
+    	return mv;
+    }
+    /**
      * 廉政监察列表
      *
      * @param request
