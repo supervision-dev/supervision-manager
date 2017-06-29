@@ -191,7 +191,7 @@ public class PageRouteController extends SystemAction {
     @RequestMapping(value = "/manage/casedetail/casedetailList.do")
     public ModelAndView casedetailList( HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
-    	ModelAndView mv = new ModelAndView("web/manage/casedetail/casedetailList");
+    	ModelAndView mv = new ModelAndView("web/manage/casemanage/casedetailList");
     	return mv;
     }
     /****************************************************/
