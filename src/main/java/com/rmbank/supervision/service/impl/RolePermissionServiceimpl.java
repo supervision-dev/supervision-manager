@@ -77,6 +77,7 @@ public class RolePermissionServiceimpl implements RolePermissionService {
 					rolePermissionResource.setId(0);
 					rolePermissionResource.setPermissionId(resId);
 					rolePermissionResource.setRoleId(roleId);
+					rolePermissionResource.setControl(1);
 					rolePermissionMapper.insert(rolePermissionResource);
 				} 
 			} 

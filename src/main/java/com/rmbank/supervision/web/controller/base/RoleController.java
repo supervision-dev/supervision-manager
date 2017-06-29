@@ -194,7 +194,7 @@ public class RoleController extends SystemAction {
 		js.setCode(1);
 		js.setMessage("保存失败!"); 
 		try {
-			 if(rolePermission.getPermissionId()>0){
+			 if(rolePermission.getRoleId()>0){
 				 if(StringUtil.isEmpty(rolePermission.getPermissionIds())){
 					 rolePermissionService.deleteByRoleId(rolePermission.getRoleId());
 				 }else{
