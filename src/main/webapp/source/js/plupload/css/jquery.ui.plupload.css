@@ -13,7 +13,7 @@
 
 .plupload_wrapper {
 	font: normal 11px Verdana,sans-serif;
-	width: 60.3%;
+	width: 81%;
 	min-width: 220px;
 	line-height: 12px;
 }
@@ -80,11 +80,13 @@
 .plupload_content {
 	position: absolute;
 	top: 30px;
-	bottom: 44px;
+	/* bottom: 44px; */
 	left: 0;
 	right: 0;
 	overflow-y: auto;
-	width: 100%;
+	width: 97%;
+	height: 160px;
+	_height: 160px;
 }
 
 .plupload_filelist {
