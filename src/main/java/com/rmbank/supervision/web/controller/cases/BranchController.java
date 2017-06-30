@@ -106,9 +106,7 @@ public class BranchController extends SystemAction {
 		item.setPageSize(Constants.DEFAULT_PAGE_SIZE);  
 		int totalCount =  0;		
 		//当前登录用户所属的机构
-		//User loginUser = this.getLoginUser();
-		User loginUser =new User();
-		loginUser.setId(1);
+		User loginUser = this.getLoginUser();
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Integer logUserOrg = userOrgByUserId.get(0).getId(); //当前登录用户所属的机构ID
 		Organ organ = userOrgByUserId.get(0);
@@ -118,12 +116,13 @@ public class BranchController extends SystemAction {
 		if(organ.getOrgtype()==Constants.ORG_TYPE_1 ||
 				organ.getOrgtype()==Constants.ORG_TYPE_2 ||
 						organ.getOrgtype()==Constants.ORG_TYPE_3 ||
+								organ.getOrgtype()==Constants.ORG_TYPE_4 ||
 						Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 			//分行立项分行完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
-			item.setPreparerOrgId(logUserOrg);    //立项机构			
-			item.setOrgTypeB(Constants.ORG_TYPE_4);			
+			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID);    //立项机构			
+			item.setOrgTypeB(Constants.ORG_TYPE_5);	 //完成机构的类型		
 			itemList=itemService.getItemListByFHLXFHWC(item); 
 			totalCount=itemService.getItemCountByFHLXFHWC(item);
 			item.setTotalCount(totalCount);
@@ -131,8 +130,8 @@ public class BranchController extends SystemAction {
 			//分行立项分行完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
-			item.setPreparerOrgId(logUserOrg); //立项机构
-			item.setOrgTypeA(Constants.ORG_TYPE_4);			
+			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID); //立项机构
+			item.setOrgTypeA(Constants.ORG_TYPE_5);	//完成机构的类型		
 			itemList=itemService.getItemListByLogOrgFHLXFHWC(item); 
 			totalCount=itemService.getItemCountByLogOrgFHLXFHWC(item);
 			item.setTotalCount(totalCount);
@@ -187,9 +186,8 @@ public class BranchController extends SystemAction {
 		request.setAttribute("meatListByKey", meatListByKey);
 		
 		//当前登录用户所属的机构
-//		User loginUser = this.getLoginUser();
-		User loginUser = new User();
-		loginUser.setId(1);
+		User loginUser = this.getLoginUser();
+
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Integer logUserOrg = userOrgByUserId.get(0).getId(); //当前登录用户所属的机构ID
 		Organ organ = userOrgByUserId.get(0);
@@ -197,13 +195,14 @@ public class BranchController extends SystemAction {
 		List<Item> itemList =null; 
 		if(organ.getOrgtype()==Constants.ORG_TYPE_1 ||
 				organ.getOrgtype()==Constants.ORG_TYPE_2 ||
-						organ.getOrgtype()==Constants.ORG_TYPE_3 ||
-						Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
+					organ.getOrgtype()==Constants.ORG_TYPE_3 ||
+						organ.getOrgtype()==Constants.ORG_TYPE_4 ||
+					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 			//分行立项中支完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
-			item.setPreparerOrgId(logUserOrg);    //立项机构
-			item.setOrgTypeA(Constants.ORG_TYPE_5);
+			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID);    //立项机构
+			item.setOrgTypeA(Constants.ORG_TYPE_6); //完成机构的类型
 			itemList=itemService.getItemListByFHLXZZWC(item);
 			totalCount=itemService.getItemCountByFHLXZZWCALL(item);
 			item.setTotalCount(totalCount);
@@ -211,8 +210,8 @@ public class BranchController extends SystemAction {
 			//分行立项中支完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
-			item.setPreparerOrgId(logUserOrg);    //立项机构
-			item.setOrgTypeA(Constants.ORG_TYPE_5);
+			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID);    //立项机构
+			item.setOrgTypeA(Constants.ORG_TYPE_6); //完成机构的类型
 			itemList=itemService.getItemListByLogOrgFHLXZZWC(item);
 			totalCount=itemService.getItemCountByLogOrgFHLXZZWC(item);
 			item.setTotalCount(totalCount);

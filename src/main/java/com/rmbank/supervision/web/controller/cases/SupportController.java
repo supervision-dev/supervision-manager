@@ -122,18 +122,20 @@ public class SupportController extends SystemAction {
 		if(organ.getOrgtype()==Constants.ORG_TYPE_1 ||
 				organ.getOrgtype()==Constants.ORG_TYPE_2 ||
 				organ.getOrgtype()==Constants.ORG_TYPE_3 ||
+						organ.getOrgtype()==Constants.ORG_TYPE_4 ||
 				Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 			//成都分行监察室和超级管理员加载所有的中支立项项目
 			//itemList=itemService.getItemList(item);
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
-			item.setOrgTypeA(Constants.ORG_TYPE_6);			
+			item.setOrgTypeA(Constants.ORG_TYPE_7);			
 			itemList=itemService.getItemListByOrgType(item);
 			totalCount=itemService.getItemCountZZLXALL(item);
 		}else{
 			//当前登录机构只加载当前登录中支立的项目和子机构完成的项目
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
-			item.setOrgTypeA(Constants.ORG_TYPE_6);	
-			item.setOrgTypeB(Constants.ORG_TYPE_5);
+			item.setOrgTypeA(Constants.ORG_TYPE_7);	//立项机构为中支监察室
+			item.setOrgTypeB(Constants.ORG_TYPE_8); //完成机构为中支部门
+			item.setOrgTypeC(Constants.ORG_TYPE_9); //完成机构为县支行
 			item.setSupervisionOrgId(logUserOrg);
 			item.setPreparerOrgId(logUserOrg);
 			itemList=itemService.getItemListByOrgTypeAndLogOrg(item);

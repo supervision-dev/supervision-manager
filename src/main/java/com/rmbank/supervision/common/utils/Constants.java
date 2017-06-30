@@ -78,6 +78,9 @@ public class Constants
   public static final Integer STATIC_ITEM_TYPE_MANAGE = 1; 
   public static final Integer STATIC_ITEM_TYPE_SVISION = 0;
   
+  //分行立项分行完成，分行监察室的机构ID
+  public static final Integer BRANCH_INPUTITEM_ORGID = 4;
+  
   //机构类型
   public static final Integer ORG_TYPE_1= 37; //分行行领导
   public static final Integer ORG_TYPE_2= 38; //分行办公室
