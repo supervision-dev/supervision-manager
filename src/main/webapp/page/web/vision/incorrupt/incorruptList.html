@@ -23,6 +23,12 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		var userRole=req.data.userRole;
+       		if(userRole == 14){
+				$("#InputItemBtn").show();
+			}else{
+				$("#InputItemBtn").hide();
+			}
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"10\">没有获取到相关数据</td></tr>";
 	       if(req.datalist != null && req.datalist.length >0){
@@ -64,10 +70,47 @@ function getDataList(pageNo){
 				    }else{
 				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    }
+				    
+				    
+				    //流程判断开始。。。。。。。。。。
 				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 ){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
 				    	
-				    }else{
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==-1 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",72);\"  target=\"rightFrame\">录入项目方案</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==0 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",72);\"  target=\"rightFrame\">录入项目方案</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==73 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",73);\"  target=\"rightFrame\">录入会议决策内容</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==85 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",73);\"  target=\"rightFrame\">录入会议决策内容</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==75 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",75);\"  target=\"rightFrame\">录入执行情况</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==779 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",75);\"  target=\"rightFrame\">录入执行情况</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==666 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",75);\"  target=\"rightFrame\">录入执行情况</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==77 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",77);\"  target=\"rightFrame\">提请党委审议</a></td>";
+				    }else if(req.datalist[i].orgType == 40 ){
+				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
+				    	if(req.datalist[i].lasgTag == 72 && req.datalist[i].status!=0){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",74);\"  target=\"rightFrame\">监察项目方案</a></td>";
+				    	}else if(req.datalist[i].lasgTag==777 && req.datalist[i].status!=0){
+					    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">监察会议决策内容</a></td>";
+					    }else if(req.datalist[i].lasgTag==778 && req.datalist[i].status!=0){
+					    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">录入问责相关资料</a></td>";
+					    }else if(req.datalist[i].lasgTag==76 && req.datalist[i].status!=0){
+					    	itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",76);\"  target=\"rightFrame\">监察执行情况</a></td>";
+					    }else if(req.datalist[i].lasgTag==78 && req.datalist[i].status!=0){
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",78);\"  target=\"rightFrame\">录入监察结论</a></td>";
+				    	}else if(req.datalist[i].lasgTag==86 && req.datalist[i].status!=0){
+				    		itemHtml +="<td width=\"180px;\"><a onclick=\"incorruptFile("+req.datalist[i].id+",86);\"  target=\"rightFrame\">录入监察结论</a></td>";
+				    	}else{
+				    		itemHtml +="<td width=\"180px;\"></td>";
+				    	}
+				    }else{				    	
 			    		itemHtml +="<td width=\"180px;\"></td>";
 			    	}
 				    itemHtml +="<td>删除</td>";  			    
@@ -105,6 +148,7 @@ function getDataList(pageNo){
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(itemHtml);
+	       $('.tablelist tbody tr:odd').addClass('odd');
        }
 	});
 }
@@ -162,7 +206,7 @@ function incorruptInfo(){
     
     	<ul class="toolbar">
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        <li id="InputItemBtn" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" />录入工作事项</li>
+        <li id="InputItemBtn" style="display: none;" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     
     </div>

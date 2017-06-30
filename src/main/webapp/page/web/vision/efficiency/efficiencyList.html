@@ -139,7 +139,7 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
 			    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</a></td>";
 				    }else{
-				    	itemHtml +="<td width=\"180px;\">无操作权限</td>";
+				    	itemHtml +="<td width=\"180px;\"></td>";
 				    }  
 				      
 				    
