@@ -52,6 +52,8 @@
   
 <script type="text/javascript">
 $(document).ready(function(){ 
+	$('.tablelist tbody tr:odd').addClass('odd');
+	//getDataList(1); 
 	 var len=32;//32长度
      var radix=16;//16进制
      var chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -131,7 +133,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('录入工作事项成功！', {
+         	layer.confirm('录入现场检查报告、执法检查意见书成功！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -164,28 +166,27 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		if($("#itemName").val()==null || $("#itemName").val()==""){	
+		/* if($("#itemName").val()==null || $("#itemName").val()==""){	
 			layer.alert('请录入监察项目！');				
 			return false;
-		} 
+		}  */
 	}
 	function ajaxPost(){
 		if(isNull()!=false){
 		        $.ajax({
 			        cache: true, //是否缓存当前页面
 			        type: "POST", //请求类型
-			        url: "/supervision/vision/enforce/jsonSaveOrUpdateItem.do",
+			        url: "/supervision/vision/enforce/jsonSaveItemProcess.do",
 			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
 			        async: true, //发送异步请求	  
 			        dataType:"json", //响应数据类型      
 			        success: function(data) {
 			        	if(data.code==0){   	    	
-				        	
 							var uploader = $('#uploader').plupload('getUploader');
 				        	if(uploader.files.length>0){
 				        		$("#uploader_start").click(); //上传文件
 				        	}else{
-				        		layer.confirm('录入工作事项成功！', {
+				        		layer.confirm('录入现场检查报告、执法检查意见书成功！', {
 									btn: ['确认'] //按钮
 								}, function(){//点击确认按钮调用
 									layer.close(layer.confirm());//关闭当前弹出层
@@ -214,7 +215,6 @@ function returnPage(){
 
 
 
-
 </script>
 
 
@@ -236,29 +236,20 @@ function returnPage(){
     <div class="tools">
     
     </div>
-    
+    <table class="tablelist" >
+    	<thead>
+    		<tr>
+				<th></th>
+				<th></th>
+        	</tr>
+        </thead>
+        <tbody id="tb_userList">  
+        </tbody>
+    </table>
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
-    	
-    	<tr>
-       		<td width="12%" align="right">工作事项：</td>
-       		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width:60%;height:28px;"/> 
-				<input type="hidden" id="hid_uuid" name="uuid" />	
-				<input type="hidden" name="OrgId" value="0">
-       		</td>
-       	</tr>
        	<tr>
-       		<td width="12%" align="right">项目类别：</td>
-       		<td colspan="3">
-       			<select id="superItemType" name="superItemType" style="width:300px;height:32px;">
-					<option value="62">单项执法</option>
-					<option value="61">综合执法</option>												
-				</select> 
-       		</td>
-       	</tr>
-       	<tr>
-			<td width="12%" align="right" height="129px;">上传附件：</td>
+			<td width="12%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right" ></div>
 	                <script>
@@ -270,7 +261,20 @@ function returnPage(){
 	                </div>
 			 </td>	
 		</tr>
-       
+		<tr>
+			<td></td>
+			<td>
+				相关资料包括（现场检查报告、执法检查意见书）
+			</td>
+		</tr>
+       	<tr>
+       		<td width="12%" align="right">资料说明：</td>
+       		<td colspan="3">
+       			<textarea rows="3" cols="5" style="width:60%;" name="content"></textarea>	
+				<input type="hidden" id="hid_uuid" name="uuid" />					
+				<input type="hidden"  name="tag" value="132"/>
+       		</td>
+       	</tr>
        	<tr>
 			<td></td>
 			<td>
