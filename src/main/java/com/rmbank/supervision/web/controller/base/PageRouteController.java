@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.model.ItemProcess;
 import com.rmbank.supervision.web.controller.SystemAction;
 
@@ -308,41 +309,7 @@ public class PageRouteController extends SystemAction {
     }
     
     
-    /**
-     * 执法监察列表
-     *
-     * @param request
-     * @param response
-     * @return
-	 * @throws UnsupportedEncodingException 
-     */
-    @RequestMapping(value = "/vision/enforce/enforceList.do")
-    public ModelAndView enforceList( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
-    	ModelAndView mv = new ModelAndView("web/vision/enforce/enforceList");
-    	return mv;
-    }
-    
-    
-    /**
-     * 执法监察查看项目
-     * @param request
-     * @param response
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    @RequestMapping(value = "/vision/enforce/showItem.do")
-    public ModelAndView enfShowItem( 
-    		@RequestParam(value="id", required = false) Integer id,
-    		HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
-    	HttpSession session = request.getSession();
-    	session.setAttribute("enfshowItemId", id);
-    	ModelAndView mv = new ModelAndView("web/vision/enforce/showItem");
-    	return mv;
-    }
-    
-    
+   
     /**
      * 廉政监察列表
      *
@@ -458,6 +425,122 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/incorrupt/showItem");
     	return mv;
     }
+    
+    
+    /**
+     * 执法监察列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/vision/enforce/enforceList.do")
+    public ModelAndView enforceList( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/vision/enforce/enforceList");
+    	return mv;
+    }
+    
+    
+    /**
+     * 到执法监察录入工作事项
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/vision/enforce/enforceInfo.do")
+    public ModelAndView enforceInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/vision/enforce/enforceInfo");
+    	return mv;
+    }
+    
+    
+    /**
+     * 执法监察查看项目
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/enforce/showItem.do")
+    public ModelAndView enfShowItem( 
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("enfshowItemId", id);
+    	ModelAndView mv = new ModelAndView("web/vision/enforce/showItem");
+    	return mv;
+    }
+    
+    /**
+     * 执法监察流程页面跳转
+     * @param request
+     * @param response
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/vision/enforce/enforceFile.do")
+    public ModelAndView enforceFile( 
+    		@RequestParam(value="itemId", required = false) Integer itemId,
+    		@RequestParam(value="tag", required = false) Integer tag,
+    		@RequestParam(value="isStept",required = false) Integer isStept,
+    		HttpServletRequest request, HttpServletResponse response
+    		) throws UnsupportedEncodingException { 
+    	
+    	HttpSession session = request.getSession();
+    	session.setAttribute("enforceItemId", itemId);
+    	
+    	ModelAndView mv = new ModelAndView();
+    	
+    	if (tag == Constants.ENFORCE_VISION_1.intValue()) {
+    		mv.setViewName("web/vision/enforce/itemProcess130");  // 到被监察对象录入立项资料页面
+		}else if (tag == Constants.ENFORCE_VISION_2.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess131");
+			// 到监察室录入监察意见页面
+		}else if (tag == Constants.ENFORCE_VISION_3.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess132");
+			 // 到被监察对象录入监察报告、意见书页面
+		}else if (tag == Constants.ENFORCE_VISION_4.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess133");
+			 // 监察室给出监察意见书的意见页面
+		}else if (tag == Constants.ENFORCE_VISION_5.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess134");
+			 // 到被监察对象录入督促整改情况页面
+		}else if (tag == Constants.ENFORCE_VISION_6.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess135");
+			 // 到监察室给出监察结论页面
+		}else if (tag == Constants.ENFORCE_VISION_7.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess136");
+			// 到被监察对象录入行政处罚意见告知书页面
+		}else if (tag == Constants.ENFORCE_VISION_8.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess137");
+			//到被监察对象录入行政处罚意见告知书
+		}else if (tag == Constants.ENFORCE_VISION_9.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess138");
+			//不听证，到被监察对象录入行政处罚决定书页面
+		}else if (tag == 139) {
+			mv.setViewName("web/vision/enforce/itemProcess139");
+			 // 听证到录入听证相关资料页面
+		}else if (tag == Constants.ENFORCE_VISION_10.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess140");
+			// 监察室监察行政处罚决定书
+		}else if (tag == Constants.ENFORCE_VISION_13.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess141");
+			// 监察室监察行政处罚决定书
+		}else if (tag == Constants.ENFORCE_VISION_16.intValue()) {
+			mv.setViewName("web/vision/enforce/itemProcess142");
+			 // 需要复议，到录入复议相关资料页面
+		}
+    	
+    	return mv;
+    }
+    
+    
     
     /**
      * 实时监察待办事项

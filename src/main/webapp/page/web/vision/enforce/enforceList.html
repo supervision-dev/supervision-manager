@@ -11,7 +11,7 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
+	
 	getDataList(1);
 });
 function getDataList(pageNo){
@@ -46,10 +46,14 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td style=\"color:green;\">完成</td>";
 				    }	
+				    if(req.datalist[i].itemCategory != null){
+				    	itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
+				    }else{
+				    	itemHtml +="<td></td>";
+				    }
 				    
-				    itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
 				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
-				    itemHtml +="<td><a class=\"enter\" onclick=\"showItem("+req.datalist[i].id+");\"  target=\"rightFrame\">查看</a></td>";
+				    itemHtml +="<td><img src=\"/supervision/source/images/t06.png\" title=\"查看\" style=\"width:15px;heigth:15px;cursor:pointer;\" onclick=\"showItem("+req.datalist[i].id+");\"  /></td>";
 				    if(req.datalist[i].itemName == null || req.datalist[i].itemName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
@@ -96,6 +100,7 @@ function getDataList(pageNo){
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(itemHtml);
+	       $('.tablelist tbody tr:odd').addClass('odd');
        }
 	});
 }
@@ -122,10 +127,12 @@ function clearForm(){
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id;
 } 
-function efficiencyFile(itemId,tag){ 
+function enforceFile(itemId,tag){ 
 	window.location.href = "/supervision/pageRoute/vision/enforce/enforceFile.do?itemId="+itemId+"&tag="+tag;
 }
-
+function enforceInfo(){
+	window.location.href = "/supervision/pageRoute/vision/enforce/enforceInfo.do";
+}
 </script>
 
 
@@ -147,10 +154,9 @@ function efficiencyFile(itemId,tag){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+        
         <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        <li id="InputItemBtn" class="click" onclick="efficiencyInfo();">录入工作事项</li>
+        <li id="InputItemBtn" class="click" onclick="enforceInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     
     </div>

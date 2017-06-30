@@ -135,7 +135,7 @@ $(document).ready(function(){
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
-				window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+				window.location.href = "/supervision/pageRoute/vision/enforce/enforceList.do";
 			});	  
 		 }
      });
@@ -158,7 +158,7 @@ function returnPage(){
 			btn: ['确认','取消'] //按钮
 		}, function(){//点击确认按钮调用
 			layer.close(layer.confirm());//关闭当前弹出层
-			window.location.href="/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+			window.location.href="/supervision/pageRoute/vision/enforce/enforceList.do";
 		}, function(){
 			
 		});
@@ -174,7 +174,7 @@ function returnPage(){
 		        $.ajax({
 			        cache: true, //是否缓存当前页面
 			        type: "POST", //请求类型
-			        url: "/supervision/vision/incorrupt/jsonSaveOrUpdateItem.do",
+			        url: "/supervision/vision/enforce/jsonSaveOrUpdateItem.do",
 			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
 			        async: true, //发送异步请求	  
 			        dataType:"json", //响应数据类型      
@@ -189,7 +189,7 @@ function returnPage(){
 									btn: ['确认'] //按钮
 								}, function(){//点击确认按钮调用
 									layer.close(layer.confirm());//关闭当前弹出层
-									window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+									window.location.href = "/supervision/pageRoute/vision/enforce/enforceList.do";
 								});	        		
 				        	}	
 			        	}else{

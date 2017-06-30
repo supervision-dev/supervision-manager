@@ -158,54 +158,7 @@ public class EnforcementVisionController extends SystemAction {
     	return dr;
 	}
 
-	/**
-	 * 跳转到添加工作事项
-	 * 
-	 * @param id
-	 * @param req
-	 * @param res
-	 * @return
-	 */
-	@RequestMapping(value = "/itemInfo.do")
-	@RequiresPermissions("vision/enforce/itemInfo.do")
-	public String ItemInfo(
-			@RequestParam(value = "id", required = false) Integer id,
-			HttpServletRequest request, HttpServletResponse response) {
-		// 获取机构
-		Organ organ = new Organ();
-		List<Organ> organList = organService.getOrganList(organ);
-		// 页面加载的机构
-		List<OrganVM> list = new ArrayList<OrganVM>();
-		OrganVM frvm = null;
-		for (Organ rc : organList) {
-			if (rc.getId() == 21 || rc.getId() == 20) {
-				frvm = new OrganVM();
-				List<Organ> itemList = new ArrayList<Organ>();// 用于当做OrganVM的itemList
-				frvm.setId(rc.getId());
-				frvm.setName(rc.getName());
-				for (Organ rc1 : organList) {
-					if (rc1.getPid() == rc.getId() && rc1.getSupervision() == 0) {
-						itemList.add(rc1);
-					} else if (rc1.getId() == 43 && rc1.getPid() == rc.getId()) {
-						itemList.add(rc1);
-					}
-				}
-				frvm.setItemList(itemList);
-				list.add(frvm);
-			}
-		}
-		// 获取当前登录用户所属机构下的所有用户
-		User lgUser = this.getLoginUser();
-		List<User> byLgUser = userService.getUserListByLgUser(lgUser);
-		// 获取执法类型
-		List<Meta> meatListByKey = configService
-				.getMeatListByKey(Constants.META_LAWTYPE_KEY);
-		request.setAttribute("meatListByKey", meatListByKey);
-		request.setAttribute("byLgUser", byLgUser);
-		request.setAttribute("OrgList", list);
-		return "web/vision/enforce/ItemInfo";
-	}
-
+	
 	/**
 	 * 依法行政领导小组添加工作事项
 	 * 
