@@ -207,6 +207,7 @@ public class PageRouteController extends SystemAction {
     /****************************************************/
     /******************实时监察模块 开始***********************/
     /****************************************************/
+    
     /**
      * 效能监察列表
      *
@@ -221,6 +222,8 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/efficiencyList");
     	return mv;
     }
+    
+
     /**
      * 到效能监察录入工作事项
      *
@@ -235,6 +238,7 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/efficiencyInfo");
     	return mv;
     }
+    
     
     /**
      * 效能监察查看项目
@@ -253,6 +257,7 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/showItem");
     	return mv;
     }
+    
     
     /**
      * 效能监察流程页面跳转
@@ -302,6 +307,7 @@ public class PageRouteController extends SystemAction {
     	return mv;
     }
     
+    
     /**
      * 执法监察列表
      *
@@ -316,6 +322,7 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/enforce/enforceList");
     	return mv;
     }
+    
     
     /**
      * 执法监察查看项目
@@ -334,6 +341,39 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/vision/enforce/showItem");
     	return mv;
     }
+    
+    
+    /**
+     * 廉政监察列表
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/vision/incorrupt/incorruptList.do")
+    public ModelAndView incorruptList( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptList");
+    	return mv;
+    }
+    
+    
+    /**
+     * 到廉政监察录入工作事项
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/vision/incorrupt/incorruptInfo.do")
+    public ModelAndView incorruptInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptInfo");
+    	return mv;
+    }
+    
     
     /**
      * 廉政监察流程页面跳转
@@ -357,59 +397,49 @@ public class PageRouteController extends SystemAction {
     	
     	if(tag == -1){
     		mv.setViewName("web/vision/incorrupt/itemInfo");
-    	}else if(tag == 67){	//分节点上传资料	
-			mv.setViewName("web/vision/incorrupt/fileView");
+    	}if (tag == 72) {
+    		mv.setViewName("web/vision/incorrupt/itemScheme");  // 到被监察对象录入方案页面
 		}
-//    	else if(tag == 67){	//不分节点上传资料	
-//			mv.setViewName("web/vision/efficiency/NoFileView");
-//		}
-//    	else if(tag == 68 && isStept==1){	//分节点录入意见		
-//			mv.setViewName("web/vision/efficiency/opinion");
-//		}else if(tag == 68 && isStept==0){	//不分节点录入意见		
-//			mv.setViewName("web/vision/efficiency/NoOpinion");
-//		}else if(tag == 69 ){
-//			mv.setViewName("web/vision/efficiency/resetView");
-//		} if(tag==688){
-//			mv.setViewName("web/vision/efficiency/jianChaJieLun");
-//		}else if(tag==777){
-//			mv.setViewName("web/vision/efficiency/wenZeView");
-//		}else if(tag==778){
-//			mv.setViewName("web/vision/efficiency/zhengGaiView");
-//		}else if(tag==800){
-//			mv.setViewName("web/vision/efficiency/buWenZeJieLun");
-//		}
+		if (tag == 73) {
+			mv.setViewName("web/vision/incorrupt/decision");
+			 // 到被监察对象录入会议决策
+		}
+		if (tag == 74) {
+			mv.setViewName("web/vision/incorrupt/opinion");
+			 // 到监察室提出监察意见
+		}
+		if (tag == 75) {
+			mv.setViewName("web/vision/incorrupt/execution");
+			 // 到被监察对象录入执行情况
+		}
+		if (tag == 76) {
+			mv.setViewName("web/vision/incorrupt/JCexecution");
+			 // 到监察室监察执行情况
+		}
+		if (tag == 77) {
+			mv.setViewName("web/vision/incorrupt/shenYi");
+			 // 到监察室监察执行情况
+		}
+		if (tag == 78) {
+			mv.setViewName("web/vision/incorrupt/jianChaJieLun");
+			// 到监察室给出监察结论
+		}
+		if (tag == 86) {
+			mv.setViewName("web/vision/incorrupt/jianChaJieLun");
+			 // 到监察室给出监察结论
+		}
+		if (tag == 777) {
+			mv.setViewName("web/vision/incorrupt/advice");
+			 // 到监察室对会议决策内容给出意见
+		}
+		if (tag == 778) {
+			mv.setViewName("web/vision/incorrupt/wenZe");
+			 // 到监察室录入问责资料
+		}
     	
     	return mv;
     }
-    /**
-     * 廉政监察列表
-     *
-     * @param request
-     * @param response
-     * @return
-	 * @throws UnsupportedEncodingException 
-     */
-    @RequestMapping(value = "/vision/incorrupt/incorruptList.do")
-    public ModelAndView incorruptList( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
-    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptList");
-    	return mv;
-    }
     
-    /**
-     * 到效能监察录入工作事项
-     *
-     * @param request
-     * @param response
-     * @return
-	 * @throws UnsupportedEncodingException 
-     */
-    @RequestMapping(value = "/vision/incorrupt/incorruptInfo.do")
-    public ModelAndView incorruptInfo( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
-    	ModelAndView mv = new ModelAndView("web/vision/incorrupt/incorruptInfo");
-    	return mv;
-    }
     
     /**
      * 廉政监察查看项目
@@ -424,7 +454,7 @@ public class PageRouteController extends SystemAction {
     		HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
-    	session.setAttribute("enfshowItemId", id);
+    	session.setAttribute("incShowItemId", id);
     	ModelAndView mv = new ModelAndView("web/vision/incorrupt/showItem");
     	return mv;
     }

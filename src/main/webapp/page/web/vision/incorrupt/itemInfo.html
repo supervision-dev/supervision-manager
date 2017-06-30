@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>效能监察</title>
+<title>廉政监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <!--
 <link rel="stylesheet" type="text/css" href="styles.css">
@@ -144,17 +144,11 @@ $(document).ready(function(){
      $("#uploader_browse").removeAttr("style");
      $("#uploader_browse").attr("style","z-index: 1;font-size: 12px;font-weight: normal;");	
 
-
-
-	laydate({
-		  elem: '#datepicker', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
-		  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
-	});	
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
-	getLeader();
+	//getLeader();
 });
 
 function getLeader(){
@@ -200,7 +194,7 @@ function returnPage(){
 			layer.alert('请选择项目类别！');	
 			return false;
 		}
-		if($("#datepicker").val()==null || $("#datepicker").val()==""){
+		/* if($("#datepicker").val()==null || $("#datepicker").val()==""){
 			layer.alert('请输入规定完成时间！');			
 			return false;
 		}  
@@ -215,31 +209,26 @@ function returnPage(){
 		if(date1<date2){
 			layer.alert('规定完成时间不能小于当前时间！');	
 			return false;
-		}
+		} */
 	}
 	function ajaxPost(){
 		if(isNull()!=false){
 		        $.ajax({
 			        cache: true, //是否缓存当前页面
 			        type: "POST", //请求类型
-			        url: "/supervision/vision/efficiency/jsonsetProjectById.do",
+			        url: "/supervision/vision/incorrupt/jsonsetProjectById.do",
 			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
 			        async: true, //发送异步请求	  
 			        dataType:"json", //响应数据类型      
 			        success: function(data) {
 			        	if(data.code==0){   	    	
-				        	
-							var uploader = $('#uploader').plupload('getUploader');
-				        	if(uploader.files.length>0){
-				        		$("#uploader_start").click(); //上传文件
-				        	}else{
-				        		layer.confirm('立项成功！', {
-									btn: ['确认'] //按钮
-								}, function(){//点击确认按钮调用
-									layer.close(layer.confirm());//关闭当前弹出层
-									window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
-								});	        		
-				        	}	
+			        		layer.confirm('立项成功！', {
+								btn: ['确认'] //按钮
+							}, function(){//点击确认按钮调用
+								layer.close(layer.confirm());//关闭当前弹出层
+								window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+							});	        		
+				        		
 			        	}else{
 			        		layer.alert(data.message);	        	
 			        	}	
@@ -306,8 +295,11 @@ function returnPage(){
        	<tr>
        		<td width="12%" align="right">项目类别：</td>
        		<td>
-       			<select id="supervisionTypeId" name="superItemType" style="width:152px;height:28px;">						
-									
+       			<select id="superItemType" name="superItemType" style="width:152px;height:28px;">						
+					<option value="56">重大问题决策</option>
+					<option value="57">重要干部任免</option>
+					<option value="58">重大项目投资决策</option>	
+					<option value="59">大额资金使用</option>					
 				</select> 
        		</td>
        	</tr>
