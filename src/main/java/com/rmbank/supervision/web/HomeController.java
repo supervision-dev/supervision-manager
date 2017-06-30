@@ -29,6 +29,7 @@ import com.rmbank.supervision.web.controller.SystemAction;
 
 
 
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.stereotype.Controller;
@@ -382,4 +383,24 @@ public class HomeController extends SystemAction {
 
         return json;
     }
+
+	 
+	@ResponseBody
+    @RequestMapping({"/loadLoginUserInfo.do"})
+    public User loadLoginUserInfo(
+            HttpServletRequest request, HttpServletResponse response) {
+		User loginUser = (User)SecurityUtils.getSubject().getSession().getAttribute(Constants.USER_INFO);
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		if(organ.getPid()>0){
+			Organ pOrgan = organService.selectByPrimaryKey(organ.getPid());
+			loginUser.setOrgName(pOrgan.getName() +"->"+organ.getName());
+		}else{
+			loginUser.setOrgName(organ.getName());
+		}
+        return loginUser;
+    }
+    
+    
+    
 }
