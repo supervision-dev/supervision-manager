@@ -16,8 +16,24 @@ $(function(){
 	$(".nav li a").click(function(){ 
 		$(".nav li a.selected").removeClass("selected")
 		$(this).addClass("selected");
-	})	
+	});
+	loadLoginUserInfo();	
 }); 
+function loadLoginUserInfo(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadLoginUserInfo.do", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	        if(req != null){
+	        	$("#a_organName").html("登录机构："+req.orgName);
+	        	$("#a_userName").html("登录用户："+req.name);
+	        }else{
+				parent.window.location.href = "/supervision/logout.do";
+	        }
+        }
+      });
+}
 </script>
 
 
@@ -30,7 +46,6 @@ $(function(){
         
     <div class="topright">    
     <ul>
-    <li><a href="#">欢迎您：系统管理员</a></li> 
      <li><a>修改密码</a></li>
     <li><a  href="/supervision/logout.do" target="_parent">退出</a></li>
     </ul>  
@@ -38,5 +53,9 @@ $(function(){
     <ul class="nav">
     <li><a  href="/supervision/modelSelect.do" target="_parent" class="selected"><img src="/supervision/source/images/ico01.png" title="工作台" /><h2 style="color:white;font-size:14px;font-weight:bold;margin-top:2px; ">工作台</h2></a></li>
     </ul>   
+    <div class="user">
+	    <span id="a_organName" ></span>
+	    <span id="a_userName" ></span>
+    </div>    
 </body>
 </html>

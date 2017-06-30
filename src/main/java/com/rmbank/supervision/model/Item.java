@@ -13,6 +13,8 @@ public class Item extends Page {
 
     private Integer supervisionTypeId;
 
+    private Integer contentTypeId;
+
     private Integer pid;
 
     private Byte stageIndex;
@@ -20,6 +22,8 @@ public class Item extends Page {
     private String name;
 
     private Integer supervisionOrgId;
+
+    private String supervisionOrgIds;
 
     private Integer supervisionUserId;
 
@@ -420,6 +424,22 @@ public class Item extends Page {
 
 	public void setIsProject(String isProject) {
 		this.isProject = isProject;
+	}
+
+	public String getSupervisionOrgIds() {
+		return supervisionOrgIds;
+	}
+
+	public void setSupervisionOrgIds(String supervisionOrgIds) {
+		this.supervisionOrgIds = supervisionOrgIds;
+	}
+
+	public Integer getContentTypeId() {
+		return contentTypeId;
+	}
+
+	public void setContentTypeId(Integer contentTypeId) {
+		this.contentTypeId = contentTypeId;
 	}
 
 	

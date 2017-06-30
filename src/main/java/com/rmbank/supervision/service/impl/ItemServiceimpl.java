@@ -379,4 +379,27 @@ public class ItemServiceimpl implements ItemService {
 		return itemMapper.getItemCountToListByLogOrg(item);
 	}
 
+	@Override
+	public void saveOrUpdateItemList(List<Integer> ids,Item item) {
+		// TODO Auto-generated method stub
+		for(Integer id: ids){
+			item.setId(0);
+			item.setSupervisionOrgId(id);
+			itemMapper.insertSelective(item);
+			ItemProcess itemProcess = new ItemProcess();
+			itemProcess.setId(0);
+			itemProcess.setUuid(item.getUuid());
+			itemProcess.setItemId(item.getId());
+			itemProcess.setDefined(false);
+			itemProcess.setContentTypeId(item.getContentTypeId());
+			itemProcess.setOrgId(id);
+			itemProcess.setLast("");
+			itemProcess.setContent(item.getContent());
+			itemProcess.setPreparerOrgId(item.getPreparerOrgId());
+			itemProcess.setPreparerId(item.getPreparerId());
+			itemProcess.setPreparerTime(item.getPreparerTime());
+			itemProcessMapper.insertSelective(itemProcess);
+		}
+	}
+
 }  

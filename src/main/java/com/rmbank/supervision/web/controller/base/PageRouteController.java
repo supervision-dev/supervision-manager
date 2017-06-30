@@ -149,6 +149,48 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZList");
     	return mv;
     }
+    /**
+     * 分行立项中支完成立项页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchZZInfo.do")
+    public ModelAndView branchZZInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZInfo");
+    	return mv;
+    }
+    /**
+     * 分行立项中支完成上传资料页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchZZFile.do")
+    public ModelAndView branchZZFile( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZFile");
+    	return mv;
+    }
+    /**
+     * 分行立项中支完成查看页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchZZView.do")
+    public ModelAndView branchZZView( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZView");
+    	return mv;
+    }
     
     /**
      * 中支立项中支完成列表
@@ -165,6 +207,79 @@ public class PageRouteController extends SystemAction {
     	return mv;
     }
     
+    /**
+     * 中支立项新增项目页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/support/supportInfo.do")
+    public ModelAndView supportInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/support/supportInfo");
+    	return mv;
+    }
+
+    /**
+     * 中支上传资料页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/support/supportFile.do")
+    public ModelAndView supportFile( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/support/supportFile");
+    	return mv;
+    }
+
+    /**
+     * 中支监察室量化页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/support/supportValue.do")
+    public ModelAndView supportValue( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/support/supportValue");
+    	return mv;
+    }
+
+    /**
+     * 中支继续上传资料页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/support/supportReFile.do")
+    public ModelAndView supportReFile( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/support/supportReFile");
+    	return mv;
+    }
+    /**
+     * 中支项目查看页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/support/supportView.do")
+    public ModelAndView supportView( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/support/supportView");
+    	return mv;
+    }
     /**
      * 量化模型管理列表
      *

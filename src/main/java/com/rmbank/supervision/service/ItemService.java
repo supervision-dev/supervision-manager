@@ -173,5 +173,11 @@ public interface ItemService {
 
 	List<Item> getItemListToListByLogOrg(Item item);
 
-	int getItemCountToListByLogOrg(Item item); 
+	int getItemCountToListByLogOrg(Item item);
+
+	/**
+	 * 保存综合管理模块，立项
+	 * @param itemList
+	 */
+	void saveOrUpdateItemList(List<Integer> ids,Item item); 
 } 

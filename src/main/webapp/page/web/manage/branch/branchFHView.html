@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>分行立项分行完成</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 
@@ -11,6 +11,7 @@ $(document).ready(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
+	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1);
 });
 function getDataList(pageNo){
@@ -18,7 +19,7 @@ function getDataList(pageNo){
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/manage/support/supportList.do",
+       url: "/supervision/manage/branch/branchFHList.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
@@ -48,11 +49,7 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			if(req.data.pageNo>1){
-	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       			}else{
-	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       			}
+	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -61,30 +58,30 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		} 
+	       		}
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			if(count > req.data.pageNo){
-	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       			}else{
-	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-       				}
+	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(manageHtml);
-			$('.tablelist tbody tr:odd').addClass('odd');
        }
 	});
 }
-function showAlertTip(type){ 
-	$("#showmessage").html("请选择要删除的项目！");
-	$("#confirm_tip").fadeIn(200); 
+function showAlertTip(type){
+	if(type == 'edit'){
+		$("#showmessage").html("请选择要编辑的用户！");
+		$("#confirm_tip").fadeIn(200);
+	}else{
+		$("#showmessage").html("请选择要删除的用户！");
+		$("#confirm_tip").fadeIn(200);
+	}
 }
 function showAddTip(){
 	$("#add_tip").fadeIn(200);
@@ -108,7 +105,7 @@ function clearForm(){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">综合管理</a></li>
-    <li><a href="#">中支立项中支完成</a></li>
+    <li><a href="#">分行立项分行完成</a></li>
     </ul>
     </div>
     
@@ -117,8 +114,9 @@ function clearForm(){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/support/supportInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
+        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
+        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
         </ul> 
     
     </div>
@@ -131,10 +129,10 @@ function clearForm(){
 		        <th>项目名称</th>
 				<th>项目分类</th>
 				<th>立项时间</th>  
-				<th>立项单位（部门）</th>					
-				<th>完成单位（部门）</th>				
-				<th>操作1</th> 
-				<th>操作2</th>
+				<th>立项单位（部门）</th>									
+				<th>完成单位（部门）</th>
+				<th>操作一</th>
+				<th>操作二</th>
 				
         	</tr>
         </thead>
