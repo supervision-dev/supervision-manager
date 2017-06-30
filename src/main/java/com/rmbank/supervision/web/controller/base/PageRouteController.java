@@ -623,9 +623,10 @@ public class PageRouteController extends SystemAction {
     	session.setAttribute("enforceItemId", itemId);
     	
     	ModelAndView mv = new ModelAndView();
-    	
-    	if (tag == Constants.ENFORCE_VISION_1.intValue()) {
-    		mv.setViewName("web/vision/enforce/itemProcess130");  // 到被监察对象录入立项资料页面
+    	if (tag == Constants.ENFORCE_VISION_0) {
+    		mv.setViewName("web/vision/enforce/itemInfo");  // 到被监察对象录入立项资料页面
+		}else if (tag == Constants.ENFORCE_VISION_1.intValue()) {
+    		mv.setViewName("web/vision/enforce/itemProcess130");  // 到被监察对象录入执法检查立项资料页面
 		}else if (tag == Constants.ENFORCE_VISION_2.intValue()) {
 			mv.setViewName("web/vision/enforce/itemProcess131");
 			// 到监察室录入监察意见页面

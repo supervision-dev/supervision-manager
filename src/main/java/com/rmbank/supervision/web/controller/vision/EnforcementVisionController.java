@@ -32,6 +32,7 @@ import com.rmbank.supervision.model.ItemProcessFile;
 import com.rmbank.supervision.model.Meta;
 import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.OrganVM;
+import com.rmbank.supervision.model.Role;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ConfigService;
 import com.rmbank.supervision.service.ItemProcessFileService;
@@ -39,6 +40,7 @@ import com.rmbank.supervision.service.ItemProcessService;
 import com.rmbank.supervision.service.ItemService;
 import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.SysLogService;
+import com.rmbank.supervision.service.UserRoleService;
 import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
@@ -59,6 +61,8 @@ public class EnforcementVisionController extends SystemAction {
 	private UserService userService;
 	@Resource
 	private OrganService organService;
+	@Resource
+	private UserRoleService userRoleService;
 	@Resource
 	private ConfigService configService;
 	@Resource
@@ -99,14 +103,17 @@ public class EnforcementVisionController extends SystemAction {
 		// 分页集合
 		List<Item> itemList = new ArrayList<Item>();
 		// 获取当前登录用户
-//		User loginUser = this.getLoginUser();
-		User loginUser =new User();
-		loginUser.setId(1);
+		User loginUser = this.getLoginUser();
+
 		// 获取当前用户对应的机构列表
-		List<Organ> userOrgList = userService.getUserOrgByUserId(loginUser
-				.getId());
+		List<Organ> userOrgList = userService.getUserOrgByUserId(loginUser.getId());
+				
 		// 获取当前用户对应的第一个机构
 		Organ userOrg = userOrgList.get(0);
+		
+		//获取当前用户对应的角色
+		List<Role> rolesByUserId = userRoleService.getRolesByUserId(loginUser.getId());
+		Role userRole = rolesByUserId.get(0);
 		try {
 			if (userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
@@ -129,32 +136,56 @@ public class EnforcementVisionController extends SystemAction {
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
 			}
+			
+			for (Item it : itemList) {
+				List<ItemProcess> itemprocessList = itemProcessService.getItemProcessItemId(it.getId());
+						
+				if (itemprocessList.size() > 0) {
+					ItemProcess lastItem = itemprocessList.get(itemprocessList
+							.size() - 1);
+					it.setLasgTag(lastItem.getContentTypeId());
+				}
+				//将登录机构的类型添加到项目中
+				it.setOrgType(userOrg.getOrgtype());
+				
+				//将登陆用户的角色id添加到项目中
+				it.setUserRole(userRole.getId());
+				
+				//将登陆用户的机构Id添加
+				it.setLogOrgId(userOrg.getId());
+				
+				//获取添加项目的机构类型和登录机构类型是否相同 
+				Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
+				if(itemOrg.getOrgtype()==userOrg.getOrgtype()){
+					it.setIsItemOrg("true");
+				}else {
+					it.setIsItemOrg("false");
+				}
+				
+				//解决办公室录入项目，监察室立项问题
+				
+				if(itemOrg.getOrgtype() == Constants.ORG_TYPE_2 && userRole.getId()==3 && userOrg.getOrgtype()== Constants.ORG_TYPE_4){
+					//如果录入项目的机构类型是分行办公室，用户角色是分行监察角色并且当前登录机构也是分行监察室
+					it.setIsProject("true");
+				}else if(itemOrg.getOrgtype() == Constants.ORG_TYPE_10 && userRole.getId()==4 && userOrg.getOrgtype()== Constants.ORG_TYPE_7){
+					//如果录入项目的机构类型是中支办公室，用户角色是中支监察角色并且当前登录机构也是中支监察室
+					it.setIsProject("true");
+				}else{
+					it.setIsProject("false");
+				}
+			}
 
+			String ip = IpUtil.getIpAddress(request);		
+			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了执法监察项目列表的查看", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+			
+			item.setTotalCount(totalCount);
+			dr.setData(item);
+			dr.setDatalist(itemList); 
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 
-		for (Item it : itemList) {
-			List<ItemProcess> itemprocessList = itemProcessService
-					.getItemProcessItemId(it.getId());
-			if (itemprocessList.size() > 0) {
-				ItemProcess lastItem = itemprocessList.get(itemprocessList
-						.size() - 1);
-				it.setLasgTag(lastItem.getContentTypeId());
-			}
-		}
-		// 通过request对象传值到前台
-		item.setTotalCount(totalCount);
-//		request.setAttribute("Item", item);
-//		request.setAttribute("userOrg", userOrg);
-//		request.setAttribute("itemList", itemList);
-
-		String ip = IpUtil.getIpAddress(request);		
-		logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了执法监察项目列表的查看", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 		
-		item.setTotalCount(totalCount);
-		dr.setData(item);
-		dr.setDatalist(itemList); 
     	return dr;
 	}
 
@@ -230,64 +261,7 @@ public class EnforcementVisionController extends SystemAction {
 		return js;
 	}
 
-	/**
-	 * 跳转到立项监察
-	 * 
-	 * @param id
-	 * @param req
-	 * @param res
-	 * @return
-	 */
-	@RequestMapping(value = "/enforceInfo.do")
-	@RequiresPermissions("vision/enforce/enforceInfo.do")
-	public String efficiencyInfo(
-			@RequestParam(value = "id", required = false) Integer id,// 项目id
-			HttpServletRequest request, HttpServletResponse response) {
-
-		Item item = itemService.selectByPrimaryKey(id);
-		// 获取机构
-		Organ organ = new Organ();
-		List<Organ> organList = organService.getOrganList(organ);
-		// 页面加载的机构
-		List<OrganVM> list = new ArrayList<OrganVM>();
-		OrganVM frvm = null;
-		for (Organ rc : organList) {
-			if (rc.getId() == 21 || rc.getId() == 20) {
-				frvm = new OrganVM();
-				List<Organ> itemList = new ArrayList<Organ>();// 用于当做OrganVM的itemList
-				frvm.setId(rc.getId());
-				frvm.setName(rc.getName());
-				String path =rc.getId()+".";//当前登录机构的子机构的path都以此开头
-				String substring=null;
-				for (Organ rc1 : organList) {
-					if(rc1.getPath().length()>path.length()){
-						substring=rc1.getPath().substring(0, path.length());
-					}
-					if (rc1.getPid() == rc.getId() && rc1.getSupervision() == 0) {
-						itemList.add(rc1);
-					}else if(path.equals(substring) && rc1.getSupervision() == 0){//添加孙子级节点	
-						itemList.add(rc1);								
-					}/*
-					 * else if(rc1.getId()==43 && rc1.getPid() == rc.getId()){
-					 * itemList.add(rc1); }
-					 */
-				}
-				frvm.setItemList(itemList);
-				list.add(frvm);
-			}
-		}
-		// 获取当前登录用户所属机构下的所有用户
-		User lgUser = this.getLoginUser();
-		List<User> byLgUser = userService.getUserListByLgUser(lgUser);
-		// 获取执法类型
-		List<Meta> meatListByKey = configService
-				.getMeatListByKey(Constants.META_LAWTYPE_KEY);
-		request.setAttribute("meatListByKey", meatListByKey);
-		request.setAttribute("byLgUser", byLgUser);
-		request.setAttribute("OrgList", list);
-		request.setAttribute("Item", item);
-		return "web/vision/enforce/enforceInfo";
-	}
+	
 
 	/**
 	 * 监察室进行执法监察立项操作
@@ -310,6 +284,11 @@ public class EnforcementVisionController extends SystemAction {
 			@RequestParam(value = "OrgId", required = false) Integer[] OrgIds,
 			HttpServletRequest request, HttpServletResponse response)
 			throws ParseException {
+		
+		HttpSession session = request.getSession();
+    	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
+		
+		
 		// 新建一个json对象 并赋初值
 		JsonResult<Item> js = new JsonResult<Item>();
 		js.setCode(new Integer(1));
@@ -318,7 +297,7 @@ public class EnforcementVisionController extends SystemAction {
 		// 获取当前登录用户
 		User u = this.getLoginUser();
 		//获取要立项的项目
-		Item item2 = itemService.selectByPrimaryKey(item.getId());
+		Item item2 = itemService.selectByPrimaryKey(ItemId);
 		try {
 			// 将前台传过来的String类型的时间转换为Date类型
 			if (end_time != null) {
@@ -328,7 +307,7 @@ public class EnforcementVisionController extends SystemAction {
 				item2.setStatus(1);
 				item2.setUuid(item.getUuid());			
 			}
-			if (item.getSuperItemType() == 61) {
+			if (item2.getSuperItemType() == 61) {
 				// 如果为综合执法，直接修改该项目
 				item2.setSupervisionOrgId(OrgIds[0]);
 				itemService.updateByPrimaryKeySelective(item2);
@@ -337,17 +316,17 @@ public class EnforcementVisionController extends SystemAction {
 				List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u.getId());					
 				ItemProcess itemProcess = new ItemProcess();
 				itemProcess.setUuid(item.getUuid());
-				itemProcess.setItemId(item.getId());
+				itemProcess.setItemId(item2.getId());
 				itemProcess.setDefined(false);
 				itemProcess.setContentTypeId(Constants.ENFORCE_VISION_1);// 监察室立项状态
 				itemProcess.setPreparerOrgId(userOrgIDs.get(0)); // 制单部门的ID
 				itemProcess.setOrgId(userOrgIDs.get(0));
-				itemProcess.setContent(content);
+				itemProcess.setContent(item.getName());
 				itemProcess.setPreparerId(u.getId());
 				itemProcess.setPreparerTime(new Date());
 				itemProcessService.insert(itemProcess);
 				
-			}else if(item.getSuperItemType() == 62){ 
+			}else if(item2.getSuperItemType() == 62){ 
 				//如果为单项执法，则需要根据勾选的机构数目来立项
 				List<Integer> itemIds= new ArrayList<Integer>();
 				//首先删除当前未立项的这条项目
@@ -385,7 +364,7 @@ public class EnforcementVisionController extends SystemAction {
 					itemProcess.setContentTypeId(Constants.ENFORCE_VISION_1);// 监察室立项状态
 					itemProcess.setPreparerOrgId(orgId); // 制单部门的ID
 					itemProcess.setOrgId(userOrgIDs.get(0));
-					itemProcess.setContent(content);
+					itemProcess.setContent(item.getName());
 					itemProcess.setPreparerId(u.getId());
 					itemProcess.setPreparerTime(new Date());
 					itemProcessService.insert(itemProcess);
@@ -418,14 +397,18 @@ public class EnforcementVisionController extends SystemAction {
 	@RequiresPermissions("vision/enforce/enforceFile.do")
 	public String branchFHFile(Item item, HttpServletRequest request,
 			HttpServletResponse response) {
+		
+		HttpSession session = request.getSession();
+    	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
+		
+		
 		int tag = item.getTag();
-		item = itemService.selectByPrimaryKey(item.getId());
+		item = itemService.selectByPrimaryKey(ItemId);
 		if (item.getPreparerTime() != null) {
-			item.setPreparerTimes(Constants.DATE_FORMAT.format(item
-					.getPreparerTime()));
+			item.setPreparerTimes(Constants.DATE_FORMAT.format(item.getPreparerTime()));	
 		}
-		List<ItemProcess> itemProcessList = itemProcessService
-				.getItemProcessItemId(item.getId());
+		List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(item.getId());
+
 
 		if (itemProcessList.size() > 0) {
 			for (ItemProcess ip : itemProcessList) {
@@ -533,6 +516,11 @@ public class EnforcementVisionController extends SystemAction {
 			@RequestParam(value="status" ,required=false) Integer status,
 			ItemProcess itemProcess, HttpServletRequest request,
 			HttpServletResponse response) throws ParseException {
+		
+		HttpSession session = request.getSession();
+    	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
+		
+		
 		// 新建一个json对象 并赋初值
 		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
 		// 获取当前登录用户
@@ -541,13 +529,14 @@ public class EnforcementVisionController extends SystemAction {
 		js.setMessage("保存项目信息失败!");
 		try {
 			// 获取当前用户所属的机构id，当做制单部门的ID
-			List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u
-					.getId());
+			List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u.getId());
+					
 			itemProcess.setPreparerOrgId(userOrgIDs.get(0)); // 制单部门的ID
 			itemProcess.setOrgId(userOrgIDs.get(0)); // 制单部门的ID
 			itemProcess.setPreparerId(u.getId());
 			itemProcess.setPreparerTime(new Date());
 			itemProcess.setDefined(false);
+			itemProcess.setItemId(ItemId);
 			if(tag==130){
 				itemProcess.setContentTypeId(Constants.ENFORCE_VISION_2);//被监察对象已经录入立项资料 
 			}else if(tag==131 && status==0){
