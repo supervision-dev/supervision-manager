@@ -22,7 +22,21 @@ h2{font-weight:normal;}
 #mainBody {width:100%;height:100%;position:absolute;z-index:-1; }
 .cloud {position:absolute;top:0px;left:0px;width:100%;height:100%;background:url(/supervision/source/images/cloud.png) no-repeat; z-index:1;opacity:0.5;}
 #cloud2 {z-index:2;}
-
+.button-action{ 
+	line-height: 16px;
+	padding:3px;
+	text-align: center;
+	font-weight: bold;
+	color: #fff;
+	text-shadow:1px 1px 1px #333;
+	margin:5px 0 5px 0;
+	border-radius: 5px; 
+	position: relative;
+	overflow: hidden; 
+	border:1px solid #dce1e6; 
+	background-color: #046dac;
+	cursor:pointer;
+}
  
 /*login*/
 .logintop{height:47px; position:absolute; top:0;  z-index:100; width:100%; background-color:rgb(56, 126, 169);} 
@@ -331,3 +345,35 @@ h2{font-weight:normal;}
 .seachform li label{padding-right:10px; float:left; line-height:32px;}
 .scinput{width:150px; height:32px; line-height:32px; border-top:solid 1px #a7b5bc; border-left:solid 1px #a7b5bc; border-right:solid 1px #ced9df; border-bottom:solid 1px #ced9df; background:url(/supervision/source/images/inputbg.gif) repeat-x; text-indent:10px;}
 .scbtn{width:85px;height:35px; background:url(/supervision/source/images/btnbg.png) no-repeat center; font-size:14px;font-weight:bold;color:#fff; cursor:pointer;border-radius:3px; behavior:url(js/pie.htc);}
+
+#value_table{ 
+	border:0px !important; 
+	width:100%; 
+}
+#value_table td{
+	border:0px !important;     
+	line-height: 20px !important;
+    height: 20px;
+}
+#value_table  td label{
+	 margin-left:15px; 
+	 font-size:16px;
+}
+#value_table  td strong{
+	 margin-left:15px; 
+	 font-size:16px;
+	 color:blue;
+}
+#value_table  td span{
+	display:inline-block;
+	 width:170px; 
+	 color:blue;
+	 font-size:16px;
+	 font-weight:bold;
+}
+#value_table  td input{
+	width:34px;height:20px !important;    min-height: 20px !important;text-align: center; 
+    border: 1px solid #bdb8b8;
+    border-radius: 1px;
+    background-color: #FFF;
+}

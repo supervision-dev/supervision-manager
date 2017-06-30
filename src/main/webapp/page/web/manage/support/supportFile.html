@@ -143,14 +143,64 @@ $(document).ready(function(){
      });
      $("#uploader_browse").removeAttr("style");
      $("#uploader_browse").attr("style","z-index: 1;font-size: 12px;font-weight: normal;");	
-
-  
-  	$(".sure").click(function(){
-	  	$("#confirm_tip").fadeOut(100);
-	});  
-	$('.tablelist tbody tr:odd').addClass('odd'); 
+ 	 loadItemInfo();
 });
- 
+function loadItemInfo(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/support/loadItemInfo.do",
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req != null){   	    	
+        		 if(req.resultItem != null){
+        		 	$("#lbl_name").text(req.resultItem.name);
+        		 	$("#lbl_supervisionType").text(req.resultItem.sType);
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
+        		 	$("#hid_itemid").val(req.resultItem.id);
+        		 }
+        		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
+        		 	var boj = req.resultItemProcess[0];
+        		 	if(boj != undefined && boj != null){
+        		 		$("#lbl_content").text(boj.content);
+        		 		if(boj.fileList != null && boj.fileList.length >0){
+        		 			var fHtml = "";
+        		 			for(var i = 0; i< boj.fileList.length; i++){
+        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a>";
+        		 			}
+        		 			$("#td_fileList").html(fHtml);
+        		 		}
+        		 	}
+        		 }
+        	}else{
+        		layer.alert(data.message);	        	
+        	} 
+       }
+	});
+}
+function downLoadFile(path,name){
+	var filePath = encodeURI(encodeURI(path));
+	var fileName = encodeURI(encodeURI(name));
+	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+} 
+function formatTime(str){
+	var oDate = new Date(str),  
+    oYear = oDate.getFullYear(),  
+    oMonth = oDate.getMonth()+1,  
+    oDay = oDate.getDate(),  
+    oHour = oDate.getHours(),  
+    oMin = oDate.getMinutes(),  
+    oSen = oDate.getSeconds(),  
+    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour);
+    return oTime;
+}
+//补0操作  
+function getzf(num){  
+    if(parseInt(num) < 10){  
+        num = '0'+num;  
+    }  
+    return num;  
+}  
 function returnPage(){
 		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
 			btn: ['确认','取消'] //按钮
@@ -165,7 +215,7 @@ function returnPage(){
 function ajaxPost(){
     $.ajax({
         type: "POST", //请求类型
-        url: "/supervision/vision/efficiency/jsonsetProjectById.do",
+        url: "/supervision/manage/support/jsonSaveFile.do",
         data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
         dataType:"json", //响应数据类型      
         success: function(data) {
@@ -174,7 +224,7 @@ function ajaxPost(){
 	        	if(uploader.files.length>0){
 	        		$("#uploader_start").click(); //上传文件
 	        	}else{
-	        		layer.confirm('立项成功！', {
+	        		layer.confirm('被监察对象上传资料成功，待中支监察室进行量化审核 ！', {
 						btn: ['确认'] //按钮
 					}, function(){//点击确认按钮调用
 						layer.close(layer.confirm());//关闭当前弹出层
@@ -222,47 +272,66 @@ function saveItem(obj){
     	<tr>
        		<td width="15%" align="right" >项目名称：</td> 
        		<td colspan="3">
+       			<label id="lbl_name"></label>
 				<input type="hidden" id="hid_uuid" name="uuid" />	
+				<input type="hidden" id="hid_itemid" name="itemId" />	
+				<input type="hidden" value="999" name="contentTypeId" />	
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:28px;">项目分类：</td>
+       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
+       			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right">立项时间：</td>
-       		<td width="20%;">
+       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="15%;">
+       			<label id="lbl_stTime"></label>
        		</td>
        		<td width="12%" align="right">完成时间：</td>
        		<td>
+       			<label id="lbl_edTime"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right">立项审批表、方案：</td>
+       		<td width="12%" align="right" style="height:55px;">立项审批表、方案：</td>
        		<td colspan="3">
+       			<label id="lbl_content"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right">附件列表：</td>
-       		<td colspan="3">
+       		<td width="12%" align="right" style="height:35px;">审批表、方案附件：</td>
+       		<td colspan="3" id="td_fileList">
        		</td>
        	</tr>
        	<tr>
-			<td width="12%" align="right" height="129px;">上传附件：</td>
+			<td width="12%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right" ></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
-	                </script>
+	                </script> 
 	                <div id="uploader" >
 	                </div>
 			 </td>	
 		</tr> 
        	<tr>
-			<td></td>
+			<td style="height:35px;"></td>
+			<td colspan="3">
+				 相关资料包括（监察报告、整改建议书、整改报告、监察决定书等）
+			</td>
+		</tr>
+       	<tr>
+       		<td width="12%" align="right">相关资料说明：</td>
+       		<td colspan="3">
+       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       		</td>
+       	</tr>
+       	<tr>
+			<td style="height:80px;"></td>
 			<td>
 				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span></td>
 			<td colspan="2" style="text-align:left;">

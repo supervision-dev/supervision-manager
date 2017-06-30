@@ -12,7 +12,7 @@ $(document).ready(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	getDataList(1);
-});
+}); 
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -24,21 +24,7 @@ function getDataList(pageNo){
        success: function(req) {
        		$("#tb_userList").html("");
        		var manageHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
-	       		manageHtml = "";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			manageHtml +="<tr>";
-				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    manageHtml +="<td>"+req.datalist[i].name+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].sType+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].showDate+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].preparerOrg+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].orgName+"</td>";  
-				    manageHtml +="<td>流程操作</td>";
-				    manageHtml +="<td>删除</td>";				    
-			        manageHtml +="</tr>";
-	       		}
-	       }
+       		
 	       if(req.data != null){
 	       		$("#i_totalcount").text(req.data.totalCount);
 	       		$("#i_pageNo").text(req.data.pageNo);
@@ -76,25 +62,107 @@ function getDataList(pageNo){
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
+	       		if(req.loginOrganRoleType != 43){
+	       			$("#div_toolbars").remove();
+	       		}
+	       }
+	       if(req.datalist != null && req.datalist.length >0){
+	       		manageHtml = "";
+	       		for(var i = 0;i<req.datalist.length;i++){
+	       			manageHtml +="<tr>";
+				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+				     if(req.datalist[i].name.length >8){
+				    	var names = req.datalist[i].name.substring(0,8)+"……"
+				    	manageHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
+				    }else{
+				    	manageHtml +="<td>"+req.datalist[i].name+"</td>";
+				    }
+				    manageHtml +="<td><img src=\"/supervision/source/images/t06.png\" title=\"查看\" style=\"width:15px;heigth:15px;cursor:pointer;\" onclick=\"showItem("+req.datalist[i].id+");\"  /></td>";
+				    manageHtml +="<td>"+req.datalist[i].sType+"</td>";
+				     if(req.datalist[i].showDate == null){
+				   		manageHtml +="<td></td>";
+				   	}else{
+				   		manageHtml +="<td title=\""+req.datalist[i].showDate+"\">"+req.datalist[i].showDate.substring(5,req.datalist[i].showDate.length)+"</td>";
+				   	}
+				    manageHtml +="<td>"+req.datalist[i].preparerOrg+"</td>";
+				    manageHtml +="<td>"+req.datalist[i].orgName+"</td>";  
+				    if(req.datalist[i].lasgTag ==51){
+				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(51,"+req.datalist[i].id+");\" class=\"button-action\">录入资料</button></td>";
+				    	}else{
+				    		manageHtml +="<td>资料上传中…</td>";
+				    	}
+				    }else if(req.datalist[i].lasgTag ==999){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(999,"+req.datalist[i].id+");\"  class=\"button-action\">量化项目</button></td>";
+				    	}else{
+				    		manageHtml +="<td>量化中…</td>";
+				    	}
+				    }else if(req.datalist[i].lasgTag ==998){
+				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(998,"+req.datalist[i].id+");\"  class=\"button-action\">继续录入资料</button></td>";
+				    	}else{
+				    		manageHtml +="<td>资料上传中…</td>";
+				    	}
+				    }else{
+				    	if(req.datalist[i].status == 4){
+				    		manageHtml +="<td>【已完成】</td>";
+				    	}else if(req.datalist[i].status == 5){
+				    		manageHtml +="<td style=\"color:red\">【逾期完成】</td>";
+				    	}else if(req.datalist[i].status == 9){
+				    		manageHtml +="<td style=\"color:red\">已删除</td>";
+				    	}else{
+				    		manageHtml +="<td></td>";
+				    	}
+				    }
+			        manageHtml +="</tr>";
+	       		}
 	       }
 	       $("#tb_userList").html(manageHtml);
 			$('.tablelist tbody tr:odd').addClass('odd');
+		  	$("#tb_userList input[type='checkbox']").click(function(){
+			  	$("#tb_userList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_item_id = this.value;
+			}); 
        }
 	});
 }
-function showAlertTip(type){ 
-	$("#showmessage").html("请选择要删除的项目！");
-	$("#confirm_tip").fadeIn(200); 
+var constants_item_id = 0;
+function showItem(id){
+	window.location.href = "/supervision/pageRoute/manage/support/supportView.do?id="+id;
 }
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
+function gotoNextFlow(currentTag,itemId){
+	if(currentTag == 51){
+		window.location.href = "/supervision/pageRoute/manage/support/supportFile.do?id="+itemId;
+	}else if(currentTag == 999){
+		window.location.href = "/supervision/pageRoute/manage/support/supportValue.do?id="+itemId;
+	}else if(currentTag == 998){
+		window.location.href = "/supervision/pageRoute/manage/support/supportReFile.do?id="+itemId;
+	}
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
-}
-function clearForm(){
-
+function showAlertTip(){ 
+	if(constants_item_id == 0){
+		$("#showmessage").html("请选择要删除的项目！");
+		$("#confirm_tip").fadeIn(200);
+	}else{
+		$("#delete_confirm_tip").fadeIn(200);
+	}
+} 
+function deleteItemAction(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/support/deleteItem.do?id="+constants_item_id,
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req.code==0){   	    	
+				$("#showmessage").html("项目删除成功！");
+				$("#confirm_tip").fadeIn(200);
+        	}else{
+        		layer.alert(data.message);	        	
+        	} 
+       }
+	});
 }
 </script>
 
@@ -114,11 +182,10 @@ function clearForm(){
     
     <div class="rightinfo">
     
-    <div class="tools">
-    
+    <div id="div_toolbars" class="tools">
     	<ul class="toolbar">
-        <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/support/supportInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+	        <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/support/supportInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
+	        <li onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
         </ul> 
     
     </div>
@@ -129,12 +196,12 @@ function clearForm(){
     		<tr>
 		        <th></th>
 		        <th>项目名称</th>
+				<th>查看</th>
 				<th>项目分类</th>
 				<th>立项时间</th>  
-				<th>立项单位（部门）</th>					
-				<th>完成单位（部门）</th>				
-				<th>操作1</th> 
-				<th>操作2</th>
+				<th>立项单位</th>					
+				<th>完成单位</th>				
+				<th>操作</th> 
 				
         	</tr>
         </thead>
@@ -173,33 +240,24 @@ function clearForm(){
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
     </div> 
-     <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+      
+    </div> 
+<div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
         
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认删除当前选择项目？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
       	</div>
         
         <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        	<input type="button" class="sure" value="确定" onclick="deleteItemAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
         </div> 
-    </div> 
-    </div> 
-
+    </div>
 </body>
 
 </html>

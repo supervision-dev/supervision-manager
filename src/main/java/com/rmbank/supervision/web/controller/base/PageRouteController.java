@@ -233,7 +233,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/support/supportFile.do")
     public ModelAndView supportFile( HttpServletRequest request, 
+    		@RequestParam(value="id", required = false) Integer id,
     		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("ZZZZItemId", id);
     	ModelAndView mv = new ModelAndView("web/manage/support/supportFile");
     	return mv;
     }
@@ -248,7 +251,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/support/supportValue.do")
     public ModelAndView supportValue( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletResponse response) throws UnsupportedEncodingException {   
+    	HttpSession session = request.getSession();
+    	session.setAttribute("ZZZZItemId", id);
     	ModelAndView mv = new ModelAndView("web/manage/support/supportValue");
     	return mv;
     }
@@ -263,7 +269,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/support/supportReFile.do")
     public ModelAndView supportReFile( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletResponse response) throws UnsupportedEncodingException {   
+    	HttpSession session = request.getSession();
+    	session.setAttribute("ZZZZItemId", id);
     	ModelAndView mv = new ModelAndView("web/manage/support/supportReFile");
     	return mv;
     }
@@ -277,7 +286,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/support/supportView.do")
     public ModelAndView supportView( HttpServletRequest request, 
-    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletResponse response) throws UnsupportedEncodingException {   
+    	HttpSession session = request.getSession();
+    	session.setAttribute("ZZZZItemId", id);
     	ModelAndView mv = new ModelAndView("web/manage/support/supportView");
     	return mv;
     }
