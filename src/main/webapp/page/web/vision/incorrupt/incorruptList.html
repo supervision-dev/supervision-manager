@@ -24,7 +24,7 @@ function getDataList(pageNo){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		var userRole=req.data.userRole;
-       		if(userRole == 14){
+       		if(userRole == 14 || userRole == 11){
 				$("#InputItemBtn").show();
 			}else{
 				$("#InputItemBtn").hide();

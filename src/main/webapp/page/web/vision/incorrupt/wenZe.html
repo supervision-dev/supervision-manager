@@ -572,6 +572,7 @@ function getDataList(pageNo){
 		        }
 	       }
 	       $("#tb_userList").html(itemHtml);
+	        $('.tablelist tbody tr:odd').addClass('odd');
        }
 	});
 }
@@ -625,7 +626,7 @@ function getDataList(pageNo){
         <tr>
        		<td width="12%" align="right">问责资料说明：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:60%;" name="content"></textarea>	
+       			<textarea rows="3" cols="5" style="width:785px; margin-left: 20px;" name="content"></textarea>	
 				<input type="hidden" id="hid_uuid" name="uuid" />	
 				<input type="hidden" name="OrgId" value="0">
        		</td>
@@ -633,8 +634,8 @@ function getDataList(pageNo){
        	<tr>
 			<td></td>
 			<td>
-				<span class="enter"  id="saveBtn" onclick="saveItem(this);">提交</span>
-				<span class="enter"  onclick="returnPage();">返回</span>
+				<span class="enterA"  id="saveBtn" onclick="saveItem(this);">提交</span>
+				<span class="enterA"  onclick="returnPage();">返回</span>
 			</td>
 		</tr>
     </table>

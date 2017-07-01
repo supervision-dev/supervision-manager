@@ -139,9 +139,16 @@ h2{font-weight:normal;}
 .tablelist tbody tr.odd{background:#f5f8fa;}
 .tablelist tbody tr:hover{background:#e5ebee;}
 .sort{padding-left:3px;}
+
+
 .itemTable{ width:100%;}
-.itemTable td{/* line-height:35px; font-weight:900;*/  text-indent:11px;  }
-.itemTable td input,textarea,select{border:solid 1px #c6c6c6;}
+.itemTable td{/* line-height:35px; font-weight:900;*/ line-height:35px; text-indent:11px; border-right: dotted 1px #c7c7c7;}
+.itemTable td input,textarea{border:solid 1px #c6c6c6; margin-left: 20px; }
+.enterA{float:left; margin-left:35px; margin-top:20px;:block; width:74px;height:30px;color:#fff;background:#3eafe0;font-weight:bold; border-radius:2px; text-align:center;line-height:30px; cursor:pointer;}
+.enterA:hover{color:#fff; background:#d98c1d;}
+.itemTable td label {float: left;}
+.itemTable td label input{ margin-top: -3px;}
+
 /*page*/
 .pagin{position:relative;margin-top:10px;padding:0 12px;}
 .pagin .blue{color:#056dae;font-style:normal;}
