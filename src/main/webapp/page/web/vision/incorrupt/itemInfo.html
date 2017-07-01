@@ -273,11 +273,7 @@ function returnPage(){
     
     <div class="tools">
     
-    	
-    	
-    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
-    		
-    	</div> -->
+
     </div>
     
     <form id="itemInfoForm" method="post">	   
@@ -286,7 +282,7 @@ function returnPage(){
     	<tr>
        		<td width="15%" align="right">项目名称：</td> 
        		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width:80%;height:28px;"/> 
+       			<input id="itemName" name="name" type="text" value="" style="width:60%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
        		</td>
        	</tr>
@@ -295,7 +291,7 @@ function returnPage(){
        	<tr>
        		<td width="12%" align="right">项目类别：</td>
        		<td>
-       			<select id="superItemType" name="superItemType" style="width:152px;height:28px;">						
+       			<select id="superItemType" name="superItemType" style="width:30%;height:32px; margin-left: 20px;">						
 					<option value="56">重大问题决策</option>
 					<option value="57">重要干部任免</option>
 					<option value="58">重大项目投资决策</option>	
@@ -308,8 +304,8 @@ function returnPage(){
        	<tr>
 			<td></td>
 			<td>
-				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span>
-				<span class="enter"  onclick="returnPage();" style="float:left; margin-left:15px;" >返回</span>
+				<span class="enterA"  id="saveBtn" onclick="saveItem(this);" >提交</span>
+				<span class="enterA"  onclick="returnPage();">返回</span>
 			</td>
 		</tr>
     </table>
