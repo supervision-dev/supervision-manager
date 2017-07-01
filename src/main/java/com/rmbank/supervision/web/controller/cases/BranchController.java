@@ -461,7 +461,7 @@ public class BranchController extends SystemAction {
 		Item item = new Item();
 		List<ItemProcess> processList = new ArrayList<ItemProcess>();
 		try { 
-	    	Integer sessionItemId =(Integer)request.getSession().getAttribute("FHZZItemId");
+	    	Integer sessionItemId =(Integer)request.getSession().getAttribute("FHFHItemId");
 	    	if(sessionItemId != null){
 	    		item = itemService.selectByPrimaryKey(sessionItemId);
 	    		if(item != null){

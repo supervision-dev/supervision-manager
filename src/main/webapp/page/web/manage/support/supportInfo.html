@@ -478,7 +478,7 @@ function saveSelectOrg(obj){
        	<tr>
        		<td width="12%" align="right" style="height:28px;">项目分类：</td>
        		<td colspan="3">
-       			<select id="slt_itemType" name="supervisionTypeId" class="dfinput" style="margin-left:-10px;">
+       			<select id="slt_itemType" name="supervisionTypeId" class="dfinput" style="margin-left:10px;">
        				<option value="">--请选择项目分类--</option>
 				</select>				
        		</td>
@@ -496,19 +496,19 @@ function saveSelectOrg(obj){
        	<tr>
        		<td width="12%" align="right">立项审批表、方案：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       			<textarea rows="3" cols="5" style="width:80%;height:58px;margin-left:20px;" name="content"></textarea>			
        		</td>
        	</tr>
        	<tr>
 			<td width="12%" align="right" height="129px;">上传附件：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" ></div>
+				 <div id="themeswitcher" class="pull-right" style="margin-left:10px;" ></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script>
-	                <div id="uploader" >
+	                <div id="uploader"  style="margin-left:10px;">
 	                </div>
 			 </td>	
 		</tr> 

@@ -167,6 +167,24 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHList");
     	return mv;
     }
+
+    /**
+     * 分行立项分行完成查看页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchFHView.do")
+    public ModelAndView branchFHView( HttpServletRequest request,  
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("FHFHItemId", id); 
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHView");
+    	return mv;
+    }
     
     /**
      * 分行立项中支完成列表
