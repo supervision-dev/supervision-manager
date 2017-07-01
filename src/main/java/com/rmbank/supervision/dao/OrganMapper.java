@@ -23,7 +23,7 @@ public interface OrganMapper {
     
     List<Organ> getOrganListByPid(Organ organ);
     
-    int getOrganCount(Organ organ);
+    int getOrganCount(Organ organ); 
 
 	List<Organ> getOrganByPId(Organ organ);
 
@@ -38,5 +38,7 @@ public interface OrganMapper {
 	List<Organ> getUserOrgByUserId(Integer id);
 
 	Organ getOrganByPidAndName(@Param("pid") Integer pid, @Param("orgName")String orgName);
+
+	List<Organ> getOrganByPIdAndPType(Organ organ);
 
 }

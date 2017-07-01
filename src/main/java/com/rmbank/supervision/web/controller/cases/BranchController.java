@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.BaseItemResult;
 import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
@@ -34,6 +35,7 @@ import com.rmbank.supervision.model.GradeScheme;
 import com.rmbank.supervision.model.Item;
 import com.rmbank.supervision.model.ItemProcess;
 import com.rmbank.supervision.model.ItemProcessFile;
+import com.rmbank.supervision.model.ItemProcessGrade;
 import com.rmbank.supervision.model.Meta;
 import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.OrganVM;
@@ -156,7 +158,7 @@ public class BranchController extends SystemAction {
 	
 	
 	/**
-	 * 分行立项中支完成列表
+	 * 分行立项分行立项分行完成完成列表
 	 * @param gradeScheme
 	 * @param request
 	 * @param response
@@ -191,6 +193,7 @@ public class BranchController extends SystemAction {
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Integer logUserOrg = userOrgByUserId.get(0).getId(); //当前登录用户所属的机构ID
 		Organ organ = userOrgByUserId.get(0);
+		item.setLogOrgId(logUserOrg);
 		//获取项目列表,根据不同的机构类型加载不同的项目
 		List<Item> itemList =null; 
 		if(organ.getOrgtype()==Constants.ORG_TYPE_1 ||
@@ -198,7 +201,7 @@ public class BranchController extends SystemAction {
 					organ.getOrgtype()==Constants.ORG_TYPE_3 ||
 						organ.getOrgtype()==Constants.ORG_TYPE_4 ||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
-			//分行立项中支完成
+			//分行立项分行立项分行完成完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
 			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID);    //立项机构
@@ -207,7 +210,7 @@ public class BranchController extends SystemAction {
 			totalCount=itemService.getItemCountByFHLXZZWCALL(item);
 			item.setTotalCount(totalCount);
 		}else{
-			//分行立项中支完成
+			//分行立项分行立项分行完成完成
 			item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 			item.setSupervisionOrgId(logUserOrg); //完成机构
 			item.setPreparerOrgId(Constants.BRANCH_INPUTITEM_ORGID);    //立项机构
@@ -222,11 +225,277 @@ public class BranchController extends SystemAction {
 			Date preparerTime = it.getPreparerTime();
 			String format = formatter.format(preparerTime);
 			it.setShowDate(format);
+			List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(it.getId());
+			if(itemProcessList.size()>0){
+				ItemProcess ip = itemProcessList.get(itemProcessList.size() - 1);
+				it.setLasgTag(ip.getContentTypeId());
+			} 
 		}
 		
 		item.setTotalCount(totalCount);
+		dr.setLoginOrganRoleType(organ.getOrgtype());
 		dr.setData(item);
 		dr.setDatalist(itemList); 
     	return dr;
     }
+	
+
+	/**
+	 * 加载所有项目类型
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadItemType.do")
+	public List<Meta> loadItemType( 
+			HttpServletRequest request, HttpServletResponse response) {
+		List<Meta> configList = new ArrayList<Meta>();
+		try { 
+			configList = configService.getMeatListByKey("PROJECT");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return configList;
+	}  
+
+	
+
+	/**
+	 * 加载机构的树
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadOrganTreeListByType.do")
+	public List<Organ> getOrganList(
+			@RequestParam(value = "ptype", required = false) Integer pType,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		Organ organ = new Organ();
+		if(pType == 0){
+			organ.setPid(0);
+			organ.setOrgtype(1);
+		}else{
+			organ.setPid(0);
+			organ.setOrgtype(0);
+		}
+		//获取用户所属的机构  
+		List<Organ> list = organService.getOrganByPIdAndPType(organ);	 
+		return list;// json.toString();
+	} 
+
+	/***********************************/
+	/************分行立项分行立项分行完成完成逻辑  开始*********/
+	/***********************************/
+
+	/**
+	 * 分行立项分行立项分行完成完成保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateItem.do")
+	public JsonResult<Item> jsonSaveOrUpdateItem( 
+			Item item,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		JsonResult<Item> js = new JsonResult<Item>();
+		js.setCode(1);
+		js.setMessage("保存分行立项分行完成立项失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		List<Integer> superVisionOrgId = new ArrayList<Integer>();
+		try { 
+			if(item != null){
+				if(StringUtil.isEmpty(item.getPreparerTimes())){
+					js.setMessage("请选择立项时间");
+					return js;
+				}else{
+					item.setPreparerTime(Constants.DATE_FORMAT1.parse(item.getPreparerTimes()));
+				}
+				if(StringUtil.isEmpty(item.getEndTimes())){
+					js.setMessage("请选择规定完成时间");
+					return js;
+				}else{
+					item.setEndTime(Constants.DATE_FORMAT1.parse(item.getEndTimes()));
+				}
+				if(StringUtil.isEmpty(item.getSupervisionOrgIds())){
+					js.setMessage("请选择被监察对象");
+					return js;
+				}else{
+					String[] ids = item.getSupervisionOrgIds().split(",");
+					for(String id :ids){
+						if(!StringUtil.isEmpty(id)){
+							superVisionOrgId.add(Integer.parseInt(id));
+						}
+					}
+					if(superVisionOrgId.size() == 0){
+						js.setMessage("请选择被监察对象");
+						return js;
+					}
+				}
+				item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
+				item.setPid(0); //主任务节点的ID
+		    	item.setStageIndex(new Byte("0")); //工作阶段排序   	
+		    	item.setSupervisionUserId(0);
+		    	item.setPreparerOrgId(organ.getId());
+		    	item.setPreparerId(loginUser.getId());
+		    	item.setIsStept(0);
+		    	item.setStatus(1);
+		    	item.setSuperItemType(null); 
+		    	item.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ);
+				itemService.saveOrUpdateItemList(superVisionOrgId,item);
+				String ip = IpUtil.getIpAddress(request);		
+				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，创建了分行立项分行完成项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+				js.setCode(0);
+				js.setMessage("保存分行立项分行完成立项成功");
+			}else{
+				js.setMessage("保存分行立项分行完成立项失败,传入对象为空");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			js.setMessage("保存分行立项分行完成立项出现异常");
+		}
+		return js;
+	} 
+
+	/**
+	 * 加载所有项目类型明细
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadItemInfo.do")
+	public BaseItemResult loadItemInfo(   
+			HttpServletRequest request, HttpServletResponse response) { 
+		BaseItemResult br = new BaseItemResult();
+		Item item = new Item();
+		List<ItemProcess> processList = new ArrayList<ItemProcess>();
+		try { 
+	    	Integer sessionItemId =(Integer)request.getSession().getAttribute("FHZZItemId");
+	    	if(sessionItemId != null){
+	    		item = itemService.selectByPrimaryKey(sessionItemId);
+	    		if(item != null){
+	    			br.setResultItem(item);
+	    		}
+	    		processList = itemProcessService.getItemProcessItemId(sessionItemId);
+	    		if(processList != null && processList.size()>0){
+	    			for(ItemProcess itp: processList){
+	    				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
+	    				fileList = itemProcessFileService.getFileListByItemId(itp.getId());
+	    				itp.setFileList(fileList);  
+	    			}
+	    			br.setResultItemProcess(processList);
+	    		}
+	    	}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+		}
+		return br;
+	}
+	
+	/**
+	 * 加载所有项目类型
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveFHZZFile.do")
+	public JsonResult<ItemProcess> jsonSaveFile( 
+			ItemProcess itemProcess,
+			HttpServletRequest request, HttpServletResponse response) { 
+		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
+		js.setCode(1);
+		js.setMessage("被监察对象上传文件失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		try { 
+			if(itemProcess != null && itemProcess.getItemId() != null && itemProcess.getItemId()>0){
+				Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+				if(item != null){
+					itemProcess.setId(0);
+					itemProcess.setDefined(false);
+					itemProcess.setOrgId(organ.getId());
+					itemProcess.setPreparerOrgId(organ.getId());
+					itemProcess.setPreparerId(loginUser.getId());
+					itemProcess.setPreparerTime(new Date());
+					itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ_OVER);
+					itemProcessService.insertSelective(itemProcess);
+				 
+					if(item.getStatus() == 3){
+						item.setStatus(5);
+					}else{
+						item.setStatus(4);
+					} 
+					itemService.updateByPrimaryKeySelective(item);
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的监察资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(0);
+					js.setMessage("被监察对象上传文件成功,当前项目完结");
+					
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+		}
+		return js;
+	}
+
+
+	/**
+	 * 删除项目
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/deleteItem.do")
+	public JsonResult<Item> deleteItem(  
+    		@RequestParam(value="id", required = false) Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		JsonResult<Item> js = new JsonResult<Item>();
+		js.setCode(1);
+		js.setMessage("删除项目失败"); 
+		User loginUser = this.getLoginUser();
+		try { 
+			 Item item = itemService.selectByPrimaryKey(id);
+			 if(item != null){
+				item.setStatus(9);
+				itemService.updateByPrimaryKeySelective(item);
+				String ip = IpUtil.getIpAddress(request);		
+				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除分行立项分行完成项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+				js.setCode(0);
+				js.setMessage("删除项目成功"); 
+			 }
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			js.setMessage("删除项目出现异常");
+		}
+		return js;
+	}  
+	
+
+	/***********************************/
+	/************分行立项分行立项分行完成完成逻辑 结束*********/
+	/***********************************/
 }

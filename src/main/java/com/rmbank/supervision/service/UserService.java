@@ -48,4 +48,6 @@ public interface UserService {
 
 	List<User> getUserListByLgUser(User lgUser);
 
+	void updateByPrimaryKeySelective(User user);
+
 }

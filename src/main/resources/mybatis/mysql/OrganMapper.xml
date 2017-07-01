@@ -170,6 +170,9 @@
 		<if test="pid != null">
 			and org.pid=#{pid,jdbcType=INTEGER}
 		</if>
+		<if test="orgtype != null">
+			and org.org_type=#{orgtype,jdbcType=INTEGER}
+		</if>
 		<if test="searchName != null and searchName != ''">
 			and (org.name like
 			CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -206,6 +209,13 @@
 	</select>
 	
 	<select id="getOrganByPId" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
+		select
+		<include refid="Query_Column_List" />, 
+			(select count(*) from t_org as o where o.pid = org.id ) as childrenCount
+		<include refid="sql_query" /> 
+	</select> 
+	
+	<select id="getOrganByPIdAndPType" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
 		select
 		<include refid="Query_Column_List" />, 
 			(select count(*) from t_org as o where o.pid = org.id ) as childrenCount

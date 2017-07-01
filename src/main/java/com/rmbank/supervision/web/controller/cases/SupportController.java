@@ -184,7 +184,7 @@ public class SupportController extends SystemAction {
 
 
 	/**
-	 * 加载所有项目类型
+	 * 中支立项保存
 	 * 
 	 * @param pid
 	 * @param request
@@ -281,7 +281,7 @@ public class SupportController extends SystemAction {
 				item.setStatus(9);
 				itemService.updateByPrimaryKeySelective(item);
 				String ip = IpUtil.getIpAddress(request);		
-				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除支立项项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除中支立项项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 				js.setCode(0);
 				js.setMessage("删除项目成功"); 
 			 }

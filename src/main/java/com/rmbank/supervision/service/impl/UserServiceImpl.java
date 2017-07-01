@@ -313,6 +313,12 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		return userMapper.getUserListByLgUser(lgUser);
 	}
+
+	@Override
+	public void updateByPrimaryKeySelective(User user) {
+		// TODO Auto-generated method stub
+		userMapper.updateByPrimaryKeySelective(user);
+	}
 	
 	
 }

@@ -46,6 +46,9 @@ public class User extends Page{
     private Integer postId;
     
     private Integer roleId;
+    
+    private Integer isChangePwd;
+    
 
     public Integer getId() {
         return id;
@@ -213,5 +216,13 @@ public class User extends Page{
 
 	public void setRoleId(Integer roleId) {
 		this.roleId = roleId;
+	}
+
+	public Integer getIsChangePwd() {
+		return isChangePwd;
+	}
+
+	public void setIsChangePwd(Integer isChangePwd) {
+		this.isChangePwd = isChangePwd;
 	}
 }

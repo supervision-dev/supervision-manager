@@ -135,6 +135,38 @@ public class PageRouteController extends SystemAction {
     	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHList");
     	return mv;
     }
+    /**
+     * 分行立项分行完成新建项目
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchFHInfo.do")
+    public ModelAndView branchFHInfo( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHInfo");
+    	return mv;
+    }
+    /**
+     * 分行立项分行完成流程节点操作
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchNextFlow.do")
+    public ModelAndView branchNextFlow( HttpServletRequest request, 
+    		@RequestParam(value="id", required = false) Integer id,
+    		@RequestParam(value="tag", required = false) Integer currentTag,
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("FHFHItemId", id); 
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHList");
+    	return mv;
+    }
     
     /**
      * 分行立项中支完成列表
@@ -174,7 +206,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/branch/branchZZFile.do")
     public ModelAndView branchZZFile( HttpServletRequest request, 
+    		@RequestParam(value="id", required = false) Integer id,
     		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("FHZZItemId", id); 
     	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZFile");
     	return mv;
     }
@@ -188,7 +223,10 @@ public class PageRouteController extends SystemAction {
      */
     @RequestMapping(value = "/manage/branch/branchZZView.do")
     public ModelAndView branchZZView( HttpServletRequest request, 
+    		@RequestParam(value="id", required = false) Integer id,
     		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("FHZZItemId", id);
     	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZView");
     	return mv;
     }

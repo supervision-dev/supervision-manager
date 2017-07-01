@@ -114,6 +114,7 @@ public class Constants
 
   //分行立项，中支完成项目进行流程
   public static final Integer CONTENT_TYPE_ID_FHZZ= 54;  
+  public static final Integer CONTENT_TYPE_ID_FHZZ_OVER= 55;  
 
   //中支立项，中支完成项目进行流程
   public static final Integer CONTENT_TYPE_ID_ZZZZ= 51; 

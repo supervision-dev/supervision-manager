@@ -7,8 +7,34 @@
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 <script language="javascript">
 $(function(){	
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
 	 loadSessionResource();
+	loadLoginUserInfo();
 });
+function loadLoginUserInfo(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadLoginUserInfo.do", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	        if(req != null){
+	        	$("#lbl_orgName").text(req.orgName);
+	        	$("#lbl_userName").text(req.name);
+	        	$("#hid_loginUser_id").val(req.id);
+	        	if(req.isChangePwd == 1){
+	        		isChangePwd = true;
+	        	}else{
+	        		changePwd();
+	        	}
+	        }else{
+				parent.window.location.href = "/supervision/logout.do";
+	        }
+        }
+      });
+}
+var isChangePwd = false;
 function loadSessionResource(){
 	$.ajax({  
        type: "POST", //请求类型
@@ -61,15 +87,89 @@ function loadSessionResource(){
     });  
 };
 function gotoModel(urlkey){
+	if(isChangePwd){
+		$.ajax({ 
+	       type: "POST", //请求类型
+	       url: "/supervision/createSingleSession.do?key="+urlkey,
+	       dataType:"json", //响应数据类型    
+	       async:false,
+	       success: function(req) {  
+	       }
+	    });
+		window.location.href = "/supervision/index.do";
+	}else{
+		changePwd();
+	}
+}
+function changePwd(){
+	$("#add_tip").fadeIn(200);
+}
+function clearForm(){
+	$(".addtipinfo .dfinput").val();
+}
+function changUserPwdAction(){
+	var obj = {};
+	obj.id = $("#hid_loginUser_id").val();
+	var oldPwd = $("#ipt_oldPwd").val(); 
+	if(oldPwd == "" || oldPwd.length== 0){
+		$("#showmessage").html("请输入用户原始登录密码！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(oldPwd.length >22 || oldPwd.length <6 ){
+		$("#showmessage").html("用户原始登录密码长度为6至22位之间的字母和数字构成！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.oldPassword = oldPwd;
+	var newPwd = $("#ipt_newPwd").val(); 
+	if(newPwd == "" || newPwd.length== 0){
+		$("#showmessage").html("请输入用户新密码！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(newPwd.length >22 || newPwd.length <6 ){
+		$("#showmessage").html("用户新密码长度为6至22位之间的字母和数字构成！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(oldPwd == newPwd){
+		$("#showmessage").html("用户新密码不能与原密码相同！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.newPassword = newPwd;
+	var rePwd = $("#ipt_rePwd").val();
+	if(rePwd == "" || rePwd.length== 0){
+		$("#showmessage").html("请输入确认密码！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	if(newPwd != rePwd){
+		$("#showmessage").html("两次密码不一致，请重新输入！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}
+	obj.rePassword = rePwd;
+	$("#add_tip").fadeOut(200);
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/createSingleSession.do?key="+urlkey,
+       url: "/supervision/changeUserPwd.do?s="+Math.random(),
        dataType:"json", //响应数据类型    
-       async:false,
-       success: function(req) {  
+       data:obj,
+       success: function(req) { 
+       		if(req != null){
+       			if(req.code == 0){
+					isChangePwd = true;
+       			} 
+				$("#showmessage").html(req.message);
+				$("#confirm_tip").fadeIn(200);
+       		}else{
+				$("#showmessage").html("修改当前登录用户密码失败，请联系管理员！");
+				$("#confirm_tip").fadeIn(200);
+       		} 
        }
     });
-	window.location.href = "/supervision/index.do";
 }
 </script> 
 </head>
@@ -83,6 +183,7 @@ function gotoModel(urlkey){
     <li><a href="#">模块选择</a></li> 
     </ul> 
     <ul class="placeul" style="float:right;"> 
+    <li><a onclick="changePwd();">修改密码</a></li> 
     <li><a href="/supervision/logout.do">退出</a></li> 
     </ul>
     </div>
@@ -94,6 +195,60 @@ function gotoModel(urlkey){
     </div>
     
 
+     <div class="addtip" id="add_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="changetipinfo"> 
+	       <div style=" width:99%;">	
+	        	<form>
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:160px;" id="sasd"> 
+	        			<tr>
+	        				<td style="height:30px;width:110px; text-align:right;">当前登录机构：</td>
+	        				<td><label id="lbl_orgName" style="margin-left:10px;"></label></td>
+	        			</tr> 
+	        			<tr>
+	        				<td style="height:30px; text-align:right;">当前登录用户：</td>
+	        				<td><label id="lbl_userName" style="margin-left:10px;"></label><input type="hidden" id="hid_loginUser_id" /></td>
+	        			</tr> 
+	        			<tr>
+		        			<td style="height:40px; text-align:right;">原密码：</td>
+		        			<td><input type="password" class="dfinput"  id="ipt_oldPwd" /></td>
+		        		</tr> 
+	        			<tr>
+		        			<td style="height:40px; text-align:right;">新密码：</td>
+		        			<td><input type="password" class="dfinput"  id="ipt_newPwd" /></td>
+		        		</tr> 
+	        			<tr>
+		        			<td style="height:40px; text-align:right;">确认密码：</td>
+		        			<td><input type="password" class="dfinput"  id="ipt_rePwd" /></td>
+		        		</tr> 
+	        			<tr><td colspan="2"></td></tr>
+	        		</table>
+	        	</form>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="saveBtn" value="保存" onclick="changUserPwdAction();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
+        </div> 
+    </div> 
+    
+    
+    <div class="tip" id="confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage"></p> 
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button"  class="sure" value="确定" /> 
+        </div>  
+    </div> 
 </body>
 
 </html>

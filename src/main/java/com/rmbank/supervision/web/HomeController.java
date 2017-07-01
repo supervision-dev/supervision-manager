@@ -8,6 +8,7 @@ import javax.servlet.http.HttpSession;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.ReturnResult;
 import com.rmbank.supervision.common.utils.Constants;
+import com.rmbank.supervision.common.utils.EndecryptUtils;
 import com.rmbank.supervision.common.utils.IpUtil;
 import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.FunctionMenu;
@@ -24,6 +25,7 @@ import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
  
+
 
 
 
@@ -79,7 +81,7 @@ public class HomeController extends SystemAction {
     public ModelAndView homePage( 
 			HttpServletRequest request, HttpServletResponse response){  
         //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
-        ModelAndView mav = new ModelAndView("login"); 
+        ModelAndView mav = new ModelAndView("masterpage"); 
         return mav;
 	}
 
@@ -351,7 +353,7 @@ public class HomeController extends SystemAction {
 		if (subject.isAuthenticated()) {
 			subject.logout(); // session 会销毁，在SessionListener监听session销毁，清理权限缓存 
 		}
-		ModelAndView mav = new ModelAndView("login"); 
+		ModelAndView mav = new ModelAndView("masterpage"); 
         return mav;
     }
     @ResponseBody
@@ -400,7 +402,59 @@ public class HomeController extends SystemAction {
 		}
         return loginUser;
     }
-    
-    
+	@ResponseBody
+    @RequestMapping({"/changeUserPwd.do"})
+    public JsonResult<User> changeUserPwd( 
+    		User user,
+            HttpServletRequest request, HttpServletResponse response) {
+        JsonResult<User> js = new JsonResult<User>();
+        js.setCode(1);
+        js.setMessage("修改当前登录用户密码失败");
+        try{
+        	if(StringUtil.isEmpty(user.getOldPassword())) {
+                js.setMessage("修改当前登录用户密码失败,原密码不能为空");
+                return js;
+            }
+            if(StringUtil.isEmpty(user.getNewPassword())) {
+                js.setMessage("修改当前登录用户密码失败,新密码不能为空");
+                return js;
+            }
+            if(user.getOldPassword().equals(user.getNewPassword())){
+                js.setMessage("修改当前登录用户密码失败,新密码不能与原密码相同");
+                return js;
+            }
+            if(StringUtil.isEmpty(user.getRePassword())) {
+                js.setMessage("修改当前登录用户密码失败,确认密码不能为空");
+                return js;
+            }
+            if(!user.getRePassword().equals(user.getNewPassword())) {
+                js.setMessage("修改当前登录用户密码失败,两次密码不一致，请确认重新输入");
+                return js;
+            }
+            /*检验原密码是否正确*/
+            User user2 = userService.getUserById(user.getId());
+            ReturnResult<User> res = userService.login(user2.getAccount(), user.getOldPassword(), false);
+            if (res.getCode().intValue() == ReturnResult.SUCCESS) {
+                /*新密码加密*/
+                User u = EndecryptUtils.md5Password(user2.getAccount(), user.getNewPassword());
+                if (u != null) {
+                    user.setPwd(u.getNewPassword());
+                    user.setSalt(u.getSalt());
+                    userService.updateByPrimaryKeySelective(user);
+                    js.setCode(0);
+                    js.setMessage("修改密码成功！");
+                }else{
+                	js.setMessage("修改当前登录用户密码失败,使用新密码创建密钥的时候出错，请联系管理员");
+                }
+            }else{
+                js.setMessage("修改当前登录用户密码失败,原密码错误");
+            } 
+        }catch(Exception ex){
+        	ex.printStackTrace();
+        	js.setMessage("修改当前登录用户密码发生异常");
+        }
+        return js;
+    }
+	
     
 }

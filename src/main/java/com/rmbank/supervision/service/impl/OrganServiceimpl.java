@@ -84,6 +84,11 @@ public class OrganServiceimpl implements OrganService {
 	}
 
 	@Override
+	public List<Organ> getOrganByPIdAndPType(Organ organ) {
+		// TODO Auto-generated method stub
+		return organMapper.getOrganByPIdAndPType(organ);
+	}
+	@Override
 	public List<Organ> getOrgsByUserId(Integer id) {
 		// TODO Auto-generated method stub
 		return userOrganMapper.getOrgsByUserId(id);
@@ -155,7 +160,7 @@ public class OrganServiceimpl implements OrganService {
 		// TODO Auto-generated method stub
 		return organMapper.getOrganByPidAndName(pid,orgName);
 	}
-
+ 
 	
 	/*
 	 * 自己@Override

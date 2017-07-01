@@ -89,6 +89,8 @@ public interface OrganService {
 	 */
 	Organ getOrganByPidAndName(Integer pid, String orgName);
 
+	List<Organ> getOrganByPIdAndPType(Organ organ);
+
 	
     
 

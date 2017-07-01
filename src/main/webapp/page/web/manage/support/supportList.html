@@ -22,6 +22,9 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		if(req != null && req.loginOrganRoleType != 43){
+       			$("#div_toolbars").remove();
+       		}
        		$("#tb_userList").html("");
        		var manageHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
        		
@@ -62,9 +65,6 @@ function getDataList(pageNo){
 	       		}
 	       		
 	       		$("#ul_pageList").html(ulHtml);
-	       		if(req.loginOrganRoleType != 43){
-	       			$("#div_toolbars").remove();
-	       		}
 	       }
 	       if(req.datalist != null && req.datalist.length >0){
 	       		manageHtml = "";
@@ -150,6 +150,7 @@ function showAlertTip(){
 	}
 } 
 function deleteItemAction(){
+		$("#delete_confirm_tip").fadeOut(200);
 	$.ajax({ 
        type: "POST", //请求类型
        url: "/supervision/manage/support/deleteItem.do?id="+constants_item_id,
@@ -158,6 +159,7 @@ function deleteItemAction(){
        		if(req.code==0){   	    	
 				$("#showmessage").html("项目删除成功！");
 				$("#confirm_tip").fadeIn(200);
+				getDataList(1);
         	}else{
         		layer.alert(data.message);	        	
         	} 

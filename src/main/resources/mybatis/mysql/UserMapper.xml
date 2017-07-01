@@ -11,9 +11,10 @@
     <result column="orgId" property="orgId" jdbcType="INTEGER" />
     <result column="roleId" property="roleId" jdbcType="INTEGER" />
     <result column="postId" property="postId" jdbcType="INTEGER" />
+    <result column="isChangePwd" property="isChangePwd" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name,account, pwd, salt, used
+    id, name,account, pwd, salt, used,isChangePwd
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -38,9 +39,9 @@
   </delete>
   <insert id="insert" parameterType="com.rmbank.supervision.model.User" useGeneratedKeys="true" keyProperty="id">
     insert into t_user (id, name, account,pwd, 
-      salt, used)
+      salt, used,isChangePwd)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{pwd,jdbcType=VARCHAR}, 
-      #{salt,jdbcType=VARCHAR}, #{used,jdbcType=INTEGER})
+      #{salt,jdbcType=VARCHAR}, #{used,jdbcType=INTEGER}, #{isChangePwd,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.rmbank.supervision.model.User" >
     insert into t_user
@@ -63,6 +64,9 @@
       <if test="used != null" >
         used,
       </if>
+      <if test="isChangePwd != null" >
+        isChangePwd,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -82,6 +86,9 @@
       </if>
       <if test="used != null" >
         #{used,jdbcType=INTEGER},
+      </if>
+      <if test="isChangePwd != null" >
+        #{isChangePwd,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -103,6 +110,9 @@
       <if test="used != null" >
         used = #{used,jdbcType=INTEGER},
       </if>
+      <if test="isChangePwd != null" >
+        isChangePwd = #{isChangePwd,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -112,7 +122,8 @@
     name = #{name,jdbcType=VARCHAR},
       pwd = #{pwd,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
-      used = #{used,jdbcType=INTEGER}
+      used = #{used,jdbcType=INTEGER},
+      isChangePwd = #{isChangePwd,jdbcType=INTEGER}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
