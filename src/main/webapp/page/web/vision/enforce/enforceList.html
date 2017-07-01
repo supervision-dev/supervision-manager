@@ -80,6 +80,8 @@ function getDataList(pageNo){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",134);\"  target=\"rightFrame\">录入督促整改情况</a></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==136 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</a></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==234 && req.datalist[i].status!=0){
+				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</a></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==138 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">不听证</a>&nbsp;<a onclick=\"enforceFile("+req.datalist[i].id+",139);\"  target=\"rightFrame\">听证</a></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==142 && req.datalist[i].status!=0){

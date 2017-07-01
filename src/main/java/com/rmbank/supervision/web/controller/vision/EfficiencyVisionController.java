@@ -738,9 +738,11 @@ public class EfficiencyVisionController extends SystemAction {
 				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
 				fileList = itemProcessFileService.getFileListByItemId(ip.getId());
 				ip.setFileList(fileList);  
+				//格式化录入时间
 				if(ip.getPreparerTime() != null){
 					ip.setPreparerTimes(Constants.DATE_FORMAT.format(ip.getPreparerTime()));
 				}
+				
 				if(ip.getContentTypeId() ==Constants.EFFICIENCY_VISION_0){
 					//request.setAttribute("ItemProcess", ip); //监察内容
 					drIPList.add(ip);
