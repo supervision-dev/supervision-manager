@@ -4,94 +4,447 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <title>分行立项分行完成</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<!--
+<link rel="stylesheet" type="text/css" href="styles.css">
+-->
+	<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<script src="/supervision/source/laydate/laydate.js"></script>
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/bootstrap.css" media="screen" />
+	<script src="/supervision/source/js/common/common.js"></script>
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/my.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/prettify.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/shCore.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/shCoreEclipse.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/jquery-ui.min.css" media="screen" />
+    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/jquery.ui.plupload.css" media="screen" />
+
+    <script type="text/javascript" src="/supervision/source/js/plupload/shCore.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/supervision/source/js/plupload/shBrushjScript.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/supervision/source/js/plupload/jquery-ui.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/supervision/source/js/plupload/plupload.full.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/supervision/source/js/plupload/jquery.ui.plupload.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/supervision/source/js/plupload/zh_CN.js" charset="UTF-8"></script>    
+    <!-- 以下两个引的文件用于layer -->
+	<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+	<script src="/supervision/source/js/layer/layer.js"></script>
+    
+    
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="/supervision/source/js/plupload/css/my_ie_lte7.css" />
+    <![endif]-->
+    <link href="/supervision/source/js/plupload/css/Breeserif.css" rel="stylesheet" type="text/css">
+    <!--[if IE]>
+    <link href="/supervision/source/js/plupload/css/opensans.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-300.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-400.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-600.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-700.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-300s.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-400s.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/opensans-600s.css" rel="stylesheet" type="text/css">
+    <link href="/supervision/source/js/plupload/css/Breeserif-400.css" rel="stylesheet" type="text/css">
+    <![endif]-->
+    <!--[if IE 7]>
+    <link rel="stylesheet" href="/supervision/source/js/plupload/css/font-awesome-ie7.min.css">
+    <![endif]-->
+    <!--[if lt IE 9]>
+    <script src="/supervision/source/js/plupload/html5shiv.js"></script>
+    <![endif]-->
+  
 
 <script type="text/javascript">
 $(document).ready(function(){ 
+		laydate({
+		  elem: '#preparerTimes', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+		  event: 'focus' //响应事件。如果没有传入event，则按照默认的click
+		});	
+		laydate({
+		  elem: '#endTimes', //目标元素。由于laydate.js封装了一个轻量级的选择器引擎，因此elem还允许你传入class、tag但必须按照这种方式 '#id .class'
+		  event: 'focus' //响应事件。如果没有传入event，则按照默认的clisck
+		});
+	 var len=32;//32长度
+     var radix=16;//16进制
+     var chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+     var uuid=[],i;
+     radix=radix||chars.length;
+     if(len){
+         for(i=0;i<len;i++){
+             uuid[i]=chars[0|Math.random()*radix];
+         }
+     }else{
+         var r;
+         uuid[8]=uuid[13]=uuid[18]=uuid[23]='-';
+         uuid[14]='4';
+         for(i=0;i<36;i++){
+             if(!uuid[i]){
+                 r=0|Math.random()*16;
+                 uuid[i]=chars[(i==19)?(r&0x3)|0x8:r];
+             }
+         }
+     }
+     var v_uuid = uuid.join('');
+     $("#hid_uuid").val(v_uuid);
+     
+     $("#uploader").plupload({
+         // General settings
+         runtimes : 'html5,flash,silverlight,html4',
+         url : "/supervision/system/upload/jsonUploadFile.do?uuid="+v_uuid,
+         // Maximum file size
+         max_file_size : '2999mb',
+         // Rename files by clicking on their titles
+         rename: true,
+         // Sort files
+         sortable: true,
+         // Enable ability to drag'n'drop files onto the widget (currently only HTML5 supports that)
+         dragdrop: true,
+         // Views to activate
+         max_retries: 0,
+         views: {
+             list: true,
+             thumbs: false, // Show thumbs
+             active: 'list'
+         },
+         // Flash settings
+         flash_swf_url : '/plupload/js/Moxie.swf',
+         // Silverlight settings
+         silverlight_xap_url : '/plupload/js/Moxie.xap'
+     });
+     var uploader = $('#uploader').plupload('getUploader');
+     //绑定进度条
+     uploader.bind('UploadProgress',function(uploader,file){
+         //每个事件监听函数都会传入一些很有用的参数，
+         //我们可以利用这些参数提供的信息来做比如更新UI，提示上传进度等操作
+         var percentMsg = "正在上传文件，可能会花费一点时间，已上传:" + uploader.total.percent + "%";
+         
+     });
+     //绑定文件添加
+     uploader.bind('FilesAdded',function(uploader,files){
+         if(null != files && files.length>0){
+             var cur_files = uploader.files;
+             var tmp_files = cur_files;
+             if(null != cur_files && cur_files.length>0){
+                 for(var i=0;i<cur_files.length;i++){
+                     var count = 0;
+                     for(var j=0;j<tmp_files.length;j++){
+                         if(cur_files[i].name == tmp_files[j].name){
+                             count++;
+                         }
+                     }
+                     if(count > 1){
+                         uploader.removeFile(cur_files[i]);
+                         i--;
+                     }
+                 }
+             }
+         }
+     });
+     //绑定文件是否全部上传完成
+     uploader.bind('UploadComplete',function(uploader,files){
+         if(null != files && files.length>0){ 
+         	layer.confirm('分行监察室立项成功，待被监察对象上传资料完成进行审核！', {
+				btn: ['确认'] //按钮
+			}, function(){//点击确认按钮调用
+				layer.close(layer.confirm());//关闭当前弹出层
+				window.location.href = "/supervision/pageRoute/manage/branch/branchFHList.do";
+			});	  
+		 }
+     });
+     $("#uploader_browse").removeAttr("style");
+     $("#uploader_browse").attr("style","z-index: 1;font-size: 12px;font-weight: normal;");	
+  
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
-	getDataList(1);
+	$('.tablelist tbody tr:odd').addClass('odd'); 
+	loadOrganTree();
+	loadItemType();
 });
-function getDataList(pageNo){
-	var obj = {};
-	obj.pageNo = pageNo; 
+function loadItemType(){
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/manage/branch/branchFHList.do",
-       data:obj,//发送到服务器的数据，序列化后的值 
+       url: "/supervision/manage/branch/loadItemType.do", 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		$("#tb_userList").html("");
-       		var manageHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
-	       		manageHtml = "";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			manageHtml +="<tr>";
-				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				    manageHtml +="<td>"+req.datalist[i].name+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].sType+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].showDate+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].preparerOrg+"</td>";
-				    manageHtml +="<td>"+req.datalist[i].orgName+"</td>";  
-				    manageHtml +="<td>流程操作</td>";
-				    manageHtml +="<td>删除</td>";				    
-			        manageHtml +="</tr>";
-	       		}
-	       }
-	       if(req.data != null){
-	       		$("#i_totalcount").text(req.data.totalCount);
-	       		$("#i_pageNo").text(req.data.pageNo);
-	       		var count = Math.ceil(req.data.totalCount/10);
-	       		$("#ul_pageList").html("");
-	       		var ulHtml = "";
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
-	       		}
-	       		for(var i = 1;i<=count;i++){
-	       			if(count == 1){
-	       				ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">1</a></li>";
-	       			}else{
-	       				if(i == req.data.pageNo){
-	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
-	       				}
-	       			}
-	       		}
-	       		if(count == 1){
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}
-	       		
-	       		$("#ul_pageList").html(ulHtml);
-	       }
-	       $("#tb_userList").html(manageHtml);
+       		$("#slt_itemType").html("");
+       		var tagHTML = "";
+   			tagHTML += "<option value=\"\">--请选择项目分类--</option>"; 
+       		if(req != null && req.length >0){
+       			for(var i = 0; i< req.length;i++){
+       				tagHTML += "<option value=\""+req[i].id+"\">"+req[i].name+"</option>";
+       			}
+       		}
+       		$("#slt_itemType").html(tagHTML);
        }
-	});
+    });
 }
-function showAlertTip(type){
-	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的用户！");
-		$("#confirm_tip").fadeIn(200);
+function returnPage(){
+		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
+			btn: ['确认','取消'] //按钮
+		}, function(){//点击确认按钮调用
+			layer.close(layer.confirm());//关闭当前弹出层
+			window.location.href="/supervision/pageRoute/manage/branch/branchFHList.do";
+		}, function(){
+			
+		});
+}
+	function isNull(){
+		if($("#itemName").val()==null || $("#itemName").val()==""){
+			layer.alert('请录入项目名称！');			
+			return false;
+		}
+		if($("#slt_itemType").val()==null || $("#slt_itemType").val()==""){
+			layer.alert('请选择项目分类！');			
+			return false;
+		}
+		if($("#preparerTimes").val()==null || $("#preparerTimes").val()==""){
+			layer.alert('请选择立项时间！');			
+			return false;
+		}	
+		if($("#endTimes").val()==null || $("#endTimes").val()==""){
+			layer.alert('请选择规定完成时间！');			
+			return false;
+		}		
+		if(selectOrgIdStr == "" || selectOrgIdStr=="未选择被监察对象"){
+			layer.alert('请选择被监察对象！');	
+			return false;
+		}  
+		
+		var evalue =$("#endTimes").val();		
+		var stTme = $("#preparerTimes").val();	
+		var date = new Date();
+		var MM = date.getMonth()+1;
+		var sdate = date.getFullYear()+"-"+MM+"-"+date.getDate(); 
+		
+		var date1 = new Date(evalue.replace(/\-/g, "\/")); 
+		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
+		var date2 = new Date(sdate.replace(/\-/g, "\/")); 
+		if(date1<date2){
+			layer.alert('规定完成时间不能小于当前时间！');	
+			return false;
+		}
+		if(date1<date3){
+			layer.alert('规定完成时间不能小于立项时间！');	
+			return false;
+		}
+		$("#orgIds").val(selectOrgIdStr);
 	}
+	function ajaxPost(){
+		if(isNull()!=false){
+		        $.ajax({
+			        type: "POST", //请求类型
+			        url: "/supervision/manage/branch/jsonSaveOrUpdateFHItem.do",
+			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
+			        dataType:"json", //响应数据类型      
+			        success: function(data) {
+			        	if(data.code==0){   	    	
+							var uploader = $('#uploader').plupload('getUploader');
+				        	if(uploader.files.length>0){
+				        		$("#uploader_start").click(); //上传文件
+				        	}else{
+				        		layer.confirm('分行监察室立项成功，待被监察对象上传资料完成进行审核 ！', {
+									btn: ['确认'] //按钮
+								}, function(){//点击确认按钮调用
+									layer.close(layer.confirm());//关闭当前弹出层
+									window.location.href = "/supervision/pageRoute/manage/branch/branchFHList.do";
+								});	        		
+				        	}	
+			        	}else{
+			        		layer.alert(data.message);	        	
+			        	}	
+			        }
+		   		});
+	   		}
+	}
+	function saveItem(obj){	
+		layer.confirm('确认信息已经填写完整，并且保存？', {
+			btn: ['确认','取消'] //按钮
+		}, function(){//点击确认按钮调用
+			layer.close(layer.confirm());//关闭当前弹出层
+			ajaxPost();
+		}, function(){
+			
+		});
+		
+	}
+//加载树开始。。。。。。。。。。。。。。。
+function loadOrganTree(){ 
+	$("#organ_tip").fadeIn(200);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/manage/branch/loadOrganTreeListByType.do?ptype=0", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tbl_orgList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tbl_orgList").html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+    }); 
 }
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
+function loadSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\" /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" class=\"displaynone\"  /><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_"+pId).html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+      });
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
+function loadSubSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_sub_"+pId).html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+      });
+} 
+function showItem(subId,tag){ 
+	loadSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone");
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
 }
-function clearForm(){
-
+function showSubItem(subId,tag){
+	loadSubSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function showSubSubItem(subId,tag){ 
+	if(tag == 0){
+		$("#tr_sub_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function selectOrgan(tag){ 
+	$("#organ_tip").fadeOut(200);
+}
+var selectOrgId = [];
+var selectOrgIdStr = "";
+var selectOrgName = [];
+var selectOrgNameStr = "";
+function setOrgValues(){
+	if(selectOrgId.length >0){
+		$.each(selectOrgId,function(index,item){
+			$("#chk_org_"+item).prop("checked","checked");
+		});
+	} 
+} 
+function saveSelectOrg(obj){
+	
+	if(obj.attr("checked") == undefined){
+		if(selectOrgId.length >0){
+			for(var i = 0; i< selectOrgId.length; i++){
+				if(selectOrgId[i] == obj.attr("value")){
+					selectOrgId.splice(i, 1);
+      				break;
+				}
+			}
+		}
+		if(selectOrgName.length >0){
+			for(var i = 0; i< selectOrgName.length; i++){
+				if(selectOrgName[i] == obj.attr("doc")){
+					selectOrgName.splice(i, 1);
+      				break;
+				}
+			}
+		}
+	}else{ 
+		selectOrgId.push(obj.attr("value"));
+		selectOrgName.push(obj.attr("doc"));
+	} 
+	if(selectOrgId.length>0){
+		selectOrgIdStr = "";
+		$.each(selectOrgId,function(index,item){
+			selectOrgIdStr += item +",";
+		});
+		selectOrgIdStr = selectOrgIdStr.substring(0,selectOrgIdStr.length -1);
+	}else{
+		 selectOrgIdStr = "未选择被监察对象";
+	}
+	if(selectOrgName.length>0){
+		selectOrgNameStr = "";
+		$.each(selectOrgName,function(index,item){
+			selectOrgNameStr += item +",";
+		});
+		selectOrgNameStr = selectOrgNameStr.substring(0,selectOrgNameStr.length -1);
+	}else{
+		 selectOrgNameStr = "未选择被监察对象";
+	}
 }
 </script>
 
@@ -104,57 +457,85 @@ function clearForm(){
 	<div class="place">
     <span>位置：</span>
     <ul class="placeul"> 
-    <li><a href="#">综合管理</a></li>
     <li><a href="#">分行立项分行完成</a></li>
+    <li><a href="#">分行监察室立项</a></li>
     </ul>
     </div>
     
     <div class="rightinfo">
-    
-    <div class="tools">
-    
-    	<ul class="toolbar">
-        <li class="click" onclick="showAddTip();"><span><img src="/supervision/source/images/t01.png" /></span>添加</li>
-        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        </ul> 
-    
-    </div>
-    
-    
-    <table class="tablelist">
-    	<thead>
-    		<tr>
-		        <th></th>
-		        <th>项目名称</th>
-				<th>项目分类</th>
-				<th>立项时间</th>  
-				<th>立项单位（部门）</th>									
-				<th>完成单位（部门）</th>
-				<th>操作一</th>
-				<th>操作二</th>
-				
-        	</tr>
-        </thead>
-        <tbody id="tb_userList">  
-        </tbody>
+     
+    <form id="itemInfoForm" method="post">	   
+    <table class="itemTable" >
+    	<tr>
+       		<td width="15%" align="right" >项目名称：</td> 
+       		<td colspan="3">
+       			<input id="itemName" name="name" type="text" value="" style="width:80%;height:28px;"/> 
+				<input type="hidden" id="hid_uuid" name="uuid" />	
+				<input type="hidden"  name="id" value="0" />	
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right" style="height:28px;">项目分类：</td>
+       		<td colspan="3">
+       			<select id="slt_itemType" name="supervisionTypeId" class="dfinput" style="margin-left:-10px;">
+       				<option value="">--请选择项目分类--</option>
+				</select>				
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right" style="height:30px;">立项时间：</td>
+       		<td width="30%;">
+	 			<input type="text" id="preparerTimes" name="preparerTimes" class="laydate-icon" style="height:22px;float:left;" />	
+       		</td>
+       		<td width="12%" align="right">完成时间：</td>
+       		<td>
+       			 <input type="text" id="endTimes" name="endTimes"   class="laydate-icon" style="height:22px;float:left;" />		
+       		</td>
+       	</tr>
+       	<tr>
+       		<td width="12%" align="right">立项审批表、方案：</td>
+       		<td colspan="3">
+       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       		</td>
+       	</tr>
+       	<tr>
+			<td width="12%" align="right" height="129px;">上传附件：</td>
+			<td colspan="3">
+				 <div id="themeswitcher" class="pull-right" ></div>
+	                <script>
+	                    $(function() {
+	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
+	                    });
+	                </script>
+	                <div id="uploader" >
+	                </div>
+			 </td>	
+		</tr> 
+       	<tr>
+       		<td width="12%" align="right">被监察对象：</td>
+       		<td colspan="3">
+       			<input id="orgIds" type="hidden" name="supervisionOrgIds" ></div>
+       			<div class="simpletipinfo" style="margin-left:-10px;width:80%;">   
+			       <div style="height:280px;width:99%;overflow-x:hidden;"> 
+		        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+		        		<tr><td></td></tr>  
+		        		</table> 
+			       </div> 
+		      	</div>
+       		</td>
+       	</tr> 
+       	<tr>
+			<td style="height:70px;"></td>
+			<td>
+				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span></td>
+			<td colspan="2" style="text-align:left;">
+				<span class="exitrence"  onclick="returnPage();" style="float:left; margin-left:15px;" >返回</span>
+			</td>
+		</tr>
     </table>
-    
+    </form>
    
-    <div class="pagin">
-    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
-        <ul class="paginList" id="ul_pageList">
-        
-        <li class="paginItem"><a href="javascript:;">1</a></li>
-        <li class="paginItem current"><a href="javascript:;">2</a></li>
-        <li class="paginItem"><a href="javascript:;">3</a></li>
-        <li class="paginItem"><a href="javascript:;">4</a></li>
-        <li class="paginItem"><a href="javascript:;">5</a></li>
-        <li class="paginItem more"><a href="javascript:;">...</a></li>
-        <li class="paginItem"><a href="javascript:;">10</a></li>
-        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-        </ul>
-    </div>
+    
     
     
     <div class="tip" id="confirm_tip">
@@ -170,34 +551,8 @@ function clearForm(){
         <div class="tipbtn">
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
-    </div> 
-     <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
-        </div> 
-    </div> 
-    </div> 
-
+    </div>  
+    </div>  
 </body>
 
 </html>

@@ -112,6 +112,7 @@ public class BranchController extends SystemAction {
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Integer logUserOrg = userOrgByUserId.get(0).getId(); //当前登录用户所属的机构ID
 		Organ organ = userOrgByUserId.get(0);
+		item.setLogOrgId(logUserOrg);
 		//获取项目列表,根据不同的机构类型加载不同的项目
 		List<Item> itemList =null;
 		//成都分行和超级管理员加载所有项目
@@ -150,6 +151,7 @@ public class BranchController extends SystemAction {
 			}
 		}
 		item.setTotalCount(totalCount);
+		dr.setLoginOrganRoleType(organ.getOrgtype());
 		dr.setData(item);
 		dr.setDatalist(itemList); 
     	return dr;
@@ -303,7 +305,7 @@ public class BranchController extends SystemAction {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/jsonSaveOrUpdateItem.do")
+	@RequestMapping(value = "/jsonSaveOrUpdateFHItem.do")
 	public JsonResult<Item> jsonSaveOrUpdateItem( 
 			Item item,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -353,7 +355,7 @@ public class BranchController extends SystemAction {
 		    	item.setIsStept(0);
 		    	item.setStatus(1);
 		    	item.setSuperItemType(null); 
-		    	item.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ);
+		    	item.setContentTypeId(Constants.CONTENT_TYPE_ID_1);
 				itemService.saveOrUpdateItemList(superVisionOrgId,item);
 				String ip = IpUtil.getIpAddress(request);		
 				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，创建了分行立项分行完成项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
@@ -369,6 +371,80 @@ public class BranchController extends SystemAction {
 		return js;
 	} 
 
+	/**
+	 * 分行立项中支完成保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateZZItem.do")
+	public JsonResult<Item> jsonSaveOrUpdateZZItem( 
+			Item item,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		JsonResult<Item> js = new JsonResult<Item>();
+		js.setCode(1);
+		js.setMessage("保存分行立项中支完成立项失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		List<Integer> superVisionOrgId = new ArrayList<Integer>();
+		try { 
+			if(item != null){
+				if(StringUtil.isEmpty(item.getPreparerTimes())){
+					js.setMessage("请选择立项时间");
+					return js;
+				}else{
+					item.setPreparerTime(Constants.DATE_FORMAT1.parse(item.getPreparerTimes()));
+				}
+				if(StringUtil.isEmpty(item.getEndTimes())){
+					js.setMessage("请选择规定完成时间");
+					return js;
+				}else{
+					item.setEndTime(Constants.DATE_FORMAT1.parse(item.getEndTimes()));
+				}
+				if(StringUtil.isEmpty(item.getSupervisionOrgIds())){
+					js.setMessage("请选择被监察对象");
+					return js;
+				}else{
+					String[] ids = item.getSupervisionOrgIds().split(",");
+					for(String id :ids){
+						if(!StringUtil.isEmpty(id)){
+							superVisionOrgId.add(Integer.parseInt(id));
+						}
+					}
+					if(superVisionOrgId.size() == 0){
+						js.setMessage("请选择被监察对象");
+						return js;
+					}
+				}
+				item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
+				item.setPid(0); //主任务节点的ID
+		    	item.setStageIndex(new Byte("0")); //工作阶段排序   	
+		    	item.setSupervisionUserId(0);
+		    	item.setPreparerOrgId(organ.getId());
+		    	item.setPreparerId(loginUser.getId());
+		    	item.setIsStept(0);
+		    	item.setStatus(1);
+		    	item.setSuperItemType(null); 
+		    	item.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ);
+				itemService.saveOrUpdateItemList(superVisionOrgId,item);
+				String ip = IpUtil.getIpAddress(request);		
+				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，创建了分行立项中支完成项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+				js.setCode(0);
+				js.setMessage("保存分行立项中支完成立项成功");
+			}else{
+				js.setMessage("保存分行立项中支完成立项失败,传入对象为空");
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			js.setMessage("保存分行立项中支完成立项出现异常");
+		}
+		return js;
+	} 
 	/**
 	 * 加载所有项目类型明细
 	 * 
@@ -406,9 +482,9 @@ public class BranchController extends SystemAction {
 		}
 		return br;
 	}
-	
+
 	/**
-	 * 加载所有项目类型
+	 * 被监察对象上传文件保存
 	 * 
 	 * @param pid
 	 * @param request
@@ -416,8 +492,8 @@ public class BranchController extends SystemAction {
 	 * @return
 	 */
 	@ResponseBody
-	@RequestMapping(value = "/jsonSaveFHZZFile.do")
-	public JsonResult<ItemProcess> jsonSaveFile( 
+	@RequestMapping(value = "/jsonSaveFHFHFile.do")
+	public JsonResult<ItemProcess> jsonSaveFHFHFile( 
 			ItemProcess itemProcess,
 			HttpServletRequest request, HttpServletResponse response) { 
 		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
@@ -457,6 +533,50 @@ public class BranchController extends SystemAction {
 		}
 		return js;
 	}
+	/**
+	 * 中支上传文件保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveFHZZFile.do")
+	public JsonResult<ItemProcess> jsonSaveFHZZFile( 
+			ItemProcess itemProcess,
+			HttpServletRequest request, HttpServletResponse response) { 
+		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
+		js.setCode(1);
+		js.setMessage("被监察对象上传文件失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		try { 
+			if(itemProcess != null && itemProcess.getItemId() != null && itemProcess.getItemId()>0){
+				Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+				if(item != null){
+					itemProcess.setId(0);
+					itemProcess.setDefined(false);
+					itemProcess.setOrgId(organ.getId());
+					itemProcess.setPreparerOrgId(organ.getId());
+					itemProcess.setPreparerId(loginUser.getId());
+					itemProcess.setPreparerTime(new Date());
+					itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_2);
+					itemProcessService.insertSelective(itemProcess); 
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的监察资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(0);
+					js.setMessage("被监察对象上传文件成功,等待监察室审核监察");
+					
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+			js.setMessage("被监察对象上传文件失败,保存上传文件发生异常");
+		}
+		return js;
+	}
 
 
 	/**
@@ -483,7 +603,7 @@ public class BranchController extends SystemAction {
 				item.setStatus(9);
 				itemService.updateByPrimaryKeySelective(item);
 				String ip = IpUtil.getIpAddress(request);		
-				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除分行立项分行完成项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除分行立项项目"+item.getName(), 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 				js.setCode(0);
 				js.setMessage("删除项目成功"); 
 			 }

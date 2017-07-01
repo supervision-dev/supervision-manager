@@ -232,7 +232,7 @@ function returnPage(){
 		if(isNull()!=false){
 		        $.ajax({
 			        type: "POST", //请求类型
-			        url: "/supervision/manage/branch/jsonSaveOrUpdateItem.do",
+			        url: "/supervision/manage/branch/jsonSaveOrUpdateZZItem.do",
 			        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
 			        dataType:"json", //响应数据类型      
 			        success: function(data) {

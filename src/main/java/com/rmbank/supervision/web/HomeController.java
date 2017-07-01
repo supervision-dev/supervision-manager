@@ -438,8 +438,9 @@ public class HomeController extends SystemAction {
                 /*新密码加密*/
                 User u = EndecryptUtils.md5Password(user2.getAccount(), user.getNewPassword());
                 if (u != null) {
-                    user.setPwd(u.getNewPassword());
+                    user.setPwd(u.getPwd());
                     user.setSalt(u.getSalt());
+                    user.setIsChangePwd(1);
                     userService.updateByPrimaryKeySelective(user);
                     js.setCode(0);
                     js.setMessage("修改密码成功！");
