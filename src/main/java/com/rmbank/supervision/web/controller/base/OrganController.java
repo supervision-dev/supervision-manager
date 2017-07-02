@@ -92,7 +92,7 @@ public class OrganController extends SystemAction {
 			HttpServletRequest request, HttpServletResponse response) { 
 		Organ organ = new Organ();
 		organ.setPageNo(1);
-		organ.setPageSize(100);
+		organ.setPageSize(9);
 		List<Organ> list = organService.getOrganList(organ);	 
 		return list;// json.toString();
 	}  

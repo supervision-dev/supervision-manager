@@ -83,42 +83,42 @@ function getDataList(pageNo){
 				    
 				    //流程操作开始
 				    if(req.datalist[i].status==0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==130 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",130);\"  target=\"rightFrame\">录入执法检查立项资料</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",130);\"  target=\"rightFrame\">录入执法检查立项资料</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==230 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",130);\"  target=\"rightFrame\">录入执法检查立项资料</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",130);\"  target=\"rightFrame\">录入执法检查立项资料</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==132 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",132);\"  target=\"rightFrame\">录入检查报告、意见书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",132);\"  target=\"rightFrame\">录入检查报告、意见书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==232 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",132);\"  target=\"rightFrame\">录入检查报告、意见书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",132);\"  target=\"rightFrame\">录入检查报告、意见书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==134 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",134);\"  target=\"rightFrame\">录入督促整改情况</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",134);\"  target=\"rightFrame\">录入督促整改情况</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==136 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==234 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",136);\"  target=\"rightFrame\">录入行政处罚意见告知书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==138 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">不听证</a>&nbsp;<a onclick=\"enforceFile("+req.datalist[i].id+",139);\"  target=\"rightFrame\">听证</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">不听证</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",139);\"  target=\"rightFrame\">听证</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==142 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">录入行政处罚决定书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">录入行政处罚决定书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==144 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">录入行政处罚决定书</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",138);\"  target=\"rightFrame\">录入行政处罚决定书</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==143 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",143);\"  target=\"rightFrame\">不复议</a>&nbsp;<a onclick=\"enforceFile("+req.datalist[i].id+",147);\"  target=\"rightFrame\">复议</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",143);\"  target=\"rightFrame\">不复议</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",147);\"  target=\"rightFrame\">复议</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==147 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",143);\"  target=\"rightFrame\">录入行政处罚情况</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",143);\"  target=\"rightFrame\">录入行政处罚情况</button></td>";
 				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
 				    	if(req.datalist[i].lasgTag==131){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",131);\"  target=\"rightFrame\">监察执法检查立项资料</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",131);\"  target=\"rightFrame\">监察执法检查立项资料</button></td>";
 				    	}else if(req.datalist[i].lasgTag==133){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",133);\"  target=\"rightFrame\">录入监察意见</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",133);\"  target=\"rightFrame\">录入监察意见</button></td>";
 				    	}else if(req.datalist[i].lasgTag==135 || req.datalist[i].lasgTag==145){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",135);\"  target=\"rightFrame\">录入监察结论</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",135);\"  target=\"rightFrame\">录入监察结论</button></td>";
 				    	}else if(req.datalist[i].lasgTag==137){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",137);\"  target=\"rightFrame\">录入监察意见</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",137);\"  target=\"rightFrame\">录入监察意见</button></td>";
 				    	}else if(req.datalist[i].lasgTag==140){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"enforceFile("+req.datalist[i].id+",140);\"  target=\"rightFrame\">监察行政处罚决定书</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",140);\"  target=\"rightFrame\">监察行政处罚决定书</button></td>";
 				    	}else{			    	
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}				    	
