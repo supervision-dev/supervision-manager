@@ -30,10 +30,8 @@ function getDataList(pageNo){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		var userRole=req.data.userRole;
-       		if(userRole == 14 || userRole == 11){
-				$("#InputItemBtn").show();
-			}else{
-				$("#InputItemBtn").hide();
+       		if(userRole != 14 && userRole != 11){
+				//$("#div_toolbar").remove(); 
 			}
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"10\">没有获取到相关数据</td></tr>";
@@ -41,6 +39,7 @@ function getDataList(pageNo){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			itemHtml +="<tr>";
+	       			
 				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
 				    if(req.datalist[i].status == 0){
 				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
@@ -55,7 +54,7 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].status == 2){
 				    	itemHtml +="<td style=\"color:green;\"><img alt=\"正在监察中\" title=\"正在监察中\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }else if(req.datalist[i].status == 3){
-				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期\" title=\"逾期\" src=\"/supervision/source/images/red.gif\" /></td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期未完成\" title=\"逾期未完成\" src=\"/supervision/source/images/red.gif\" /></td>";
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td style=\"color:green;\"><img alt=\"已完结\" title=\"已完结\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
@@ -131,7 +130,7 @@ function getDataList(pageNo){
 				    }else{				    	
 			    		itemHtml +="<td width=\"180px;\"></td>";
 			    	}
-				    itemHtml +="<td><button type=\"button\" class=\"button-actionA\" onclick=\"deleteItem("+req.datalist[i].id+",'"+req.datalist[i].name+"');\"  target=\"rightFrame\">删除</button></td>";  			    
+				    /* itemHtml +="<td><button type=\"button\" class=\"button-actionA\" onclick=\"deleteItem("+req.datalist[i].id+",'"+req.datalist[i].name+"');\"  target=\"rightFrame\">删除</button></td>"; */  			    
 			        itemHtml +="</tr>";
 	       		}
 	       }
@@ -174,19 +173,43 @@ function getDataList(pageNo){
 	       }
 	       $("#tb_userList").html(itemHtml);
 	       $('.tablelist tbody tr:odd').addClass('odd');
+	       $("#tb_userList input[type='checkbox']").click(function(){
+			  	$("#tb_userList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_item_id = this.value;
+			});
        }
 	});
 }
-function showAlertTip(type){
-	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
+
+var constants_item_id = 0;
+function showAlertTip(){ 
+	if(constants_item_id == 0){
+		$("#showmessage").html("请选择要删除的项目！");
 		$("#confirm_tip").fadeIn(200);
 	}else{
-		$("#showmessage").html("请选择要删除的用户！");
-		$("#confirm_tip").fadeIn(200);
+		$("#delete_confirm_tip").fadeIn(200);
 	}
+} 
+function deleteItemAction(){
+	$("#delete_confirm_tip").fadeOut(200);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/incorrupt/jsondeleteItemById.do?id="+constants_item_id+"&s="+Math.random(),
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		if(req.code==0){   	    	
+				$("#showmessage").html("项目删除成功！");
+				$("#confirm_tip").fadeIn(200);
+				getDataList(1);
+        	}else{
+        		layer.alert(data.message);	        	
+        	} 
+       }
+	});
 }
-function deleteItem(id,name){
+
+/* function deleteItem(id,name){
 	layer.confirm('确认删除项目：'+name+'?', {
 		btn: ['确认','取消'] //按钮
 	}, function(){//点击确认按钮调用
@@ -201,7 +224,8 @@ function deleteItem(id,name){
 						btn: ['确认'] //按钮
 					}, function(){//点击确认按钮调用
 						layer.close(layer.confirm());//关闭当前弹出层
-						window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+						//window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+						getDataList(1);
 					});	 
 	  			}else{		  			    
 					layer.confirm('删除失败！', {
@@ -215,9 +239,9 @@ function deleteItem(id,name){
 	}, function(){
 		
 	});
-}
+} */
 function showItem(id){ 
-	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id;
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id+"&s="+Math.random();
 } 
 function incorruptFile(itemId,tag){ 
 	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag;
@@ -236,21 +260,26 @@ function incorruptInfo(){
 
 <body>
 
-	<div class="place">
+	<div class="places">
     <span>位置：</span>
-    <ul class="placeul"> 
-    <li><a href="#">实时监察</a></li>
+    <ul class="placeuls"> 
+    <li><a href="#">实时监察       ></a></li>
     <li><a href="#">廉政监察</a></li>
+    <li><span><img src="/supervision/source/images/new.gif" /></span>新项目</li>
+    <li><span><img src="/supervision/source/images/green.gif" /></span>监察中</li>
+    <li><span><img src="/supervision/source/images/red.gif" /></span>逾期</li>
+    <li><span><img src="/supervision/source/images/dui.gif" /></span>已完结</li>
+    <li><span><img src="/supervision/source/images/overdead.png" /></span>逾期完结</li>
     </ul>
     </div>
     
     <div class="rightinfo">
     
-    <div class="tools">
+    <div class="tools" id="div_toolbar">
     
     	<ul class="toolbar">
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
-        <li id="InputItemBtn" style="display: none;" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
+		<li onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+        <li id="InputItemBtn" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     
     </div>
@@ -267,8 +296,8 @@ function incorruptInfo(){
 				<th>项目类别</th>	
 				<th>项目名称</th>	
 				<th>被监察对象</th>
-				<th>操作一</th>	
-				<th>操作二</th>	
+				<th>流程操作</th>	
+				<!-- <th>操作二</th>	 -->
 				
         	</tr>
         </thead>
@@ -333,7 +362,22 @@ function incorruptInfo(){
         </div> 
     </div> 
     </div> 
-
+<div class="tip" id="delete_confirm_tip">
+   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#delete_confirm_tip').fadeOut(100);" ></a></div>
+        
+	    <div class="tipinfo">
+	        <span><img src="/supervision/source/images/ticon1.png" /></span>
+	        <div class="tipright">
+	        	<p id="showmessage">确认删除当前选择项目？</p> 
+	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
+	        </div> 
+      	</div>
+        
+        <div class="tipbtn">
+        	<input type="button" class="sure" value="确定" onclick="deleteItemAction();"  /> 
+        	<input type="button" class="cancel" value="取消" onclick="javascript:$('#delete_confirm_tip').fadeOut(200);" /> 
+        </div> 
+    </div>
 </body>
 
 </html>

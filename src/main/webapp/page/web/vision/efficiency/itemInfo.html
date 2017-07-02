@@ -155,6 +155,7 @@ $(document).ready(function(){
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
 	getLeader();
+	loadOrgTree();
 });
 
 function getLeader(){
@@ -191,7 +192,6 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		setOrgId();	
 		if($("#itemName").val()==null || $("#itemName").val()==""){
 			layer.alert('请录入监察项目！');			
 			return false;
@@ -200,11 +200,10 @@ function returnPage(){
 			layer.alert('请输入规定完成时间！');			
 			return false;
 		}		
-		if($("input[name='OrgId']").val()==null || $("input[name='OrgId']").val()==""){
+		if(selectOrgIdStr =="" || selectOrgIdStr =="未选择被监察对象"){
 			layer.alert('请选择被监察对象！');	
 			return false;
-		}  
-		
+		}   
 		var evalue =$("#datepicker").val();		
 		var date = new Date();
 		var MM = date.getMonth()+1;
@@ -264,8 +263,7 @@ function returnPage(){
 
 
 //加载树开始。。。。。。。。。。。。。。。
-function test(){ 
-	$("#organ_tip").fadeIn(200);
+function loadOrgTree(){ 
 	$.ajax({ 
        type: "POST", //请求类型
        url: "/supervision/vision/efficiency/loadOrganTreeList.do?pid=0", 
@@ -277,9 +275,9 @@ function test(){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){
        				if(req[i].childrenCount ==0){
-       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr><td style=\"width:10px;\"> </td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
        				}else{
-       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr><td style=\"width:10px;\"> </td><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
        					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
        					tbHtml += "</table></td></tr>  ";
@@ -397,48 +395,27 @@ function selectOrgan(tag){
 
 var selectOrgId = [];
 var selectOrgIdStr = "";
-var selectOrgName = [];
-var selectOrgNameStr = "";
 function setOrgValues(){
 	if(selectOrgId.length >0){
 		$.each(selectOrgId,function(index,item){
 			$("#chk_org_"+item).prop("checked","checked");
 		});
 	} 
-}
-function setOrgId(){
-	var orgHtml="";
-	if(selectOrgId.length >0){
-		for(var i = 0; i< selectOrgId.length; i++){
-			orgHtml +="<input type=\"hidden\" name=\"OrgId\" value=\""+selectOrgId[i]+"\"/>"
-		}
-		$("#orgID").html(orgHtml);
-	}
-}
+} 
 function saveSelectOrg(obj){
 	
 	if(obj.attr("checked") == undefined){
 		if(selectOrgId.length >0){
 			for(var i = 0; i< selectOrgId.length; i++){
-				orgHtml +="<input type=\"hidden\" name=\"OrgId\" value=\""+selectOrgId[i]+"\"/>"
 				if(selectOrgId[i] == obj.attr("value")){
 					selectOrgId.splice(i, 1);
       				break;
 				}
 			}
-			$("#orgID").html(orgHtml);
 		}
-		if(selectOrgName.length >0){
-			for(var i = 0; i< selectOrgName.length; i++){
-				if(selectOrgName[i] == obj.attr("doc")){
-					selectOrgName.splice(i, 1);
-      				break;
-				}
-			}
-		}
+		 
 	}else{ 
 		selectOrgId.push(obj.attr("value"));
-		selectOrgName.push(obj.attr("doc"));
 	} 
 	if(selectOrgId.length>0){
 		selectOrgIdStr = "";
@@ -449,18 +426,7 @@ function saveSelectOrg(obj){
 	}else{
 		 selectOrgIdStr = "未选择被监察对象";
 	}
-	if(selectOrgName.length>0){
-		selectOrgNameStr = "";
-		$.each(selectOrgName,function(index,item){
-			selectOrgNameStr += item +",";
-		});
-		selectOrgNameStr = selectOrgNameStr.substring(0,selectOrgNameStr.length -1);
-	}else{
-		 selectOrgNameStr = "未选择被监察对象";
-	}
-	$("#ipt_slt_orgName").val(selectOrgNameStr);
-	$("#ipt_slt_orgName").text(selectOrgNameStr);
-	$("#lbl_sltOrg").text(selectOrgIdStr);
+	 $("#orgID").val(selectOrgIdStr);
 }
 </script>
 
@@ -534,12 +500,19 @@ function saveSelectOrg(obj){
        	<tr>
        		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
-       			<div id="orgID" style="display: none;"></div>
-       			<textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="1" cols="5"  style="width:80%;height:50px;"></textarea>
+       			<input id="orgID" name="OrgId" type="hidden" /> 
+       			<!-- <textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="1" cols="5"  style="width:80%;height:50px;"></textarea> -->
+       			<div class="simpletipinfo">   
+			       <div style="height:280px;width:99%;overflow-x:hidden;"> 
+		        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+		        		<tr><td></td></tr>  
+		        		</table> 
+			       </div>
+		      	</div>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right">责任领导：</td>
+       		<td width="12%" align="right" style="height:50px;">责任领导：</td>
        		<td colspan="3">
        			<table id="leader" style="border: 0;">
        			
@@ -584,7 +557,7 @@ function saveSelectOrg(obj){
         </div> 
     </div> 
     </div> 
-	<div class="simplestip" id="organ_tip" style="margin-left: 18%; margin-top: 5px;"> 
+	<!-- <div class="simplestip" id="organ_tip" style="margin-left: 18%; margin-top: 5px;"> 
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
 	    <div class="simpletipinfo">   
@@ -599,7 +572,7 @@ function saveSelectOrg(obj){
         	<input type="button"  class="saveBtn" value="确定" onclick="selectOrgan();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:$('#slt_postId').removeClass('displaynone');$('#slt_roleId').removeClass('displaynone');$('#organ_tip').fadeOut(100);" /> 
         </div>  
-    </div>
+    </div> -->
 </body>
 
 </html>

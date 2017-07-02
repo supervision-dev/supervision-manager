@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.Item;
 import com.rmbank.supervision.model.ItemProcess;
 import com.rmbank.supervision.model.ItemProcessFile;
@@ -332,7 +334,7 @@ public class EfficiencyVisionController extends SystemAction {
 	public JsonResult<Item> jsonsetProjectById(Item item,
 			@RequestParam(value = "end_time", required = false) String end_time,//用于接收前台传过来的String类型的时间
 	   		@RequestParam(value = "content", required = false) String content,
-	   		@RequestParam(value = "OrgId", required = false) Integer[] OrgIds,    		
+	   		@RequestParam(value = "OrgId", required = false) String OrgIds,    		
 			HttpServletRequest request, HttpServletResponse response) {
 		
     	// 新建一个json对象 并赋初值
@@ -370,7 +372,19 @@ public class EfficiencyVisionController extends SystemAction {
 			List<Integer> userOrgIDs = userService.getUserOrgIdsByUserId(u.getId());	
 			//立项返回的项目ID
 			List<Integer> itemIds= new ArrayList<Integer>();
-			for (Integer orgId : OrgIds) {
+			String[] idStr = OrgIds.split(",");
+			List<Integer> organIds = new ArrayList<Integer>();
+			List<Integer> orgIdList = new ArrayList<Integer>();
+			if(idStr.length>0){
+				for(String idss: idStr){
+					if(!StringUtil.isEmpty(idss)){
+						organIds.add(Integer.parseInt(idss));
+						
+					}
+				}
+				 orgIdList = new ArrayList<Integer>(new HashSet<Integer>(organIds)); 
+			}
+			for (Integer orgId : orgIdList) {
 				getItemProcess.setContentTypeId(Constants.EFFICIENCY_VISION_0);
 				getItemProcess.setContent(null);
 				getItemProcess.setUuid(uuid);

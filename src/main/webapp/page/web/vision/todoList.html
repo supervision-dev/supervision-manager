@@ -2,10 +2,103 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>无标题文档</title>
+<title>实时监察待办事项</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
- 
+
+<script type="text/javascript">
+$(document).ready(function(){ 
+
+	getDataListA();
+	getDataListB();
+	getDataListC();
+});
+
+function getDataListA(){
+	var obj = {};
+	obj.supervisionTypeId = 2; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/todoList.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		 fillUlList(req,"ul_xljc");
+       }
+      });
+}
+function getDataListB(){
+	var obj = {};
+	obj.supervisionTypeId = 3; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/todoList.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		 fillUlList(req,"ul_lzjc");
+       }
+      });
+}
+function getDataListC(){
+	var obj = {};
+	obj.supervisionTypeId = 4; 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/todoList.do",
+       data:obj,//发送到服务器的数据，序列化后的值 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		 fillUlList(req,"ul_zfjc");
+       }
+      });
+}
+function fillUlList(obj,target){
+	$("#"+target).html("");
+	var tagHtml = "<li><a href=\"#\">暂无代办事项</a><b></b></li>";
+	if(obj != null && obj.length>0){
+		tagHtml = "";
+		for(var i = 0; i< obj.length; i++){
+			var names = obj[i].name;
+			if(names.length>13){
+				names = names.substring(0,11)+"……";
+			}
+			tagHtml += "<li><a onclick=\"showItem("+obj[i].id+","+obj[i].supervisionTypeId+");\">"+names+"</a><b>"+formatTime(obj[i].preparerTime,false)+"</b></li>";
+		}
+	}
+	$("#"+target).html(tagHtml);
+}
+function showItem(itemId,tag){
+	if(tag == 2){
+		window.location.href = "/supervision/pageRoute/vision/efficiency/showItem.do?id="+itemId+"&s="+Math.random();
+	}else if(tag == 3){
+		window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+itemId+"&s="+Math.random();
+	}else if(tag == 4){
+		window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+itemId+"&s="+Math.random();
+	}
+}
+function formatTime(str,islong){
+	var oDate = new Date(str),  
+    oYear = oDate.getFullYear(),  
+    oMonth = oDate.getMonth()+1,  
+    oDay = oDate.getDate(),  
+    oHour = oDate.getHours(),  
+    oMin = oDate.getMinutes(),  
+    oSen = oDate.getSeconds(),  
+    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
+    return oTime;
+}
+//补0操作  
+function getzf(num){  
+    if(parseInt(num) < 10){  
+        num = '0'+num;  
+    }  
+    return num;  
+} 
+</script>       
 </head>
 
 
@@ -24,19 +117,16 @@
 			    <div class="indexinfoleft">
 				    <div class="listtitle">效能监察</div>    
 				    <ul class="newlist" id="ul_xljc">
-					    <li><a href="#">上海自贸区今日正式挂牌成立立</a><b>10-09</b></li> 
 				    </ul>   
 			    </div> 
 			    <div class="indexinfoleft">
 				    <div class="listtitle">廉政监察</div>    
 				    <ul class="newlist" id="ul_lzjc">
-					    <li><a href="#">上海自贸区今日正式挂牌成立立</a><b>10-09</b></li> 
 				    </ul>   
 			    </div>
 			    <div class="indexinfoleft">
 				    <div class="listtitle">执法监察</div>    
 				    <ul class="newlist" id="ul_zfjc">
-					    <li><a href="#">上海自贸区今日正式挂牌成立立</a><b>10-09</b></li> 
 				    </ul>   
 			    </div>
 		    </div>
