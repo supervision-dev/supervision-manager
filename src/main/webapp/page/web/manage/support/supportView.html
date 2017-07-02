@@ -30,9 +30,9 @@ function loadItemInfo(){
         		 if(req.resultItem != null){
         		 	$("#lbl_name").text(req.resultItem.name);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
-        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
-        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime));
-        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
         		 	var boj = req.resultItemProcess[0];
@@ -57,7 +57,7 @@ function loadItemInfo(){
 	        		 			}
 	        		 			$("#td_fileList1").html(fHtml);
 	        		 		}
-        		 			$("#td_scdTime").html(formatTime(boj.preparerTime));
+        		 			$("#td_scdTime").html(formatTime(boj.preparerTime,true));
 		        		 	if($("#tr_scd1").hasClass("displaynone")){
 		        		 		$("#tr_scd1").removeClass("displaynone");
 		        		 	}
@@ -77,7 +77,7 @@ function loadItemInfo(){
 	        		 		 }else{
 	        		 		 	$("#td_isValue").html("未量化");
 	        		 		 }
-        		 			$("#td_thdTime").html(formatTime(obj2.preparerTime));
+        		 			$("#td_thdTime").html(formatTime(obj2.preparerTime,true));
 		        		 	if($("#tr_thd1").hasClass("displaynone")){
 		        		 		$("#tr_thd1").removeClass("displaynone");
 		        		 	}
@@ -97,7 +97,7 @@ function loadItemInfo(){
 	        		 			}
 	        		 			$("#td_fileList2").html(fHtml);
 	        		 		}
-        		 			$("#td_fthTime").html(formatTime(obj3.preparerTime));
+        		 			$("#td_fthTime").html(formatTime(obj3.preparerTime,true));
 		        		 	if($("#tr_fth1").hasClass("displaynone")){
 		        		 		$("#tr_fth1").removeClass("displaynone");
 		        		 	}
@@ -121,7 +121,7 @@ function downLoadFile(path,name){
 	var fileName = encodeURI(encodeURI(name));
 	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 } 
-function formatTime(str){
+function formatTime(str,islong){
 	var oDate = new Date(str),  
     oYear = oDate.getFullYear(),  
     oMonth = oDate.getMonth()+1,  
@@ -130,6 +130,9 @@ function formatTime(str){
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
     oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
     return oTime;
 }
 //补0操作  

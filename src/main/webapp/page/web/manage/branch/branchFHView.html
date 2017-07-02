@@ -20,6 +20,7 @@
 $(document).ready(function(){   
  	 loadItemInfo();
 });
+var isFirst_tag = true;
 function loadItemInfo(){
 	$.ajax({ 
        type: "POST", //请求类型
@@ -30,9 +31,9 @@ function loadItemInfo(){
         		 if(req.resultItem != null){
         		 	$("#lbl_name").text(req.resultItem.name);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
-        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
-        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime));
-        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
         		 	var boj = req.resultItemProcess[0];
@@ -59,7 +60,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 33){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室监察意见：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -72,7 +73,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 34){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况说明：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -83,13 +84,27 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
-        		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
-        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪意见：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
-	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 91){
+        		 				if(isFirst_tag){
+        		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪意见：</td>";
+		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+		        		 			isFirst_tag = false;
+        		 				}else{
+        		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察意见：</td>";
+		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
+		        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+		        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+			        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+			        		 			}
+		        		 			}
+		        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目跟踪监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 				}
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
@@ -99,7 +114,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 93){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -110,7 +125,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察监察室给定最终结论时间\">"+formatTime(req.resultItemProcess[i].preparerTime)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察监察室给定最终结论时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}
         		 		}
         		 		$("#tbl_viewTable").append(phtml);
@@ -127,7 +142,7 @@ function downLoadFile(path,name){
 	var fileName = encodeURI(encodeURI(name));
 	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 } 
-function formatTime(str){
+function formatTime(str,islong){
 	var oDate = new Date(str),  
     oYear = oDate.getFullYear(),  
     oMonth = oDate.getMonth()+1,  
@@ -136,6 +151,9 @@ function formatTime(str){
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
     oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
     return oTime;
 }
 //补0操作  

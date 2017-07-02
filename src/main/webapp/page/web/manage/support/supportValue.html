@@ -38,8 +38,8 @@ function loadItemInfo(){
         		 if(req.resultItem != null){
         		 	$("#lbl_name").text(req.resultItem.name);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
-        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
-        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 	$("#hid_itemid").val(req.resultItem.id); 
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
@@ -91,7 +91,7 @@ function loadModel(){
         }
     });
 }
-function formatTime(str){
+function formatTime(str,islong){
 	var oDate = new Date(str),  
     oYear = oDate.getFullYear(),  
     oMonth = oDate.getMonth()+1,  
@@ -100,6 +100,9 @@ function formatTime(str){
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
     oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
     return oTime;
 }
 //补0操作  
