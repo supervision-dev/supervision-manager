@@ -14,6 +14,9 @@ $(document).ready(function(){
 	
 	getDataList(1);
 });
+function search(pageNo){
+	getDataList(pageNo);
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -36,15 +39,17 @@ function getDataList(pageNo){
 				    	itemHtml +="<td>已立项</td>";
 				    }
 				    if(req.datalist[i].status == 0){
-				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"新项目\" title=\"新项目\" src=\"/supervision/source/images/new.gif\" /></td>";
 				    }else if(req.datalist[i].status == 1){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"正在监察中\" title=\"正在监察中\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }else if(req.datalist[i].status == 2){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"正在监察中\" title=\"正在监察中\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }else if(req.datalist[i].status == 3){
-				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期\" title=\"逾期\" src=\"/supervision/source/images/red.gif\" /></td>";
 				    }else if(req.datalist[i].status == 4){
-				    	itemHtml +="<td style=\"color:green;\">完成</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"已完结\" title=\"已完结\" src=\"/supervision/source/images/dui.gif\" /></td>";
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
 				    }	
 				    if(req.datalist[i].itemCategory != null){
 				    	itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
@@ -52,12 +57,23 @@ function getDataList(pageNo){
 				    	itemHtml +="<td></td>";
 				    }
 				    
-				    itemHtml +="<td>"+req.datalist[i].name+"</td>";
+				    if(req.datalist[i].name.length >6){
+				    	var names = req.datalist[i].name.substring(0,6)+"…"
+				    	itemHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
+				    }else{
+				    	itemHtml +="<td>"+req.datalist[i].name+"</td>";
+				    }
 				    itemHtml +="<td><img src=\"/supervision/source/images/t06.png\" title=\"查看\" style=\"width:15px;heigth:15px;cursor:pointer;\" onclick=\"showItem("+req.datalist[i].id+");\"  /></td>";
 				    if(req.datalist[i].itemName == null || req.datalist[i].itemName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
-				    	itemHtml +="<td>"+req.datalist[i].itemName+"</td>";  
+				    	if(req.datalist[i].itemName.length >6){
+					    	var names = req.datalist[i].itemName.substring(0,6)+"…"
+					    	itemHtml +="<td title=\""+req.datalist[i].itemName+"\">"+names+"</td>";
+					    }else{
+					    	itemHtml +="<td>"+req.datalist[i].itemName+"</td>";
+					    }
+				    	  
 				    }	
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
 				    	itemHtml +="<td></td>";  
@@ -123,7 +139,11 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -132,16 +152,19 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		}
+	       		} 
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
 	       		}
-	       		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(itemHtml);

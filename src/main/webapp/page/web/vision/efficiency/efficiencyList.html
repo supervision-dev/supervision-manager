@@ -17,10 +17,9 @@ $(document).ready(function(){
 	getDataList(1);
 	
 });
-
-
-
-
+function search(pageNo){
+	getDataList(pageNo);
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
@@ -49,20 +48,20 @@ function getDataList(pageNo){
 				    	itemHtml +="<td>已立项</td>";
 				    }
 				    if(req.datalist[i].status == 0){
-				    	itemHtml +="<td style=\"color:green;\">新项目</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"新项目\" title=\"新项目\" src=\"/supervision/source/images/new.gif\" /></td>";
 				    }else if(req.datalist[i].status == 1){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"正在监察中\" title=\"正在监察中\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }else if(req.datalist[i].status == 2){
-				    	itemHtml +="<td style=\"color:green;\">监察中</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"正在监察中\" title=\"正在监察中\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }else if(req.datalist[i].status == 3){
-				    	itemHtml +="<td style=\"color:green;\">逾期</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期\" title=\"逾期\" src=\"/supervision/source/images/red.gif\" /></td>";
 				    }else if(req.datalist[i].status == 4){
-				    	itemHtml +="<td style=\"color:green;\">完成</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"已完结\" title=\"已完结\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
-				    	itemHtml +="<td style=\"color:green;\">逾期完成</td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
 				    }					    
 				    if(req.datalist[i].name.length >6){
-				    	var names = req.datalist[i].name.substring(0,6)+"……"
+				    	var names = req.datalist[i].name.substring(0,6)+"…"
 				    	itemHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
 				    }else{
 				    	itemHtml +="<td>"+req.datalist[i].name+"</td>";
@@ -74,16 +73,16 @@ function getDataList(pageNo){
 				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    }
 				    if(req.datalist[i].isSign <= 3){
-				    	itemHtml +="<td>未签收</td>";
+				    	itemHtml +="<td><img alt=\"未签收\" title=\"未签收\" src=\"/supervision/source/images/mark.png\" /></td>";
 				    }else if(req.datalist[i].isSign > 3){
-				    	itemHtml +="<td>已签收</td>";
+				    	itemHtml +="<td><img alt=\"已签收\" title=\"已签收\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }
 				    if(req.datalist[i].status == 4){
-				    	itemHtml +="<td>已完成</td>";
+				    	itemHtml +="<td><img alt=\"已完成\" title=\"已完成\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
-				    	itemHtml +="<td>逾期完成</td>";
+				    	itemHtml +="<td><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
 				    }else if(req.datalist[i].status != 4){
-				    	itemHtml +="<td>未完成</td>";
+				    	itemHtml +="<td><img alt=\"未完成\" title=\"未完成\" src=\"/supervision/source/images/green.gif\" /></td>";
 				    }
 				    if(req.datalist[i].status == 4){
 				    	itemHtml +="<td>已完结</td>";	
@@ -101,6 +100,8 @@ function getDataList(pageNo){
 				    	itemHtml +="<td>已逾期</td>";
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td>已完结</td>";
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td>已完结</td>";
 				    }else{
 				    	itemHtml +="<td></td>";
 				    }
@@ -110,41 +111,41 @@ function getDataList(pageNo){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且登录用户角色是监察室角色。
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==3 || req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==4 ){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else if(req.datalist[i].isProject == "true" && req.datalist[i].userRole==3 || req.datalist[i].isProject == "true" && req.datalist[i].userRole==4 ){
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign <= 3 && req.datalist[i].status!=0){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"sign("+req.datalist[i].id+");\"  target=\"rightFrame\">签收</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"sign("+req.datalist[i].id+");\"  target=\"rightFrame\">签收</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 66 ||req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 72){
-				    	itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</a></td>";
+				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</button></td>";
 				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</button></td>";
 				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 68 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 688 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 778 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 888){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</button></td>";
 				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 666){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</a>&nbsp;<a onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</a></td>";
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
-			    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</a></td>";
+			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
-			    		itemHtml +="<td width=\"180px;\"><a onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</a></td>";
+			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</button></td>";
 				    }else{
 				    	itemHtml +="<td width=\"180px;\"></td>";
 				    }  
 				      
 				    
 				    //流程判断结束
-				    itemHtml +="<td>删除</td>";  			    
+				   	    
 			        itemHtml +="</tr>";
 	       		}
 	       			
@@ -158,7 +159,11 @@ function getDataList(pageNo){
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			if(req.data.pageNo>1){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo -1 )+");\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
+	       			}
 	       		}
 	       		for(var i = 1;i<=count;i++){
 	       			if(count == 1){
@@ -167,15 +172,19 @@ function getDataList(pageNo){
 	       				if(i == req.data.pageNo){
 	       					ulHtml += "<li class=\"paginItem current\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}else{
-	       					ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\">"+i+"</a></li>";
+	       					ulHtml += "<li class=\"paginItem\" onclick=\"search("+i+");\"><a href=\"javascript:;\">"+i+"</a></li>";
 	       				}
 	       			}
-	       		}
+	       		} 
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
 	       		}else{
-	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
-	       		}	       		
+	       			if(count > req.data.pageNo){
+	       				ulHtml += "<li class=\"paginItem\" onclick=\"search("+(req.data.pageNo +1 )+");\"><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+	       			}else{
+	       				ulHtml += "<li class=\"paginItem\" ><a href=\"javascript:;\"><span class=\"pagenxt\"></span></a></li>";
+       				}
+	       		} 		
 	       		$("#ul_pageList").html(ulHtml);
 	       }
 	       $("#tb_userList").html(itemHtml);
@@ -466,22 +475,20 @@ function saveSelectOrg(obj){
     
     
     <table class="tablelist">
-    	<thead>
-    		<tr>
-		        <th></th>
-		        <th>立项情况</th>
-				<th>状态</th>	
-				<th>工作事项</th>	
-				<th>查看</th>	
-				<th>被监察对象</th>	
-				<th>签收情况</th>	
-				<th>部门完成情况</th>	
-				<th>是否完结</th>	
-				<th>规定办理时间</th>	
-				<th>状态提醒</th>
-				<th width="180px">操作一</th>
-				<th>操作二</th>
-				
+    	<thead >
+    		<tr >
+		        <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;"></th>
+		        <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">立项<br/>情况</th>
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">状态</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">工作事项</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">查看</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">被监察对象</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">签收情况</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">部门完成情况</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">是否完结</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">规定办理时间</th>	
+				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">状态提醒</th>
+				<th width="160px" style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">操作</th>
         	</tr>
         </thead>
         <tbody id="tb_userList">  
