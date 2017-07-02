@@ -13,6 +13,9 @@ $(document).ready(function(){
 	});  
 	getDataList(1);
 }); 
+function search(pageNo){
+	getDataList(pageNo);
+}
 function getDataList(pageNo){
 	var obj = {};
 	obj.pageNo = pageNo; 
