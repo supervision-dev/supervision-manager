@@ -37,6 +37,20 @@ h2{font-weight:normal;}
 	background-color: #046dac;
 	cursor:pointer;
 }
+.button-actionA{ 
+	line-height: 16px;
+	padding:3px;
+	text-align: center;
+	color: #fff;
+	text-shadow:1px 1px 1px #333;
+	margin:5px 0 5px 0;
+	border-radius: 5px; 
+	position: relative;
+	overflow: hidden; 
+	border:1px solid #dce1e6; 
+	background-color: red;
+	cursor:pointer;
+}
  
 /*login*/
 .logintop{height:47px; position:absolute; top:0;  z-index:100; width:100%; background-color:rgb(56, 126, 169);} 

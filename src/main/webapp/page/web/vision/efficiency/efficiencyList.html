@@ -82,6 +82,8 @@ function getDataList(pageNo){
 				    	itemHtml +="<td><img alt=\"未签收\" title=\"未签收\" src=\"/supervision/source/images/mark.png\" /></td>";
 				    }else if(req.datalist[i].isSign > 3){
 				    	itemHtml +="<td><img alt=\"已签收\" title=\"已签收\" src=\"/supervision/source/images/dui.gif\" /></td>";
+				    }else{
+				    	itemHtml +="<td></td>";
 				    }
 				    
 				    /* if(req.datalist[i].status == 4){
@@ -98,8 +100,11 @@ function getDataList(pageNo){
 				    	itemHtml +="<td>已完结</td>";	
 				    }else if(req.datalist[i].status != 4){
 				    	itemHtml +="<td>未完结</td>";
+				    }else{
+				    	itemHtml +="<td></td>";
 				    }
-				    if(req.datalist[i].showDate == null){
+				    
+				    if(req.datalist[i].showDate == null || req.datalist[i].showDate == ""){
 				   		itemHtml +="<td></td>";
 				   	}else{
 				   		itemHtml +="<td title=\""+req.datalist[i].showDate+"\">"+req.datalist[i].showDate.substring(5,req.datalist[i].showDate.length)+"</td>";
@@ -144,14 +149,18 @@ function getDataList(pageNo){
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
 				    	}else if(req.datalist[i].status == 4){
 					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-					    }
+					    }else if(req.datalist[i].status == 5){
+					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+					    } 
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
 			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
 			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</button></td>";
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-				    }  
+				    }else if(req.datalist[i].status == 5){
+				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+				    }   
 				      
 				    
 				    //流程判断结束

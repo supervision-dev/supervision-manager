@@ -5,7 +5,10 @@
 <title>执法监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
-
+<!-- 以下两个引的文件用于layer -->
+	<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+	<script src="/supervision/source/js/layer/layer.js"></script>
+    
 <script type="text/javascript">
 $(document).ready(function(){ 
   	$(".sure").click(function(){
@@ -126,7 +129,7 @@ function getDataList(pageNo){
 			    		itemHtml +="<td width=\"180px;\"></td>";
 			    	}	    
 				    
-				    itemHtml +="<td><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",140);\"  target=\"rightFrame\">删除</button></td>";  			    
+				    itemHtml +="<td><button type=\"button\" class=\"button-actionA\" onclick=\"deleteItem("+req.datalist[i].id+",'"+req.datalist[i].name+"');\"  target=\"rightFrame\">删除</button></td>";  			    
 			        itemHtml +="</tr>";
 	       		}
 	       }
@@ -173,28 +176,34 @@ function getDataList(pageNo){
 	});
 }
 function deleteItem(id,name){
-	layer.confirm('确认删除项目'+name+'?', {
+	layer.confirm('确认删除项目：'+name+'?', {
 		btn: ['确认','取消'] //按钮
 	}, function(){//点击确认按钮调用
 		layer.close(layer.confirm());//关闭当前弹出层
 		$.ajax({
-			url : "/supervision/vision/efficiency/jsondeleteItemById.do?id="+id,
+			url : "/supervision/vision/enforce/jsondeleteItemById.do?id="+id,
 			type : "post",  
 	    	dataType : "json",								
 			success : function(data) { 									
 	  			if(data.code == 0){ 
-	  				$.messager.alert('操作信息',data.message,'info',function(){ 
-	  					search();  
-	      			});
+	  				layer.confirm('删除成功！', {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+						window.location.href = "/supervision/pageRoute/vision/enforce/enforceList.do";
+					});	 
 	  			}else{		  			    
-					$.messager.alert('错误信息','删除失败！','error');
+					layer.confirm('删除失败！', {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+					});	 
 	  			}  
 		    } 
 		});
 	}, function(){
 		
 	});
-	
 }
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id;
