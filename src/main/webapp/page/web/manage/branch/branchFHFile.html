@@ -155,8 +155,8 @@ function loadItemInfo(){
         		 if(req.resultItem != null){
         		 	$("#lbl_name").text(req.resultItem.name);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
-        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
-        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 	$("#hid_itemid").val(req.resultItem.id);
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
@@ -183,7 +183,7 @@ function downLoadFile(path,name){
 	var fileName = encodeURI(encodeURI(name));
 	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 } 
-function formatTime(str){
+function formatTime(str,islong){
 	var oDate = new Date(str),  
     oYear = oDate.getFullYear(),  
     oMonth = oDate.getMonth()+1,  
@@ -192,6 +192,9 @@ function formatTime(str){
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
     oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
     return oTime;
 }
 //补0操作  
@@ -321,7 +324,7 @@ function saveItem(obj){
        	<tr>
        		<td width="12%" align="right">相关资料说明：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       			<textarea rows="3" cols="5" style="width:80%;height:58px;margin-left:20px;" name="content"></textarea>			
        		</td>
        	</tr>
        	<tr>

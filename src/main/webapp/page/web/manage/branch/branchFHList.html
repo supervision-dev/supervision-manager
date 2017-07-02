@@ -76,13 +76,13 @@ function getDataList(pageNo){
 				    	}
 				    }else if(req.datalist[i].lasgTag ==35){
 				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
-				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(35,"+req.datalist[i].id+");\" class=\"button-action\">录入监察结论</button></td>";
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(35,"+req.datalist[i].id+");\" class=\"button-action\">录入监察意见</button></td>";
 				    	}else{
 				    		manageHtml +="<td>项目监察中…</td>";
 				    	}
 				    }else if(req.datalist[i].lasgTag ==91){
 				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
-				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(35,"+req.datalist[i].id+");\" class=\"button-action\">录入跟踪整改情况</button></td>";
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(91,"+req.datalist[i].id+");\" class=\"button-action\">录入跟踪整改情况</button></td>";
 				    	}else{
 				    		manageHtml +="<td>项目监察中…</td>";
 				    	}

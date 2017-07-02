@@ -642,6 +642,61 @@ public class BranchController extends SystemAction {
 		}
 		return js;
 	}
+	/**
+	 * 中支上传文件保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateFollow.do")
+	public JsonResult<ItemProcess> jsonSaveOrUpdateFollow( 
+			ItemProcess itemProcess,
+			HttpServletRequest request, HttpServletResponse response) { 
+		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
+		js.setCode(1);
+		js.setMessage("监察室对项目跟踪处理失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		try { 
+			if(itemProcess != null && itemProcess.getItemId() != null && itemProcess.getItemId()>0){
+				Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+				if(item != null){
+					itemProcess.setId(0);
+					itemProcess.setDefined(false);
+					itemProcess.setOrgId(organ.getId());
+					itemProcess.setPreparerOrgId(organ.getId());
+					itemProcess.setPreparerId(loginUser.getId());
+					itemProcess.setPreparerTime(new Date());
+					if(itemProcess.getIsFollowStatus()== Constants.NOT_OVER){
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_6);
+					}else{
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_7);
+						if(item.getStatus() == 3){
+							item.setStatus(5);
+						}else{
+							item.setStatus(4);
+						}
+						itemService.updateByPrimaryKeySelective(item);
+					}
+					itemProcessService.insertSelective(itemProcess); 
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "分行监察室 对项目  "+item.getName()+" 进行跟踪处理", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(0);
+					js.setMessage("监察室对项目跟踪处理成功");
+					
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+			js.setMessage("监察室对项目跟踪处理发生异常");
+		}
+		return js;
+	}
+	
 	
 	/**
 	 * 中支上传文件保存
@@ -687,7 +742,108 @@ public class BranchController extends SystemAction {
 		}
 		return js;
 	}
+
 	
+	/**
+	 * 中支上传文件保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateReChangeFile.do")
+	public JsonResult<ItemProcess> jsonSaveOrUpdateReChangeFile( 
+			ItemProcess itemProcess,
+			HttpServletRequest request, HttpServletResponse response) { 
+		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
+		js.setCode(1);
+		js.setMessage("上传跟踪监察整改情况失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		try { 
+			if(itemProcess != null && itemProcess.getItemId() != null && itemProcess.getItemId()>0){
+				Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+				if(item != null){
+					itemProcess.setId(0);
+					itemProcess.setDefined(false);
+					itemProcess.setOrgId(organ.getId());
+					itemProcess.setPreparerOrgId(organ.getId());
+					itemProcess.setPreparerId(loginUser.getId());
+					itemProcess.setPreparerTime(new Date());
+					itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_5); 
+					itemProcessService.insertSelective(itemProcess); 
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的跟踪监察整改情况资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(0);
+					js.setMessage("被监察对象上传跟踪监察整改情况资料成功,等待监察室审核监察");
+					
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+			js.setMessage("被监察对象上传跟踪监察整改情况资料失败,保存上传文件发生异常");
+		}
+		return js;
+	}
+
+	
+	/**
+	 * 中支上传文件保存
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/jsonSaveOrUpdateReFianlOpion.do")
+	public JsonResult<ItemProcess> jsonSaveOrUpdateReFianlOpion( 
+			ItemProcess itemProcess,
+			HttpServletRequest request, HttpServletResponse response) { 
+		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
+		js.setCode(1);
+		js.setMessage("监察给出监察意见失败");
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		try { 
+			if(itemProcess != null && itemProcess.getItemId() != null && itemProcess.getItemId()>0){
+				Item item = itemService.selectByPrimaryKey(itemProcess.getItemId());
+				if(item != null){
+					itemProcess.setId(0);
+					itemProcess.setDefined(false);
+					itemProcess.setOrgId(organ.getId());
+					itemProcess.setPreparerOrgId(organ.getId());
+					itemProcess.setPreparerId(loginUser.getId());
+					itemProcess.setPreparerTime(new Date());
+					if(itemProcess.getIsOver()== Constants.NOT_OVER){
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_6);
+					}else{
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_7);
+						if(item.getStatus() == 3){
+							item.setStatus(5);
+						}else{
+							item.setStatus(4);
+						}
+						itemService.updateByPrimaryKeySelective(item);
+					}
+					itemProcessService.insertSelective(itemProcess); 
+					String ip = IpUtil.getIpAddress(request);		
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "分行监察室对项目  "+item.getName()+" 给出了监察意见", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					js.setCode(0);
+					js.setMessage("监察给出监察意见成功,当前项目完结");
+					
+				}
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+			js.setMessage("监察给出监察意见发生异常");
+		}
+		return js;
+	}
 	/**
 	 * 删除项目
 	 * 

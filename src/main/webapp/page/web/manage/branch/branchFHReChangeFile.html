@@ -9,7 +9,8 @@
 -->
 	<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 <script src="/supervision/source/laydate/laydate.js"></script>
-    <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/bootstrap.css" media="screen" />
+	<script src="/supervision/source/js/common/common.js"></script>
+	<link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/bootstrap.css" media="screen" />
 	<script src="/supervision/source/js/common/common.js"></script>
     <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/my.css" media="screen" />
     <link type="text/css" rel="stylesheet" href="/supervision/source/js/plupload/css/prettify.css" media="screen" />
@@ -51,10 +52,11 @@
     <script src="/supervision/source/js/plupload/html5shiv.js"></script>
     <![endif]-->
   
+  
 
 <script type="text/javascript">
 $(document).ready(function(){  
-	 var len=32;//32长度
+	var len=32;//32长度
      var radix=16;//16进制
      var chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
      var uuid=[],i;
@@ -133,7 +135,9 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('被监察对象上传资料成功，待分行监察室进行审核监察 ！', {
+         	var isComple = $("#slt_isValue").val();
+         	var messages = "上传跟踪监察整改情况成功,待分行监察室给出监察意见";
+         	layer.confirm(messages, {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -143,8 +147,13 @@ $(document).ready(function(){
      });
      $("#uploader_browse").removeAttr("style");
      $("#uploader_browse").attr("style","z-index: 1;font-size: 12px;font-weight: normal;");	
+  
+  	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	}); 
  	 loadItemInfo();
 });
+var isFirst_tag = true;
 function loadItemInfo(){
 	$.ajax({ 
        type: "POST", //请求类型
@@ -154,10 +163,11 @@ function loadItemInfo(){
        		if(req != null){   	    	
         		 if(req.resultItem != null){
         		 	$("#lbl_name").text(req.resultItem.name);
+        		 	$("#hid_itemId").val(req.resultItem.id);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
-        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime));
-        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime));
-        		 	$("#hid_itemid").val(req.resultItem.id);
+        		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
+        		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
         		 	var boj = req.resultItemProcess[0];
@@ -170,7 +180,93 @@ function loadItemInfo(){
         		 			}
         		 			$("#td_fileList").html(fHtml);
         		 		}
-        		 	}
+        		 	} 
+        		 	if(req.resultItemProcess.length >1){
+        		 		var phtml ="";
+        		 		for(var i = 1;i<req.resultItemProcess.length;i++){
+        		 			if(req.resultItemProcess[i].contentTypeId == 32){
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">上传相关资料说明：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
+	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 			}
+	        		 			}
+	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 33){
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室监察意见：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室整改意见：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].changeContent+"</label></td></tr>";
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
+	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 			}
+	        		 			}
+	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 34){
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况说明：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况附件：</td><td colspan=\"3\">";
+	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 			}
+	        		 			}
+	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 91){
+        		 				if(isFirst_tag){
+        		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪意见：</td>";
+		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+		        		 			isFirst_tag = false;
+        		 				}else{
+        		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察意见：</td>";
+		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
+		        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+		        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+			        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+			        		 			}
+		        		 			}
+		        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目跟踪监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 				}
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
+	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 			}
+	        		 			} 
+	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 			}else if(req.resultItemProcess[i].contentTypeId == 93){
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论附件：</td><td colspan=\"3\">";
+	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
+	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 			}
+	        		 			}
+	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
+	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察监察室给定最终结论时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+        		 			}
+        		 		}
+        		 		$("#tbl_viewTable").append(phtml);
+        		 	}  
+        		 	/**
+        		 	*从第二个节点开始循环，即var i = 1；
+        		 	**/
         		 }
         	}else{
         		layer.alert(data.message);	        	
@@ -183,7 +279,7 @@ function downLoadFile(path,name){
 	var fileName = encodeURI(encodeURI(name));
 	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
 } 
-function formatTime(str){
+function formatTime(str,islong){
 	var oDate = new Date(str),  
     oYear = oDate.getFullYear(),  
     oMonth = oDate.getMonth()+1,  
@@ -191,7 +287,10 @@ function formatTime(str){
     oHour = oDate.getHours(),  
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
-    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour);
+    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    if(islong){
+    	oTime += ' '+ getzf(oHour) +':'+ getzf(oMin) +':'+getzf(oSen);
+    }
     return oTime;
 }
 //补0操作  
@@ -200,7 +299,8 @@ function getzf(num){
         num = '0'+num;  
     }  
     return num;  
-}  
+}     
+
 function returnPage(){
 		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
 			btn: ['确认','取消'] //按钮
@@ -211,33 +311,6 @@ function returnPage(){
 			
 		});
 }
- 
-function ajaxPost(){
-    $.ajax({
-        type: "POST", //请求类型
-        url: "/supervision/manage/branch/jsonSaveFHFHFile.do",
-        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
-        dataType:"json", //响应数据类型      
-        success: function(data) {
-        	if(data.code==0){   	    	
-				var uploader = $('#uploader').plupload('getUploader');
-	        	if(uploader.files.length>0){
-	        		$("#uploader_start").click(); //上传文件
-	        	}else{
-	        		layer.confirm('被监察对象上传资料成功，待分行监察室进行审核监察 ！', {
-						btn: ['确认'] //按钮
-					}, function(){//点击确认按钮调用
-						layer.close(layer.confirm());//关闭当前弹出层
-						window.location.href = "/supervision/pageRoute/manage/branch/branchFHList.do";
-					});	        		
-	        	}	
-        	}else{
-        		layer.alert(data.message);	        	
-        	}	
-        }
-	});
-}
-
 function saveItem(obj){	
 	layer.confirm('确认信息已经填写完整，并且保存？', {
 		btn: ['确认','取消'] //按钮
@@ -248,6 +321,37 @@ function saveItem(obj){
 		
 	});
 	
+}
+function ajaxPost(){ 
+	 
+	var obj = {};
+	obj.itemId = $("#hid_itemId").val();
+	obj.uuid = $("#hid_uuid").val();
+	obj.content = $("#content_a").val();
+   $.ajax({
+       type: "POST", //请求类型
+       url: "/supervision/manage/branch/jsonSaveOrUpdateReChangeFile.do",
+       data:obj,//发送到服务器的数据，序列化后的值
+       dataType:"json", //响应数据类型      
+       success: function(data) {
+	       	if(data.code==0){   	    	
+				var uploader = $('#uploader').plupload('getUploader');
+	        	if(uploader.files.length>0){
+	        		$("#uploader_start").click(); //上传文件
+	        	}else{
+	        		var messages = "上传跟踪监察整改情况成功,待分行监察室给出监察意见";
+		         	layer.confirm(messages, {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+						window.location.href = "/supervision/pageRoute/manage/branch/branchFHList.do";
+					});	        		
+	        	}	
+	       	}else{
+	       		layer.alert(data.message);	        	
+	       	}	
+       }
+	});
 }
 </script>
 
@@ -261,21 +365,17 @@ function saveItem(obj){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">分行立项分行完成</a></li>
-    <li><a href="#">被监察对象上传资料</a></li>
+    <li><a href="#">被监察对象上传跟踪监察整改情况</a></li>
     </ul>
     </div>
     
     <div class="rightinfo">
-     
     <form id="itemInfoForm" method="post">	   
-    <table class="itemTable" >
+    <table class="itemTable" id="tbl_viewTable" >
     	<tr>
        		<td width="15%" align="right" >项目名称：</td> 
        		<td colspan="3">
-       			<label id="lbl_name"></label>
-				<input type="hidden" id="hid_uuid" name="uuid" />	
-				<input type="hidden" id="hid_itemid" name="itemId" />	
-				<input type="hidden" value="999" name="contentTypeId" />	
+       			<label id="lbl_name"></label> 	
        		</td>
        	</tr>
        	<tr>
@@ -306,35 +406,45 @@ function saveItem(obj){
        		</td>
        	</tr>
        	<tr>
-			<td width="12%" align="right" height="129px;">相关资料：</td>
+       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td colspan="3" id="td_fstTime" style="color:blue;font-size:16px;font-weight:bold;" title="分行监察室提交立项时间">
+       		</td>
+       	</tr> 
+    </table>
+    </form> 
+     <table class="itemTable" >
+       	<tr>
+       		<td width="15%" align="right" style="height:35px;">
+       			<input type="hidden" id="hid_itemId" />
+				<input type="hidden" id="hid_uuid" name="uuid" />跟踪整改情况说明：
+				</td>
+       		<td colspan="3">
+       			 <textarea id="content_a" rows="3" cols="5" style="width:80%;height:38px;margin-left:20px;" ></textarea>	
+       		</td>
+       	</tr> 
+       	<tr>
+			<td width="12%" align="right" height="129px;">整改情况附件：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" ></div>
+				 <div id="themeswitcher" class="pull-right" style="margin-left:20px;" ></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
-	                </script> 
-	                <div id="uploader" >
+	                </script>
+	                <div id="uploader"  style="margin-left:20px;">
 	                </div>
 			 </td>	
-		</tr>  
+		</tr> 
        	<tr>
-       		<td width="12%" align="right">相关资料说明：</td>
-       		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
-       		</td>
-       	</tr>
-       	<tr>
-			<td style="height:80px;"></td>
-			<td>
+			<td style="height:70px;"></td>
+			<td style="width:20%;">
 				<span class="enter"  id="saveBtn" onclick="saveItem(this);" style="float:left; margin-left:10px;">提交</span></td>
 			<td colspan="2" style="text-align:left;">
 				<span class="exitrence"  onclick="returnPage();" style="float:left; margin-left:15px;" >返回</span>
 			</td>
 		</tr>
     </table>
-    </form>
-   
+    </div>  
     
     
     
@@ -351,8 +461,7 @@ function saveItem(obj){
         <div class="tipbtn">
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
-    </div>  
-    </div>  
+    </div> 
 </body>
 
 </html>
