@@ -2,112 +2,29 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>效能监察</title>
-<link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<title>无标题文档</title>
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jsapi.js"></script>
+<script type="text/javascript" src="js/format+zh_CN,default,corechart.I.js"></script>		
+<script type="text/javascript" src="js/jquery.gvChart-1.0.1.min.js"></script>
+<script type="text/javascript" src="js/jquery.ba-resize.min.js"></script>
 
 <script type="text/javascript">
-$(document).ready(function(){ 
-  	$(".sure").click(function(){
-	  	$("#confirm_tip").fadeOut(100);
-	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
-	//getDataList(1);
-});
-function getDataList(pageNo){
-	var obj = {};
-	obj.pageNo = pageNo; 
-	$.ajax({ 
-       type: "POST", //请求类型
-       url: "/supervision/vision/efficiency/showItem.do",
-       data:obj,//发送到服务器的数据，序列化后的值 
-       dataType:"json", //响应数据类型      
-       success: function(req) {
-       		$("#tb_userList").html("");
-       		var itemHtml = "<tr><td colspan=\"2\">没有获取到相关数据</td></tr>";
-	   		if(req.ResultItem != null){
-	       		itemHtml = "";	       		
-       			itemHtml +="<tr>";				    
-			    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">工作事项：</td>";  	
-			    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.name+"</td>";		    
-		        itemHtml +="</tr>";
-		        for(var i = 0;i<req.ResultItemProcess[0].fileList.length;i++){
-			        itemHtml +="<tr>";				    
-				    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";  	
-				    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[0].fileList[i].filePath+"\',\'"+req.ResultItemProcess[0].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a></td>";			       
-			        itemHtml +="</tr>";
-		        }
-	       }
-	       if(req.ResultItemProcess != null){
-	       		for(var i = 0;i<req.ResultItemProcess.length;i++){
-	       			if(req.ResultItemProcess[i].contentTypeId == -1 && req.ResultItemProcess[i].content != null){
-	       				itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察项目：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
-				        itemHtml +="</tr>";		        
-				        
-	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
-	       				itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">监察内容：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[0].content+"</td>";			       
-				        itemHtml +="</tr>";
-				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">规定完成时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.endTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"12%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.orgName+"</td>";			       
-				        itemHtml +="</tr>";
-	       			}
-			        
-		        }
-	       }
-	       $("#tb_userList").html(itemHtml);
-       }
-	});
-}
-function showAlertTip(type){
-	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的项目！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的项目！");
-		$("#confirm_tip").fadeIn(200);
-	}
-}
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
-}
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
-}
-function clearForm(){
+		gvChartInit();
+		jQuery(document).ready(function(){
 
-}
-function downLoadFile(path,name){
-		var filePath = encodeURI(encodeURI(path));
-		var fileName = encodeURI(encodeURI(name));
-		window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
-}
-
-function returnPage(){
-	window.location.href="/supervision/pageRoute/vision/enforce/enforceList.do";
-		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
-			btn: ['确认','取消'] //按钮
-		}, function(){//点击确认按钮调用
-			layer.close(layer.confirm());//关闭当前弹出层
-			
-		}, function(){
-			
+		jQuery('#myTable5').gvChart({
+				chartType: 'PieChart',
+				gvSettings: {
+					vAxis: {title: 'No of players'},
+					hAxis: {title: 'Month'},
+					width: 650,
+					height: 250
+					}
+			});
 		});
-	}
-</script>
-
-
+		</script>
 </head>
 
 
@@ -115,94 +32,151 @@ function returnPage(){
 
 	<div class="place">
     <span>位置：</span>
-    <ul class="placeul"> 
-    <li><a href="#">实时监察</a></li>
-    <li><a href="#">效能监察</a></li>
+    <ul class="placeul">
+    <li><a href="#">首页</a></li>
+    <li><a href="#">工作台</a></li>
     </ul>
     </div>
     
-    <div class="rightinfo">
     
-    <div class="tools">
+    <div class="mainbox">
     
-    	<a class="enter" onclick="returnPage()"  target="rightFrame">返回</a> 
-    	
-    	<!-- <div style=" float:right; margin-right: 6%;width: 30%; height: 100%; background-color: red;">
-    		
-    	</div> -->
+    <div class="mainleft">
+    
+    
+    <div class="leftinfo">
+    <div class="listtitle"><a href="#" class="more1">更多</a>数据统计</div>
+        
+    <div class="maintj">  
+    <table id='myTable5'>
+				<caption>uimaker.com players count</caption>
+				<thead>
+					<tr>
+						<th></th>
+						<th>Jan</th>
+						<th>Feb</th>
+						<th>Mar</th>
+						<th>Apr</th>
+						<th>May</th>
+						<th>Jun</th>
+						<th>Jul</th>
+						<th>Aug</th>
+						<th>Sep</th>
+						<th>Oct</th>
+						<th>Nov</th>
+						<th>Dec</th>
+					</tr>
+				</thead>
+					<tbody>
+					<tr>
+						<th>2010</th>
+						<td>125</td>
+						<td>185</td>
+						<td>327</td>
+						<td>359</td>
+						<td>376</td>
+						<td>398</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+						<td>0</td>
+					</tr>
+				</tbody>
+			</table>  
     </div>
     
-       
-    <table class="tablelist" >
-    	<thead>
-    		<tr>
-				<th></th>
-				<th></th>
-        	</tr>
-        	
-        </thead>
-        <tbody id="tb_userList">  
-        </tbody>
-    </table>
+    </div>
+    <!--leftinfo end-->
+    
+    
+    <div class="leftinfos">
     
    
-    <!-- <div class="pagin">
-    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
-        <ul class="paginList" id="ul_pageList">
-        
-        <li class="paginItem"><a href="javascript:;">1</a></li>
-        <li class="paginItem current"><a href="javascript:;">2</a></li>
-        <li class="paginItem"><a href="javascript:;">3</a></li>
-        <li class="paginItem"><a href="javascript:;">4</a></li>
-        <li class="paginItem"><a href="javascript:;">5</a></li>
-        <li class="paginItem more"><a href="javascript:;">...</a></li>
-        <li class="paginItem"><a href="javascript:;">10</a></li>
-        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-        </ul>
-    </div> -->
+    <div class="infoleft">
+    
+    <div class="listtitle"><a href="#" class="more1">更多</a>待办事项</div>    
+    <ul class="newlist">
+    <li><a href="#">上海自贸区今日正式挂牌成立</a><b>10-09</b></li>
+    <li><a href="#">习近平将访东南亚两国 首次出席APEC峰会</a><b>10-08</b></li>
+    <li><a href="#">最高法:谎称炸弹致航班备降者从重追刑责</a><b>10-09</b></li>
+    <li><a href="#">华北大部遭遇雾霾天 北京全城陷重污染</a><b>10-06</b></li>
+    <li><a href="#">"环保专家"董良杰涉嫌寻衅滋事被刑拘</a><b>10-05</b></li>
+    <li><a href="#">中央巡视组：重庆对一把手监督不到位</a><b>10-04</b></li>
+    <li><a href="#">囧!悍马没改好成华丽马车(图)</a><b>10-03</b></li>
+    </ul>   
+    
+    </div>
     
     
-    <div class="tip" id="confirm_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="tipinfo">
-	        <span><img src="/supervision/source/images/ticon.png" /></span>
-	        <div class="tipright">
-	        	<p id="showmessage"></p> 
-	        </div> 
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="sure" value="确定" /> 
-        </div> 
+    <div class="inforight">
+    <div class="listtitle"><a href="#" class="more1">添加</a>常用工具</div>
+    
+    <ul class="tooli">
+    <li><span><img src="images/d01.png" /></span><p><a href="#">信息资料</a></p></li>
+    <li><span><img src="images/d02.png" /></span><p><a href="#">编辑</a></p></li>
+    <li><span><img src="images/d03.png" /></span><p><a href="#">记事本</a></p></li>
+    <li><span><img src="images/d04.png" /></span><p><a href="#">任务日历</a></p></li>
+    <li><span><img src="images/d05.png" /></span><p><a href="#">图片管理</a></p></li>
+    <li><span><img src="images/d06.png" /></span><p><a href="#">交易</a></p></li>
+    <li><span><img src="images/d07.png" /></span><p><a href="#">档案袋</a></p></li>    
+    </ul>
+    
+    </div>
+    
+    
+    </div>
+    
+    
+    </div>
+    <!--mainleft end-->
+    
+    
+    <div class="mainright">
+    
+    
+    <div class="dflist">
+    <div class="listtitle"><a href="#" class="more1">更多</a>最新信息</div>    
+    <ul class="newlist">
+    <li><a href="#">上海自贸区今日正式挂牌成立</a></li>
+    <li><a href="#">习近平将访东南亚两国 首次出席APEC峰会</a></li>
+    <li><a href="#">最高法:谎称炸弹致航班备降者从重追刑责</a></li>
+    <li><a href="#">华北大部遭遇雾霾天 北京全城陷重污染</a></li>
+    <li><a href="#">"环保专家"董良杰涉嫌寻衅滋事被刑拘</a></li>
+    <li><a href="#">中央巡视组：重庆对一把手监督不到位</a></li>
+    <li><a href="#">囧!悍马没改好成华丽马车(图)</a></li>
+    <li><a href="#">澳门黄金周加派稽查人员监察出租车违规行为</a></li>
+    <li><a href="#">香港环境局长吁民众支持政府扩建堆填区</a></li> 
+    </ul>        
+    </div>
+    
+    
+    <div class="dflist1">
+    <div class="listtitle"><a href="#" class="more1">更多</a>信息统计</div>    
+    <ul class="newlist">
+    <li><i>会员数：</a></i>2535462</li>
+    <li><i>文档数：</a></i>5546</li>
+    <li><i>普通文章：</a></i>2315</li>
+    <li><i>软件：</a></i>1585</li>
+    <li><i>评论数：</a></i>5342</li>    
+    </ul>        
+    </div>
+     
     </div> 
-     <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="addtipinfo"> 
-	       <div style="height:300px;width:99%;">	
-	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:100%;"> 
-	        			<tr><td style="height:30px;width:80px;"><span>用户名称：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户账号：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>用户密码：</span></td><td><input type="text" class="dfinput"  /></td></tr> 
-	        			<tr><td style="height:30px;"><span>确认密码：</span></td><td><input type="text" class="dfinput"  /></td></tr>  
-	        			<tr><td style="height:30px;"><span>所属机构：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>职务名称：</span></td><td><input type="text" class="dfinput"  /></td></tr>
-	        			<tr><td style="height:30px;"><span>用户角色：</span></td><td></td></tr>
-	        			<tr><td colspan="2"></td></tr>
-	        		</table>
-	        	</form>
-	       </div>
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
-        	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
-        </div> 
-    </div> 
-    </div> 
+    </div>
+
+
 
 </body>
-
+<script type="text/javascript">
+	setWidth();
+	$(window).resize(function(){
+		setWidth();	
+	});
+	function setWidth(){
+		var width = ($('.leftinfos').width()-12)/2;
+		$('.infoleft,.inforight').width(width);
+	}
+</script>
 </html>
