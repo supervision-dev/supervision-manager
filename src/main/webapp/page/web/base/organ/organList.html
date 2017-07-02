@@ -23,12 +23,11 @@ function getOrgTreeList(){
        success: function(req) {
        		$("#tbl_orgList").html("");
        		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		var oHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"4\">加载机构数据失败，请联系管理员~</td></tr>";
        		if(req != null && req.length >0){
     			tbHtml = "";
+    			oHtml = "";
        			for(var i = 0; i<req.length;i++){
-       				if(i == 0){
-       					loadOrganListByOrganId(-1,req[i].childrenCount);
-       				}
        				if(req[i].childrenCount ==0){
        					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td onclick=\"loadOrganListByOrganId("+req[i].id+","+req[i].childrenCount+")\">"+req[i].name+"</td></tr>";
        				}else{
@@ -37,12 +36,48 @@ function getOrgTreeList(){
        					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
        					tbHtml += "</table></td></tr>  ";
        				} 
+       				var oObj = req[i];
+					oHtml += "<tr>";
+       				oHtml += "<td><input name=\"orgChk\" type=\"checkbox\" value=\""+oObj.id+"\" doc=\""+oObj.name+"\"  /></td>";
+       				oHtml += "<td>"+oObj.name+"</td>";
+       				if(oObj.supervision == 0){
+       					oHtml += "<td>否</td> ";
+       				}else{
+       					oHtml += "<td>是</td> ";
+       				}
+       				if(oObj.orgtype == 37){
+       					oHtml += "<td>分行行领导机构</td>";
+       				}else if(oObj.orgtype == 38){
+       					oHtml += "<td>分行办公室机构</td>";
+       				} else if(oObj.orgtype == 39){
+       					oHtml += "<td>依法行政领导办公室</td>";
+       				}else if(oObj.orgtype == 40){
+       					oHtml += "<td>分行监察室  </td>";
+       				}else if(oObj.orgtype == 41){
+       					oHtml += "<td>分行机关</td>";
+       				}else if(oObj.orgtype == 42){
+       					oHtml += "<td>中支机构</td>";
+       				}else if(oObj.orgtype == 43){
+       					oHtml += "<td>中支监察室</td>";
+       				}else if(oObj.orgtype == 44){
+       					oHtml += "<td>中支部门</td>";
+       				}else if(oObj.orgtype == 45){
+       					oHtml += "<td>县支行</td>";
+       				}else if(oObj.orgtype == 46){
+       					oHtml += "<td>中支办公室机构</td>";
+       				}else if(oObj.orgtype == 47){
+       					oHtml += "<td>中支依法行政领导小组办公室</td>";
+       				}else if(oObj.orgtype == 48){
+       					oHtml += "<td>中支领导机构</td>";
+       				}
+       				oHtml += "</tr>";
        			}
        		} 
+       		$("#tb_organList").html(oHtml);
        		$("#tbl_orgList").html(tbHtml); 
        }
     }); 
-}
+} 
 
 function loadSubOrgListByPId(pId){
 	$.ajax({ 
