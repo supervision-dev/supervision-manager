@@ -5,7 +5,10 @@
 <title>廉政监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
-
+<!-- 以下两个引的文件用于layer -->
+	<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+	<script src="/supervision/source/js/layer/layer.js"></script>
+    
 <script type="text/javascript">
 $(document).ready(function(){ 
   	$(".sure").click(function(){
@@ -128,7 +131,7 @@ function getDataList(pageNo){
 				    }else{				    	
 			    		itemHtml +="<td width=\"180px;\"></td>";
 			    	}
-				    itemHtml +="<td>删除</td>";  			    
+				    itemHtml +="<td><button type=\"button\" class=\"button-actionA\" onclick=\"deleteItem("+req.datalist[i].id+",'"+req.datalist[i].name+"');\"  target=\"rightFrame\">删除</button></td>";  			    
 			        itemHtml +="</tr>";
 	       		}
 	       }
@@ -183,17 +186,36 @@ function showAlertTip(type){
 		$("#confirm_tip").fadeIn(200);
 	}
 }
-function showAddTip(){
-	$("#add_tip").fadeIn(200);
+function deleteItem(id,name){
+	layer.confirm('确认删除项目：'+name+'?', {
+		btn: ['确认','取消'] //按钮
+	}, function(){//点击确认按钮调用
+		layer.close(layer.confirm());//关闭当前弹出层
+		$.ajax({
+			url : "/supervision/vision/enforce/jsondeleteItemById.do?id="+id,
+			type : "post",  
+	    	dataType : "json",								
+			success : function(data) { 									
+	  			if(data.code == 0){ 
+	  				layer.confirm('删除成功！', {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+						window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+					});	 
+	  			}else{		  			    
+					layer.confirm('删除失败！', {
+						btn: ['确认'] //按钮
+					}, function(){//点击确认按钮调用
+						layer.close(layer.confirm());//关闭当前弹出层
+					});	 
+	  			}  
+		    } 
+		});
+	}, function(){
+		
+	});
 }
-function saveOrUpdateUserInfo(){
-	clearForm();
-	$('#add_tip').fadeOut(100);
-}
-function clearForm(){
-
-}
-
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id;
 } 
