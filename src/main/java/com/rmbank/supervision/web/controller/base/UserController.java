@@ -82,14 +82,14 @@ public class UserController extends SystemAction {
 		//分页集合
 		List<User> userList = new ArrayList<User>();
 		//获取当前登录用户
-//    	User lgUser = this.getLoginUser();
-//    	List<Organ> userOrgList=userService.getUserOrgByUserId(lgUser.getId());
+    	User lgUser = this.getLoginUser();
+    	List<Organ> userOrgList=userService.getUserOrgByUserId(lgUser.getId());
 //    	List<Organ> userOrgList=userService.getUserOrgByUserId(2);
     	//判断当前登录账号是不是超级管理员
-//		if(lgUser.getAccount().equals(Constants.USER_SUPER_ADMIN_ACCOUNT) 
-//				|| userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_1 
-//				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_2
-//				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_3){
+		if(lgUser.getAccount().equals(Constants.USER_SUPER_ADMIN_ACCOUNT) 
+				|| userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_1 
+				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_2
+				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_3){
 			try{
 				//t_user取满足要求的参数数据
 				userList =  userService.getUserList(user);					
@@ -98,25 +98,25 @@ public class UserController extends SystemAction {
 			}catch(Exception ex){ 
 				ex.printStackTrace();
 			}	
-//		}else {
-//			try{
-//				lgUser.setSearchName(user.getSearchName()); 
-//				
-//				//获取当前登录用户所属的机构ID
-//				List<Integer> userOrgIds=userService.getUserOrgIdsByUserId(lgUser.getId());
-//				//将用户所属的机构id存入到session中
-//				HttpSession session = request.getSession();
-//				session.setAttribute("userOrgIds", userOrgIds); 
-//				
-//				//根据机构ID查询用户
-//				userList=userService.getUserByOrgids(userOrgIds);					
-//				totalCount = userService.getUserCountByOrgId(lgUser);
-// 				
-//
-//			}catch(Exception ex){ 
-//				ex.printStackTrace();
-//			}	 
-//		}
+		}else {
+			try{
+				lgUser.setSearchName(user.getSearchName()); 
+				
+				//获取当前登录用户所属的机构ID
+				List<Integer> userOrgIds=userService.getUserOrgIdsByUserId(lgUser.getId());
+				//将用户所属的机构id存入到session中
+				HttpSession session = request.getSession();
+				session.setAttribute("userOrgIds", userOrgIds); 
+				
+				//根据机构ID查询用户
+				userList=userService.getUserByOrgids(userOrgIds);					
+				totalCount = userService.getUserCountByOrgId(lgUser);
+ 				
+
+			}catch(Exception ex){ 
+				ex.printStackTrace();
+			}	 
+		}
 		user.setTotalCount(totalCount); 	
 
 		dr.setData(user);
@@ -330,4 +330,40 @@ public class UserController extends SystemAction {
 		}			
 		return user;
     }
+
+	/**
+	 * 加载机构的树
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadOrganTreeList.do")
+	public List<Organ> getOrganList(
+			@RequestParam(value = "pid", required = false) Integer pid,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		Organ organ = new Organ();
+		if (pid != null && pid>0) {
+			organ.setPid(pid);
+		} else {
+			//获取当前登录用户
+			User loginUser = this.getLoginUser();
+			//获取当前用户对应的机构列表
+			List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+			//获取当前用户对应的第一个机构
+			Organ userOrg=userOrgList.get(0);
+			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
+				organ.setPid(0);
+			}else{
+				organ.setPid(userOrg.getPid());
+			}
+		} 
+		//获取用户所属的机构  
+		List<Organ> list = organService.getOrganByPId(organ);	 
+		return list;// json.toString();
+	}  
+    
 }

@@ -229,9 +229,9 @@ function showOrgTip(){
 	$("#organ_tip").fadeIn(0);
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/loadOrganTreeList.do?pid=0", 
+       url: "/supervision/system/user/loadOrganTreeList.do?pid=0", 
        dataType:"json", //响应数据类型      
-       success: function(req) {
+       success: function(req) { 
        		$("#tbl_orgList").html("");
        		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
        		if(req != null && req.length >0){
