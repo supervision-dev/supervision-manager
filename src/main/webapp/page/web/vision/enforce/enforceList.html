@@ -126,7 +126,7 @@ function getDataList(pageNo){
 			    		itemHtml +="<td width=\"180px;\"></td>";
 			    	}	    
 				    
-				    itemHtml +="<td>删除</td>";  			    
+				    itemHtml +="<td><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",140);\"  target=\"rightFrame\">删除</button></td>";  			    
 			        itemHtml +="</tr>";
 	       		}
 	       }
@@ -172,17 +172,30 @@ function getDataList(pageNo){
        }
 	});
 }
-function showAlertTip(type){
-	if(type == 'edit'){
-		$("#showmessage").html("请选择要编辑的用户！");
-		$("#confirm_tip").fadeIn(200);
-	}else{
-		$("#showmessage").html("请选择要删除的用户！");
-		$("#confirm_tip").fadeIn(200);
-	}
+function deleteItem(id,name){
+	layer.confirm('确认删除项目'+name+'?', {
+		btn: ['确认','取消'] //按钮
+	}, function(){//点击确认按钮调用
+		layer.close(layer.confirm());//关闭当前弹出层
+		$.ajax({
+			url : "/supervision/vision/efficiency/jsondeleteItemById.do?id="+id,
+			type : "post",  
+	    	dataType : "json",								
+			success : function(data) { 									
+	  			if(data.code == 0){ 
+	  				$.messager.alert('操作信息',data.message,'info',function(){ 
+	  					search();  
+	      			});
+	  			}else{		  			    
+					$.messager.alert('错误信息','删除失败！','error');
+	  			}  
+		    } 
+		});
+	}, function(){
+		
+	});
+	
 }
-
-
 function showItem(id){ 
 	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id;
 } 

@@ -70,26 +70,28 @@ function getDataList(pageNo){
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
-				    	if(req.datalist[i].orgName.length >6){
-					    	var names = req.datalist[i].orgName.substring(0,4)+"…"
+				    	if(req.datalist[i].orgName.length >7){
+					    	var names = req.datalist[i].orgName.substring(0,6)+"…"
 					    	itemHtml +="<td title=\""+req.datalist[i].orgName+"\">"+names+"</td>";
 					    }else{
 					    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";
 					    }
 				    	
 				    }
-				    if(req.datalist[i].isSign <= 3){
+				    if(req.datalist[i].isSign <= 3 &&req.datalist[i].status !=0){
 				    	itemHtml +="<td><img alt=\"未签收\" title=\"未签收\" src=\"/supervision/source/images/mark.png\" /></td>";
 				    }else if(req.datalist[i].isSign > 3){
 				    	itemHtml +="<td><img alt=\"已签收\" title=\"已签收\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }
-				    if(req.datalist[i].status == 4){
+				    
+				    /* if(req.datalist[i].status == 4){
 				    	itemHtml +="<td><img alt=\"已完成\" title=\"已完成\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
-				    	itemHtml +="<td><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
+				    	itemHtml +="<td><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/overdead.png\" /></td>";
 				    }else if(req.datalist[i].status != 4){
 				    	itemHtml +="<td><img alt=\"未完成\" title=\"未完成\" src=\"/supervision/source/images/green.gif\" /></td>";
-				    }
+				    } */
+				    
 				    if(req.datalist[i].status == 4){
 				    	itemHtml +="<td>已完结</td>";	
 				    }else if(req.datalist[i].status == 5){
@@ -200,7 +202,30 @@ function getDataList(pageNo){
        }
 	});
 }
-
+function deleteItem(id,name){
+	layer.confirm('确认删除项目'+name+'?', {
+		btn: ['确认','取消'] //按钮
+	}, function(){//点击确认按钮调用
+		layer.close(layer.confirm());//关闭当前弹出层
+		$.ajax({
+			url : "/supervision/vision/efficiency/jsondeleteItemById.do?id="+id,
+			type : "post",  
+	    	dataType : "json",								
+			success : function(data) { 									
+	  			if(data.code == 0){ 
+	  				$.messager.alert('操作信息',data.message,'info',function(){ 
+	  					search();  
+	      			});
+	  			}else{		  			    
+					$.messager.alert('错误信息','删除失败！','error');
+	  			}  
+		    } 
+		});
+	}, function(){
+		
+	});
+	
+}
 function showAlertTip(type){
 	if(type == 'edit'){
 		$("#showmessage").html("请选择要编辑的项目！");
@@ -229,7 +254,7 @@ function sign(itemId){
 		layer.close(layer.confirm());//关闭当前弹出层
 		$.ajax({ 
 	       type: "POST", //请求类型
-	       url: "/supervision//vision/efficiency/jsonSignItemById.do?itemId="+itemId,
+	       url: "/supervision/vision/efficiency/jsonSignItemById.do?itemId="+itemId,
 	       //data:obj,//发送到服务器的数据，序列化后的值 
 	       dataType:"json", //响应数据类型      
 	       success: function(req) {
@@ -492,11 +517,11 @@ function saveSelectOrg(obj){
 				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">查看</th>	
 				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">完成部门</th>	
 				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">签收情况</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">完成情况</th>	
+				<!-- <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">完成情况</th>	 -->
 				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">是否完结</th>	
 				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">规定办理时间</th>	
 				<!-- <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">状态提醒</th> -->
-				<th width="160px" style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">操作</th>
+				<th width="150px" style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">操作</th>
         	</tr>
         </thead>
         <tbody id="tb_userList">  
