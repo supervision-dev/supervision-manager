@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -316,6 +317,7 @@ public class BranchController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Organ organ = userOrgByUserId.get(0);
+		List<Integer> superVisionOrgId1 = new ArrayList<Integer>();
 		List<Integer> superVisionOrgId = new ArrayList<Integer>();
 		try { 
 			if(item != null){
@@ -338,13 +340,14 @@ public class BranchController extends SystemAction {
 					String[] ids = item.getSupervisionOrgIds().split(",");
 					for(String id :ids){
 						if(!StringUtil.isEmpty(id)){
-							superVisionOrgId.add(Integer.parseInt(id));
+							superVisionOrgId1.add(Integer.parseInt(id));
 						}
 					}
-					if(superVisionOrgId.size() == 0){
+					if(superVisionOrgId1.size() == 0){
 						js.setMessage("请选择被监察对象");
 						return js;
 					}
+					superVisionOrgId =  new ArrayList<Integer>(new HashSet<Integer>(superVisionOrgId1)); 
 				}
 				item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 				item.setPid(0); //主任务节点的ID
@@ -391,6 +394,7 @@ public class BranchController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 		Organ organ = userOrgByUserId.get(0);
+		List<Integer> superVisionOrgId1 = new ArrayList<Integer>();
 		List<Integer> superVisionOrgId = new ArrayList<Integer>();
 		try { 
 			if(item != null){
@@ -413,13 +417,14 @@ public class BranchController extends SystemAction {
 					String[] ids = item.getSupervisionOrgIds().split(",");
 					for(String id :ids){
 						if(!StringUtil.isEmpty(id)){
-							superVisionOrgId.add(Integer.parseInt(id));
+							superVisionOrgId1.add(Integer.parseInt(id));
 						}
 					}
-					if(superVisionOrgId.size() == 0){
+					if(superVisionOrgId1.size() == 0){
 						js.setMessage("请选择被监察对象");
 						return js;
 					}
+					superVisionOrgId =  new ArrayList<Integer>(new HashSet<Integer>(superVisionOrgId1)); 
 				}
 				item.setItemType(Constants.STATIC_ITEM_TYPE_MANAGE);
 				item.setPid(0); //主任务节点的ID
