@@ -164,7 +164,23 @@ public class PageRouteController extends SystemAction {
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
     	session.setAttribute("FHFHItemId", id); 
-    	ModelAndView mv = new ModelAndView("web/manage/branch/branchFHList");
+    	String pageUrl = "web/manage/branch/branchFHFile"; 
+    	if(currentTag == Constants.CONTENT_TYPE_ID_1){
+    		pageUrl = "web/manage/branch/branchFHFile";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_2){
+    		pageUrl = "web/manage/branch/branchFHOpinion";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_3){
+    		pageUrl = "web/manage/branch/branchFHChangeFile";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_4){
+    		pageUrl = "web/manage/branch/branchFHFollow";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_5){
+    		pageUrl = "web/manage/branch/branchFHFianlOpinion";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_6){
+    		pageUrl = "web/manage/branch/branchFHReChangeFile";
+    	}else if(currentTag == Constants.CONTENT_TYPE_ID_7){
+    		pageUrl = "web/manage/branch/branchFHList";
+    	}
+    	ModelAndView mv = new ModelAndView(pageUrl);
     	return mv;
     }
 

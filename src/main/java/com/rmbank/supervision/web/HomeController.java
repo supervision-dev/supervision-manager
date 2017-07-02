@@ -442,6 +442,9 @@ public class HomeController extends SystemAction {
                     user.setSalt(u.getSalt());
                     user.setIsChangePwd(1);
                     userService.updateByPrimaryKeySelective(user);
+                    User loginUser = (User)request.getSession().getAttribute(Constants.USER_INFO);
+                    loginUser.setIsChangePwd(1);
+                    request.getSession().setAttribute(Constants.USER_INFO,loginUser);
                     js.setCode(0);
                     js.setMessage("修改密码成功！");
                 }else{

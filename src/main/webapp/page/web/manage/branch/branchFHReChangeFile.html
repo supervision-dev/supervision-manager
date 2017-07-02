@@ -191,7 +191,7 @@ function formatTime(str){
     oHour = oDate.getHours(),  
     oMin = oDate.getMinutes(),  
     oSen = oDate.getSeconds(),  
-    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay);
+    oTime = oYear +'-'+ getzf(oMonth) +'-'+ getzf(oDay) +' '+ getzf(oHour);
     return oTime;
 }
 //补0操作  
@@ -308,13 +308,13 @@ function saveItem(obj){
        	<tr>
 			<td width="12%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" style="margin-left:20px;" ></div>
+				 <div id="themeswitcher" class="pull-right" ></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script> 
-	                <div id="uploader"  style="margin-left:20px;">
+	                <div id="uploader" >
 	                </div>
 			 </td>	
 		</tr>  

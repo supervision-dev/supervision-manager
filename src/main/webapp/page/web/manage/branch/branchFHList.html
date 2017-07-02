@@ -51,9 +51,39 @@ function getDataList(pageNo){
 				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
 				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(31,"+req.datalist[i].id+");\" class=\"button-action\">上传资料</button></td>";
 				    	}else{
-				    		manageHtml +="<td>资料上传中…</td>";
+				    		manageHtml +="<td>项目监察中…</td>";
 				    	}
-				    }else{
+				    }else if(req.datalist[i].lasgTag ==32){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(32,"+req.datalist[i].id+");\" class=\"button-action\">录入监察意见</button></td>";
+				    	}else{
+				    		manageHtml +="<td>项目监察中…</td>";
+				    	}
+				    }else if(req.datalist[i].lasgTag ==33){
+				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(33,"+req.datalist[i].id+");\" class=\"button-action\">录入整改情况</button></td>";
+				    	}else{
+				    		manageHtml +="<td>项目监察中…</td>";
+				    	} 
+				    }else if(req.datalist[i].lasgTag ==34){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(34,"+req.datalist[i].id+");\" class=\"button-action\">项目跟踪</button></td>";
+				    	}else{
+				    		manageHtml +="<td>项目监察中…</td>";
+				    	}
+				    }else if(req.datalist[i].lasgTag ==35){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(35,"+req.datalist[i].id+");\" class=\"button-action\">录入监察结论</button></td>";
+				    	}else{
+				    		manageHtml +="<td>项目监察中…</td>";
+				    	}
+				    }else if(req.datalist[i].lasgTag ==91){
+				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(35,"+req.datalist[i].id+");\" class=\"button-action\">录入跟踪整改情况</button></td>";
+				    	}else{
+				    		manageHtml +="<td>项目监察中…</td>";
+				    	}
+				    }else {
 				    	if(req.datalist[i].status == 4){
 				    		manageHtml +="<td>【已完成】</td>";
 				    	}else if(req.datalist[i].status == 5){
