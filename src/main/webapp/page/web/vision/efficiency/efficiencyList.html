@@ -58,7 +58,7 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td style=\"color:green;\"><img alt=\"已完结\" title=\"已完结\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
-				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/overdead.png\" /></td>";
 				    }					    
 				    if(req.datalist[i].name.length >6){
 				    	var names = req.datalist[i].name.substring(0,4)+"…"
@@ -519,19 +519,20 @@ function saveSelectOrg(obj){
     <table class="tablelist">
     	<thead >
     		<tr >
-		        <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;"></th>
-		        <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x; text-align: center;">立项情况</th>
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">状态</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">工作事项</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">查看</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">完成部门</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">签收情况</th>	
-				<!-- <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">完成情况</th>	 -->
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">是否完结</th>	
-				<th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">规定办理时间</th>	
-				<!-- <th style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">状态提醒</th> -->
-				<th width="150px" style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;">操作</th>
+		        <th </th>
+		        <th>立项情况</th>
+				<th>状态</th>	
+				<th>工作事项</th>	
+				<th>查看</th>	
+				<th>完成部门</th>	
+				<th>签收情况</th>	
+				<!-- <th>完成情况</th>	 -->
+				<th>是否完结</th>	
+				<th>规定办理时间</th>	
+				<!-- <th>状态提醒</th> -->
+				<th width="150px">操作</th>
         	</tr>
+        	 <!-- style="height: 70px; line-height: 70px; background:url(/supervision/source/images/th1.gif) repeat-x;" -->
         </thead>
         <tbody id="tb_userList">  
         </tbody>

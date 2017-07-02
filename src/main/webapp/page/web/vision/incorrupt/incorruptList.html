@@ -59,7 +59,7 @@ function getDataList(pageNo){
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td style=\"color:green;\"><img alt=\"已完结\" title=\"已完结\" src=\"/supervision/source/images/dui.gif\" /></td>";
 				    }else if(req.datalist[i].status == 5){
-				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/yuqiwanjie.gif\" /></td>";
+				    	itemHtml +="<td style=\"color:green;\"><img alt=\"逾期完成\" title=\"逾期完成\" src=\"/supervision/source/images/overdead.png\" /></td>";
 				    }	
 				    if(req.datalist[i].name.length >6){
 				    	var names = req.datalist[i].name.substring(0,6)+"…"

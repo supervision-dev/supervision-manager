@@ -87,9 +87,10 @@ public class UserController extends SystemAction {
 //    	List<Organ> userOrgList=userService.getUserOrgByUserId(2);
     	//判断当前登录账号是不是超级管理员
 		if(lgUser.getAccount().equals(Constants.USER_SUPER_ADMIN_ACCOUNT) 
-				|| userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_1 
+				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_1 
 				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_2
-				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_3){
+				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_3
+				||userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_4){
 			try{
 				//t_user取满足要求的参数数据
 				userList =  userService.getUserList(user);					
