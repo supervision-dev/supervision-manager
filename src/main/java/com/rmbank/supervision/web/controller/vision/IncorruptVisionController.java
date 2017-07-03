@@ -157,9 +157,6 @@ public class IncorruptVisionController extends SystemAction {
 				it.setLogOrgId(userOrg.getId());
 			}
 
-			String ip = IpUtil.getIpAddress(request);		
-			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了对廉政监察项目列表的查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-			
 			item.setTotalCount(totalCount);
 			item.setOrgType(userOrg.getOrgtype());
 			dr.setData(item);
