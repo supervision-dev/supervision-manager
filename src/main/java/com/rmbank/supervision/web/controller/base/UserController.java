@@ -261,11 +261,12 @@ public class UserController extends SystemAction {
 			User user = userService.getUserById(id);
 			boolean state = userService.deleteUserById(id);				
 			if(state){
+				js.setCode(new Integer(0));
+				js.setMessage("删除成功!");
 				User loginUser = this.getLoginUser();
 				String ip = IpUtil.getIpAddress(request);		
 				logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，删除了"+user.getName()+"用户", 3, loginUser.getId(), loginUser.getUserOrgID(), ip);
-				js.setCode(new Integer(0));
-				js.setMessage("删除成功!");
+				
 				return js;
 			}else {
 				return js;
