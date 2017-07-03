@@ -35,6 +35,10 @@ function getDataList(pageNo){
 			}else{
 				$("#InputItemBtn").hide();
 			}
+			if(LogOrgType == 40 || LogOrgType == 43){
+				$("#DeleteBtn").show();
+			}
+			
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"13\">没有获取到相关数据</td></tr>";
 	   		if(req.datalist != null && req.datalist.length >0){
@@ -165,8 +169,6 @@ function getDataList(pageNo){
 				    }else{
 				    	itemHtml +="<td width=\"180px;\"></td>";
 				    }   
-				      
-				    
 				    //流程判断结束
 				   	    
 			        itemHtml +="</tr>";
@@ -504,7 +506,7 @@ function saveSelectOrg(obj){
     <div class="tools">
     
     	<ul class="toolbar">
-        <li onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+        <li onclick="showAlertTip();" id="DeleteBtn" style="display: none;"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
        	<li id="InputItemBtn" style="display: none;" class="click" onclick="efficiencyInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     	
