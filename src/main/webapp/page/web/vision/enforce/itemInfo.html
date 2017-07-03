@@ -154,28 +154,27 @@ $(document).ready(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
-	getLeader();
+	getItem();
 	loadOrgTree();
 });
 
-function getLeader(){
+function getItem(){
 	var obj = {};
 	$("#leader").html("");
 	var leaderHtml = "";
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/vision/efficiency/getLeader.do",
+       url: "/supervision/vision/enforce/getItem.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
-       success: function(req) {
-	       if(req.datalist != null && req.datalist.length >0){
-	       		leaderHtml +="</tr style=\"border: 0;\"><td style=\"border: 0;\">";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			leaderHtml +="<label style=\"float: left;\"><input type=\"checkbox\" name=\"leader\" />"+req.datalist[i].name+"</label>";
-		       		
+       success: function(data) {
+	       if(data != null){
+	       		if(data.superItemType==61){
+	       			$("#tr_setOrg").hide();
+	       			$("#orgID").val(0);
 	       		}
-	       }	leaderHtml +="</td></tr>";
-	       $("#leader").html(leaderHtml);
+	       }
+	       
        }
        
 	});
@@ -680,7 +679,7 @@ function saveSelectOrg(obj){
        			<input type="text" name="end_time" value="" id="datepicker" style="margin-top: 10px;" class="laydate-icon">
        		</td>
        	</tr>
-       	<tr>
+       	<tr id="tr_setOrg">
        		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
        			<input id="orgID" name="OrgId" type="hidden" /> 

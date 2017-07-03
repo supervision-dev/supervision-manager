@@ -348,6 +348,7 @@ public class UserController extends SystemAction {
 			HttpServletRequest request, HttpServletResponse response) {
 		
 		Organ organ = new Organ();
+		Organ thisOrg = null;
 		if (pid != null && pid>0) {
 			organ.setPid(pid);
 		} else {
@@ -359,12 +360,20 @@ public class UserController extends SystemAction {
 			Organ userOrg=userOrgList.get(0);
 			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
 				organ.setPid(0);
+			}else if(userOrg.getOrgtype() == Constants.ORG_TYPE_6){
+				organ.setPid(userOrg.getId());
+				thisOrg = organService.selectByPrimaryKey(userOrg.getId());
 			}else{
 				organ.setPid(userOrg.getPid());
 			}
 		} 
 		//获取用户所属的机构  
-		List<Organ> list = organService.getOrganByPId(organ);	 
+		List<Organ> list = new ArrayList<Organ>();
+		if(thisOrg !=null){
+			list.add(thisOrg);
+		}else{
+			 list = organService.getOrganByPId(organ);	
+		}
 		return list;// json.toString();
 	}  
     

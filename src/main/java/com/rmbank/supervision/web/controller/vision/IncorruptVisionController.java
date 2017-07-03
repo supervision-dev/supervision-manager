@@ -124,6 +124,7 @@ public class IncorruptVisionController extends SystemAction {
 							.getAccount())) {
 				// 取满足要求的参数数据
 				item.setSupervisionTypeId(3);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
@@ -131,6 +132,7 @@ public class IncorruptVisionController extends SystemAction {
 			} else {// 获取当前用户需要完成的项目
 					// 取满足要求的参数数据
 				item.setSupervisionTypeId(3);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByTypeAndLogOrg(item);

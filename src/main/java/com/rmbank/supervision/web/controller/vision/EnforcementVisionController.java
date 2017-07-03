@@ -125,12 +125,14 @@ public class EnforcementVisionController extends SystemAction {
 							
 				// 取满足要求的参数数据
 				item.setSupervisionTypeId(4);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountBySSJC(item);
 			} else {
-				// 取满足要求的参数数据
+				// 取满足要求的参数数据、
+				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionTypeId(4);
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
@@ -192,6 +194,24 @@ public class EnforcementVisionController extends SystemAction {
     	return dr;
 	}
 
+	/**
+	 * 获取立项项目信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getItem.do",method = RequestMethod.POST)
+	@RequiresPermissions("vision/enforce/getItem.do")
+	public Item getItem(HttpServletRequest request,HttpServletResponse response){
+		
+		HttpSession session = request.getSession();
+    	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
+    	Item item = itemService.selectByPrimaryKey(ItemId);
+		
+    	return item;
+	}
+	
 	
 	/**
 	 * 依法行政领导小组添加工作事项
@@ -323,7 +343,7 @@ public class EnforcementVisionController extends SystemAction {
 			}
 			if (item2.getSuperItemType() == 61) {
 				// 如果为综合执法，直接修改该项目
-				item2.setSupervisionOrgId(orgIdList.get(0));
+				item2.setSupervisionOrgId(item2.getPreparerOrgId());
 				itemService.updateByPrimaryKeySelective(item2);
 				
 				//新增项目操作流程
