@@ -22,6 +22,7 @@ function search(pageNo){
 }
 function getDataList(pageNo){
 	var obj = {};
+	obj.searchName = $("#ipt_searchname").val();
 	obj.pageNo = pageNo; 
 	$.ajax({ 
        type: "POST", //请求类型
@@ -290,7 +291,12 @@ function incorruptInfo(){
 		<li id="DeleteBtn" onclick="showAlertTip();" style="display: none;"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
         <li id="InputItemBtn" style="display: none;" class="click" onclick="incorruptInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
-    
+        
+    	<span style="float:left;line-height:22px;">关键字：</span><input type="text" name="searchName" id="ipt_searchname" style="height:22px;float:left;border:1px solid #C6C6C6" />
+    	<ul class="toolbar" style="margin-left:10px;"> 
+        <li onclick="getDataList(1);" ><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
+        </ul>
+        
     </div>
     
     
