@@ -192,7 +192,7 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		setOrgId();	
+		//setOrgId();	
 		if($("#itemName").val()==null || $("#itemName").val()==""){
 			layer.alert('请录入监察项目！');			
 			return false;
@@ -657,7 +657,7 @@ function saveSelectOrg(obj){
     	<tr>
        		<td width="12%" align="right">执法监察立项：</td> 
        		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width: 791px;height:28px;"/> 
+       			<input id="itemName" name="name" type="text" value="" style="width: 80%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
        		</td>
        	</tr>
