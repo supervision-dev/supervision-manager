@@ -29,6 +29,16 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		var LogOrgType=req.data.orgType;
+       		if(LogOrgType == 39 || LogOrgType == 47){
+				$("#InputItemBtn").show();
+			}else{
+				$("#InputItemBtn").hide();
+			}
+			if(LogOrgType == 40 || LogOrgType == 43){
+				$("#DeleteBtn").show();
+			}
+       
        		$("#tb_userList").html("");
        		var itemHtml = "<tr><td colspan=\"10\">没有获取到相关数据</td></tr>";
 	       if(req.datalist != null && req.datalist.length >0){
@@ -85,7 +95,7 @@ function getDataList(pageNo){
 				    }	
 				    
 				    //流程操作开始
-				    if(req.datalist[i].status==0){
+				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 || req.datalist[i].orgType == 43 &&req.datalist[i].status==0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==130 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",130);\"  target=\"rightFrame\">录入执法检查立项资料</button></td>";
@@ -272,10 +282,9 @@ function enforceInfo(){
     <div class="rightinfo">
     
     <div class="tools">
-    
     	<ul class="toolbar">        
-        <li onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
-        <li id="InputItemBtn" class="click" onclick="enforceInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
+        <li id="DeleteBtn" onclick="showAlertTip();" style="display: none;" ><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+        <li id="InputItemBtn" style="display: none;" class="click" onclick="enforceInfo();"><span><img src="/supervision/source/images/t01.png" /></span>录入工作事项</li>
         </ul> 
     </div>
     

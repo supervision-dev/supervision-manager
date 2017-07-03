@@ -186,7 +186,6 @@ public class EfficiencyVisionController extends SystemAction {
 				}
 				
 				//解决办公室录入项目，监察室立项问题
-				
 				if(itemOrg.getOrgtype() == Constants.ORG_TYPE_2 && userRole.getId()==3 && userOrg.getOrgtype()== Constants.ORG_TYPE_4){
 					//如果录入项目的机构类型是分行办公室，用户角色是分行监察角色并且当前登录机构也是分行监察室
 					it.setIsProject("true");

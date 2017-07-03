@@ -179,6 +179,7 @@ public class EnforcementVisionController extends SystemAction {
 			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了执法监察项目列表的查看", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 			
 			item.setTotalCount(totalCount);
+			item.setOrgType(userOrg.getOrgtype());
 			dr.setData(item);
 			dr.setDatalist(itemList); 
 		} catch (Exception ex) {

@@ -132,6 +132,7 @@ function getDataList(pageNo){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else if(req.datalist[i].isProject == "true" && req.datalist[i].userRole==3 || req.datalist[i].isProject == "true" && req.datalist[i].userRole==4 ){
+				    		//解决分行办公室或中支办公室录入工作事项，分行监察室或终止监察室立项问题
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
