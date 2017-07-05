@@ -92,7 +92,13 @@ function getDataList(pageNo){
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
-				    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
+				    	if(req.datalist[i].orgName.length >6){
+					    	var names = req.datalist[i].orgName.substring(0,6)+"…"
+					    	itemHtml +="<td title=\""+req.datalist[i].orgName+"\">"+names+"</td>";
+					    }else{
+					    	itemHtml +="<td>"+req.datalist[i].orgName+"</td>";
+					    }
+				    	//itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    }	
 				    
 				    //流程操作开始
@@ -133,12 +139,16 @@ function getDataList(pageNo){
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",137);\"  target=\"rightFrame\">录入监察意见</button></td>";
 				    	}else if(req.datalist[i].lasgTag==140){
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"enforceFile("+req.datalist[i].id+",140);\"  target=\"rightFrame\">监察行政处罚决定书</button></td>";
+				    	}else if(req.datalist[i].status == 4 || req.datalist[i].status == 5 ){			    	
+				    		itemHtml +="<td width=\"180px;\">【已完结】</td>";
 				    	}else{			    	
 				    		itemHtml +="<td width=\"180px;\"></td>";
 				    	}				    	
-				    }else{			    	
+				    }else if(req.datalist[i].status == 4 || req.datalist[i].status == 5 ){			    	
+			    		itemHtml +="<td width=\"180px;\">【已完结】</td>";
+			    	}else{			    	
 			    		itemHtml +="<td width=\"180px;\"></td>";
-			    	}	    
+			    	}
 				    
 				    /* itemHtml +="<td><button type=\"button\" class=\"button-actionA\" onclick=\"deleteItem("+req.datalist[i].id+",'"+req.datalist[i].name+"');\"  target=\"rightFrame\">删除</button></td>";  	 */		    
 			        itemHtml +="</tr>";

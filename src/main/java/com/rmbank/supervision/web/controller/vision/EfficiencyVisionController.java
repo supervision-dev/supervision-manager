@@ -345,6 +345,8 @@ public class EfficiencyVisionController extends SystemAction {
 		
 		// 获取当前登录用户
 		User u = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(u.getId());
+		Organ organ2 = userOrgList.get(0);
 		//获取要立项的项目
 		Item item2 = itemService.selectByPrimaryKey(sessionItemId);
 		try {
@@ -387,6 +389,7 @@ public class EfficiencyVisionController extends SystemAction {
 				getItemProcess.setUuid(uuid);
 				item2.setId(0);
 				item2.setSupervisionOrgId(orgId);
+				//item2.setPreparerOrgId(organ2.getId());
 				itemService.insertSelective(item2);//根据机构数对项目进行立项
 				Integer itemId = item2.getId(); //立项返回的ID
 				itemIds.add(itemId);

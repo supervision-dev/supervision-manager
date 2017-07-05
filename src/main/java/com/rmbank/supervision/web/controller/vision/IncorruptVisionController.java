@@ -131,6 +131,17 @@ public class IncorruptVisionController extends SystemAction {
 				totalCount = itemService.getItemCountBySSJC(item);
 			} else {// 获取当前用户需要完成的项目
 					// 取满足要求的参数数据
+				/*List<Item> BGSitemList = new ArrayList<Item>();
+				int BGStotalCount = 0;
+				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
+					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
+					item.setSupervisionTypeId(2); //2代表效能监察
+					item.setSupervisionOrgId(BGS.getId());
+					item.setPreparerOrgId(BGS.getId());
+					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
+					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+				}*/
 				item.setSupervisionTypeId(3);
 				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionOrgId(userOrg.getId());
