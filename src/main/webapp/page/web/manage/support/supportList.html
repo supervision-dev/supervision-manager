@@ -90,11 +90,11 @@ function getDataList(pageNo){
 				    manageHtml +="<td>"+req.datalist[i].preparerOrg+"</td>";
 				    manageHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    if(req.datalist[i].lasgTag ==51){
-				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId ){
 				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(51,"+req.datalist[i].id+");\" class=\"button-action\">录入资料</button></td>";
 				    	}else{
-				    		manageHtml +="<td>资料上传中…</td>";
-				    	}
+				    		manageHtml +="<td>资料上传中…</td>"; 
+				    	} 
 				    }else if(req.datalist[i].lasgTag ==999){
 				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
 				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(999,"+req.datalist[i].id+");\"  class=\"button-action\">量化项目</button></td>";

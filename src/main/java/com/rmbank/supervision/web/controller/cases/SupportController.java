@@ -375,6 +375,7 @@ public class SupportController extends SystemAction {
 							}else{
 								item.setStatus(4);
 							}
+							itemService.updateByPrimaryKeySelective(item);
 						}
 						String ip = IpUtil.getIpAddress(request);		
 						logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的监察资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
