@@ -144,13 +144,29 @@ function getDataList(pageNo){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</button></td>";
 				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
-				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
+				    	/* if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</button></td>";
 				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 68 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 688 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 778 || req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 888){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</button></td>";
 				    	}else if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 666){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
+				    	}else if(req.datalist[i].status == 4){
+					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+					    }else if(req.datalist[i].status == 5){
+					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+					    }else{
+					    	itemHtml +="<td width=\"180px;\"></td>";
+					    }   */
+					    if(req.datalist[i].lasgTag == 67){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</button></td>";
+				    	}else if(req.datalist[i].lasgTag == 68 ||req.datalist[i].lasgTag == 688 ||req.datalist[i].lasgTag == 778 ||req.datalist[i].lasgTag == 888){
+				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</button></td>";
+				    	}else if(req.datalist[i].lasgTag == 666){
 				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
 				    	}else if(req.datalist[i].status == 4){
