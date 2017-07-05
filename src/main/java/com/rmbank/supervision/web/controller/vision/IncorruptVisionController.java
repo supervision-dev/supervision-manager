@@ -124,6 +124,7 @@ public class IncorruptVisionController extends SystemAction {
 							.getAccount())) {
 				// 取满足要求的参数数据
 				item.setSupervisionTypeId(3);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
@@ -131,6 +132,7 @@ public class IncorruptVisionController extends SystemAction {
 			} else {// 获取当前用户需要完成的项目
 					// 取满足要求的参数数据
 				item.setSupervisionTypeId(3);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByTypeAndLogOrg(item);
@@ -155,10 +157,8 @@ public class IncorruptVisionController extends SystemAction {
 				it.setLogOrgId(userOrg.getId());
 			}
 
-			String ip = IpUtil.getIpAddress(request);		
-			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了对廉政监察项目列表的查询", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
-			
 			item.setTotalCount(totalCount);
+			item.setOrgType(userOrg.getOrgtype());
 			dr.setData(item);
 			dr.setDatalist(itemList); 
 		} catch (Exception ex) {

@@ -205,7 +205,7 @@ public class SysLogController {
 		// 设置页面初始值及页面大小
 		if (systemLog.getPageNo() == null)
 			systemLog.setPageNo(1);
-		systemLog.setPageSize(Constants.DEFAULT_PAGE_SIZE);
+		systemLog.setPageSize(500);
 		systemLog.setMoudleId(Constants.LOG_TYPE_SYS);
 		if(StringUtil.isEmpty(systemLog.getSchBeginTime())){
 			systemLog.setSchBeginTime(null);

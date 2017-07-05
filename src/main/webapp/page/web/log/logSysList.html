@@ -64,7 +64,7 @@ function fillDataList(req){
 	       if(req.data != null){
 	       		$("#i_totalcount").text(req.data.totalCount);
 	       		$("#i_pageNo").text(req.data.pageNo);
-	       		var count = Math.ceil(req.data.totalCount/10);
+	       		var count = Math.ceil(req.data.totalCount/500);
 	       		$("#ul_pageList").html("");
 	       		var ulHtml = "";
 	       		if(count == 1){

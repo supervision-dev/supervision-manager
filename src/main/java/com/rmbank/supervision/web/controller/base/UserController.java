@@ -261,11 +261,12 @@ public class UserController extends SystemAction {
 			User user = userService.getUserById(id);
 			boolean state = userService.deleteUserById(id);				
 			if(state){
+				js.setCode(new Integer(0));
+				js.setMessage("删除成功!");
 				User loginUser = this.getLoginUser();
 				String ip = IpUtil.getIpAddress(request);		
 				logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，删除了"+user.getName()+"用户", 3, loginUser.getId(), loginUser.getUserOrgID(), ip);
-				js.setCode(new Integer(0));
-				js.setMessage("删除成功!");
+				
 				return js;
 			}else {
 				return js;
@@ -347,6 +348,7 @@ public class UserController extends SystemAction {
 			HttpServletRequest request, HttpServletResponse response) {
 		
 		Organ organ = new Organ();
+		Organ thisOrg = null;
 		if (pid != null && pid>0) {
 			organ.setPid(pid);
 		} else {
@@ -358,12 +360,20 @@ public class UserController extends SystemAction {
 			Organ userOrg=userOrgList.get(0);
 			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
 				organ.setPid(0);
+			}else if(userOrg.getOrgtype() == Constants.ORG_TYPE_6){
+				organ.setPid(userOrg.getId());
+				thisOrg = organService.selectByPrimaryKey(userOrg.getId());
 			}else{
 				organ.setPid(userOrg.getPid());
 			}
 		} 
 		//获取用户所属的机构  
-		List<Organ> list = organService.getOrganByPId(organ);	 
+		List<Organ> list = new ArrayList<Organ>();
+		if(thisOrg !=null){
+			list.add(thisOrg);
+		}else{
+			 list = organService.getOrganByPId(organ);	
+		}
 		return list;// json.toString();
 	}  
     

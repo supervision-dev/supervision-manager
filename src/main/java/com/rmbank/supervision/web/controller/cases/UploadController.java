@@ -43,7 +43,7 @@ import com.rmbank.supervision.web.controller.SystemAction;
 @Controller
 @Scope("prototype")
 @RequestMapping("/system/upload")
-public class UploadAction extends SystemAction {
+public class UploadController extends SystemAction {
 	
 	@Resource
 	private  ItemProcessService itemProcessService;

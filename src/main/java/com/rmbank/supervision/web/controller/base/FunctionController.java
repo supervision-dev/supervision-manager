@@ -21,7 +21,7 @@ import com.rmbank.supervision.web.controller.SystemAction;
 @Scope("prototype")
 @Controller
 @RequestMapping("/system/function")
-public class FunctionAction extends SystemAction{
+public class FunctionController extends SystemAction{
 	
 	@Resource
 	private FunctionService functionService;

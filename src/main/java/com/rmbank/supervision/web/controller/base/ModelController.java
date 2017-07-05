@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Scope("prototype")
 @Controller
 @RequestMapping("/moudle/model")
-public class ModelAction {
+public class ModelController {
 
 	
 	/**

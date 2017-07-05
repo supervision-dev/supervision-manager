@@ -154,27 +154,27 @@ $(document).ready(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
-	getLeader();
+	getItem();
+	loadOrgTree();
 });
 
-function getLeader(){
+function getItem(){
 	var obj = {};
 	$("#leader").html("");
 	var leaderHtml = "";
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/vision/efficiency/getLeader.do",
+       url: "/supervision/vision/enforce/getItem.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
-       success: function(req) {
-	       if(req.datalist != null && req.datalist.length >0){
-	       		leaderHtml +="</tr style=\"border: 0;\"><td style=\"border: 0;\">";
-	       		for(var i = 0;i<req.datalist.length;i++){
-	       			leaderHtml +="<label style=\"float: left;\"><input type=\"checkbox\" name=\"leader\" />"+req.datalist[i].name+"</label>";
-		       		
+       success: function(data) {
+	       if(data != null){
+	       		if(data.superItemType==61){
+	       			$("#tr_setOrg").hide();
+	       			$("#orgID").val(0);
 	       		}
-	       }	leaderHtml +="</td></tr>";
-	       $("#leader").html(leaderHtml);
+	       }
+	       
        }
        
 	});
@@ -191,7 +191,7 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		setOrgId();	
+		//setOrgId();	
 		if($("#itemName").val()==null || $("#itemName").val()==""){
 			layer.alert('请录入监察项目！');			
 			return false;
@@ -264,7 +264,7 @@ function returnPage(){
 
 
 //加载树开始。。。。。。。。。。。。。。。
-function test(){ 
+/* function test(){ 
 	$("#organ_tip").fadeIn(200);
 	$.ajax({ 
        type: "POST", //请求类型
@@ -461,6 +461,173 @@ function saveSelectOrg(obj){
 	$("#ipt_slt_orgName").val(selectOrgNameStr);
 	$("#ipt_slt_orgName").text(selectOrgNameStr);
 	$("#lbl_sltOrg").text(selectOrgIdStr);
+} */
+
+//加载树开始。。。。。。。。。。。。。。。
+function loadOrgTree(){ 
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/vision/efficiency/loadOrganTreeList.do?pid=0", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tbl_orgList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /> </td><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tbl_orgList").html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+    }); 
+}
+
+function loadSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\" /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_"+pId).html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+      });
+}
+
+function loadSubSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
+       					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_sub_"+pId).html(tbHtml); 
+   			$("#tbl_orgList input[type='checkbox']").click(function(){ 
+   				saveSelectOrg($(this));
+		    }); 
+		    setOrgValues();
+       }
+      });
+} 
+
+function showItem(subId,tag){ 
+	loadSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone");
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
+}
+function showSubItem(subId,tag){
+	loadSubSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function showSubSubItem(subId,tag){ 
+	if(tag == 0){
+		$("#tr_sub_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+
+function selectOrgan(tag){ 
+	$("#organ_tip").fadeOut(200);
+}
+
+var selectOrgId = [];
+var selectOrgIdStr = "";
+function setOrgValues(){
+	if(selectOrgId.length >0){
+		$.each(selectOrgId,function(index,item){
+			$("#chk_org_"+item).prop("checked","checked");
+		});
+	} 
+} 
+function saveSelectOrg(obj){
+	
+	if(obj.attr("checked") == undefined){
+		if(selectOrgId.length >0){
+			for(var i = 0; i< selectOrgId.length; i++){
+				if(selectOrgId[i] == obj.attr("value")){
+					selectOrgId.splice(i, 1);
+      				break;
+				}
+			}
+		}
+		 
+	}else{ 
+		selectOrgId.push(obj.attr("value"));
+	} 
+	if(selectOrgId.length>0){
+		selectOrgIdStr = "";
+		$.each(selectOrgId,function(index,item){
+			selectOrgIdStr += item +",";
+		});
+		selectOrgIdStr = selectOrgIdStr.substring(0,selectOrgIdStr.length -1);
+	}else{
+		 selectOrgIdStr = "未选择被监察对象";
+	}
+	 $("#orgID").val(selectOrgIdStr);
 }
 </script>
 
@@ -486,11 +653,10 @@ function saveSelectOrg(obj){
     
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
-    	
     	<tr>
        		<td width="12%" align="right">执法监察立项：</td> 
        		<td colspan="3">
-       			<input id="itemName" name="name" type="text" value="" style="width: 791px;height:28px;"/> 
+       			<input id="itemName" name="name" type="text" value="" style="width: 80%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
        		</td>
        	</tr>
@@ -513,11 +679,18 @@ function saveSelectOrg(obj){
        			<input type="text" name="end_time" value="" id="datepicker" style="margin-top: 10px;" class="laydate-icon">
        		</td>
        	</tr>
-       	<tr>
+       	<tr id="tr_setOrg">
        		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
-       			<div id="orgID" style="display: none;"></div>
-       			<textarea type="text" id="ipt_slt_orgName" readonly="readonly"  onclick="test();" rows="1" cols="5"  style="width:79%;height:50px;"></textarea>
+       			<input id="orgID" name="OrgId" type="hidden" /> 
+       			<!-- <textarea type="text" id="ipt_slt_orgName" readonly="readonly" onclick="test();" rows="1" cols="5"  style="width:80%;height:50px;"></textarea> -->
+       			<div class="simpletipinfo">   
+			       <div style="height:280px;width:99%;overflow-x:hidden;"> 
+		        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+		        		<tr><td></td></tr>  
+		        		</table> 
+			       </div>
+		      	</div>
        		</td>
        	</tr>
        
@@ -559,7 +732,8 @@ function saveSelectOrg(obj){
         </div> 
     </div> 
     </div> 
-	<div class="simplestip" id="organ_tip" style="margin-left: 112%; margin-top: 5px;"> 
+    
+	<!-- <div class="simplestip" id="organ_tip" style="margin-left: 112%; margin-top: 5px;"> 
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
 	    <div class="simpletipinfo">   
@@ -574,7 +748,7 @@ function saveSelectOrg(obj){
         	<input type="button"  class="saveBtn" value="确定" onclick="selectOrgan();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:$('#slt_postId').removeClass('displaynone');$('#slt_roleId').removeClass('displaynone');$('#organ_tip').fadeOut(100);" /> 
         </div>  
-    </div>
+    </div> -->
 </body>
 
 </html>

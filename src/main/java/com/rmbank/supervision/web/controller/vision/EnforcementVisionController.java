@@ -6,6 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.JsonResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.IpUtil;
+import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.Item;
 import com.rmbank.supervision.model.ItemProcess;
 import com.rmbank.supervision.model.ItemProcessFile;
@@ -123,18 +125,34 @@ public class EnforcementVisionController extends SystemAction {
 							
 				// 取满足要求的参数数据
 				item.setSupervisionTypeId(4);
+				item.setPreparerOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountBySSJC(item);
 			} else {
-				// 取满足要求的参数数据
+				// 取满足要求的参数数据、
+				//如果是中支监察室，需要获取到和当前中支监察在同一个中支下的依法行政领导小组录入的
+				List<Item> YFXZitemList = new ArrayList<Item>();
+				int YFXZtotalCount = 0;
+				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
+					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "依法行政领导小组办公室");
+					item.setSupervisionTypeId(4); //4代表执法监察
+					item.setSupervisionOrgId(BGS.getId());
+					item.setPreparerOrgId(BGS.getId());
+					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+					YFXZitemList = itemService.getItemListByTypeAndLogOrg(item);
+					YFXZtotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+				}
+				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionTypeId(4);
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
 				itemList = itemService.getItemListByTypeAndLogOrg(item);
+				itemList.addAll(YFXZitemList);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
+				totalCount+= YFXZtotalCount;
 			}
 			
 			for (Item it : itemList) {
@@ -175,10 +193,9 @@ public class EnforcementVisionController extends SystemAction {
 				}
 			}
 
-			String ip = IpUtil.getIpAddress(request);		
-			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，执行了执法监察项目列表的查看", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 			
 			item.setTotalCount(totalCount);
+			item.setOrgType(userOrg.getOrgtype());
 			dr.setData(item);
 			dr.setDatalist(itemList); 
 		} catch (Exception ex) {
@@ -189,6 +206,24 @@ public class EnforcementVisionController extends SystemAction {
     	return dr;
 	}
 
+	/**
+	 * 获取立项项目信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value="/getItem.do",method = RequestMethod.POST)
+	@RequiresPermissions("vision/enforce/getItem.do")
+	public Item getItem(HttpServletRequest request,HttpServletResponse response){
+		
+		HttpSession session = request.getSession();
+    	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
+    	Item item = itemService.selectByPrimaryKey(ItemId);
+		
+    	return item;
+	}
+	
 	
 	/**
 	 * 依法行政领导小组添加工作事项
@@ -281,14 +316,25 @@ public class EnforcementVisionController extends SystemAction {
 	public JsonResult<Item> jsonUpdateItem(Item item,			
 			@RequestParam(value = "end_time", required = false) String end_time,// 用于接收前台传过来的String类型的时间
 			@RequestParam(value = "content", required = false) String content,
-			@RequestParam(value = "OrgId", required = false) Integer[] OrgIds,
+			@RequestParam(value = "OrgId", required = false) String OrgIds,
 			HttpServletRequest request, HttpServletResponse response)
 			throws ParseException {
 		
 		HttpSession session = request.getSession();
     	Integer ItemId = (Integer) session.getAttribute("enforceItemId");
 		
-		
+    	String[] idStr = OrgIds.split(",");
+		List<Integer> organIds = new ArrayList<Integer>();
+		List<Integer> orgIdList = new ArrayList<Integer>();
+		if(idStr.length>0){
+			for(String idss: idStr){
+				if(!StringUtil.isEmpty(idss)){
+					organIds.add(Integer.parseInt(idss));
+					
+				}
+			}
+			 orgIdList = new ArrayList<Integer>(new HashSet<Integer>(organIds)); 
+		}
 		// 新建一个json对象 并赋初值
 		JsonResult<Item> js = new JsonResult<Item>();
 		js.setCode(new Integer(1));
@@ -309,7 +355,7 @@ public class EnforcementVisionController extends SystemAction {
 			}
 			if (item2.getSuperItemType() == 61) {
 				// 如果为综合执法，直接修改该项目
-				item2.setSupervisionOrgId(OrgIds[0]);
+				item2.setSupervisionOrgId(item2.getPreparerOrgId());
 				itemService.updateByPrimaryKeySelective(item2);
 				
 				//新增项目操作流程
@@ -337,7 +383,7 @@ public class EnforcementVisionController extends SystemAction {
 				//获取初始化流程的附件集合
 				List<ItemProcessFile> fileList = itemProcessFileService.getFileListByItemId(itemProcessList.get(0).getId());
 				
-				for (Integer orgId : OrgIds) {
+				for (Integer orgId : orgIdList) {
 					item2.setId(0);
 					item2.setSupervisionOrgId(orgId);
 					itemService.insertSelective(item2);//根据机构数对项目进行立项
