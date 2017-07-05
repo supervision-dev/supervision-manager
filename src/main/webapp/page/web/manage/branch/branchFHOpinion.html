@@ -136,7 +136,7 @@ $(document).ready(function(){
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
          	var isComple = $("#slt_isValue").val();
-         	var messages = "分行监察室给定监察意见成功,";
+         	var messages = "分行监察室给定监察意见成功，";
          	if(isComple == 1 || isComple == "1"){
          		messages += "当前项目完结！"
          	}else{

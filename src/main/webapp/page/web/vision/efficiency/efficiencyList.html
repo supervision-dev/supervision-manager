@@ -126,14 +126,14 @@ function getDataList(pageNo){
 				    	itemHtml +="<td></td>";
 				    } */
 				    //流程判断开始
-				    //首先判断登录机构是否是分行监察室或中支监察室
+				    //首先判断登录机构是否是分行监察室或中支监察室，并且项目状态为未立项
 				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 || req.datalist[i].orgType == 43 && req.datalist[i].status == 0){
-				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且登录用户角色是监察室角色。
+				    	//再来判断添加项目的机构类型和登录机构的类型是否一致，并且登录用户角色是监察室角色。
 				    	if(req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==3 || req.datalist[i].isItemOrg == "true" && req.datalist[i].userRole==4 ){
 				    		//只有添加项目机构类型和登录机构类型一致才会有立项按钮
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else if(req.datalist[i].isProject == "true" && req.datalist[i].userRole==3 || req.datalist[i].isProject == "true" && req.datalist[i].userRole==4 ){
-				    		//解决分行办公室或中支办公室录入工作事项，分行监察室或终止监察室立项问题
+				    		//解决分行办公室或中支办公室录入工作事项，分行监察室或中支监察室立项问题
 				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
 				    	}else{
 				    		itemHtml +="<td width=\"180px;\"></td>";
@@ -160,22 +160,27 @@ function getDataList(pageNo){
 					    }else{
 					    	itemHtml +="<td width=\"180px;\"></td>";
 					    }   */
-					    if(req.datalist[i].lasgTag == 67){
-				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</button></td>";
-				    	}else if(req.datalist[i].lasgTag == 68 ||req.datalist[i].lasgTag == 688 ||req.datalist[i].lasgTag == 778 ||req.datalist[i].lasgTag == 888){
-				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</button></td>";
-				    	}else if(req.datalist[i].lasgTag == 666){
-				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
-				    	}else if(req.datalist[i].status == 4){
-					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-					    }else if(req.datalist[i].status == 5){
-					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+					    if(req.datalist[i].isItemOrg == "true" || req.datalist[i].isProject == "true"){
+					    	if(req.datalist[i].lasgTag == 67){
+					    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyOpinion("+req.datalist[i].id+",68,"+req.datalist[i].isStept+");\"  target=\"rightFrame\">录入监察意见</button></td>";
+					    	}else if(req.datalist[i].lasgTag == 68 ||req.datalist[i].lasgTag == 688 ||req.datalist[i].lasgTag == 778 ||req.datalist[i].lasgTag == 888){
+					    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",688);\"  target=\"rightFrame\">录入监察结论</button></td>";
+					    	}else if(req.datalist[i].lasgTag == 666){
+					    		//只有添加项目机构类型和登录机构类型一致才会有按钮
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">问责</button>&nbsp;<button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",800);\"  target=\"rightFrame\">不问责</button></td>";
+					    	}else if(req.datalist[i].status == 4){
+						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+						    }else if(req.datalist[i].status == 5){
+						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+						    }else{
+						    	itemHtml +="<td width=\"180px;\"></td>";
+						    }
 					    }else{
 					    	itemHtml +="<td width=\"180px;\"></td>";
-					    }  
+					    }
+					      
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
 			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){

@@ -75,6 +75,15 @@ function getDataList(pageNo){
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItem.orgName+"</td>";			       
 				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否分节点监察：</td>";  	
+				        if(req.ResultItem.isStept == 0){
+				        	itemHtml +="<td style=\"text-align: left; padding-left:5px;\">不分节点监察</td>";			       
+				        }else if(req.ResultItem.isStept == 1){
+				        	itemHtml +="<td style=\"text-align: left; padding-left:5px;\">分节点监察</td>";			       
+				        }
+				        itemHtml +="</tr>";
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 66){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否签收：</td>";  	
@@ -128,7 +137,7 @@ function getDataList(pageNo){
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 68){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><div style=\"width:80%;padding:10px;\">"+req.ResultItemProcess[i].content+"<div></td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 
 	       				itemHtml +="<tr>";
@@ -152,7 +161,7 @@ function getDataList(pageNo){
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 72 && req.ResultItem.isStept == 1){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">节点"+OPnode+"监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><div style=\"width:80%;padding:10px;\">"+req.ResultItemProcess[i].content+"<div></td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
 	       				itemHtml +="<tr>";
@@ -173,7 +182,7 @@ function getDataList(pageNo){
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 888 && req.ResultItem.isStept == 1 ){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">节点"+OPnode+"监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><div style=\"width:80%;padding:10px;\">"+req.ResultItemProcess[i].content+"<div></td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
 	       				itemHtml +="<tr>";
@@ -216,7 +225,7 @@ function getDataList(pageNo){
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 69){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\"><div style=\"width:80%;padding:10px;\">"+req.ResultItemProcess[i].content+"<div></td>";			       
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";				        
 				        
 	       				itemHtml +="<tr>";

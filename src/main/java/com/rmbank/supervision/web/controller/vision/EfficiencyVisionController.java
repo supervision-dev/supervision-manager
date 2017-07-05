@@ -126,8 +126,9 @@ public class EfficiencyVisionController extends SystemAction {
 				itemList = itemService.getItemListByType(item);			
 				totalCount = itemService.getItemCountBySSJC(item); //实时监察分页
 			}else {
-				//当前登录用户只加载自己完成的项目,如果是中支监察室还需要加载自己录入的和当前中支办公室录入的
-				//如果是中支监察室，需要获取到和当前中支监察在同一个中支下的办公室的
+				//当前登录用户只加载自己完成的项目,如果是中支监察室还需要加载自己录入的和当前中支下办公室录入的
+				
+				//如果是中支监察室，需要获取到和当前中支监察室在同一个中支下的办公室的录入的事项
 				List<Item> BGSitemList = new ArrayList<Item>();
 				int BGStotalCount = 0;
 				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
@@ -177,8 +178,10 @@ public class EfficiencyVisionController extends SystemAction {
 				//将登陆用户的机构Id添加
 				it.setLogOrgId(userOrg.getId());
 				
-				//获取添加项目的机构类型和登录机构类型是否相同 
+				//获取录入项目的机构
 				Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
+				
+				//判断添加项目的机构类型和登录机构类型是否相同，用于判断中支监察室录入事项由中支监察室立项，而不是由分行监察室立项 
 				if(itemOrg.getOrgtype()==userOrg.getOrgtype()){
 					it.setIsItemOrg("true");
 				}else {
@@ -187,10 +190,10 @@ public class EfficiencyVisionController extends SystemAction {
 				
 				//解决办公室录入项目，监察室立项问题
 				if(itemOrg.getOrgtype() == Constants.ORG_TYPE_2 && userRole.getId()==3 && userOrg.getOrgtype()== Constants.ORG_TYPE_4){
-					//如果录入项目的机构类型是分行办公室，用户角色是分行监察角色并且当前登录机构也是分行监察室
+					//如果录入项目的机构类型是分行办公室，当前登录用户角色是分行监察角色，并且当前登录机构也是分行监察室
 					it.setIsProject("true");
 				}else if(itemOrg.getOrgtype() == Constants.ORG_TYPE_10 && userRole.getId()==4 && userOrg.getOrgtype()== Constants.ORG_TYPE_7){
-					//如果录入项目的机构类型是中支办公室，用户角色是中支监察角色并且当前登录机构也是中支监察室
+					//如果录入项目的机构类型是中支办公室，当前登录用户角色是中支监察角色，并且当前登录机构也是中支监察室
 					it.setIsProject("true");
 				}else{
 					it.setIsProject("false");
