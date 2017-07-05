@@ -424,7 +424,7 @@ h2{font-weight:normal;}
 	text-align: center; 
 }
 #sltModel img{ 
-	cursor:pointer; width:70%;   border-radius: 5%;
+	cursor:pointer;  border-radius: 5%;
 }
 #sltModel img:hover{
 	cursor:pointer;
