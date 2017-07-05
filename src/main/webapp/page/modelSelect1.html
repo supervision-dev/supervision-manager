@@ -41,50 +41,45 @@ function loadSessionResource(){
        url: "/supervision/loadUserResourceSession.do", 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		$("#sltModel").html("");
+       		$("#ul_modelList").html("");
        		if(req != null && req.length >0){
-       			var mdHtml = "<tr><td style=\"width:20%\"></td>";
+       			var mdHtml = "";
        			for(var i = 0; i< req.length ;i++){
        				var obj = req[i];
+       				mdHtml += "<li><span>"; 
        				if(obj.url == "vision/efficiency/efficiencyList.do"){
-       					mdHtml += "<td><img src=\"/supervision/source/images/model/ssjc.png\"  onclick=\"gotoModel('ssjc');\" /></td>";
-       					/* mdHtml += "<img src=\"/supervision/source/images/model/ssjc.png\"  onclick=\"gotoModel('ssjc');\" />";
+       					mdHtml += "<img src=\"/supervision/source/images/model/ssjc.png\" />";
 	       				mdHtml += "</span>";
 	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
 	    				mdHtml += "<p>效能监察<br />廉政监察<br />执法监察</p>"; 
-    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('ssjc');\">进入模块</a></div></li>"; */
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('ssjc');\">进入模块</a></div></li>";
        				}else if(obj.url == "manage/branch/branchFHList.do"){
-       					mdHtml += "<td><img src=\"/supervision/source/images/model/zhgl.png\" onclick=\"gotoModel('zhgl');\" /></td>";
-       					/* mdHtml += "<img src=\"/supervision/source/images/model/zhgl.png\" onclick=\"gotoModel('zhgl');\" />";
+       					mdHtml += "<img src=\"/supervision/source/images/model/zhgl.png\" />";
 	       				mdHtml += "</span>";
 	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
 	    				mdHtml += "<p>分行立项<br />中支立项<br />量化指标模型</p>"; 
-    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('zhgl');\">进入模块</a></div></li>"; */ 
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('zhgl');\">进入模块</a></div></li>"; 
        				}else if(obj.url == "system/user/userList.do"){
-       					mdHtml += "<td><img src=\"/supervision/source/images/model/jcgl.png\"  onclick=\"gotoModel('jcgl');\" /></td>";
-       					/* mdHtml += "<img src=\"/supervision/source/images/model/jcgl.png\"  onclick=\"gotoModel('jcgl');\" />";
+       					mdHtml += "<img src=\"/supervision/source/images/model/jcgl.png\" />";
 	       				mdHtml += "</span>";
 	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
 	    				mdHtml += "<p>机构用户管理<br />角色权限管理<br />系统预设配置</p>";  
-    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('jcgl');\">进入模块</a></div></li>"; */
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('jcgl');\">进入模块</a></div></li>";
        				}else if(obj.url == "system/log/logList.do"){ 
-       					mdHtml += "<td><img src=\"/supervision/source/images/model/rzgl.png\"  onclick=\"gotoModel('rzgl');\" /></td>";
-       					/* mdHtml += "<img src=\"/supervision/source/images/model/rzgl.png\"  onclick=\"gotoModel('rzgl');\" />";
+       					mdHtml += "<img src=\"/supervision/source/images/model/rzgl.png\" />";
 	       				mdHtml += "</span>";
 	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>"; 
 	    				mdHtml += "<p>实时监察日志<br />综合管理日志<br />系统操作日志</p>"; 
-    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('rzgl');\">进入模块</a></div></li>"; */
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('rzgl');\">进入模块</a></div></li>";
        				}else if(obj.url == "statistic/efficiency/efficencyStatistic.do"){ 
-       					mdHtml += "<td><img src=\"/supervision/source/images/model/tjfx.png\" onclick=\"gotoModel('tjfx');\" /></td>";
-       					/* mdHtml += "<img src=\"/supervision/source/images/model/tjfx.png\" onclick=\"gotoModel('tjfx');\" />";
+       					mdHtml += "<img src=\"/supervision/source/images/model/tjfx.png\" />";
 	       				mdHtml += "</span>";
 	       				mdHtml += "<div class=\"lright\"><h2>"+obj.name+"</h2>";
 	    				mdHtml += "<p>实时监察统计<br />综合管理统计<br />实时统计</p>"; 
-    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('tjfx');\">进入模块</a></div></li>"; */
+    					mdHtml += "<a class=\"enter\" onclick=\"gotoModel('tjfx');\">进入模块</a></div></li>";
        				} 
        			}
-       			mdHtml += "<td style=\"width:20%\"></td></tr>";
-       			$("#sltModel").html(mdHtml); 
+       			$("#ul_modelList").html(mdHtml); 
        		}else{
        			window.location.href = "/supervision/logout.do";
        		}
@@ -193,13 +188,9 @@ function changUserPwdAction(){
     </ul>
     </div>
     
-    <div class="rightinfo" >
-   		<table id="emptyModel">
-   			<tr><td><img src="/supervision/source/images/model/empty.png" /></td></tr> 
-	   	</table>
-	    <table id="sltModel">
-	   	</table>
-     
+    <div class="rightinfo">
+    <ul id="ul_modelList" class="classlist">
+    </ul> 
     <div class="clear"></div>
     </div>
     

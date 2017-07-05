@@ -500,6 +500,54 @@ public class BranchController extends SystemAction {
 	}
 
 	/**
+	 * 加载所有项目类型明细
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadFHZZItemInfo.do")
+	public BaseItemResult loadFHZZItemInfo(   
+			HttpServletRequest request, HttpServletResponse response) { 
+		BaseItemResult br = new BaseItemResult();
+		Item item = new Item();
+		List<ItemProcess> processList = new ArrayList<ItemProcess>();
+		try { 
+	    	Integer sessionItemId =(Integer)request.getSession().getAttribute("FHZZItemId");
+	    	if(sessionItemId != null){
+	    		item = itemService.selectByPrimaryKey(sessionItemId);
+	    		if(item != null){
+	    			br.setResultItem(item);
+	    		}
+	    		processList = itemProcessService.getItemProcessItemId(sessionItemId);
+	    		if(processList != null && processList.size()>0){
+	    			for(ItemProcess itp: processList){
+	    				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
+	    				fileList = itemProcessFileService.getFileListByItemId(itp.getId());
+	    				itp.setFileList(fileList);  
+	    				if(itp.getContentTypeId() == Constants.CONTENT_TYPE_ID_3){
+	    					if(!StringUtil.isEmpty(itp.getContent()) && itp.getContent().contains("&&")){
+	    						String[] cts = itp.getContent().split("&&");
+	    						if(cts.length >0){
+	    							itp.setContent(cts[0]);
+								}
+								if(cts.length>1){
+									itp.setChangeContent(cts[1]);
+								}
+	    					}
+	    				}
+	    			}
+	    			br.setResultItemProcess(processList);
+	    		}
+	    	}
+		} catch (Exception ex) {
+			ex.printStackTrace(); 
+		}
+		return br;
+	}
+	/**
 	 * 被监察对象上传文件保存
 	 * 
 	 * @param pid

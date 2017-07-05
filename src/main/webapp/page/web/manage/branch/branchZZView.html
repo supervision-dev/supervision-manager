@@ -23,7 +23,7 @@ $(document).ready(function(){
 function loadItemInfo(){
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/manage/branch/loadItemInfo.do",
+       url: "/supervision/manage/branch/loadFHZZItemInfo.do",
        dataType:"json", //响应数据类型      
        success: function(req) {
        		if(req != null){   	    	

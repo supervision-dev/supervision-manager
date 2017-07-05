@@ -85,6 +85,14 @@ public class HomeController extends SystemAction {
         return mav;
 	}
 
+	@RequestMapping("introduction")  
+    public ModelAndView introduction( 
+			HttpServletRequest request, HttpServletResponse response){  
+        //创建模型跟视图，用于渲染页面。并且指定要返回的页面为login页面
+        ModelAndView mav = new ModelAndView("introduction"); 
+        return mav;
+	}
+
 	@RequestMapping("loginPage")  
     public ModelAndView loginPage( 
 			HttpServletRequest request, HttpServletResponse response){  
