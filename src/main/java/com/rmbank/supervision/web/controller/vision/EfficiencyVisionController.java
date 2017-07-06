@@ -222,7 +222,7 @@ public class EfficiencyVisionController extends SystemAction {
 	 */
 	@ResponseBody
     @RequestMapping(value = "/getLeader.do")
-//  @RequiresPermissions("vision/efficiency/getLeader.do")
+//	@RequiresPermissions("vision/efficiency/getLeader.do")
 	 public DataListResult<User> getLeader(
 			 HttpServletRequest request, HttpServletResponse response){
 		DataListResult<User> dr = new DataListResult<User>();

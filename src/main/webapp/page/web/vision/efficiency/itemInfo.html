@@ -167,9 +167,9 @@ function getLeader(){
        url: "/supervision/vision/efficiency/getLeader.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
-       success: function(req) {
+       success: function(req) { 
 	       if(req.datalist != null && req.datalist.length >0){
-	       		leaderHtml +="</tr style=\"border: 0;\"><td style=\"border: 0;\">";
+	       		leaderHtml +="<tr style=\"border: 0;\"><td style=\"border: 0;\">";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			leaderHtml +="<label style=\"float: left;\"><input type=\"checkbox\" name=\"leader\" />"+req.datalist[i].name+"</label>";
 		       		
@@ -474,13 +474,13 @@ function saveSelectOrg(obj){
        	<tr>
 			<td width="12%" align="right" height="129px;">上传附件：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" style="margin-left: 10px;"></div>
+				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script>
-	                <div id="uploader" style="margin-left: 10px;">
+	                <div id="uploader">
 	                </div>
 			 </td>	
 		</tr>
@@ -548,9 +548,6 @@ function saveSelectOrg(obj){
     </div> 
      <div class="addtip" id="add_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
-	    
-        
         <div class="tipbtn">
         	<input type="button"  class="saveBtn" value="保存" onclick="saveOrUpdateUserInfo();" /> 
         	<input type="button"  class="cancel" value="取消" onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" /> 
