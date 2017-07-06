@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -59,7 +59,7 @@ function loadSubOrgListByPId(pId){
        				if(req[i].childrenCount ==0){
        					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
        				}else{
-       					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" class=\"displaynone\"   onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/unnext.png\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
        					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
        					tbHtml += "</table></td></tr>  ";
@@ -108,7 +108,17 @@ function loadUserListByOrgId(orgId,orgName){
        			for(var i = 0; i<req.length;i++){
        				tbHtml += "<tr onclick=\"selectLoginUser("+req[i].id+",'"+req[i].account+"','"+req[i].name+"');\"><td style=\"height:25px;width:30%;\">"+req[i].name+"</td><td style=\"height:25px;width:30%;\">"+req[i].orgName+"</td><td>"+req[i].roleName+"</td></tr>";
        			}
-       		} 
+       			if(req.length ==1){
+					$("#ipt_username").val(req[0].name);
+					$("#slt_userName").text(req[0].name);
+					$("#hid_ipt_username").val(req[0].account); 
+					$("#ipt_password").focus();
+       			}else{
+					$("#ipt_username").val("--请选择登录用户--");
+					$("#slt_userName").text("尚未选择");
+					$("#hid_ipt_username").val(""); 
+       			}
+       		}
        		$("#tbl_userList").html(tbHtml); 
        }
     }); 
@@ -155,8 +165,9 @@ function showSubSubItem(subId,tag){
 }
 function selectOrgan(tag){
 	$('#organ_tip').fadeOut(200);
+	$("#ipt_password").focus();
 }
-function selectLoginUser(id,account,name){
+function selectLoginUser(id,account,name){ 
 	$("#ipt_username").val(name);
 	$("#slt_userName").text(name);
 	$("#hid_ipt_username").val(account);
@@ -212,13 +223,12 @@ function submitLogin(){
     <div class="loginbody">
     <div  class="systemlogo" >
     <img id="login_logo" src="/supervision/source/images/login/lo_title.png"/></div>
-       
+        
     <div class="loginbox">
-    
+     
     <ul>
     <li><input id="ipt_organname" type="text" class="loginorgan" value="--请选择登录机构--" readonly="readonly" onclick="showOrgTip();"/></li>
-    <li id="li_suborganname"><input id="ipt_sub_organname" type="text" class="loginorgan" value="--请选择下级机构--" readonly="readonly"  /></li>
-    <li id="li_username">
+    <li id="li_userslt" >
     	<input id="ipt_username"  type="text" class="loginuser" value="--请选择登录用户--" readonly="readonly" onclick="showUserTip();"/>
     	<input id="hid_ipt_username"  type="hidden" />
     </li>  
