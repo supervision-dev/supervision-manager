@@ -119,7 +119,8 @@ public class IncorruptVisionController extends SystemAction {
 			if (userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 						userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
-								userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
+							userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
+								userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser
 							.getAccount())) {
 				// 取满足要求的参数数据

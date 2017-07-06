@@ -208,6 +208,12 @@
 		</if> -->
 	</select>
 	
+	<select id="getOrganByPid" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT o.*,o1.name AS parentName FROM t_org o
+		LEFT JOIN t_org o1 ON o.pid=o1.id
+		WHERE o.pid=#{pid,jdbcType=INTEGER}
+	</select>
+	
 	<select id="getOrganByPId" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
 		select
 		<include refid="Query_Column_List" />, 

@@ -41,4 +41,6 @@ public interface OrganMapper {
 
 	List<Organ> getOrganByPIdAndPType(Organ organ);
 
+	List<Organ> getOrganByPid(Integer pid);
+
 }

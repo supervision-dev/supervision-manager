@@ -59,6 +59,7 @@ public class OrganController extends SystemAction {
 			HttpServletRequest request, HttpServletResponse response) {
 		
 		Organ organ = new Organ();
+		List<Organ> list =new ArrayList<Organ>();
 		if (pid != null && pid>0) {
 			organ.setPid(pid);
 		} else {
@@ -70,12 +71,15 @@ public class OrganController extends SystemAction {
 			Organ userOrg=userOrgList.get(0);
 			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
 				organ.setPid(0);
+				//获取用户所属的机构  
+				list = organService.getOrganByPId(organ);	 
 			}else{
-				organ.setPid(userOrg.getPid());
+				organ.setPid(userOrg.getId());
+				Organ organ2 = organService.selectByPrimaryKey(userOrg.getId());
+				list.add(organ2);
 			}
 		} 
-		//获取用户所属的机构  
-		List<Organ> list = organService.getOrganByPId(organ);	 
+		
 		return list;// json.toString();
 	}  
 

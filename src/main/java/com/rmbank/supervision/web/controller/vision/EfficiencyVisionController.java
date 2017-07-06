@@ -119,6 +119,7 @@ public class EfficiencyVisionController extends SystemAction {
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
+											userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setSupervisionTypeId(2); //2代表效能监察

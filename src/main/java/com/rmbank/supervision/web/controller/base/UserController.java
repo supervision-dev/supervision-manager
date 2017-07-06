@@ -102,7 +102,16 @@ public class UserController extends SystemAction {
 		}else {
 			try{
 				lgUser.setSearchName(user.getSearchName()); 
-				
+				//如果当前登录机构是中支机构，则获取该中支下的所有部门和县支行
+				if(userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_6){
+					Organ organ = userOrgList.get(0);
+					List<Organ> organByPId = organService.getOrganByPId(organ.getId());
+					for (Organ organ2 : organByPId) {
+						List<User> userListByOrgId = userService.getUserListByOrgId(organ2.getId());
+						userList.addAll(userListByOrgId);
+						totalCount+=userListByOrgId.size();
+					}
+				}
 				//获取当前登录用户所属的机构ID
 				List<Integer> userOrgIds=userService.getUserOrgIdsByUserId(lgUser.getId());
 				//将用户所属的机构id存入到session中
@@ -110,10 +119,10 @@ public class UserController extends SystemAction {
 				session.setAttribute("userOrgIds", userOrgIds); 
 				
 				//根据机构ID查询用户
-				userList=userService.getUserByOrgids(userOrgIds);					
-				totalCount = userService.getUserCountByOrgId(lgUser);
- 				
-
+				List<User> userByOrgids = userService.getUserByOrgids(userOrgIds);					
+				int countByOrgId = userService.getUserCountByOrgId(lgUser);
+				userList.addAll(userByOrgids);
+				totalCount+=countByOrgId;
 			}catch(Exception ex){ 
 				ex.printStackTrace();
 			}	 
