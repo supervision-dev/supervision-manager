@@ -59,7 +59,7 @@ function loadSubOrgListByPId(pId){
        				if(req[i].childrenCount ==0){
        					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
        				}else{
-       					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr onclick=\"loadUserListByOrgId("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" class=\"displaynone\"   onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/unnext.png\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
        					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
        					tbHtml += "</table></td></tr>  ";
@@ -217,7 +217,8 @@ function submitLogin(){
     
     <ul>
     <li><input id="ipt_organname" type="text" class="loginorgan" value="--请选择登录机构--" readonly="readonly" onclick="showOrgTip();"/></li>
-    <li>
+    <li id="li_suborganname"><input id="ipt_sub_organname" type="text" class="loginorgan" value="--请选择下级机构--" readonly="readonly"  /></li>
+    <li id="li_username">
     	<input id="ipt_username"  type="text" class="loginuser" value="--请选择登录用户--" readonly="readonly" onclick="showUserTip();"/>
     	<input id="hid_ipt_username"  type="hidden" />
     </li>  
