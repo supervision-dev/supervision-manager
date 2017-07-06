@@ -105,7 +105,7 @@ function loadItemInfo(){
 		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目跟踪监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 				}
         		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
-        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况：</td>";
+        		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪监察整改情况：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){

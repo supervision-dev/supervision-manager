@@ -588,10 +588,14 @@
 	 i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
 	and i.item_type=#{itemType,jdbcType=INTEGER}
 	and i.`supervision_org_id`= #{supervisionOrgId,jdbcType=INTEGER} and status &lt;&gt;9
+	<if test="searchName != null and searchName != ''">
+		and (i.name like
+		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+		)
+	</if>
 	or i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
 	and i.item_type=#{itemType,jdbcType=INTEGER}
 	and i.`preparer_org_id`= #{preparerOrgId,jdbcType=INTEGER} and status &lt;&gt;9
-	
 	<if test="searchName != null and searchName != ''">
 		and (i.name like
 		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -608,10 +612,14 @@
 	WHERE i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
 	and i.`supervision_org_id`= #{supervisionOrgId,jdbcType=INTEGER}
 	and i.item_type=#{itemType,jdbcType=INTEGER} and status &lt;&gt;9
+	<if test="searchName != null and searchName != ''">
+		and (
+			i.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')			
+     	)
+	</if>
 	or i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
 	and i.item_type=#{itemType,jdbcType=INTEGER}
 	and i.`preparer_org_id`= #{preparerOrgId,jdbcType=INTEGER} and status &lt;&gt;9
-	
 	<if test="searchName != null and searchName != ''">
 		and (
 			i.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')			
