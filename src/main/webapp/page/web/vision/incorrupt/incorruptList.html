@@ -150,20 +150,17 @@ function getDataList(pageNo){
 					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",78);\"  target=\"rightFrame\">录入监察结论</button></td>";
 					    	}else if(req.datalist[i].lasgTag==86 && req.datalist[i].status!=0){
 					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",86);\"  target=\"rightFrame\">录入监察结论</button></td>";
-					    	}else if(req.datalist[i].status == 4){
-						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-						    }else if(req.datalist[i].status == 5){
+					    	}else if(req.datalist[i].status == 4 || req.datalist[i].status == 5){
 						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
 						    }else{
 						    	itemHtml +="<td width=\"180px;\"></td>";
 					    	}
-				    	}else{
+				    	}else if(req.datalist[i].status == 4 || req.datalist[i].status == 5){
+					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+					    }else{
 					    	itemHtml +="<td width=\"180px;\"></td>";
 				    	}
-				    	
-				    }else if(req.datalist[i].status == 4){
-				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-				    }else if(req.datalist[i].status == 5){
+				    }else if(req.datalist[i].status == 4 || req.datalist[i].status == 5){
 				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
 				    }else{				    	
 			    		itemHtml +="<td width=\"180px;\"></td>";

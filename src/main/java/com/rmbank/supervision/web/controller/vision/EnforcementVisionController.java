@@ -175,14 +175,23 @@ public class EnforcementVisionController extends SystemAction {
 				
 				//获取添加项目的机构类型和登录机构类型是否相同 
 				Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
-				if(itemOrg.getOrgtype()==userOrg.getOrgtype()){
-					it.setIsItemOrg("true");
-				}else {
-					it.setIsItemOrg("false");
+				//如果当前登录机构是中支监察室
+				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+					//判断录入项目的机构和当前登录的中支监察室否在同一个中支下
+					if(itemOrg.getPid().intValue()==userOrg.getPid().intValue()){
+						it.setIsItemOrg("true");
+					}else {
+						it.setIsItemOrg("false");
+					}
+				}else if(userOrg.getOrgtype()==Constants.ORG_TYPE_4){
+					if(itemOrg.getPid()==5){
+						it.setIsItemOrg("true");
+					}else {
+						it.setIsItemOrg("false");
+					}
 				}
 				
-				//解决办公室录入项目，监察室立项问题
-				
+				//实现同级立项，即分行依法行政领导小组录入的项目由分行监察室立项，中支依法行政领导小组录入项目由中支监察室立项。
 				if(itemOrg.getOrgtype() == Constants.ORG_TYPE_2 && userRole.getId()==3 && userOrg.getOrgtype()== Constants.ORG_TYPE_4){
 					//如果录入项目的机构类型是分行办公室，用户角色是分行监察角色并且当前登录机构也是分行监察室
 					it.setIsProject("true");

@@ -180,7 +180,7 @@ public class IncorruptVisionController extends SystemAction {
 				Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
 				//如果当前登录机构是中支监察室，则判断每条项目的录入机构是否和该中支监察室在同一个中支下
 				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
-					if(itemOrg.getPid()==userOrg.getPid()){
+					if(itemOrg.getPid().intValue()==userOrg.getPid().intValue()){
 						it.setIsItemOrg("true");
 					}else {
 						it.setIsItemOrg("false");
@@ -289,6 +289,7 @@ public class IncorruptVisionController extends SystemAction {
 	@RequestMapping(value = "/jsonsetProjectById.do", method = RequestMethod.POST)
 	@RequiresPermissions("vision/incorrupt/jsonsetProjectById.do")
 	public JsonResult<Item> jsonsetProjectById(Item item,
+			@RequestParam(value = "end_time", required = false) String end_time,
 			HttpServletRequest request, HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
@@ -303,9 +304,16 @@ public class IncorruptVisionController extends SystemAction {
 				Item temp = itemService.selectByPrimaryKey(sessionItemId);
 				if (temp != null) {
 					temp.setSuperItemType(item.getSuperItemType());
-					temp.setStatus(1);
-					temp.setEndTime(new Date());
-					
+					temp.setStatus(1);	
+					if (end_time != null && end_time != "") {
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						Date date = sdf.parse(end_time);
+						temp.setEndTime(date);
+					}else {
+						js.setCode(new Integer(1));
+						js.setMessage("立项失败,请输入规定完成时间!");
+						return js;
+					}
 					itemService.updateByPrimaryKeySelective(temp);
 					List<ItemProcess> itemList = itemProcessService.getItemProcessItemId(item.getId());
 							
