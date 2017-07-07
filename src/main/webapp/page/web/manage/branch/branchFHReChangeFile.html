@@ -194,7 +194,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 33){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室监察意见：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -207,7 +207,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\"  title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 34){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况说明：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -218,13 +218,13 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 91){
         		 				if(isFirst_tag){
         		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪意见：</td>";
 		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+		        		 			phtml += "<td colspan=\"3\"  title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
 		        		 			isFirst_tag = false;
         		 				}else{
         		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察意见：</td>";
@@ -236,7 +236,7 @@ function loadItemInfo(){
 			        		 			}
 		        		 			}
 		        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-		        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察室对项目跟踪监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+		        		 			phtml += "<td colspan=\"3\"  title=\"分行监察室对项目跟踪监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 				}
         		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪监察整改情况：</td>";
@@ -248,7 +248,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			} 
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 93){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论：</td>";
 	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
@@ -259,7 +259,7 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
-	        		 			phtml += "<td colspan=\"3\" style=\"color:blue;font-size:16px;font-weight:bold;\" title=\"分行监察监察室给定最终结论时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
+	        		 			phtml += "<td colspan=\"3\"  title=\"分行监察监察室给定最终结论时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}
         		 		}
         		 		$("#tbl_viewTable").append(phtml);
@@ -407,31 +407,31 @@ function ajaxPost(){
        	</tr>
        	<tr>
        		<td width="12%" align="right" style="height:35px;">提交时间：</td>
-       		<td colspan="3" id="td_fstTime" style="color:blue;font-size:16px;font-weight:bold;" title="分行监察室提交立项时间">
+       		<td colspan="3" id="td_fstTime"  title="分行监察室提交立项时间">
        		</td>
        	</tr> 
     </table>
     </form> 
-     <table class="itemTable" >
+     <table class="input_Table" >
        	<tr>
        		<td width="15%" align="right" style="height:35px;">
        			<input type="hidden" id="hid_itemId" />
 				<input type="hidden" id="hid_uuid" name="uuid" />跟踪监察整改情况：
 				</td>
        		<td colspan="3">
-       			 <textarea id="content_a" rows="3" cols="5" style="width:80%;height:38px;margin-left:20px;" ></textarea>	
+       			 <textarea id="content_a" rows="3" cols="5" style="width:81%;height:38px;" ></textarea>	
        		</td>
        	</tr> 
        	<tr>
 			<td width="12%" align="right" height="129px;">整改情况附件：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" style="margin-left:20px;" ></div>
+				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script>
-	                <div id="uploader"  style="margin-left:20px;">
+	                <div id="uploader">
 	                </div>
 			 </td>	
 		</tr> 

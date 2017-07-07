@@ -271,7 +271,7 @@ function saveItem(obj){
     <div class="rightinfo">
      
     <form id="itemInfoForm" method="post">	   
-    <table class="itemTable" >
+    <table class="input_Table" >
     	<tr>
        		<td width="15%" align="right" >项目名称：</td> 
        		<td colspan="3">
@@ -298,33 +298,33 @@ function saveItem(obj){
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、方案：</td>
+       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/>方案：</td>
        		<td colspan="3">
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">审批表、方案附件：</td>
+       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/>方案附件：</td>
        		<td colspan="3" id="td_fileList">
        		</td>
        	</tr>
        	<tr>
 			<td width="12%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" style="margin-left:20px;" ></div>
+				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script> 
-	                <div id="uploader"  style="margin-left:20px;">
+	                <div id="uploader">
 	                </div>
 			 </td>	
 		</tr>  
        	<tr>
        		<td width="12%" align="right">相关资料说明：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;margin-left:20px;" name="content"></textarea>			
+       			<textarea rows="3" cols="5" style="width:81%;height:58px;" name="content"></textarea>			
        		</td>
        	</tr>
        	<tr>
