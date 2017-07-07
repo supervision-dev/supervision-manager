@@ -130,26 +130,33 @@ public class IncorruptVisionController extends SystemAction {
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountBySSJC(item);
-			} else {// 获取当前用户需要完成的项目
-					// 取满足要求的参数数据
-				/*List<Item> BGSitemList = new ArrayList<Item>();
-				int BGStotalCount = 0;
-				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
-					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
-					item.setSupervisionTypeId(2); //2代表效能监察
-					item.setSupervisionOrgId(BGS.getId());
-					item.setPreparerOrgId(BGS.getId());
-					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
-					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
-					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
-				}*/
+			} else {// 其他用户获取当前用户需要完成的项目
 				item.setSupervisionTypeId(3);
 				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
+				// 取满足要求的参数数据
 				itemList = itemService.getItemListByTypeAndLogOrg(item);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
+			
+				//如果是中支监察室需要加载当前中支下其他所有部门包括县支行的录入的工作事项
+				List<Item> BMItem = new ArrayList<Item>();
+				int BMItemCount = 0;
+				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+					//获取和当前登录的中支监察室在同一个中支下的所有部门。
+					List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
+					for (Organ organ : organByPId) {
+						item.setPreparerOrgId(organ.getId());
+						item.setSupervisionOrgId(organ.getId());
+						BMItem = itemService.getItemListByTypeAndLogOrg(item);
+						BMItemCount = itemService.getItemCountByLogOrgSSJC(item);
+						
+						itemList.addAll(BMItem);
+						totalCount+=BMItemCount;
+					}
+				}
+				
 			}
 			
 			for (Item it : itemList) {
