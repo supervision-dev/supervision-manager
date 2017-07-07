@@ -111,8 +111,13 @@ function getDataList(pageNo){
 				    
 				    
 				    //流程判断开始。。。。。。。。。。
-				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 ){
-				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
+				    if(req.datalist[i].orgType == 40 && req.datalist[i].status == 0 || req.datalist[i].orgType == 43 && req.datalist[i].status == 0){
+				    	if(req.datalist[i].isItemOrg=="true"){
+				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",-1);\"  target=\"rightFrame\">立项</button></td>";
+				    	}else {
+							itemHtml +="<td width=\"180px;\"></td>";
+						}
+				    	
 				    	
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==-1 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",72);\"  target=\"rightFrame\">录入项目方案</button></td>";
@@ -130,28 +135,32 @@ function getDataList(pageNo){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",75);\"  target=\"rightFrame\">录入执行情况</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==77 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",77);\"  target=\"rightFrame\">提请党委审议</button></td>";
-				    }else if(req.datalist[i].orgType == 40 ){
+				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43 ){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
-				    	if(req.datalist[i].lasgTag == 72 && req.datalist[i].status!=0){
-				    		//只有添加项目机构类型和登录机构类型一致才会有按钮
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",74);\"  target=\"rightFrame\">监察项目方案</button></td>";
-				    	}else if(req.datalist[i].lasgTag==777 && req.datalist[i].status!=0){
-					    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">监察会议决策内容</button></td>";
-					    }else if(req.datalist[i].lasgTag==778 && req.datalist[i].status!=0){
-					    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">录入问责相关资料</button></td>";
-					    }else if(req.datalist[i].lasgTag==76 && req.datalist[i].status!=0){
-					    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",76);\"  target=\"rightFrame\">监察执行情况</button></td>";
-					    }else if(req.datalist[i].lasgTag==78 && req.datalist[i].status!=0){
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",78);\"  target=\"rightFrame\">录入监察结论</button></td>";
-				    	}else if(req.datalist[i].lasgTag==86 && req.datalist[i].status!=0){
-				    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",86);\"  target=\"rightFrame\">录入监察结论</button></td>";
-				    	}else if(req.datalist[i].status == 4){
-					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-					    }else if(req.datalist[i].status == 5){
-					    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
-					    }else{
+				    	if(req.datalist[i].isItemOrg=="true"){
+				    		if(req.datalist[i].lasgTag == 72 && req.datalist[i].status!=0){					    		
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",74);\"  target=\"rightFrame\">监察项目方案</button></td>";
+					    	}else if(req.datalist[i].lasgTag==777 && req.datalist[i].status!=0){
+						    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",777);\"  target=\"rightFrame\">监察会议决策内容</button></td>";
+						    }else if(req.datalist[i].lasgTag==778 && req.datalist[i].status!=0){
+						    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">录入问责相关资料</button></td>";
+						    }else if(req.datalist[i].lasgTag==76 && req.datalist[i].status!=0){
+						    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",76);\"  target=\"rightFrame\">监察执行情况</button></td>";
+						    }else if(req.datalist[i].lasgTag==78 && req.datalist[i].status!=0){
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",78);\"  target=\"rightFrame\">录入监察结论</button></td>";
+					    	}else if(req.datalist[i].lasgTag==86 && req.datalist[i].status!=0){
+					    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",86);\"  target=\"rightFrame\">录入监察结论</button></td>";
+					    	}else if(req.datalist[i].status == 4){
+						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+						    }else if(req.datalist[i].status == 5){
+						    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
+						    }else{
+						    	itemHtml +="<td width=\"180px;\"></td>";
+					    	}
+				    	}else{
 					    	itemHtml +="<td width=\"180px;\"></td>";
 				    	}
+				    	
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
 				    }else if(req.datalist[i].status == 5){

@@ -265,11 +265,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 				        itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -278,15 +273,15 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";
-	       			}else if(req.ResultItemProcess[i].contentTypeId == 73){
-	       				itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
-				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 73){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";
@@ -302,15 +297,15 @@ function getDataList(pageNo){
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否合规：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">合规</td>";			       
 				        itemHtml +="</tr>";
-	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
-	       				itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
-				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";				        
+	       			}else if(req.ResultItemProcess[i].contentTypeId == 0){
+	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";
@@ -326,17 +321,17 @@ function getDataList(pageNo){
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否合规：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">不合规</td>";			       
 				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";				        
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 777){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">会议决策内容：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 				        itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -345,17 +340,17 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";				        
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 75){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 				        itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -363,6 +358,11 @@ function getDataList(pageNo){
 						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
 				        }
 				        itemHtml +="</td>";
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
 				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
@@ -375,11 +375,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 				        itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -387,6 +382,11 @@ function getDataList(pageNo){
 						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
 				        }
 				        itemHtml +="</td>";
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
 				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
@@ -409,11 +409,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -422,6 +417,11 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";		
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否需要整改：</td>";  	
@@ -433,11 +433,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -446,18 +441,17 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";		
-				         
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 78){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察意见：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -466,6 +460,11 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";		
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否合规：</td>";  	
@@ -477,11 +476,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -490,6 +484,11 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";		
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否合规：</td>";  	
@@ -506,11 +505,6 @@ function getDataList(pageNo){
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";			        
 				        
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -519,6 +513,11 @@ function getDataList(pageNo){
 				        }
 				        itemHtml +="</td>";
 				        itemHtml +="</tr>";		
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否合规：</td>";  	
@@ -547,18 +546,12 @@ function getDataList(pageNo){
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
 				        itemHtml +="</tr>";
-
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 84){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">监察结论：</td>";  	
 					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";  
 	       				
-				        itemHtml +="<tr>";				    
-					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
-				        itemHtml +="</tr>";	 
-				        
 	       				itemHtml +="<tr>";
 				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
 				        itemHtml +="<td style=\"text-align: left;\">";
@@ -566,7 +559,12 @@ function getDataList(pageNo){
 						    itemHtml +="<a style=\"margin-left: 5px;\" title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
 				        }
 				        itemHtml +="</td>";
-				        itemHtml +="</tr>";	
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left; padding-left:5px;\">"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+				        itemHtml +="</tr>";			        	
 	       			}
 			        
 		        }
@@ -575,7 +573,6 @@ function getDataList(pageNo){
        }
 	});
 }
-
 </script>
 
 
