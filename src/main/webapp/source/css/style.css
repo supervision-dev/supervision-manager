@@ -160,9 +160,14 @@ h2{font-weight:normal;}
 .sort{padding-left:3px;}
 
 
-.itemTable{ width:100%;}
-.itemTable td{/* line-height:35px; font-weight:900;*/ line-height:35px; text-indent:11px;/*  border-right: dotted 1px #c7c7c7; */}
+.itemTable{width:100%; clear:both;}
+.itemTable td{border:solid 1px #cbcbcb; font-size:14px; /* line-height:35px; font-weight:900;*/ line-height:35px; text-indent:11px;}
 .itemTable td input,textarea{border:solid 1px #c6c6c6;}
+
+.input_Table{width:100%;}
+.input_Table td{font-size:14px; line-height:35px; text-indent:11px;}
+.input_Table td input,textarea{border:solid 1px #c6c6c6;}
+
 .enterA{float:left; margin-left:35px; margin-top:20px;:block; width:74px;height:30px;color:#fff;background:#3eafe0;font-weight:bold; border-radius:2px; text-align:center;line-height:30px; cursor:pointer;}
 .enterA:hover{color:#fff; background:#d98c1d;}
 .itemTable td label {float: left;}
