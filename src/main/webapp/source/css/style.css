@@ -68,9 +68,9 @@ h2{font-weight:normal;}
 .loginbox ul li label a{color:#687f92;} 
 .loginbox ul li label a:hover{color:#3d96c9;}
 .loginbox ul li label input{margin-right:5px;}
-.loginorgan{width:299px; height:30px; background:url(/supervision/source/images/loginorgan.png) no-repeat; border:none; line-height:30px; padding-left:44px; font-size:14px; font-weight:bold; z-index:0; }
-.loginuser{width:299px; height:30px; background:url(/supervision/source/images/loginuser.png) no-repeat; border:none; line-height:30px; padding-left:44px; font-size:14px; font-weight:bold; z-index:0; }
-.loginpwd{width:299px; height:30px; background:url(/supervision/source/images/loginpassword.png) no-repeat; border:none;line-height:30px; padding-left:44px; font-size:14px; color:#90a2bc;}
+.loginorgan{width:343px; height:48px; background:url(/supervision/source/images/loginorgan.png) no-repeat; border:none; line-height:48px; padding-left:44px; font-size:14px; font-weight:bold; z-index:0; }
+.loginuser{width:343px; height:48px; background:url(/supervision/source/images/loginuser.png) no-repeat; border:none; line-height:48px; padding-left:44px; font-size:14px; font-weight:bold; z-index:0; }
+.loginpwd{width:343px; height:48px; background:url(/supervision/source/images/loginpassword.png) no-repeat; border:none;line-height:48px; padding-left:44px; font-size:14px; color:#90a2bc;}
 .loginbtn{width:111px;height:35px; background:url(/supervision/source/images/buttonbg.png) repeat-x; font-size:14px; font-weight:bold; color:#fff;cursor:pointer; line-height:35px;}
 .loginbm{height:50px; line-height:50px; text-align:center; position:absolute; bottom:0; width:100%;color:white; background-color:rgb(56, 126, 169);}
 .loginbm a{font-weight:bold;color:white;}
