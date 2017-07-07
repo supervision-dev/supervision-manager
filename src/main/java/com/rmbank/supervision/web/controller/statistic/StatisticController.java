@@ -84,7 +84,14 @@ public class StatisticController {
 			 ex.printStackTrace();
 		 }
 		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
 		 smList.setItem(item);
+		 
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
 		return smList;
@@ -142,6 +149,12 @@ public class StatisticController {
 			 ex.printStackTrace();
 		 }
 		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
@@ -200,6 +213,12 @@ public class StatisticController {
 			 ex.printStackTrace();
 		 }
 		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
@@ -255,6 +274,12 @@ public class StatisticController {
 			 ex.printStackTrace();
 		 }
 		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
 		return smList;
@@ -310,6 +335,12 @@ public class StatisticController {
 			 ex.printStackTrace();
 		 }
 		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
 		return smList;
