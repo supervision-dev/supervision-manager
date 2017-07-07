@@ -174,6 +174,25 @@ public class IncorruptVisionController extends SystemAction {
 				
 				//将登陆用户的机构Id添加
 				it.setLogOrgId(userOrg.getId());
+				
+				
+				//获取录入项目的机构
+				Organ itemOrg = organService.selectByPrimaryKey(it.getPreparerOrgId());
+				//如果当前登录机构是中支监察室，则判断每条项目的录入机构是否和该中支监察室在同一个中支下
+				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+					if(itemOrg.getPid()==userOrg.getPid()){
+						it.setIsItemOrg("true");
+					}else {
+						it.setIsItemOrg("false");
+					}
+				}else if(userOrg.getOrgtype()==Constants.ORG_TYPE_4){
+					if(itemOrg.getPid()==5 || itemOrg.getOrgtype()==Constants.ORG_TYPE_5 
+							|| itemOrg.getOrgtype()==Constants.ORG_TYPE_6){
+						it.setIsItemOrg("true");
+					}else {
+						it.setIsItemOrg("false");
+					}
+				}
 			}
 
 			item.setTotalCount(totalCount);
