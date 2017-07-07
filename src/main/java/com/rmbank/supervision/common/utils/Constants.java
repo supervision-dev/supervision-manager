@@ -105,7 +105,7 @@ public class Constants
   public static final Integer CONTENT_TYPE_ID_6= 91;   
   public static final Integer CONTENT_TYPE_ID_7= 93;  
 
-  public static final Integer SUPERVISION_ORGAN_ID_CDFH = 19;
+  public static final Integer SUPERVISION_ORGAN_ID_CDFH = 4;
   
   public static final Integer SUPERVISION_TYPE_ID_XL = 2;
   public static final Integer SUPERVISION_TYPE_ID_LZ = 3;  
