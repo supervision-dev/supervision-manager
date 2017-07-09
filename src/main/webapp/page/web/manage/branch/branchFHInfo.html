@@ -467,7 +467,7 @@ function saveSelectOrg(obj){
     <form id="itemInfoForm" method="post">	   
     <table class="input_Table" >
     	<tr>
-       		<td width="15%" align="right" >项目名称：</td> 
+       		<td width="12%" align="right" >项目名称：</td> 
        		<td colspan="3">
        			<input id="itemName" name="name" type="text" value="" style="width:81%;height:28px;"/> 
 				<input type="hidden" id="hid_uuid" name="uuid" />	
@@ -475,7 +475,7 @@ function saveSelectOrg(obj){
        		</td>
        	</tr>
        	<tr>
-       		<td width="15%" align="right" style="height:36px;">项目分类：</td>
+       		<td width="12%" align="right" style="height:36px;">项目分类：</td>
        		<td colspan="3">
        			<select id="slt_itemType" name="supervisionTypeId" ><!-- class="dfinput" -->
        				<option value="">--请选择项目分类--</option>
@@ -483,23 +483,18 @@ function saveSelectOrg(obj){
        		</td>
        	</tr>
        	<tr>
-       		<td width="15%" align="right" style="height:30px;">立项时间：</td>
+       		<td width="12%" align="right" style="height:30px;">立项时间：</td>
        		<td width="20%;">
 	 			<input type="text" id="preparerTimes" name="preparerTimes" class="laydate-icon" style="height:22px;float:left;" />	
        		</td>
-       		<td width="15%" align="right">完成时间：</td>
+       		<td width="12%" align="right">完成时间：</td>
        		<td>
        			 <input type="text" id="endTimes" name="endTimes"   class="laydate-icon" style="height:22px;float:left;" />		
        		</td>
        	</tr>
+       
        	<tr>
-       		<td width="15%" align="right">立项审批表<br/>、方案：</td>
-       		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
-       		</td>
-       	</tr>
-       	<tr>
-			<td width="15%" align="right" height="129px;">上传附件：</td>
+			<td width="12%" align="right" height="129px;">立项审批表<br/>、方案：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
@@ -511,8 +506,14 @@ function saveSelectOrg(obj){
 	                </div>
 			 </td>	
 		</tr> 
+			<tr>
+       		<td width="12%" align="right">立项审批表<br/>、方案说明：</td>
+       		<td colspan="3">
+       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       		</td>
+       	</tr>
        	<tr>
-       		<td width="15%" align="right">被监察对象：</td>
+       		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
        			<input id="orgIds" type="hidden" name="supervisionOrgIds" ></div>
        			<div class="simpletipinfo" style="margin-left:-10px;width:80%;">   
