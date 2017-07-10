@@ -213,7 +213,19 @@ function saveItem(obj){
 	});
 	
 }
-
+function deleteFile(obj){
+	$("#"+obj).remove();
+	var uploader = $('#uploader').plupload('getUploader'); 
+	var flist = uploader.files;
+	if(flist.length >0){
+		for(var f = 0;f<flist.length;f++){
+			if(flist[f].id == obj){
+				flist.splice(f,1);
+			}
+		}
+	} 
+	uploader.refresh()
+} 
 function show(){		
 	var wanjie=$('input:radio[name="wanjie"]:checked').val();		
 	if(wanjie == 0){

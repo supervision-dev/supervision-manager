@@ -264,7 +264,19 @@ function ajaxPost(){
         }
 	});
 }
-
+function deleteFile(obj){
+	$("#"+obj).remove();
+	var uploader = $('#uploader').plupload('getUploader'); 
+	var flist = uploader.files;
+	if(flist.length >0){
+		for(var f = 0;f<flist.length;f++){
+			if(flist[f].id == obj){
+				flist.splice(f,1);
+			}
+		}
+	} 
+	uploader.refresh()
+} 
 function saveItem(obj){	
 	layer.confirm('确认信息已经填写完整，并且保存？', {
 		btn: ['确认','取消'] //按钮

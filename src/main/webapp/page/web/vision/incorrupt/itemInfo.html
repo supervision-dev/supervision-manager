@@ -154,7 +154,19 @@ $(document).ready(function(){
 	$('.tablelist tbody tr:odd').addClass('odd');
 
 });
-
+function deleteFile(obj){
+	$("#"+obj).remove();
+	var uploader = $('#uploader').plupload('getUploader'); 
+	var flist = uploader.files;
+	if(flist.length >0){
+		for(var f = 0;f<flist.length;f++){
+			if(flist[f].id == obj){
+				flist.splice(f,1);
+			}
+		}
+	} 
+	uploader.refresh()
+} 
 function returnPage(){
 		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
 			btn: ['确认','取消'] //按钮
