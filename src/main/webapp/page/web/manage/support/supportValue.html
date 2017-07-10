@@ -178,7 +178,7 @@ function ajaxPost(){
         data:obj,//发送到服务器的数据，序列化后的值
         success: function(data) {
         	if(data.code==0){   	    	
-	        	  layer.confirm('监察室量化项目成功，待被监察对象继续上传资料，完成项目监察', {
+	        	  layer.confirm('监察室选择是否量化项目成功，待被监察对象继续上传资料', {
 						btn: ['确认','取消'] //按钮
 					}, function(){//点击确认按钮调用
 						layer.close(layer.confirm());//关闭当前弹出层

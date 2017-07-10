@@ -318,65 +318,71 @@ function saveItem(obj){
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
+       		<td width="15%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
        			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="15%" align="right" style="height:35px;">立项时间：</td>
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="12%" align="right">完成时间：</td>
+       		<td width="15%" align="right">完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、方案：</td>
-       		<td colspan="3">
-       			<label id="lbl_content"></label>
-       		</td>
-       	</tr>
-       	<tr>
-       		<td width="12%" align="right" style="height:35px;">审批表、方案附件：</td>
+       		<td width="15%" align="right" style="height:35px;">相关资料：</td>
        		<td colspan="3" id="td_fileList">
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
-       		<td colspan="3" id="td_fstTime"title="中支监察室提交立项时间">
+       		<td></td>
+       		<td colspan="3">相关资料包括：（立项审批表、方案、行政执法通知书）</td>
+       	</tr>
+       	<tr>
+       		<td width="15%" align="right" style="height:55px;">相关资料说明：</td>
+       		<td colspan="3">
+       			<label id="lbl_content"></label>
        		</td>
        	</tr>
+       	<!-- <tr>
+       		<td width="15%" align="right" style="height:35px;">提交时间：</td>
+       		<td colspan="3" id="td_fstTime"title="中支监察室提交立项时间">
+       		</td>
+       	</tr> -->
        <!-- 	<tr>
-       		<td width="12%" align="right" style="height:35px;">上传相关资料说明：</td>
+       		<td width="15%" align="right" style="height:35px;">上传相关资料说明：</td>
        		<td colspan="3">
        			<label id="lbl_content1"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">相关资料附件：</td>
+       		<td width="15%" align="right" style="height:35px;">相关资料附件：</td>
        		<td colspan="3" id="td_fileList1">
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td width="15%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_scdTime"title="被监察对象上传资料时间">
        		</td>
        	</tr> -->
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">是否量化：</td>
+       		<td width="15%" align="right" style="height:35px;">是否量化：</td>
        		<td colspan="3" id="td_isValue">
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td width="15%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_thdTime"title="中支监察室对项目量化处理时间">
        		</td>
        	</tr>
+       	</table>
+       	<table class="input_Table">
        	<tr>
-			<td width="12%" align="right" height="129px;">相关资料：</td>
+			<td width="15%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right" ></div>
 	                <script>
@@ -395,7 +401,7 @@ function saveItem(obj){
 			</td>
 		</tr>
        	<tr>
-       		<td width="12%" align="right">相关资料说明：</td>
+       		<td width="15%" align="right">相关资料说明：</td>
        		<td colspan="3">
        			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
        		</td>

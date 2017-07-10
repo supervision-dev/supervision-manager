@@ -104,6 +104,9 @@ function loadItemInfo(){
 		        		 	if($("#tr_fth2").hasClass("displaynone")){
 		        		 		$("#tr_fth2").removeClass("displaynone");
 		        		 	}
+		        		 	if($("#tr_fth33").hasClass("displaynone")){
+		        		 		$("#tr_fth33").removeClass("displaynone");
+		        		 	}
 		        		 	if($("#tr_fth3").hasClass("displaynone")){
 		        		 		$("#tr_fth3").removeClass("displaynone");
 		        		 	}
@@ -205,11 +208,11 @@ function getzf(num){
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
-       	<tr>
+       <!-- 	<tr>
        		<td width="12%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_fstTime" title="中支监察室提交立项时间">
        		</td>
-       	</tr>
+       	</tr> -->
        	<!-- <tr id="tr_scd1" class="displaynone">
        		<td width="12%" align="right" style="height:35px;">上传相关资料说明：</td>
        		<td colspan="3">
@@ -236,15 +239,19 @@ function getzf(num){
        		<td colspan="3" id="td_thdTime" title="中支监察室对项目量化处理时间">
        		</td>
        	</tr>
-       	<tr id="tr_fth1" class="displaynone">
-       		<td width="12%" align="right" style="height:35px;">上传相关资料说明：</td>
-       		<td colspan="3">
-       			<label id="lbl_content2"></label>
+       	<tr id="tr_fth2" class="displaynone">
+       		<td width="12%" align="right" style="height:35px;">上报相关资料：</td>
+       		<td colspan="3" id="td_fileList2">
        		</td>
        	</tr>
-       	<tr id="tr_fth2" class="displaynone">
-       		<td width="12%" align="right" style="height:35px;">相关资料附件：</td>
-       		<td colspan="3" id="td_fileList2">
+       	<tr id="tr_fth33" class="displaynone">
+       		<td></td>
+       		<td colspan="3">相关资料包括（监察报告、整改建议书、整改报告、监察决定书、跟踪监察情况等）</td>
+       	</tr>
+       	<tr id="tr_fth1" class="displaynone">
+       		<td width="12%" align="right" style="height:35px;">相关资料说明：</td>
+       		<td colspan="3">
+       			<label id="lbl_content2"></label>
        		</td>
        	</tr>
        	<tr id="tr_fth3" class="displaynone">
