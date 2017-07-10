@@ -75,9 +75,15 @@ function getDataList(pageNo){
 	       if(req.data != null){
 	       		$("#i_totalcount").text(req.data.totalCount);
 	       		$("#i_pageNo").text(req.data.pageNo);
+	       		$("#i_totalcountA").text(req.data.totalCount);
+	       		$("#i_pageNoA").text(req.data.pageNo);
 	       		var count = Math.ceil(req.data.totalCount/10);
 	       		$("#ul_pageList").html("");
 	       		var ulHtml = "";
+	       		if(req.data.roleId==11){
+	       			$("#pagin").hide();
+	       			$("#paginA").show();
+	       		}
 	       		if(count == 1){
 	       			ulHtml += "<li class=\"paginItem\"><a href=\"javascript:;\"><span class=\"pagepre\"></span></a></li>";
 	       		}else{
@@ -469,23 +475,25 @@ function clearForm(){
     
     </div>
     
-    
-    <table class="tablelist">
-    	<thead>
-    		<tr>
-		        <th></th>
-		        <th>用户名称</th>
-				<th>用户账号</th>
-				<th>所属机构</th>	
-				<th>所属角色</th>	  
-        	</tr>
-        </thead>
-        <tbody id="tb_userList">  
-        </tbody>
-    </table>
-    
+
+   	<div style="height:370px;_height:370px;overflow-y:auto; width:100%;">
+	    <table class="tablelist">
+	    	<thead>
+	    		<tr>
+			        <th></th>
+			        <th>用户名称</th>
+					<th>用户账号</th>
+					<th>所属机构</th>	
+					<th>所属角色</th>	  
+	        	</tr>
+	        </thead>
+	        <tbody id="tb_userList">  
+	        </tbody>
+	    </table>
+    </div>
    
-    <div class="pagin">
+   
+    <div class="pagin" id="pagin">
     	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
         <ul class="paginList" id="ul_pageList">
         
@@ -499,7 +507,9 @@ function clearForm(){
         <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
         </ul>
     </div>
-    
+    <div class="pagin" id="paginA" style="display: none;">
+   		<div class="message">共<i id="i_totalcountA" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNoA" class="blue">&nbsp;</i>页</div>
+    </div>
     
     <div class="tip" id="confirm_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
