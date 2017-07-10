@@ -128,7 +128,7 @@ function ajaxPost(){
 		obj.itemId = $.trim($("#hid_itemid").val());
 		obj.isValue = isValued;
 		if(isValued == 1) {
-			var pId = $.trim($("#tr_valueModel").val());
+			var pId = $.trim($("#slt_isValue").val());
 			if(pId == ""){
 				layer.confirm('请选择量化模型，并量化分值', {
 							btn: ['确认'] //按钮
@@ -157,7 +157,7 @@ function ajaxPost(){
 			    return;
 			}
 			$.each(det_id_collect,function(index,item){
-				detailArray.push(item.value);
+				detailArray.push(item.value); 
 			});   
 			if(detailArray.length != valueArray.length){
 					layer.confirm('请量化所有三级指标分值,必须填写', {
@@ -351,7 +351,7 @@ function getValue(obj,index,maxValue){
 				}
 			}
 		});
-		$("#sp_subTotal_"+index).text(subTotalValue+"分"); 
+		$("#sp_subTotal_"+index).text(subTotalValue.toFixed(2)+"分"); 
 		
 		var totalValue = 0;
 		var totla_collect = $("#value_table input[doc='ipt_value']");
@@ -362,7 +362,7 @@ function getValue(obj,index,maxValue){
 				}
 			}
 		});
-		$("#totalvalue").html(totalValue+"分");
+		$("#totalvalue").html(totalValue.toFixed(2)+"分");
 	}
 } 
 </script>

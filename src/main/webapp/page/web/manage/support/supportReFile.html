@@ -173,8 +173,8 @@ function loadItemInfo(){
         		 		}
         		 		$("#td_scdTime").html(formatTime(boj.preparerTime,true));
         		 	}
-        		 	if(req.resultItemProcess.length >2){ 
-	        		 	var obj1 = req.resultItemProcess[1];
+        		 	if(req.resultItemProcess.length >1){ 
+	        		 	/* var obj1 = req.resultItemProcess[1];
 	        		 	if(obj1 != undefined && obj1 != null){
 	        		 		$("#lbl_content1").text(obj1.content);
 	        		 		if(obj1.fileList != null && obj1.fileList.length >0){
@@ -184,11 +184,11 @@ function loadItemInfo(){
 	        		 			}
 	        		 			$("#td_fileList1").html(fHtml);
 	        		 		}
-	        		 	}
-	        		 	var obj2 = req.resultItemProcess[2];
+	        		 	} */
+	        		 	var obj2 = req.resultItemProcess[1];
 	        		 	if(obj2 != undefined && obj2 != null){
 	        		 		 if(obj2.valueTypeValue != null){
-	        		 		 	$("#td_isValue").html("量化得分："+obj2.valueTypeValue);
+	        		 		 	$("#td_isValue").html("量化得分："+obj2.valueTypeValue.toFixed(2));
 	        		 		 }else{
 	        		 		 	$("#td_isValue").html("未量化");
 	        		 		 }

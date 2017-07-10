@@ -46,7 +46,7 @@ function loadItemInfo(){
         		 			$("#td_fileList").html(fHtml);
         		 		}
         		 	}
-        		 	if(req.resultItemProcess.length >1){ 
+        		 	/* if(req.resultItemProcess.length >1){ 
 	        		 	var obj1 = req.resultItemProcess[1];
 	        		 	if(obj1 != undefined && obj1 != null){
 	        		 		$("#lbl_content1").text(obj1.content);
@@ -68,12 +68,12 @@ function loadItemInfo(){
 		        		 		$("#tr_scd3").removeClass("displaynone");
 		        		 	}
 	        		 	}
-       		 		}
-       		 		if(req.resultItemProcess.length>2){
-	        		 	var obj2 = req.resultItemProcess[2];
+       		 		} */
+       		 		if(req.resultItemProcess.length>1){
+	        		 	var obj2 = req.resultItemProcess[1];
 	        		 	if(obj2 != undefined && obj2 != null){
 	        		 		 if(obj2.valueTypeValue != null){
-	        		 		 	$("#td_isValue").html("量化得分："+obj2.valueTypeValue);
+	        		 		 	$("#td_isValue").html("量化得分："+obj2.valueTypeValue.toFixed(2));
 	        		 		 }else{
 	        		 		 	$("#td_isValue").html("未量化");
 	        		 		 }
@@ -86,8 +86,8 @@ function loadItemInfo(){
 		        		 	}
 	        		 	}
        		 		}
-       		 		if(req.resultItemProcess.length>3){
-	        		 	var obj3 = req.resultItemProcess[3];
+       		 		if(req.resultItemProcess.length>2){
+	        		 	var obj3 = req.resultItemProcess[2];
 	        		 	if(obj3 != undefined && obj3 != null){
 	        		 		$("#lbl_content2").text(obj3.content);
 	        		 		if(obj3.fileList != null && obj3.fileList.length >0){
@@ -220,12 +220,12 @@ function getzf(num){
        		<td width="12%" align="right" style="height:35px;">相关资料附件：</td>
        		<td colspan="3" id="td_fileList1">
        		</td>
-       	</tr> -->
+       	</tr>
        	<tr id="tr_scd3" class="displaynone">
        		<td width="12%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_scdTime" title="被监察对象上传资料时间">
        		</td>
-       	</tr>
+       	</tr> -->
        	<tr id="tr_thd1" class="displaynone">
        		<td width="12%" align="right" style="height:35px;">是否量化：</td>
        		<td colspan="3" id="td_isValue">

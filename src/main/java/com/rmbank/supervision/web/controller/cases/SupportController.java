@@ -318,7 +318,7 @@ public class SupportController extends SystemAction {
 	    			for(ItemProcess itp: processList){
 	    				List<ItemProcessFile> fileList = new ArrayList<ItemProcessFile>();
 	    				fileList = itemProcessFileService.getFileListByItemId(itp.getId());
-	    				if(itp.getContentTypeId()==Constants.CONTENT_TYPE_ID_ZZZZ_RE_FILE){
+	    				if(itp.getContentTypeId().intValue()==Constants.CONTENT_TYPE_ID_ZZZZ_RE_FILE.intValue()){
 	    					List<ItemProcessGrade> gsList = gradeSchemeService.getGradeListByItemProcessId(itp.getId());
 	    					if(gsList.size()>0){
 	    						double valueTypeValue = 0;
