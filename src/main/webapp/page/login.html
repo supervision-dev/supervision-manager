@@ -12,13 +12,19 @@
 	<script>DD_belatedPNG.fix('.ad_img img,#login_logo');</script>
 	<![endif]--> 
 <script language="javascript">
-	$(function(){
-    $('.loginbox').css({'position':'absolute','left':230});
-	$(window).resize(function(){  
-    $('.loginbox').css({'position':'absolute','left':230});
-    })  
-});  
+ 	$(function(){
+	    $('.loginbox').css({'position':'absolute','left':'50%','margin-left':'-346'});
+		$(window).resize(function(){  
+	    $('.loginbox').css({'position':'absolute','left':'50%','margin-left':'-346'});
+	    })  
+	});  
 
+ 	/* $(function(){
+	    $('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+		$(window).resize(function(){  
+	    $('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+	    })  
+	});  */
 function showOrgTip(){
 	$("#organ_tip").fadeIn(0);
 	$.ajax({ 
