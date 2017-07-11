@@ -550,6 +550,11 @@ function getDataList(pageNo){
 				        itemHtml +="</tr>";				        
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 142){
 	       				itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"22%\" style=\"text-align: right; \">是否听证：</td>";  	
+					    itemHtml +="<td style=\"text-align: left;\">听证</td>";			       
+				        itemHtml +="</tr>";	
+				        
+	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"22%\" style=\"text-align: right; \">听证相关资料：</td>";  	
 					    itemHtml +="<td style=\"text-align: left;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";	
