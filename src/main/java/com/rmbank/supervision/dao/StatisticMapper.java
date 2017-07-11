@@ -14,5 +14,7 @@ public interface StatisticMapper {
 
 	List<StatisticModel> loadBranchTotalStatistisList(Item item); 
 
-	List<StatisticModel> loadSupportTotalStatistisList(Item item); 
+	List<StatisticModel> loadSupportTotalStatistisList(Item item);
+
+	List<StatisticModel> loadBranchSUPPTotalStatistisList(Item item); 
 }

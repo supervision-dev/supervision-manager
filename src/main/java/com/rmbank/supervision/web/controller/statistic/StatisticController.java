@@ -226,7 +226,7 @@ public class StatisticController {
 	}
 
 	/**
-	 * 分行立项统计
+	 * 分行立项分行完成统计
 	 * @param request
 	 * @param response
 	 * @return
@@ -285,6 +285,65 @@ public class StatisticController {
 		return smList;
 	}
 
+    /**
+	 * 分行立项中支完成统计
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws UnsupportedEncodingException 
+	 */
+    @ResponseBody
+	@RequestMapping("/branch/branchSUPPStatistic.do")
+	public StatisticModelList branchStatisticSUPP(Item item, 
+			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
+		StatisticModelList smList = new StatisticModelList();
+		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
+		StatisticModel statisticModel = new StatisticModel();
+		int totalCount = 0;
+		int comCount = 0;
+		int unComCount = 0;
+		int overUnComCount = 0;
+		int overComCount = 0;
+		if(StringUtil.isEmpty(item.getSchBeginTime())){
+			item.setSchBeginTime(null);
+		}else{
+			item.setSchBeginTime(item.getSchBeginTime()+" 00:00:00");
+		}
+		if(StringUtil.isEmpty(item.getSchEndTime())){
+			item.setSchEndTime(null);
+		}else{
+			item.setSchEndTime(item.getSchEndTime()+" 23:59:59");
+		}
+		item.setPreparerOrgId(Constants.SUPERVISION_ORGAN_ID_CDFH); 
+		 try{ 
+			 totalList = statisticService.loadBranchSUPPTotalStatistisList(item); 
+			 for(StatisticModel sm : totalList){
+				 totalCount = totalCount + sm.getTotalCount(); 
+				 comCount = comCount + sm.getComCount();
+				 unComCount = unComCount+ sm.getUnComCount();
+				 overUnComCount = overUnComCount+ sm.getOverUnComCount();
+				 overComCount = overComCount+ sm.getOverComCount();
+			 }
+			 statisticModel.setTotalCount(totalCount);
+			 statisticModel.setComCount(comCount);
+			 statisticModel.setUnComCount(unComCount);
+			 statisticModel.setOverComCount(overComCount);
+			 statisticModel.setOverUnComCount(overUnComCount); 
+		 }
+		 catch(Exception ex){
+			 ex.printStackTrace();
+		 }
+		 smList.setStatisticModel(statisticModel);
+		 if(!StringUtil.isEmpty(item.getSchBeginTime()) && item.getSchBeginTime().length()>9){ 
+			item.setSchBeginTime(item.getSchBeginTime().substring(0,item.getSchBeginTime().length() -9));
+		 }
+		 if(!StringUtil.isEmpty(item.getSchEndTime()) && item.getSchEndTime().length()>9){ 
+			item.setSchEndTime(item.getSchEndTime().substring(0,item.getSchEndTime().length() -9));
+		 }
+		 smList.setItem(item);
+		 smList.setTotalList(totalList);
+		return smList;
+	}
 	/**
 	 * 中支立项统计
 	 * @param request

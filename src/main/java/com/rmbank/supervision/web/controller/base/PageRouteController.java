@@ -770,7 +770,7 @@ public class PageRouteController extends SystemAction {
     /******************统计分析模块 开始***********************/
     /****************************************************/
     /**
-     * 分行立项统计
+     * 分行立项分行完成统计
      *
      * @param request
      * @param response
@@ -781,6 +781,21 @@ public class PageRouteController extends SystemAction {
     public ModelAndView branchStatistic( HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	ModelAndView mv = new ModelAndView("web/statistic/branchStatistic");
+    	return mv;
+    }
+    
+    /**
+     * 分行立项中支完成统计
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/statistic/branch/branchSUPPStatistic.do")
+    public ModelAndView branchSUPPStatistic( HttpServletRequest request, 
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	ModelAndView mv = new ModelAndView("web/statistic/branchSUPPStatistic");
     	return mv;
     }
     /**

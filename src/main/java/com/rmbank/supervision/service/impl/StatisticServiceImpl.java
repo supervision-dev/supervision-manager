@@ -39,6 +39,12 @@ public class StatisticServiceImpl implements StatisticService {
 	public List<StatisticModel> loadSupportTotalStatistisList(Item item) {
 		// TODO Auto-generated method stub
 		return statisticMapper.loadSupportTotalStatistisList(item);
+	}
+
+	@Override
+	public List<StatisticModel> loadBranchSUPPTotalStatistisList(Item item) {
+		// TODO Auto-generated method stub
+		return statisticMapper.loadBranchSUPPTotalStatistisList(item);
 	} 
 	
 	

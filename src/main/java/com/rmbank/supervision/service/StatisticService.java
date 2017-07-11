@@ -22,7 +22,7 @@ public interface StatisticService {
 	List<StatisticModel> loadTotalStatistisList(Item item); 
 
 	/**
-	 * 获取分行立项 的所有记录数
+	 * 获取分行立项分行完成 的所有记录数
 	 * @param item
 	 * @return
 	 */
@@ -35,5 +35,12 @@ public interface StatisticService {
 	 * @return
 	 */
 	List<StatisticModel> loadSupportTotalStatistisList(Item item);
+	
+	/**
+	 * 获取分行立项中支完成 的所有记录数
+	 * @param item
+	 * @return
+	 */
+	List<StatisticModel> loadBranchSUPPTotalStatistisList(Item item);
 
 }
