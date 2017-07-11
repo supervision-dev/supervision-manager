@@ -26,4 +26,6 @@ public interface RoleMapper {
 	List<Role> getExistRole(Role role);
 
 	void deleteRoleById(Integer id);
+
+	List<Role> getRoleListByUsed(Role role);
 }

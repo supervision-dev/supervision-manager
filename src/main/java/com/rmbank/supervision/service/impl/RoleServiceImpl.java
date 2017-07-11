@@ -104,4 +104,10 @@ public class RoleServiceImpl implements RoleService{
 
 	}
 
+	@Override
+	public List<Role> getRoleListByUsed(Role role) {
+		// TODO Auto-generated method stub
+		return roleMapper.getRoleListByUsed(role);
+	}
+
 }

@@ -149,14 +149,22 @@ public class UserController extends SystemAction {
 //    @RequiresPermissions("system/user/getRoleList.do")
     public List<Role> getRoleList(HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException { 
-    	List<Role>  list = roleService.getRoleList(new Role());
-    	if(list != null){
+    	List<Role>  list = new ArrayList<Role>();
+    	User lgUser = this.getLoginUser();
+    	List<Role> rolesByUserId = roleService.getRolesByUserId(lgUser.getId());
+    	Role role = rolesByUserId.get(0);
+    	if(role.getId()==11){
+    		list = roleService.getRoleListByUsed(new Role());
+    	}else{
+    		list = roleService.getRoleList(new Role());
+		}
+    	/*if(list != null){
 	    	Collections.sort(list, new Comparator<Role>() {
 	            public int compare(Role arg0, Role arg1) {
 	                return arg0.getName().compareTo(arg1.getName());
 	            }
 	        });
-    	}
+    	}*/
     	return list;
     }
     

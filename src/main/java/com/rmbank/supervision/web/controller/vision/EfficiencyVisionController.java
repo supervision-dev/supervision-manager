@@ -835,6 +835,7 @@ public class EfficiencyVisionController extends SystemAction {
 		
 		showResult.setResultItem(item);
 		showResult.setResultItemProcess(drIPList); 
+		session.setAttribute("effshowItemId",null);
     	return showResult;
     }
     

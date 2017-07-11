@@ -85,6 +85,9 @@
         limit #{pageStart}, #{pageSize}
     </if>
   </select>
+  <select id="getRoleListByUsed" parameterType="com.rmbank.supervision.model.Role" resultMap="BaseResultMap">
+  	select * from t_role where used &gt; 8 order by used
+  </select>
   <select id="getRoleCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.Role">
   	select count(*) 
   	<include refid="sql_query"></include>

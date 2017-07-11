@@ -22,4 +22,7 @@ public interface RoleService {
 
 	boolean deleteRoleById(Integer id);
 
+
+	List<Role> getRoleListByUsed(Role role);
+
 }

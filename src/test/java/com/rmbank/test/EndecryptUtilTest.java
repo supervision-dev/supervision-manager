@@ -1,13 +1,18 @@
 package com.rmbank.test;
 
+import javax.annotation.Resource;
+
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.junit.Test; 
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings; 
+import com.rmbank.supervision.dao.UserMapper;
+import com.rmbank.supervision.model.User;
 public class EndecryptUtilTest {
-	
+	 @Resource
+	 private UserMapper userMapper;
 	
 	@Test
 	public void main(){
@@ -45,6 +50,9 @@ public class EndecryptUtilTest {
 	        
 	        System.out.println("salt:"+salt);
 	        System.out.println("password:"+password_cipherText);
+	        
+	        User user =new User();
+	        
 		}
 	}
 }
