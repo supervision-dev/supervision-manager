@@ -66,6 +66,8 @@ function loadItemInfo(){
 		        		 	}
 		        		 	if($("#tr_scd3").hasClass("displaynone")){
 		        		 		$("#tr_scd3").removeClass("displaynone");
+		        		 	}if($("#tr_scd11").hasClass("displaynone")){
+		        		 		$("#tr_scd11").removeClass("displaynone");
 		        		 	}
 	        		 	}
        		 		}
@@ -129,61 +131,61 @@ function getzf(num){
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
     	<tr>
-       		<td width="15%" align="right" >项目名称：</td> 
+       		<td width="17%" align="right" >项目名称：</td> 
        		<td colspan="3">
        			<label id="lbl_name"></label> 	
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
+       		<td width="17%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
        			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="17%" align="right" style="height:35px;">立项时间：</td>
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="12%" align="right">完成时间：</td>
+       		<td width="17%" align="right">规定完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
+       	</tr>       	
+       	<tr>
+       		<td width="17%" align="right" style="height:35px;">立项审批表、方案：</td>
+       		<td colspan="3" id="td_fileList">
+       		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、方案：</td>
+       		<td width="17%" align="right" style="height:35px;">相关说明：</td>
        		<td colspan="3">
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">审批表、方案附件：</td>
-       		<td colspan="3" id="td_fileList">
-       		</td>
-       	</tr>
-       	<tr>
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td width="17%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_fstTime"  title="分行监察室提交立项时间">
        		</td>
        	</tr>
        	
        	<tr id="tr_scd2" class="displaynone">
-       		<td width="12%" align="right" style="height:35px;">中支录入项目资料：</td>
+       		<td width="17%" align="right" style="height:35px;">中支录入项目资料：</td>
        		<td colspan="3" id="td_fileList1">
        		</td>
        	</tr>
-       	<tr>
+       	<tr id="tr_scd11" class="displaynone">
        		<td></td>
        		<td colspan="3">中支录入项目资料包括（行政监察通知书、行政监察报告、整改建议书、整改报告、跟踪整改情况等）</td>
        	</tr>
        	<tr id="tr_scd1" class="displaynone">
-       		<td width="12%" align="right" style="height:35px;">项目资料说明：</td>
+       		<td width="17%" align="right" style="height:35px;">项目资料说明：</td>
        		<td colspan="3">
        			<label id="lbl_content1"></label>
        		</td>
        	</tr>
        	<tr id="tr_scd3" class="displaynone">
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td width="17%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_scdTime"  title="被监察对象上传资料时间">
        		</td>
        	</tr>
