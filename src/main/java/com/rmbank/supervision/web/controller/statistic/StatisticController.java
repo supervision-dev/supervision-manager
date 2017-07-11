@@ -286,7 +286,7 @@ public class StatisticController {
 	}
 
 	/**
-	 * 分行立项统计
+	 * 中支立项统计
 	 * @param request
 	 * @param response
 	 * @return
