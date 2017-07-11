@@ -453,7 +453,7 @@ function returnPage(){
 				是否完结：
 			</td> 
        		<td colspan="3">
-       			 <select id="slt_isValue"  class="dfinput" style="margin-left:10px;" >
+       			 <select id="slt_isValue"  class="dfinput">
        			 	
        			 	<option value="1">完结</option>
        			 	<option value="0">未完结</option>
@@ -463,19 +463,19 @@ function returnPage(){
        	<tr>
        		<td width="15%" align="right" style="height:35px;">监察室意见：</td>
        		<td colspan="3">
-       			 <textarea id="content_opinion" rows="3" cols="5" style="width:81%;height:38px;margin-left:20px;" ></textarea>	
+       			 <textarea id="content_opinion" rows="3" cols="5" style="width:81%;height:38px;" ></textarea>	
        		</td>
        	</tr>  
        	<tr>
 			<td width="12%" align="right" height="129px;">上传附件：</td>
 			<td colspan="3">
-				 <div id="themeswitcher" class="pull-right" style="margin-left:20px;" ></div>
+				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
 	                    $(function() {
 	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
 	                    });
 	                </script>
-	                <div id="uploader"  style="margin-left:20px;">
+	                <div id="uploader">
 	                </div>
 			 </td>	
 		</tr> 

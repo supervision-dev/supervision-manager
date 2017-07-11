@@ -178,10 +178,10 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		/* if($("#itemName").val()==null || $("#itemName").val()==""){	
-			layer.alert('请录入监察项目！');				
+		if($("#content").val()==null || $("#content").val()==""){	
+			layer.alert('请录入监察结论！');				
 			return false;
-		}  */
+		} 
 	}
 	function ajaxPost(){
 		if(isNull()!=false){
@@ -752,7 +752,7 @@ function getDataList(pageNo){
     	<tr>
        		<td width="22%" align="right">监察结论：</td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:81%; name="content"></textarea>	
+       			<textarea id="content" rows="3" cols="5" style="width:81%;" name="content"></textarea>
 				<input type="hidden" id="hid_uuid" name="uuid" />					
 				<input type="hidden"  name="tag" value="135"/>
        		</td>
