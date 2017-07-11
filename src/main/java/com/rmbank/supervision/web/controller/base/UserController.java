@@ -84,6 +84,8 @@ public class UserController extends SystemAction {
 		//获取当前登录用户
     	User lgUser = this.getLoginUser();
     	List<Organ> userOrgList=userService.getUserOrgByUserId(lgUser.getId());
+    	List<Role> rolesByUserId = roleService.getRolesByUserId(lgUser.getId());
+    	Role role = rolesByUserId.get(0);
 //    	List<Organ> userOrgList=userService.getUserOrgByUserId(2);
     	//判断当前登录账号是不是超级管理员
 		if(lgUser.getAccount().equals(Constants.USER_SUPER_ADMIN_ACCOUNT) 
@@ -128,7 +130,7 @@ public class UserController extends SystemAction {
 			}	 
 		}
 		user.setTotalCount(totalCount); 	
-
+		user.setRoleId(role.getId());
 		dr.setData(user);
 		dr.setDatalist(userList); 
     	return dr;
@@ -230,7 +232,7 @@ public class UserController extends SystemAction {
 			}
 			//根据id去数据库匹配，如编辑，则可以直接保存；如新增，则需匹配该账号是否重复
 			List<User> lc = userService.getExistUser(u);
-			if (lc.size() == 0) {  
+			if (/*lc.size() == 0*/true) {  
 				State = userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
 				if(State){
 					User loginUser = this.getLoginUser();

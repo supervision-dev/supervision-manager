@@ -80,7 +80,7 @@
   <select id="getRoleList" parameterType="com.rmbank.supervision.model.Role" resultMap="BaseResultMap">
   	select <include refid="Base_Column_List" />
   	<include refid="sql_query" />
-	order by role.id DESC 
+	order by role.used 
 	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
         limit #{pageStart}, #{pageSize}
     </if>
