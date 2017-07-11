@@ -503,7 +503,7 @@ function getDataList(pageNo){
 	       			}else if(req.ResultItemProcess[i].contentTypeId == 234){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"22%\" style=\"text-align: right; \">监察意见：</td>";  	
-					    itemHtml +="<td style=\"text-align: left; padding:20px;\">"+req.ResultItemProcess[i].content+"</td>";			       
+					    itemHtml +="<td style=\"text-align: left;\">"+req.ResultItemProcess[i].content+"</td>";			       
 				        itemHtml +="</tr>";	
 				        
 				        itemHtml +="<tr>";
@@ -747,7 +747,6 @@ function getDataList(pageNo){
     </table>
     <form id="itemInfoForm" method="post">	   
     <table class="input_Table" >
-    	<tbody>
     	<tr>
        		<td width="22%" align="right">执法检查立项资料：</td>
        		<td colspan="3">
@@ -756,7 +755,6 @@ function getDataList(pageNo){
 				<input type="hidden"  name="tag" value="130"/>
        		</td>
        	</tr>
-       	
        	<tr>
 			<td width="22%" align="right" height="129px;">上传附件：</td>
 			<td colspan="3">
@@ -770,7 +768,6 @@ function getDataList(pageNo){
 	                </div>
 			 </td>	
 		</tr>
-       
        	<tr>
 			<td></td>
 			<td>
@@ -778,7 +775,6 @@ function getDataList(pageNo){
 				<span class="enterA"  onclick="returnPage();">返回</span>
 			</td>
 		</tr>
-		</tbody>
     </table>
     </form>
 
