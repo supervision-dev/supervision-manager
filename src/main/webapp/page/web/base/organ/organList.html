@@ -75,6 +75,17 @@ function getOrgTreeList(){
        		} 
        		$("#tb_organList").html(oHtml);
        		$("#tbl_orgList").html(tbHtml); 
+   			if(!$("#hid_li_btn").hasClass("displaynone")){
+				$("#hid_li_btn").addClass("displaynone");
+			}
+			$('.tablelist tbody tr:odd').addClass('odd');
+		  	$("#tb_organList input[type='checkbox']").click(function(){
+			  	$("#tb_organList input[type='checkbox']").removeAttr("checked");  
+				$(this).prop("checked","checked");
+				constants_organ_id = this.value;
+				constants_organ_name = $(this).attr("doc");
+				$("#hid_li_btn").removeClass("displaynone");
+			}); 
        }
     }); 
 } 
