@@ -62,6 +62,7 @@ public class OrganController extends SystemAction {
 		List<Organ> list =new ArrayList<Organ>();
 		if (pid != null && pid>0) {
 			organ.setPid(pid);
+			list = organService.getOrganByPId(organ);	
 		} else {
 			//获取当前登录用户
 			User loginUser = this.getLoginUser();
