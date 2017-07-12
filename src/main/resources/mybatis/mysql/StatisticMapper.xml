@@ -58,6 +58,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t1.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 		) AS comCount,
 		(SELECT count(t2.id)
 		FROM
@@ -66,6 +72,12 @@
 		AND	t2.item_type = 0 AND t2.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t2.supervision_org_id = o.id
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t2.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 		) AS unComCount,
 		
@@ -77,6 +89,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t3.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 		) AS overUnComCount,
 		(SELECT count(t4.id)
 		FROM
@@ -85,6 +103,12 @@
 		AND	t4.item_type = 0 AND t4.supervision_type_id = #{supervisionTypeId,jdbcType=INTEGER } and t4.supervision_org_id = o.id
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t4.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 		) AS overComCount
 	FROM
@@ -97,6 +121,12 @@
 	</if> 
   	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
      	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+     </if>
+     <if test="orgIds != null and orgIds !=''">
+     	and t.preparer_org_id in  
+     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                       #{item}  
+               </foreach>  
      </if>
 	GROUP BY o.`name` 
   </select>  
@@ -203,6 +233,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t1.supervision_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 40 AND o11.org_type = 42) AS comCount,
 		
 		(SELECT count(t2.id)
@@ -217,6 +253,12 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t2.supervision_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 40 AND o22.org_type = 42) AS unComCount,
 		
@@ -233,6 +275,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t3.supervision_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 40 AND o33.org_type = 42) AS overUnComCount,
 		
 		(SELECT count(t4.id)
@@ -247,6 +295,12 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t4.supervision_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 40 AND o44.org_type = 42) AS overComCount
 	FROM
@@ -263,6 +317,12 @@
 		</if>  
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t.supervision_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 	GROUP BY org.name
 	ORDER BY org.org_type asc,org.id asc
@@ -285,6 +345,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t1.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 43) AS comCount,
 		(SELECT count(t2.id)
 		FROM
@@ -297,6 +363,12 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t2.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 43) AS unComCount,
 		
@@ -312,6 +384,12 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t3.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
+	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 43) AS overUnComCount,
 		(SELECT count(t4.id)
 		FROM
@@ -324,6 +402,12 @@
 		</if> 
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t4.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 43) AS overComCount
 	FROM
@@ -338,6 +422,12 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="orgIds != null and orgIds !=''">
+	     	and t.preparer_org_id in  
+	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+                        #{item}  
+                </foreach>  
 	     </if>
 	GROUP BY org.name
   </select>  

@@ -18,19 +18,28 @@ import com.rmbank.supervision.common.StatisticModelList;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.StringUtil;
 import com.rmbank.supervision.model.Item;
+import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.StatisticModel;
+import com.rmbank.supervision.model.User;
+import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.StatisticService;
+import com.rmbank.supervision.service.UserService;
+import com.rmbank.supervision.web.controller.SystemAction;
 
 @Scope("prototype")
 @Controller
 @RequestMapping("/statistic")
-public class StatisticController {
+public class StatisticController extends SystemAction {
 
 	/**
 	 * 资源注入
 	 */
 	@Resource
 	private StatisticService statisticService;
+	@Resource
+	private UserService userService;
+	@Resource
+	private OrganService organService;
 	/**
 	 * 效能监察统计
 	 * @param request
@@ -47,6 +56,19 @@ public class StatisticController {
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
 
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		Organ userOrg=userOrgList.get(0);
+		if(userOrg.getOrgtype() == 42){
+			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
+			List<Integer> orgIds =new ArrayList<Integer>();
+			for (Organ organ : organByPId) {
+				orgIds.add(organ.getId());
+			}
+			orgIds.add(userOrg.getId());
+			item.setOrgIds(orgIds);
+		}
+		
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -113,6 +135,19 @@ public class StatisticController {
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
 
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		Organ userOrg=userOrgList.get(0);
+		if(userOrg.getOrgtype() == 42){
+			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
+			List<Integer> orgIds =new ArrayList<Integer>();
+			for (Organ organ : organByPId) {
+				orgIds.add(organ.getId());
+			}
+			orgIds.add(userOrg.getId());
+			item.setOrgIds(orgIds);
+		}
+		
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -177,6 +212,19 @@ public class StatisticController {
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
 
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		Organ userOrg=userOrgList.get(0);
+		if(userOrg.getOrgtype() == 42){
+			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
+			List<Integer> orgIds =new ArrayList<Integer>();
+			for (Organ organ : organByPId) {
+				orgIds.add(organ.getId());
+			}
+			orgIds.add(userOrg.getId());
+			item.setOrgIds(orgIds);
+		}
+		
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -299,6 +347,20 @@ public class StatisticController {
 		StatisticModelList smList = new StatisticModelList();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
+		
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		Organ userOrg=userOrgList.get(0);
+		if(userOrg.getOrgtype() == 42){
+			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
+			List<Integer> orgIds =new ArrayList<Integer>();
+			for (Organ organ : organByPId) {
+				orgIds.add(organ.getId());
+			}
+			orgIds.add(userOrg.getId());
+			item.setOrgIds(orgIds);
+		}
+		
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -358,6 +420,20 @@ public class StatisticController {
 		StatisticModelList smList = new StatisticModelList();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
+		
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		Organ userOrg=userOrgList.get(0);
+		if(userOrg.getOrgtype() == 42){
+			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
+			List<Integer> orgIds =new ArrayList<Integer>();
+			for (Organ organ : organByPId) {
+				orgIds.add(organ.getId());
+			}
+			orgIds.add(userOrg.getId());
+			item.setOrgIds(orgIds);
+		}
+		
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;

@@ -1,6 +1,7 @@
 package com.rmbank.supervision.model;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -84,9 +85,12 @@ public class Item extends Page {
     //廉政监察的项目名称
     private String itemNmae;
     
-    
     //执法监察的项目名称
     private String itemName;
+    
+    
+    //定义机构ID的List用于统计
+    private List<Integer> orgIds;
     
     /**
      * 定义字段供前台使用
@@ -440,6 +444,14 @@ public class Item extends Page {
 
 	public void setContentTypeId(Integer contentTypeId) {
 		this.contentTypeId = contentTypeId;
+	}
+
+	public List<Integer> getOrgIds() {
+		return orgIds;
+	}
+
+	public void setOrgIds(List<Integer> orgIds) {
+		this.orgIds = orgIds;
 	}
 
 	

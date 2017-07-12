@@ -73,9 +73,9 @@ function loadItemInfo(){
 	        		 	var obj2 = req.resultItemProcess[1];
 	        		 	if(obj2 != undefined && obj2 != null){
 	        		 		 if(obj2.valueTypeValue != null){
-	        		 		 	$("#td_isValue").html("量化得分："+obj2.valueTypeValue.toFixed(2));
+	        		 		 	$("#td_isValue").html("监察室已量化，量化得分为："+obj2.valueTypeValue.toFixed(2));
 	        		 		 }else{
-	        		 		 	$("#td_isValue").html("未量化");
+	        		 		 	$("#td_isValue").html("不量化");
 	        		 		 }
         		 			$("#td_thdTime").html(formatTime(obj2.preparerTime,true));
 		        		 	if($("#tr_thd1").hasClass("displaynone")){
@@ -188,7 +188,7 @@ function getzf(num){
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="12%" align="right">完成时间：</td>
+       		<td width="16%" align="right">规定完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
