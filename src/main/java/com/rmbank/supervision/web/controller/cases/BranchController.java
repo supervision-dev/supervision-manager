@@ -119,7 +119,7 @@ public class BranchController extends SystemAction {
 		//成都分行和超级管理员加载所有项目
 		if(organ.getOrgtype()==Constants.ORG_TYPE_1 ||
 				organ.getOrgtype()==Constants.ORG_TYPE_2 ||
-						organ.getOrgtype()==Constants.ORG_TYPE_3 ||
+						//organ.getOrgtype()==Constants.ORG_TYPE_3 ||
 								organ.getOrgtype()==Constants.ORG_TYPE_4 ||
 						Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 			//分行立项分行完成
