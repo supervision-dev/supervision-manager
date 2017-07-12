@@ -16,7 +16,15 @@
 	    $('.loginbox').css({'position':'absolute','left':'50%','margin-left':'-346'});
 		$(window).resize(function(){  
 	    $('.loginbox').css({'position':'absolute','left':'50%','margin-left':'-346'});
-	    })  
+	    });
+	    
+		$("#ipt_password").keydown(function (e) {
+		    var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode; //兼容IE 火狐 谷歌  
+		    if (keyCode == 13) {  
+		        submitLogin();
+		    }  
+		});  
+	     
 	});  
 
  	/* $(function(){
@@ -239,7 +247,7 @@ function submitLogin(){
     	<input id="hid_ipt_username"  type="hidden" />
     </li>  
     <li><input id="ipt_password" name="password" type="password" class="loginpwd"  /></li>
-    <li><input name="" type="button" class="loginbtn" value="登录"  onclick="submitLogin();"  />
+    <li><input name="" id="Login_Btn" type="button" class="loginbtn" value="登录"  onclick="submitLogin();"  />
     <!-- <label><input name="" type="checkbox" value="" checked="checked" />记住密码</label><label><a href="#">忘记密码？</a></label> --></li>
     </ul>
     
