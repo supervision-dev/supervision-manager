@@ -34,19 +34,19 @@ function loadStatisticData(){
     }); 
 }
 function search(){
-	if($("#stTime").val()==null || $("#stTime").val()==""){ 
-		$("#showmessage").html("请选择起始日期！");
-		$("#confirm_tip").fadeIn(200);
-		return;
-	} 
-	if($("#edTime").val()==null || $("#edTime").val()==""){ 
-		$("#showmessage").html("请选择截止日期！");
-		$("#confirm_tip").fadeIn(200);
-		return;
-	} 
 	var obj = {};
-	obj.schBeginTime = $("#stTime").val();
-	obj.schEndTime = $("#edTime").val();
+	if($("#stTime").val()==null || $("#stTime").val()==""){  
+	} else{
+		obj.schBeginTime = $("#stTime").val();
+	}
+	if($("#edTime").val()==null || $("#edTime").val()==""){  
+	} else{
+		obj.schEndTime = $("#edTime").val();
+	}
+	if($.trim($("#sch_searchname").val()).length == 0 ||$.trim($("#sch_searchname").val()) == ""){
+	}else{
+		obj.searchName = $.trim($("#sch_searchname").val());
+	}
 	$.ajax({ 
        type: "POST", //请求类型
        data:obj,
@@ -97,7 +97,10 @@ function fillDataList(req){
    		if(req.item.schEndTime != null){
    		 	$("#edTime").val(req.item.schEndTime);
    		}
-	}else{
+   		if(req.item.searchName != null){
+   		 	$("#sch_searchname").val(req.item.searchName);
+   		}
+	}else{ 
 	 	parent.window.location.href = "/supervision/logout.do";
 	}
 }
@@ -119,15 +122,16 @@ function fillDataList(req){
     
     <div class="rightinfo">
      
-    <div class="tools"> 
-    	<span style="float:left;line-height:22px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:22px;float:left;" />
+    <div class="tools">  
+    	<span style="float:left;line-height:22px;">关键字：</span><input type="text" id="sch_searchname" name="searchName" style="height:22px;float:left;border:1px solid #c6c6c6;" />
+    	<span style="float:left;line-height:22px;margin-left:3px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:22px;float:left;" />
      	<span style="float:left;line-height:22px;margin-left:5px;">截止时间：</span><input type="text" id="edTime" name="schEndTime"  class="laydate-icon" style="height:22px;float:left;" />
     	<ul class="toolbar" style="margin-left:10px;"> 
         <li onclick="search();"><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
         </ul>
     </div>
     <table class="tablelist">
-    	<thead>
+    	<thead> 
 	    	<tr>
 		        <th>项目总记录数</th>
 		        <th>已完成项目</th>

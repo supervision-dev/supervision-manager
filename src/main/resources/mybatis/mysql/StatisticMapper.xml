@@ -64,6 +64,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 		) AS comCount,
 		(SELECT count(t2.id)
 		FROM
@@ -78,6 +81,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 		) AS unComCount,
 		
@@ -95,6 +101,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 		) AS overUnComCount,
 		(SELECT count(t4.id)
 		FROM
@@ -109,6 +118,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 		) AS overComCount
 	FROM
@@ -127,6 +139,9 @@
      		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                        #{item}  
                </foreach>  
+     </if>
+     <if test="searchName != null">
+     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
      </if>
 	GROUP BY o.`name` 
   </select>  
@@ -150,6 +165,9 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="searchName != null">
+	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 40 AND o11.org_type = 41) AS comCount,
 		
 		(SELECT count(t2.id)
@@ -164,6 +182,9 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="searchName != null">
+	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 40 AND o22.org_type = 41) AS unComCount,
 		
@@ -180,6 +201,9 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
+	     <if test="searchName != null">
+	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 40 AND o33.org_type = 41) AS overUnComCount,
 		
 		(SELECT count(t4.id)
@@ -194,6 +218,9 @@
 		</if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="searchName != null">
+	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 40 AND o44.org_type = 41) AS overComCount
 	FROM
@@ -210,6 +237,9 @@
 		</if>  
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
+	     </if>
+	     <if test="searchName != null">
+	     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 	GROUP BY org.name
 	ORDER BY org.org_type asc,org.id asc
@@ -239,6 +269,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 40 AND o11.org_type = 42) AS comCount,
 		
 		(SELECT count(t2.id)
@@ -259,6 +292,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 40 AND o22.org_type = 42) AS unComCount,
 		
@@ -281,6 +317,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 40 AND o33.org_type = 42) AS overUnComCount,
 		
 		(SELECT count(t4.id)
@@ -301,6 +340,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 40 AND o44.org_type = 42) AS overComCount
 	FROM
@@ -323,6 +365,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 	GROUP BY org.name
 	ORDER BY org.org_type asc,org.id asc
@@ -351,6 +396,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 43) AS comCount,
 		(SELECT count(t2.id)
 		FROM
@@ -369,6 +417,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 43) AS unComCount,
 		
@@ -390,6 +441,9 @@
                         #{item}  
                 </foreach>  
 	     </if>
+	     <if test="searchName != null">
+	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 43) AS overUnComCount,
 		(SELECT count(t4.id)
 		FROM
@@ -408,6 +462,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 43) AS overComCount
 	FROM
@@ -428,6 +485,9 @@
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="searchName != null">
+	     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
 	     </if>
 	GROUP BY org.name
   </select>  

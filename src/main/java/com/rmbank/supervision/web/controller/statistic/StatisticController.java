@@ -74,6 +74,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
@@ -153,6 +159,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
@@ -230,6 +242,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
@@ -292,6 +310,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
@@ -366,6 +390,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
@@ -439,6 +469,12 @@ public class StatisticController extends SystemAction {
 		int unComCount = 0;
 		int overUnComCount = 0;
 		int overComCount = 0;
+    	//判断搜索名是否为空，不为空则转为utf-8编码 		
+		if(item.getSearchName() != null && item.getSearchName() != ""){
+			String searchName =  new String(item.getSearchName().getBytes(
+					"iso8859-1"), "utf-8");
+			item.setSearchName(searchName);
+		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
 			item.setSchBeginTime(null);
 		}else{
