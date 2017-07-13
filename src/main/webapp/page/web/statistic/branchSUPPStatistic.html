@@ -86,6 +86,7 @@ function fillDataList(req){
 			for(var i = 0; i<req.totalList.length; i++){
 				var obj = req.totalList[i]; 
 				totalHtml += "<tr>";
+				totalHtml += "<td>"+obj.orgParentName+"</td>";
 				totalHtml += "<td>"+obj.orgName+"</td>";
 				totalHtml += "<td>"+obj.totalCount+"</td>";
 				totalHtml += "<td>"+obj.comCount+"</td>";
@@ -299,6 +300,7 @@ function clearForm(){
     <table class="tablelist" style="margin-top:15px;">
     	<thead>
 	    	<tr>
+	    		<th>所属机构</th>
 	    		<th>机构名称</th>
 		        <th>立项总数</th>
 		        <th>已完成项目</th>

@@ -49,7 +49,7 @@
   
   <select id="loadTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
   	SELECT
-		t.`status` as status,o.`name` as org_name,COUNT(t.id) as totalCount,
+		t.`status` as status,o.`name` as org_name,porg.`name` as org_parent_name ,COUNT(t.id) as totalCount,
 
 		(SELECT count(t1.id)
 		FROM
@@ -139,6 +139,7 @@
 	FROM
 		t_item t
 	LEFT JOIN t_org o ON t.supervision_org_id = o.id
+	LEFT JOIN t_org porg on o.pid = porg.id
 	WHERE t.`status` != 9 and t.`status` != 0 
 		AND	t.item_type = 0
 	<if test="supervisionTypeId != null ">
@@ -166,7 +167,7 @@
    
   <select id="loadBranchTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
   	SELECT
-		t.status as status, org.name as org_name,COUNT(t.id) as totalCount,
+		t.status as status, org.name as org_name,porg.`name` as org_parent_name ,COUNT(t.id) as totalCount,
 
 		(SELECT count(t1.id)
 		FROM
@@ -255,6 +256,7 @@
 		t_item t
 	LEFT JOIN t_org  o on t.preparer_org_id = o.id
 	LEFT JOIN t_org org on t.supervision_org_id = org.id
+	LEFT JOIN t_org porg on org.pid = porg.id
 	WHERE t.`status` != 9   AND	t.item_type = 1 
 		AND o.org_type = 40 AND org.org_type = 41
 		<if test="supervisionTypeId != null and supervisionTypeId >0">
@@ -279,7 +281,7 @@
   
   <select id="loadBranchSUPPTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
   	SELECT
-		t.status as status, org.name as org_name,COUNT(t.id) as totalCount,
+		t.status as status, org.name as org_name,porg.`name` as org_parent_name ,COUNT(t.id) as totalCount,
 
 		(SELECT count(t1.id)
 		FROM
@@ -392,6 +394,7 @@
 		t_item t
 	LEFT JOIN t_org  o on t.preparer_org_id = o.id
 	LEFT JOIN t_org org on t.supervision_org_id = org.id
+	LEFT JOIN t_org porg on org.pid = porg.id
 	WHERE t.`status` != 9   AND	t.item_type = 1 
 		AND o.org_type = 40 AND org.org_type = 42
 		<if test="supervisionTypeId != null and supervisionTypeId >0">
@@ -422,7 +425,7 @@
    
   <select id="loadSupportTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
   	SELECT
-		 t.`status`  as status,org.name as org_name,count(t.id) as totalCount,
+		 t.`status`  as status,org.name as org_name,porg.`name` as org_parent_name ,count(t.id) as totalCount,
 
 		(SELECT count(t1.id)
 		FROM
@@ -529,6 +532,7 @@
 		t_item t
 	LEFT JOIN t_org o ON t.preparer_org_id = o.id
 	LEFT JOIN t_org org on t.supervision_org_id = org.id
+	LEFT JOIN t_org porg on org.pid = porg.id
 	WHERE  t.`status` != 9  
 		AND	t.item_type = 1
 		AND o.org_type = 43 
