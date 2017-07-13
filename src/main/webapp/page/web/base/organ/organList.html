@@ -12,7 +12,23 @@ $(document).ready(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
    getOrgTreeList();
+   getLoginOrg();
 }); 
+
+function getLoginOrg(){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/organ//getLoginOrg.do?", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       if(req.orgtype != 40){
+	       	$("#hid_org_btn").hide();
+	       }
+       }
+    });
+}
+
+
 var constants_organ_id = 0;
 var constants_organ_name = "";
 function getOrgTreeList(){
@@ -431,7 +447,7 @@ function deleteOrganAction(){
     <div class="mainbox">
       	<div class="tools">
 	    	<ul class="toolbar">
-		        <li class="click" onclick="showAddTip(1);"><span><img src="/supervision/source/images/t01.png" /></span>添加根机构</li>
+		        <li class="click" id="hid_org_btn" onclick="showAddTip(1);"><span><img src="/supervision/source/images/t01.png" /></span>添加根机构</li>
 		        <li id="hid_li_btn" class="click displaynone" onclick="showAddTip(0);"><span><img src="/supervision/source/images/t01.png" /></span>添加子机构</li>
 		        <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
 		        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 

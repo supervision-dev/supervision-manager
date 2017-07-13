@@ -83,7 +83,25 @@ public class OrganController extends SystemAction {
 		
 		return list;// json.toString();
 	}  
-
+	/**
+	 * 加载当前登录机构
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/getLoginOrg.do")
+	public Organ getLoginOrg(
+			@RequestParam(value = "id", required = false) Integer id,
+			HttpServletRequest request, HttpServletResponse response) {
+		//当前登录用户所属的机构
+		User loginUser = this.getLoginUser();
+		List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
+		Organ organ = userOrgByUserId.get(0);
+		return organ;// json.toString();
+	}  
+	
 	/**
 	 * 加载所有的机构
 	 *  
