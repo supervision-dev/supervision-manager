@@ -5,6 +5,7 @@ public class StatisticModel {
 	private Integer orgId;
 	private Integer status;
 	private String orgName;
+	private String orgParentName;
 	private Integer totalCount;
 	private Integer comCount;
 	private Integer unComCount;
@@ -61,6 +62,12 @@ public class StatisticModel {
 	}
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	public String getOrgParentName() {
+		return orgParentName;
+	}
+	public void setOrgParentName(String orgParentName) {
+		this.orgParentName = orgParentName;
 	}
 	private Integer overUnComCount;
 	private Integer overComCount;

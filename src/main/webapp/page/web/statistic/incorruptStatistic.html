@@ -47,6 +47,10 @@ function search(){
 	}else{
 		obj.searchName = $.trim($("#sch_searchname").val());
 	}
+	if($.trim($("#hid_orgId").val()).length == 0 ||$.trim($("#hid_orgId").val()) == ""){
+	}else{
+		obj.supervisionOrgId = $.trim($("#hid_orgId").val());
+	}
 	$.ajax({ 
        type: "POST", //请求类型
        data:obj,
@@ -114,9 +118,149 @@ function fillDataList(req){
    		if(req.item.searchName != null){
    		 	$("#sch_searchname").val(req.item.searchName);
    		}
+   		if(req.item.supervisionOrgId != null){
+   		 	$("#hid_orgId").val(req.item.supervisionOrgId);
+   		} 
 	}else{
 	 	parent.window.location.href = "/supervision/logout.do";
 	} 
+}
+function showOrgTip(){
+	$("#organ_tip").fadeIn(0);
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/system/user/loadOrganTreeList.do?pid=0", 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+       		$("#tbl_orgList").html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tbl_orgList").html(tbHtml); 
+       }
+    }); 
+}
+
+function loadSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+
+function loadSubSubOrgListByPId(pId){
+	$.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/loadOrganTreeList.do?pid="+pId, 
+       dataType:"json", //响应数据类型      
+       success: function(req) {
+	       	$("#tb_sub_sub_"+pId).html("");
+       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		if(req != null && req.length >0){
+    			tbHtml = "";
+       			for(var i = 0; i<req.length;i++){
+       				if(req[i].childrenCount ==0){
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
+       				}else{
+       					tbHtml += "<tr onclick=\"clickOrganName("+req[i].id+",'"+req[i].name+"');\"><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td>"+req[i].name+"</td></tr>";
+       					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td>";
+       					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
+       					tbHtml += "</table></td></tr>  ";
+       				} 
+       			}
+       		} 
+       		$("#tb_sub_sub_"+pId).html(tbHtml); 
+       }
+      });
+}
+function clickOrganName(orgId,orgName){ 
+	$("#slt_orgName").text(orgName);
+	$("#ipt_organname").val(orgName);
+	$("#hid_orgId").val(orgId);
+}
+
+function showItem(subId,tag){ 
+	loadSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_"+subId).removeClass("displaynone"); 
+		$("#img_coll_"+subId).addClass("displaynone");
+		$("#img_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_"+subId).addClass("displaynone");  
+		$("#img_coll_"+subId).removeClass("displaynone"); 
+		$("#img_exp_"+subId).addClass("displaynone");
+	}  
+}
+function showSubItem(subId,tag){
+	loadSubSubOrgListByPId(subId);
+	if(tag == 0){
+		$("#tr_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_exp_"+subId).addClass("displaynone");
+	} 
+}
+function showSubSubItem(subId,tag){ 
+	if(tag == 0){
+		$("#tr_sub_sub_"+subId).removeClass("displaynone"); 
+		$("#img_sub_sub_coll_"+subId).addClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).removeClass("displaynone");
+	}else{
+		$("#tr_sub_sub_"+subId).addClass("displaynone");  
+		$("#img_sub_sub_coll_"+subId).removeClass("displaynone");
+		$("#img_sub_sub_exp_"+subId).addClass("displaynone");
+	} 
+} 
+
+function selectOrgan(tag){
+	$('#organ_tip').fadeOut(200);
+}
+function cancelSelectOrgan(){
+	$("#slt_orgName").text("");
+	$("#ipt_organname").val("--请选择机构查询--");
+	$("#hid_orgId").val("");
+	$('#organ_tip').fadeOut(200);
+}
+function clearForm(){
+	$("#hid_orgId").val("");
+	$("#ipt_organname").val("--请选择机构查询--");
+	$("#slt_orgName").text("");
+	$("#sch_searchname").val("");
+	$("#stTime").val("");
+	$("#edTime").val("");
 }
 </script>
 
@@ -138,9 +282,13 @@ function fillDataList(req){
     
     <div class="tools">
     	<span style="float:left;line-height:22px;">关键字：</span><input type="text" id="sch_searchname" name="searchName" style="height:22px;float:left;border:1px solid #c6c6c6;" />
+    	<span style="float:left;line-height:22px;margin-left:3px;">机构选择：</span>
+		<input type="hidden" name="orgId" id="hid_orgId" />
+		<input type="text"  id="ipt_organname" readonly="readonly" value="--请选择机构查询--"  onclick="showOrgTip();" style="height:22px;float:left;border:1px solid #C6C6C6;vertical-align:middle;" />
     	<span style="float:left;line-height:22px;margin-left:3px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:22px;float:left;" />
      	<span style="float:left;line-height:22px;margin-left:5px;">截止时间：</span><input type="text" id="edTime" name="schEndTime"  class="laydate-icon" style="height:22px;float:left;" />
     	<ul class="toolbar" style="margin-left:10px;"> 
+        <li onclick="clearForm();" ><span><img src="/supervision/source/images/t07.png" /></span>重置</li>
         <li onclick="search();" ><span><img src="/supervision/source/images/t06.png" /></span>查询</li>
         </ul>
     </div> 
@@ -206,6 +354,25 @@ function fillDataList(req){
         <div class="tipbtn">
         	<input type="button"  class="sure" value="确定" /> 
         </div> 
+    </div>
+    <div class="schTip" id="organ_tip"> 
+   		<div class="tiptop"><span>选择机构</span><a  onclick="cancelSelectOrgan();" ></a></div>
+          
+	    <div class="schTipinfo">   
+	       <div style="min-height:210px;_height: 210px; overflow:visible;  width:99%;max-heigth:250px;overflow-x:hidden; "> 
+        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
+        		<tr><td></td></tr>  
+        		</table> 
+	       </div> 
+      	</div>
+        
+        <div class="simpletipbtn">
+        	<div style="width:90%;padding:10px;">
+        		<span style="float:left;margin-left:20px;font-size:16px;font-weight:bold;">当前选择机构：</span> <span  style="float:left;color:blue;font-size:16px;font-weight:bold;" id="slt_orgName" >尚未选择</span>
+        	</div>
+        	<input type="button"  class="saveBtn" value="确定" onclick="selectOrgan();" /> 
+        	<input type="button"  class="cancel" value="取消" onclick="cancelSelectOrgan();" /> 
+        </div>  
     </div>
 </body>
 

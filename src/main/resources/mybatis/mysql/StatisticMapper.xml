@@ -6,6 +6,7 @@
     <result column="org_id" jdbcType="INTEGER" property="orgId" />
     <result column="status" jdbcType="INTEGER" property="status" />
     <result column="org_name" jdbcType="VARCHAR" property="orgName" />
+    <result column="org_parent_name" jdbcType="VARCHAR" property="orgParentName" />
     <result column="totalCount" jdbcType="INTEGER" property="totalCount" />
     <result column="comCount" jdbcType="INTEGER" property="comCount" />
     <result column="unComCount" jdbcType="INTEGER" property="unComCount" />
@@ -58,11 +59,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t1.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
-                        #{item}  
-                </foreach>  
+	                       #{item}  
+	               </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t1.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -76,11 +80,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t2.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
-                        #{item}  
-                </foreach>  
+	                       #{item}  
+	               </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t2.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -95,11 +102,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t3.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
-                        #{item}  
-                </foreach>  
+	                       #{item}  
+	               </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t3.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -113,11 +123,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t4.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
-                        #{item}  
-                </foreach>  
+	                       #{item}  
+	               </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t4.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -134,11 +147,14 @@
   	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
      	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
      </if>
-     <if test="orgIds != null and orgIds !=''">
-     	and t.preparer_org_id in  
+     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+     	and t.supervision_org_id in  
      		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                        #{item}  
                </foreach>  
+     </if>
+     <if test="supervisionOrgId != null">
+     	and t.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
      </if>
      <if test="searchName != null">
      	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -167,6 +183,9 @@
 	     </if>
 	     <if test="searchName != null">
 	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if> 
+	     <if test="supervisionOrgId != null">
+	     	and t1.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 			AND t1.supervision_org_id = org.id AND o1.org_type = 40 AND o11.org_type = 41) AS comCount,
 		
@@ -185,6 +204,9 @@
 	     </if>
 	     <if test="searchName != null">
 	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if> 
+	     <if test="supervisionOrgId != null">
+	     	and t2.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 			AND t2.supervision_org_id = org.id AND o2.org_type = 40 AND o22.org_type = 41) AS unComCount,
 		
@@ -203,6 +225,9 @@
 	     </if>
 	     <if test="searchName != null">
 	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if> 
+	     <if test="supervisionOrgId != null">
+	     	and t3.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 			AND t3.supervision_org_id = org.id AND o3.org_type = 40 AND o33.org_type = 41) AS overUnComCount,
 		
@@ -221,6 +246,9 @@
 	     </if>
 	     <if test="searchName != null">
 	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+	     </if> 
+	     <if test="supervisionOrgId != null">
+	     	and t4.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 			 and t4.supervision_org_id = org.id AND o4.org_type = 40 AND o44.org_type = 41) AS overComCount
 	FROM
@@ -234,7 +262,10 @@
 		</if>
 		<if test="preparerOrgId != null ">
 			AND	t.preparer_org_id = #{preparerOrgId,jdbcType=INTEGER }
-		</if>  
+		</if>   
+	     <if test="supervisionOrgId != null">
+	     	and t.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
+	     </if>
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
@@ -263,11 +294,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
 	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t1.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -287,11 +321,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
 	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t2.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -311,11 +348,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
 	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t3.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -335,11 +375,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
 	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t4.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -360,11 +403,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
 	     	and t.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -390,11 +436,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t1.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t1.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t1.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -412,11 +461,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t2.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t2.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t2.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -435,11 +487,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t3.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t3.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t3.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -457,11 +512,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t4.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t4.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t4.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -480,11 +538,14 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="orgIds != null and orgIds !=''">
-	     	and t.preparer_org_id in  
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     	and t.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
                 </foreach>  
+	     </if>
+	     <if test="supervisionOrgId != null">
+	     	and t.supervision_org_id =  #{supervisionOrgId,jdbcType=INTEGER } 
 	     </if>
 	     <if test="searchName != null">
 	     	and t.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
