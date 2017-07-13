@@ -269,6 +269,7 @@ h2{font-weight:normal;}
 .assigntip{border:1px solid #C6C6C6;width:585px; height:460px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .simplestip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:10%; left:10%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .simpletip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:16%; left:40%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
+.schTip{border:1px solid #C6C6C6;width:485px; height:360px;_height:360px; position:absolute;top:16%; left:20%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
 .tiptop{height:40px; line-height:40px; background-color:#066cae; cursor:pointer;}
 .tiptop span{font-size:14px; font-weight:bold; color:#fff;float:left; text-indent:20px;}
 .tiptop a{display:block; background:url(/supervision/source/images/close.png) no-repeat; width:22px; height:22px;float:right;margin-right:7px; margin-top:10px; cursor:pointer;}
@@ -282,7 +283,8 @@ h2{font-weight:normal;}
 .addtipinfo{padding-top:30px;margin-left:15px;width:458px;_height:300px;overflow-y:auto;  } 
 .addtipinfo span{width:95px;  float:right;}  
 .simpletipinfo{padding-top:10px;margin-left:15px;width:458px;_height:300px;overflow-y:auto;  } 
-.tipright{float:left;padding-top:15px; padding-left:10px;} 
+.schTipinfo{padding-top:10px;margin-left:15px;width:458px;_height:200px;overflow-y:auto;  } 
+.tipright{float:left;padding-top:15px; padding-left:10px;}  
 .tipright p{font-size:14px; font-weight:bold; line-height:35px;}
 .tipright cite{color:#858686;}
 .tipbtn{margin-top:25px; text-align:center;} 

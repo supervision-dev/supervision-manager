@@ -108,11 +108,12 @@ function fillDataList(req){
 	       		 	$("#edTime").val(req.data.schEndTime);
 	       		}
 	       		if(req.data.orgId != null){
-	       		 	$("#hid_orgId").val(req.data.orgId);
+	       		 	$("#hid_orgId").val(req.data.orgId); 
 	       		}
 	       		if(req.data.orgName != null){
 	       		 	$("#ipt_organname").val(req.data.orgName);
-	       		} 
+					$("#slt_orgName").text(req.data.orgName);
+	       		}  
 	       		if(req.data.moudleId != null){
 	       		 	$("#slt_moudleId").val(req.data.moudleId);
 	       		} 
@@ -276,7 +277,7 @@ function selectOrgan(tag){
 function clearForm(){
 	$("#slt_moudleId").val("");
 	$("#hid_orgId").val("");
-	$("#ipt_organname").val("--请选择操作机构查询--");
+	$("#ipt_organname").val("--请选择机构查询--");
 	$("#ipt_searchname").val("");
 	$("#stTime").val("");
 	$("#edTime").val("");
@@ -309,7 +310,7 @@ function clearForm(){
 		</select>
 		<span style="float:left;line-height:22px;margin-left:5px;">机构选择：</span>
 		<input type="hidden" name="orgId" id="hid_orgId" />
-		<input type="text"  id="ipt_organname" readonly="readonly" value="--请选择操作机构查询--"  onclick="showOrgTip();" style="height:22px;float:left;border:1px solid #C6C6C6;vertical-align:middle;" />
+		<input type="text"  id="ipt_organname" readonly="readonly" value="--请选择机构查询--"  onclick="showOrgTip();" style="height:22px;float:left;border:1px solid #C6C6C6;vertical-align:middle;" />
     	<span style="float:left;line-height:22px;margin-left:5px;">关键字：</span><input type="text" name="searchName" id="ipt_searchname" style="height:22px;float:left;border:1px solid #C6C6C6" />
     	<span style="float:left;line-height:22px;margin-left:5px;">起始时间：</span><input type="text" id="stTime" name="schBeginTime" class="laydate-icon" style="height:22px;float:left;" /> 
      	<span style="float:left;line-height:22px;margin-left:5px;">截止时间：</span><input type="text" id="edTime" name="schEndTime"  class="laydate-icon" style="height:22px;float:left;" />
@@ -368,11 +369,11 @@ function clearForm(){
     </div>  
     </div> 
 
-    <div class="simpletip" id="organ_tip"> 
+    <div class="schTip" id="organ_tip"> 
    		<div class="tiptop"><span>选择机构</span><a  onclick="javascript:$('#organ_tip').fadeOut(100);" ></a></div>
           
-	    <div class="simpletipinfo">   
-	       <div style="min-height:310px;_height: 310px; overflow:visible;  width:99%;max-heigth:350px;overflow-x:hidden; "> 
+	    <div class="schTipinfo">   
+	       <div style="min-height:210px;_height: 210px; overflow:visible;  width:99%;max-heigth:250px;overflow-x:hidden; "> 
         		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
         		<tr><td></td></tr>  
         		</table> 

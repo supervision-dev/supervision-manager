@@ -182,7 +182,48 @@ public class SupportController extends SystemAction {
 		return configList;
 	}  
 
-
+	/**
+	 * 加载机构的树
+	 * 
+	 * @param pid
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadOrganTreeList.do")
+	public List<Organ> getOrganList(
+			@RequestParam(value = "pid", required = false) Integer pid,
+			HttpServletRequest request, HttpServletResponse response) {
+		
+		Organ organ = new Organ();
+		if (pid != null && pid>0) {
+			organ.setPid(pid);
+		} else {
+			//获取当前登录用户
+			User loginUser = this.getLoginUser();
+			//获取当前用户对应的机构列表
+			List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+			//获取当前用户对应的第一个机构
+			Organ userOrg=userOrgList.get(0);
+			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
+				organ.setPid(0);
+				organ.setOrgtype(0);
+			}else{
+				if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 || 
+					userOrg.getOrgtype() == Constants.ORG_TYPE_10 || 
+					 userOrg.getOrgtype() == Constants.ORG_TYPE_11 || 
+					  userOrg.getOrgtype() == Constants.ORG_TYPE_12){
+					organ.setPid(userOrg.getPid());
+				}else{
+					organ.setPid(userOrg.getId());
+				} 
+			}
+		} 
+		//获取用户所属的机构   
+		List<Organ> list = organService.getOrganByPId(organ);	 
+		return list;// json.toString();
+	}  
 	/**
 	 * 中支立项保存
 	 * 
