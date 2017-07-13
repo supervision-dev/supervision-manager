@@ -389,11 +389,11 @@
 	WHERE i.item_type=1 AND STATUS  &lt;&gt; 9   
 	
 	AND i.supervision_org_id=#{supervisionOrgId}
-	AND o.`org_type` IN (44,45)
+	AND o.`org_type` IN (44,45,46,47)
 	
 	OR i.preparer_org_id=#{preparerOrgId}
 	AND o2.`org_type` =43
-	AND o.`org_type` IN (44,45)
+	AND o.`org_type` IN (44,45,46,47)
 	AND STATUS &lt;&gt; 9 
 	<!-- 
 	where i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} 当前登录机构要完成的

@@ -220,7 +220,11 @@ function saveItem(obj){
 	});
 	
 }
-
+function downLoadFile(path,name){
+	var filePath = encodeURI(encodeURI(path));
+	var fileName = encodeURI(encodeURI(name));
+	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+}
 function show(){		
 	var wanjie=$('input:radio[name="wanjie"]:checked').val();		
 	if(wanjie == 0){
