@@ -166,7 +166,11 @@ function deleteFile(obj){
 	} 
 	uploader.refresh()
 } 
-
+function downLoadFile(path,name){
+	var filePath = encodeURI(encodeURI(path));
+	var fileName = encodeURI(encodeURI(name));
+	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+}
 function returnPage(){
 		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
 			btn: ['确认','取消'] //按钮
