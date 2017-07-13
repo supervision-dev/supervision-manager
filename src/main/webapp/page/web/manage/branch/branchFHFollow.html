@@ -119,7 +119,7 @@ function loadItemInfo(){
         		 		if(boj.fileList != null && boj.fileList.length >0){
         		 			var fHtml = "";
         		 			for(var i = 0; i< boj.fileList.length; i++){
-        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a>";
+        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a><br/>";
         		 			}
         		 			$("#td_fileList").html(fHtml);
         		 		}
@@ -127,15 +127,15 @@ function loadItemInfo(){
         		 	if(req.resultItemProcess.length >1){
         		 		var phtml ="";
         		 		for(var i = 1;i<req.resultItemProcess.length;i++){
-        		 			if(req.resultItemProcess[i].contentTypeId == 32){
-	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">上传相关资料说明：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
-	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
+        		 			if(req.resultItemProcess[i].contentTypeId == 32){	        		 			
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">上传资料：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 		        		 			}
 	        		 			}
+	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">资料说明：</td>";
+	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
 	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 33){
@@ -146,7 +146,7 @@ function loadItemInfo(){
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
@@ -157,7 +157,7 @@ function loadItemInfo(){
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
@@ -175,7 +175,7 @@ function loadItemInfo(){
 		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
 		        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 		        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-			        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+			        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 			        		 			}
 		        		 			}
 		        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
@@ -187,7 +187,7 @@ function loadItemInfo(){
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
@@ -198,7 +198,7 @@ function loadItemInfo(){
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
-		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a>";
+		        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
 		        		 			}
 	        		 			}
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
@@ -326,34 +326,34 @@ function returnPage(){
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
+       		<td width="15%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
        			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="15%" align="right" style="height:35px;">立项时间：</td>
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="12%" align="right">完成时间：</td>
+       		<td width="15%" align="right">规定完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
+       	</tr>       	
+       	<tr>
+       		<td width="15%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案：</span></td>
+       		<td colspan="3" id="td_fileList">
+       		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、方案：</td>
+       		<td width="15%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案说明：</span></td>
        		<td colspan="3">
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">审批表、方案附件：</td>
-       		<td colspan="3" id="td_fileList">
-       		</td>
-       	</tr>
-       	<tr>
-       		<td width="12%" align="right" style="height:35px;">提交时间：</td>
+       		<td width="15%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_fstTime"  title="分行监察室提交立项时间">
        		</td>
        	</tr> 
@@ -375,7 +375,7 @@ function returnPage(){
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">跟踪处理意见：</td>
+       		<td width="15%" align="right" style="height:35px;">跟踪处理意见：</td>
        		<td colspan="3">
        			 <textarea id="content_opinion" rows="3" cols="5" style="width:81%;height:38px;" ></textarea>	
        		</td>

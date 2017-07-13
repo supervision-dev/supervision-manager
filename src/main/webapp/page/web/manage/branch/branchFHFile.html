@@ -179,7 +179,7 @@ function loadItemInfo(){
         		 		if(boj.fileList != null && boj.fileList.length >0){
         		 			var fHtml = "";
         		 			for(var i = 0; i< boj.fileList.length; i++){
-        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a>";
+        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a><br/>";
         		 			}
         		 			$("#td_fileList").html(fHtml);
         		 		}
@@ -284,7 +284,7 @@ function saveItem(obj){
     <div class="rightinfo">
      
     <form id="itemInfoForm" method="post">	   
-    <table class="input_Table" >
+    <table class="itemTable" >
     	<tr>
        		<td width="15%" align="right" >项目名称：</td> 
        		<td colspan="3">
@@ -295,34 +295,36 @@ function saveItem(obj){
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
+       		<td width="15%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
        			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="15%" align="right" style="height:35px;">立项时间：</td>
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="12%" align="right">完成时间：</td>
+       		<td width="15%" align="right">规定完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
-       	</tr>
+       	</tr>       	
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/>方案：</td>
-       		<td colspan="3">
-       			<label id="lbl_content"></label>
-       		</td>
-       	</tr>
-       	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/>方案附件：</td>
+       		<td width="15%" align="right" style="height:35px;">立项审批表、<br/><span style=" margin-top: -15px; font-size: 14px;">方案：</span></td>
        		<td colspan="3" id="td_fileList">
        		</td>
        	</tr>
        	<tr>
-			<td width="12%" align="right" height="129px;">相关资料：</td>
+       		<td width="15%" align="right" style="height:35px;">立项审批表、<br/><span style=" margin-top: -15px; font-size: 14px;">方案说明：</span></td>
+       		<td colspan="3">
+       			<label id="lbl_content"></label>
+       		</td>
+       	</tr>
+       	</table>
+       	<table class="input_Table">
+       	<tr>
+			<td width="15%" align="right" height="129px;">相关资料：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right"></div>
 	                <script>
@@ -335,7 +337,7 @@ function saveItem(obj){
 			 </td>	
 		</tr>  
        	<tr>
-       		<td width="12%" align="right">相关资料说明：</td>
+       		<td width="15%" align="right">相关资料说明：</td>
        		<td colspan="3">
        			<textarea rows="3" cols="5" style="width:81%;height:58px;" name="content"></textarea>			
        		</td>

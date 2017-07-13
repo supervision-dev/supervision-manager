@@ -382,26 +382,35 @@
   
   <!-- 查询当前登录机构中支立项中支完成的项目 -->
   <select id="getItemListByOrgTypeAndLogOrg" parameterType="com.rmbank.supervision.model.Item" resultMap="BaseResultMap">
-  	SELECT i.*,o.name AS orgName,o1.name AS preparerOrg,m.name AS sType FROM t_item AS i
-	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id` <!-- 完成机构 -->
-	LEFT JOIN t_org AS o1 ON o1.id =i.preparer_org_id 
-	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id` <!-- 立项机构 -->
-	LEFT JOIN `t_meta` AS m ON m.`id`=i.`supervision_type_id`	
-	where i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} <!-- 当前登录机构要完成的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} <!-- 完成机构为中支单位 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
-	or i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} <!-- 当前登录机构要完成的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeC,jdbcType=INTEGER} <!-- 完成机构为县支行 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
-	or i.preparer_org_id=#{preparerOrgId,jdbcType=INTEGER} <!-- 当前登录机构要立项的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} <!-- 完成机构为中支单位 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
+  	SELECT i.*,o.name AS orgName,o2.name AS preparerOrg,m.name AS sType FROM t_item AS i
+	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id`   
+	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id`  
+	LEFT JOIN `t_meta` AS m ON m.`id`=i.`supervision_type_id`
+	WHERE i.item_type=1 AND STATUS  &lt;&gt; 9   
+	
+	AND i.supervision_org_id=#{supervisionOrgId}
+	AND o.`org_type` IN (44,45)
+	
+	OR i.preparer_org_id=#{preparerOrgId}
+	AND o2.`org_type` =43
+	AND o.`org_type` IN (44,45)
+	AND STATUS &lt;&gt; 9 
+	<!-- 
+	where i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} 当前登录机构要完成的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} 完成机构为中支单位
+	and status &lt;&gt;9 排除状态为9的	
+	or i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} 当前登录机构要完成的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeC,jdbcType=INTEGER} 完成机构为县支行
+	and status &lt;&gt;9 排除状态为9的	
+	or i.preparer_org_id=#{preparerOrgId,jdbcType=INTEGER} 当前登录机构要立项的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} 完成机构为中支单位
+	and status &lt;&gt;9 排除状态为9的	 -->
 	<if test="searchName != null and searchName != ''">
 		and (i.name like
 		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
@@ -425,25 +434,39 @@
   </select>
   <!-- 获取当前机构中支立项的记录数 -->
   <select id="getItemCountZZLX" parameterType="com.rmbank.supervision.model.Item" resultType="java.lang.Integer">
-  	select count(*) from t_item as i 
-  	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id` <!-- 完成机构 -->
-  	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id` <!-- 立项机构 -->
-  	where i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} <!-- 当前登录机构要完成的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} <!-- 完成机构为中支单位 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
-	or i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} <!-- 当前登录机构要完成的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeC,jdbcType=INTEGER} <!-- 完成机构为县支行 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
-	or i.preparer_org_id=#{preparerOrgId,jdbcType=INTEGER} <!-- 当前登录机构要立项的 -->
-	and	i.item_type=#{itemType,jdbcType=INTEGER} <!-- 综合管理模块的数据 -->
-	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} <!-- 立项机构类型为中支监察 -->
-	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} <!-- 完成机构为中支单位 -->
-	and status &lt;&gt;9 <!-- 排除状态为9的 -->	
-  </select>
+  	<!-- select count(*) from t_item as i 
+  	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id` 完成机构
+  	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id` 立项机构
+  	where i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} 当前登录机构要完成的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} 完成机构为中支单位
+	and status &lt;&gt;9 排除状态为9的	
+	or i.supervision_org_id=#{supervisionOrgId,jdbcType=INTEGER} 当前登录机构要完成的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeC,jdbcType=INTEGER} 完成机构为县支行
+	and status &lt;&gt;9 排除状态为9的	
+	or i.preparer_org_id=#{preparerOrgId,jdbcType=INTEGER} 当前登录机构要立项的
+	and	i.item_type=#{itemType,jdbcType=INTEGER} 综合管理模块的数据
+	and o2.`org_type` =#{orgTypeA,jdbcType=INTEGER} 立项机构类型为中支监察
+	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER} 完成机构为中支单位
+	and status &lt;&gt;9 排除状态为9的	
+ -->
+ 	SELECT count(*) FROM t_item AS i
+	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id`   
+	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id`  
+	LEFT JOIN `t_meta` AS m ON m.`id`=i.`supervision_type_id`
+	WHERE i.item_type=1 AND STATUS  &lt;&gt; 9   
+	
+	AND i.supervision_org_id=#{supervisionOrgId}
+	AND o.`org_type` IN (44,45)
+	
+	OR i.preparer_org_id=#{preparerOrgId}
+	AND o2.`org_type` =43
+	AND o.`org_type` IN (44,45)
+	AND STATUS &lt;&gt; 9   
+ </select>
   
   <!-- 分行立项分行完成 -->
   <select id="getItemListByFHLXFHWC" parameterType="com.rmbank.supervision.model.Item" resultMap="BaseResultMap">
@@ -471,7 +494,7 @@
 	</if>
 	and	i.`preparer_org_id`=#{preparerOrgId,jdbcType=INTEGER} and status &lt;&gt;9
 	and i.item_type=#{itemType,jdbcType=INTEGER} 
-	and o.`org_type` =#{orgTypeB,jdbcType=INTEGER}
+	and o.`org_type` in (37,38,39,40,41)
 	ORDER BY i.`id` DESC
 	<if test="pageStart != null and pageSize != null and pageStart>-1 and pageSize>-1">
         limit #{pageStart}, #{pageSize}
@@ -500,7 +523,7 @@
 	</if>
 	 and i.`preparer_org_id`=#{preparerOrgId,jdbcType=INTEGER} and status &lt;&gt;9
 	 and i.item_type=#{itemType,jdbcType=INTEGER} 
-	 and o.`org_type` =#{orgTypeB,jdbcType=INTEGER}
+	 and o.`org_type` in (37,38,39,40,41)
   </select>
   
   
