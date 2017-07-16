@@ -337,6 +337,24 @@
       <artifactId>checkstyle</artifactId>
       <version>5.0</version>
     </dependency> 
+    
+    <!-- 加入导出Excel表格的jar -->
+    <dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml-schemas</artifactId>
+	     <version>3.10-FINAL</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi-ooxml</artifactId>
+	     <version>3.10-FINAL</version>
+	</dependency>
+	<dependency>
+	    <groupId>org.apache.poi</groupId>
+	    <artifactId>poi</artifactId>
+	     <version>3.10-FINAL</version>
+	</dependency>
+    
   </dependencies>
   <build>
     <finalName>supervision</finalName>

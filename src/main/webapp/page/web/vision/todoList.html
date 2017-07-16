@@ -60,7 +60,7 @@ function fillUlList(obj,target){
 		tagHtml = "";
 		for(var i = 0; i< obj.length; i++){
 			var names = obj[i].name;
-			if(names.length>13){
+			if(names.length>12){
 				names = names.substring(0,11)+"……";
 			}
 			tagHtml += "<li><a onclick=\"showItem("+obj[i].id+","+obj[i].supervisionTypeId+");\">"+names+"</a><b>"+formatTime(obj[i].preparerTime,false)+"</b></li>";
