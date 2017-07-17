@@ -321,9 +321,9 @@ function loadSubOrgListByPId(pId){
        		if(req != null && req.length >0){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){
-       				if(req[i].childrenCount ==0){
+       				if(req[i].childrenCount ==0 && $.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
-       				}else{
+       				}else if($.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\" /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubItem("+req[i].id+",0)\"/><img id=\"img_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
        					tbHtml += "<table id=\"tb_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
@@ -350,9 +350,9 @@ function loadSubSubOrgListByPId(pId){
        		if(req != null && req.length >0){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){
-       				if(req[i].childrenCount ==0){
+       				if(req[i].childrenCount ==0 && $.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
-       				}else{
+       				}else if($.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_sub_sub_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showSubSubItem('"+req[i].id+"',0)\"/><img id=\"img_sub_sub_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showSubSubItem('"+req[i].id+"',1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_sub_sub_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
        					tbHtml += "<table id=\"tb_sub_sub_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
