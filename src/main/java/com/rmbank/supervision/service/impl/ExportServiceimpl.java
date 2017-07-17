@@ -3,6 +3,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Service;
 
+import com.rmbank.supervision.common.ExportExcelVO;
 import com.rmbank.supervision.common.StatisticModelList;
 import com.rmbank.supervision.common.utils.ExportExcel;
 import com.rmbank.supervision.service.ExportService;
@@ -11,9 +12,8 @@ import com.rmbank.supervision.service.ExportService;
 public class ExportServiceimpl implements ExportService {
 
 	@Override
-	public boolean export(String fileName, String title, String orgNmae,
-			StatisticModelList sml,HttpServletResponse response) {
-		boolean state = ExportExcel.Export(fileName, title, orgNmae, sml,response);
+	public boolean export(ExportExcelVO eevo) {
+		boolean state = ExportExcel.Export(eevo);
 		return state;
 	}
 

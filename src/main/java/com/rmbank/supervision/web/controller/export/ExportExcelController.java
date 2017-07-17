@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.rmbank.supervision.common.ExportExcelVO;
 import com.rmbank.supervision.common.StatisticModelList;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.StringUtil;
@@ -54,13 +55,14 @@ public class ExportExcelController extends SystemAction{
 	public StatisticModelList efficencyStatistic(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
+		ExportExcelVO eevo = new ExportExcelVO();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>();   
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
 
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
-		Organ userOrg=userOrgList.get(0);
+		Organ userOrg=userOrgList.get(0);		
 		String title ="中国人民银行成都分行电子监察平台效能监察项目统计汇总表";
 		if(userOrg.getOrgtype() == 42){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
@@ -71,10 +73,13 @@ public class ExportExcelController extends SystemAction{
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
 			title+="（"+userOrg.getName()+"）";
+			eevo.setOrgName(userOrg.getName()+"监察室");
 		}else{
 			title+="（全辖）";
+			eevo.setOrgName(userOrg.getName());
 		}
-		
+		eevo.setTitle(title);
+		eevo.setFileName("效能监察统计表");
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -127,7 +132,11 @@ public class ExportExcelController extends SystemAction{
 		 smList.setItem(item);		 
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
-		 exportService.export("文件名", title, userOrg.getName(), smList,response);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA("效能监察项目");
+		 eevo.setItemTdB("实时监察项目");
+		 exportService.export(eevo);
 		return smList;
 	}
 
@@ -139,10 +148,11 @@ public class ExportExcelController extends SystemAction{
 	 * @throws UnsupportedEncodingException 
 	 */
     @ResponseBody
-	@RequestMapping("/incorrupt/incorruptStatistic.do")
+	@RequestMapping("/incorrupt.do")
 	public StatisticModelList incorruptStatistic(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
+		ExportExcelVO eevo = new ExportExcelVO();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
@@ -150,6 +160,7 @@ public class ExportExcelController extends SystemAction{
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		String title ="中国人民银行成都分行电子监察平台廉政监察项目统计汇总表";
 		if(userOrg.getOrgtype() == 42){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
@@ -158,8 +169,13 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
+			title+="（"+userOrg.getName()+"）";
+			eevo.setOrgName(userOrg.getName()+"监察室");
+		}else{
+			title+="（全辖）";
+			eevo.setOrgName(userOrg.getName());
 		}
-		
+		eevo.setTitle(title);
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -210,7 +226,12 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
-		 smList.setTotalList(totalList);
+		 smList.setTotalList(totalList); eevo.setSml(smList);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA("廉政监察项目");
+		 eevo.setItemTdB("实时监察项目");
+		 exportService.export(eevo); 
 		return smList;
 	}
 
@@ -222,10 +243,11 @@ public class ExportExcelController extends SystemAction{
 	 * @throws UnsupportedEncodingException 
 	 */
     @ResponseBody
-	@RequestMapping("/enforce/enforceStatistic.do")
+	@RequestMapping("/enforce.do")
 	public StatisticModelList enforceStatistic(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
+		ExportExcelVO eevo = new ExportExcelVO();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
 		StatisticModel subStatisticModel = new StatisticModel();
@@ -233,6 +255,7 @@ public class ExportExcelController extends SystemAction{
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		String title ="中国人民银行成都分行电子监察平台执法监察项目统计汇总表";
 		if(userOrg.getOrgtype() == 42){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
@@ -241,8 +264,13 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
+			title+="（"+userOrg.getName()+"）";
+			eevo.setOrgName(userOrg.getName()+"监察室");
+		}else{
+			title+="（全辖）";
+			eevo.setOrgName(userOrg.getName());
 		}
-		
+		eevo.setTitle(title);
 		int totalCount = 0;
 		int comCount = 0;
 		int unComCount = 0;
@@ -294,6 +322,11 @@ public class ExportExcelController extends SystemAction{
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA("执法监察项目");
+		 eevo.setItemTdB("实时监察项目");
+		 exportService.export(eevo); 
 		return smList;
 	}
 
@@ -305,10 +338,12 @@ public class ExportExcelController extends SystemAction{
 	 * @throws UnsupportedEncodingException 
 	 */
     @ResponseBody
-	@RequestMapping("/branch/branchStatistic.do")
+	@RequestMapping("/branchStatistic.do")
 	public StatisticModelList branchStatistic(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
+		ExportExcelVO eevo = new ExportExcelVO();
+		String title ="中国人民银行成都分行电子监察平台综合管理项目统计汇总表（分行立项分行完成）";
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
 		int totalCount = 0;
@@ -360,6 +395,13 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 eevo.setOrgName("成都分行监察室");
+		 eevo.setTitle(title);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA(null);
+		 eevo.setItemTdB("分行立项分行完成项目");
+		 exportService.export(eevo); 
 		return smList;
 	}
 
@@ -371,13 +413,14 @@ public class ExportExcelController extends SystemAction{
 	 * @throws UnsupportedEncodingException 
 	 */
     @ResponseBody
-	@RequestMapping("/branch/branchSUPPStatistic.do")
+	@RequestMapping("/branchSUPPStatistic.do")
 	public StatisticModelList branchStatisticSUPP(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
-		
+		ExportExcelVO eevo = new ExportExcelVO();
+		String title ="中国人民银行成都分行电子监察平台综合管理项目统计汇总表（分行立项中支完成）";
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
@@ -440,6 +483,15 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 smList.setItem(item);
+		 smList.setTotalList(totalList);
+		 eevo.setOrgName("成都分行监察室");
+		 eevo.setTitle(title);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA(null);
+		 eevo.setItemTdB("分行立项中支完成项目");
+		 exportService.export(eevo); 
 		return smList;
 	}
 	/**
@@ -450,16 +502,17 @@ public class ExportExcelController extends SystemAction{
 	 * @throws UnsupportedEncodingException 
 	 */
     @ResponseBody
-	@RequestMapping("/support/supportStatistic.do")
+	@RequestMapping("/supportStatistic.do")
 	public StatisticModelList supportStatistic(Item item, 
 			HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException{
 		StatisticModelList smList = new StatisticModelList();
 		List<StatisticModel> totalList = new ArrayList<StatisticModel>(); 
 		StatisticModel statisticModel = new StatisticModel();
-		
+		ExportExcelVO eevo = new ExportExcelVO();
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		String title ="中国人民银行成都分行电子监察平台综合管理项目统计汇总表（中支立项中支完成）";
 		if(userOrg.getOrgtype() == 42){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
@@ -468,7 +521,13 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
+			title+="（"+userOrg.getName()+"）";
+			eevo.setOrgName(userOrg.getName()+"监察室");
+		}else{
+			title+="（全辖）";
+			eevo.setOrgName(userOrg.getName());
 		}
+		eevo.setTitle(title);
 		
 		int totalCount = 0;
 		int comCount = 0;
@@ -520,6 +579,11 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 eevo.setSml(smList);
+		 eevo.setResponse(response);
+		 eevo.setItemTdA(null);
+		 eevo.setItemTdB("中支立项中支完成项目");
+		 exportService.export(eevo); 
 		return smList;
 	}
 	
