@@ -61,6 +61,17 @@ function search(){
        }
     }); 
 }
+function exportExcel(){
+	/* $.ajax({ 
+       type: "POST", //请求类型
+       url: "/supervision/export/excel/efficiency.do", 
+       dataType:"json", //响应数据类型    
+       success: function(req) { 
+       		fillDataList(req);
+       }
+    });  */
+    window.location="/supervision/export/excel/efficiency.do";
+}
 function fillDataList(req){
 	if(req != null){
 		$("#tb_StatisticModel").html("");
@@ -277,6 +288,7 @@ function clearForm(){
     <li><a href="#">统计分析</a></li>
     <li><a href="#">廉政监察统计</a></li>
     </ul>
+    <button onclick="exportExcel()" style="line-height: 20px; float: right; margin-right: 35px; width: 80px; height: 20px; margin-top: 10px; background-color: red;">导出到Excel</button>
     </div>
     
     <div class="rightinfo">

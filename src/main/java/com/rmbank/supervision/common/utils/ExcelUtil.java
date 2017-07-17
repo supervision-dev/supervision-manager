@@ -64,8 +64,8 @@ public class ExcelUtil {
 						Field field = item.getClass().getDeclaredField(attrNames[j]);
 						field.setAccessible(true);
 						Object o= field.get(item);
-						//String value =o == null?"":o.toString();
-						String value =o.toString();
+						String value =o == null?"":o.toString();
+						//String value =o.toString();
 						HSSFCell cell = row.createCell(j);
 						cell.setCellValue(value);
 					}

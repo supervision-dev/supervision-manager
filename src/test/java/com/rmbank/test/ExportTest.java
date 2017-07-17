@@ -10,16 +10,16 @@ import java.util.Map;
 
 import org.junit.Test;
 
+import com.rmbank.supervision.common.StatisticModelList;
 import com.rmbank.supervision.common.utils.ExcelUtil;
 import com.rmbank.supervision.common.utils.ExportExcel;
 
 public class ExportTest {
 	@Test
 	public void main() throws Exception{
-		/*ExportExcel ee= new ExportExcel();
-		ee.Export("文件名");
-		*/
-		List<Student> data =new ArrayList<Student>();
+		//ExportExcel.Export("文件名","分行立项分行完成","中支监察室", new ArrayList<StatisticModelList>());
+
+		/*List<Student> data =new ArrayList<Student>();
 		Student stu = new Student("张三",19,"男");
 		Student stu1 = new Student("张二",18,"女");
 		Student stu2 = new Student("张无",17,"男");
@@ -31,6 +31,6 @@ public class ExportTest {
 		fields.put("name", "姓名");
 		fields.put("age", "年龄");
 		fields.put("sex", "性别");
-		ExcelUtil.ListToExcel(data, out, fields);
+		ExcelUtil.ListToExcel(data, out, fields);*/
 	}
 }
