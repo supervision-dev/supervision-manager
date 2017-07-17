@@ -432,6 +432,7 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
+			title+="("+userOrg.getName()+")";
 		}
 		
 		int totalCount = 0;
