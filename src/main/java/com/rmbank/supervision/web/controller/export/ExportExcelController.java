@@ -1,6 +1,7 @@
 package com.rmbank.supervision.web.controller.export;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,8 +88,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
@@ -183,8 +183,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
@@ -278,8 +277,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
@@ -353,8 +351,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
@@ -442,8 +439,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){
@@ -537,8 +533,7 @@ public class ExportExcelController extends SystemAction{
 		int overComCount = 0;
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(item.getSearchName() != null && item.getSearchName() != ""){
-			String searchName =  new String(item.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName = URLDecoder.decode(item.getSearchName(),"utf-8");
 			item.setSearchName(searchName);
 		}
 		if(StringUtil.isEmpty(item.getSchBeginTime())){

@@ -620,7 +620,7 @@ public class PageRouteController extends SystemAction {
     		HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
-    	session.setAttribute("incShowItemId", id);
+    	session.setAttribute("incorruptItemId", id);
     	ModelAndView mv = new ModelAndView("web/vision/incorrupt/showItem");
     	return mv;
     }
@@ -671,7 +671,7 @@ public class PageRouteController extends SystemAction {
     		HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
-    	session.setAttribute("enfshowItemId", id);
+    	session.setAttribute("enforceItemId", id);
     	ModelAndView mv = new ModelAndView("web/vision/enforce/showItem");
     	return mv;
     }

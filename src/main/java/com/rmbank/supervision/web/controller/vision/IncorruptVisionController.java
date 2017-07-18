@@ -758,7 +758,7 @@ public class IncorruptVisionController extends SystemAction {
 			HttpServletRequest request,HttpServletResponse response) {
 
 		HttpSession session = request.getSession();
-    	Integer itemId = (Integer) session.getAttribute("incShowItemId");
+    	Integer itemId = (Integer) session.getAttribute("incorruptItemId");
     	
     	if(itemId==null){
     		itemId = (Integer) session.getAttribute("incorruptItemId");

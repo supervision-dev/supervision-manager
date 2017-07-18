@@ -745,11 +745,9 @@ public class EnforcementVisionController extends SystemAction {
 			HttpServletResponse response) {
 		
     	HttpSession session = request.getSession();
-    	Integer itemId = (Integer) session.getAttribute("enfshowItemId");
-    	
+    	Integer itemId = (Integer) session.getAttribute("enforceItemId");
     	if(itemId==null){
     		itemId = (Integer) session.getAttribute("enforceItemId");
-    		
     	}
     	
     	BaseItemResult showResult = new BaseItemResult();
@@ -831,7 +829,7 @@ public class EnforcementVisionController extends SystemAction {
 		
 		showResult.setResultItem(item);
 		showResult.setResultItemProcess(drIPList); 
-		session.setAttribute("enfshowItemId",null);
+		session.setAttribute("enforceItemId",null);
     	return showResult;
 	}
 }
