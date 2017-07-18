@@ -829,7 +829,6 @@ public class EnforcementVisionController extends SystemAction {
 		
 		showResult.setResultItem(item);
 		showResult.setResultItemProcess(drIPList); 
-		session.setAttribute("enforceItemId",null);
     	return showResult;
 	}
 }

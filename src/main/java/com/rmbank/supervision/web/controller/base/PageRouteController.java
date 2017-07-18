@@ -453,7 +453,7 @@ public class PageRouteController extends SystemAction {
     		HttpServletRequest request, 
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
-    	session.setAttribute("effshowItemId", id);
+    	session.setAttribute("efficiencyItemId", id);
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/showItem");
     	return mv;
     }

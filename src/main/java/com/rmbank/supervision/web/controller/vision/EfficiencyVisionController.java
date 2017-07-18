@@ -733,7 +733,7 @@ public class EfficiencyVisionController extends SystemAction {
             HttpServletRequest request, HttpServletResponse response){
     	
     	HttpSession session = request.getSession();
-    	Integer itemId = (Integer) session.getAttribute("effshowItemId");
+    	Integer itemId = (Integer) session.getAttribute("efficiencyItemId");
     	
     	if(itemId==null){
     		itemId = (Integer) session.getAttribute("efficiencyItemId");
@@ -835,7 +835,7 @@ public class EfficiencyVisionController extends SystemAction {
 		
 		showResult.setResultItem(item);
 		showResult.setResultItemProcess(drIPList); 
-		session.setAttribute("effshowItemId",null);
+//		session.setAttribute("effshowItemId",null);
     	return showResult;
     }
     

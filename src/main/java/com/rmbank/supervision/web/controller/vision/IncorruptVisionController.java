@@ -834,7 +834,7 @@ public class IncorruptVisionController extends SystemAction {
 		
 		showResult.setResultItem(item);
 		showResult.setResultItemProcess(drIPList); 
-		session.setAttribute("incShowItemId",null);
+//		session.setAttribute("incShowItemId",null);
     	return showResult;
 	}
 
