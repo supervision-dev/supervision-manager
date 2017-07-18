@@ -401,7 +401,7 @@ public class ExportExcelController extends SystemAction{
 		 eevo.setResponse(response);
 		 eevo.setItemTdA(null);
 		 eevo.setItemTdB("分行立项分行完成项目");
-		 exportService.export(eevo); 
+		 boolean export = exportService.export(eevo); 
 		return smList;
 	}
 

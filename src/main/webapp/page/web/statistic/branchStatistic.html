@@ -66,13 +66,13 @@ function search(){
 function exportExcel(){
 	/* $.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/export/excel/efficiency.do", 
+       url: "/supervision/export/excel/branchStatistic.do", 
        dataType:"json", //响应数据类型    
        success: function(req) { 
        		fillDataList(req);
        }
-    });  */
-    window.location="/supervision/export/excel/branchStatistic.do";
+    });   */
+	window.location="/supervision/export/excel/branchStatistic.do"; 
 }
 function fillDataList(req){
 	if(req != null){
@@ -106,7 +106,7 @@ function fillDataList(req){
 				totalHtml += "</tr>";
 			}
 		}else{
-			totalHtml += "<tr><td colspan=\"6\">暂无统计数据!</td></tr>";
+			totalHtml += "<tr><td colspan=\"7\">暂无统计数据!</td></tr>";
 		}
 		$("#tb_TotalList").html(totalHtml); 
    		if(req.item.schBeginTime != null){
