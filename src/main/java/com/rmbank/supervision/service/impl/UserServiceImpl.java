@@ -106,11 +106,11 @@ public class UserServiceImpl implements UserService {
 			User user = new User();
 			user.setAccount(name);
 			User userByAccount = userMapper.getUserByAccount(user);
-			if(userByAccount.getFailNumber()<=4){
+			if(userByAccount.getFailNumber()<4){
 				userByAccount.setLogonTime(new Date());
 				userMapper.updateByAccount(userByAccount);
 				res.setCode(Integer.valueOf(0));
-				res.setMessage("登录失败，密码错误！您还有"+(5-userByAccount.getFailNumber())+"次机会");
+				res.setMessage("登录失败，密码错误！您还有"+(4-userByAccount.getFailNumber())+"次机会");
 			}else {
 				userByAccount.setLogonTime(new Date());
 				userByAccount.setIsLocking(1);
