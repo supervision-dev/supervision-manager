@@ -128,13 +128,18 @@ function changUserPwdAction(){
 	}
 	obj.oldPassword = oldPwd;
 	var newPwd = $("#ipt_newPwd").val(); 
+	var myReg = /^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9]{8,22}$/; 
 	if(newPwd == "" || newPwd.length== 0){
 		$("#showmessage").html("请输入用户新密码！");
 		$("#confirm_tip").fadeIn(200);
 		return;
+	}else if(!myReg.test(newPwd)){
+		$("#showmessage").html("用户新密码必须由字母和数字构成！");
+		$("#confirm_tip").fadeIn(200);
+		return;
 	}
-	if(newPwd.length >22 || newPwd.length <6 ){
-		$("#showmessage").html("用户新密码长度为6至22位之间的字母和数字构成！");
+	if(newPwd.length >22 || newPwd.length <8 ){
+		$("#showmessage").html("用户新密码长度为8至22位之间的字母和数字构成！");
 		$("#confirm_tip").fadeIn(200);
 		return;
 	}
