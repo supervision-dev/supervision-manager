@@ -11,9 +11,11 @@ import org.springframework.stereotype.Component;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.DateUtil;
 import com.rmbank.supervision.model.Item;
+import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ItemService;
 import com.rmbank.supervision.service.SysLogService;
 import com.rmbank.supervision.service.TimeerTaskService;
+import com.rmbank.supervision.service.UserService;
 @Component
 public class TimerTaskServiceImpl implements  TimeerTaskService{
 
@@ -22,6 +24,8 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 	private ItemService itemService;
 	@Resource
 	private SysLogService logService;
+	@Resource
+	private UserService userService;
  
 //	@Scheduled(cron="0 0 9 * * ?")
 	@Override 
@@ -63,5 +67,29 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 		}
 	}
 
+	/**
+	 * 用户账号解锁
+	 */
+	@Override
+	@Scheduled(fixedDelay = 60000) 
+	public void isUnlock() {
+		// TODO Auto-generated method stub
+		User user = new User();
+		user.setIsLocking(1);
+		List<User> userByisLocking = userService.getUserByisLocking(user);
+		for (User user2 : userByisLocking) {
+			long l = new Date().getTime() - user2.getLogonTime().getTime();
+			long day = l / (24 * 60 * 60 * 1000);
+			long hour = (l / (60 * 60 * 1000) - day * 24);
+			long min = 15 - ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+			if(min<=0){
+				user2.setLogonTime(null);
+				user2.setFailNumber(0);
+				user2.setIsLocking(0);
+				userService.updateByPrimaryKey(user2);
+			}
+		}
+		System.out.println("人生又少一分钟！");
+	}
 
 }

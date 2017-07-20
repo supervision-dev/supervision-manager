@@ -72,4 +72,8 @@ public interface UserMapper {
 	 * @return
 	 */
 	List<User> getUserListByLgUser(User lgUser);
+
+	int updateByAccount(User user);
+	
+	List<User> getUserByisLocking(User user);
 }

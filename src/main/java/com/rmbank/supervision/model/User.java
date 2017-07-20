@@ -1,5 +1,6 @@
 package com.rmbank.supervision.model;
 
+import java.util.Date;
 import java.util.List;
 
 import com.rmbank.supervision.common.utils.Page;
@@ -49,6 +50,9 @@ public class User extends Page{
     
     private Integer isChangePwd;
     
+    private Integer failNumber;
+    private Integer isLocking;
+    private Date logonTime;
 
     public Integer getId() {
         return id;
@@ -224,5 +228,29 @@ public class User extends Page{
 
 	public void setIsChangePwd(Integer isChangePwd) {
 		this.isChangePwd = isChangePwd;
+	}
+
+	public Integer getFailNumber() {
+		return failNumber;
+	}
+
+	public void setFailNumber(Integer failNumber) {
+		this.failNumber = failNumber;
+	}
+
+	public Integer getIsLocking() {
+		return isLocking;
+	}
+
+	public void setIsLocking(Integer isLocking) {
+		this.isLocking = isLocking;
+	}
+
+	public Date getLogonTime() {
+		return logonTime;
+	}
+
+	public void setLogonTime(Date logonTime) {
+		this.logonTime = logonTime;
 	}
 }

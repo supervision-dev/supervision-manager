@@ -12,9 +12,13 @@
     <result column="roleId" property="roleId" jdbcType="INTEGER" />
     <result column="postId" property="postId" jdbcType="INTEGER" />
     <result column="isChangePwd" property="isChangePwd" jdbcType="INTEGER" />
+    
+    <result column="failNumber" property="failNumber" jdbcType="INTEGER" />
+    <result column="isLocking" property="isLocking" jdbcType="INTEGER" />
+    <result column="logonTime" property="logonTime" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name,account, pwd, salt, used,isChangePwd
+    id, name,account, pwd, salt, used,isChangePwd,failNumber,isLocking,logonTime
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -113,6 +117,15 @@
       <if test="isChangePwd != null" >
         isChangePwd = #{isChangePwd,jdbcType=INTEGER},
       </if>
+      <if test="failNumber != null" >
+        failNumber = #{failNumber,jdbcType=INTEGER},
+      </if>
+      <if test="isLocking != null" >
+        isLocking = #{isLocking,jdbcType=INTEGER},
+      </if>
+      <if test="logonTime != null" >
+        logonTime = #{logonTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where id = #{id,jdbcType=INTEGER}
   </update>
@@ -123,11 +136,27 @@
       pwd = #{pwd,jdbcType=VARCHAR},
       salt = #{salt,jdbcType=VARCHAR},
       used = #{used,jdbcType=INTEGER},
-      isChangePwd = #{isChangePwd,jdbcType=INTEGER}
+      isChangePwd = #{isChangePwd,jdbcType=INTEGER},
+      failNumber = #{failNumber,jdbcType=INTEGER},
+      isLocking = #{isLocking,jdbcType=INTEGER},
+      logonTime = #{logonTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
   
-  
+  <update id="updateByAccount"  parameterType="com.rmbank.supervision.model.User">
+  	update t_user
+  	<set>
+        failNumber = failNumber+1,
+      <if test="isLocking != null" >
+        isLocking = #{isLocking,jdbcType=INTEGER},
+      </if>
+        logonTime = #{logonTime,jdbcType=TIMESTAMP}
+     </set> 
+    where account = #{account,jdbcType=INTEGER}
+  </update>
+  <select id="getUserByaccount" parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
+  	select * from t_user where account = where account = #{account,jdbcType=INTEGER}
+  </select>
   
   <sql id="sql_query">
   	from t_user as user
@@ -256,4 +285,7 @@
 	order by u.id DESC 
   </select>
   
+  <select id="getUserByisLocking" parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
+  	select * from t_user where isLocking=#{isLocking,jdbcType=INTEGER}
+  </select>
 </mapper>

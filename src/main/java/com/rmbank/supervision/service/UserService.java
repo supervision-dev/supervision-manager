@@ -49,5 +49,9 @@ public interface UserService {
 	List<User> getUserListByLgUser(User lgUser);
 
 	void updateByPrimaryKeySelective(User user);
+	
+	int updateByAccount(User user);
+	
+	List<User> getUserByisLocking(User user);
 
 }

@@ -5,4 +5,6 @@ public interface TimeerTaskService {
 	void itemSSOverTimeTask();
 	
 	void itemZHOverTimeTask();
+
+	void isUnlock();
 }

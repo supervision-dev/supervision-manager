@@ -1,5 +1,6 @@
 package com.rmbank.supervision.service.impl;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -24,58 +25,101 @@ import com.rmbank.supervision.model.UserOrgan;
 import com.rmbank.supervision.model.UserRole;
 import com.rmbank.supervision.service.UserService;
 
-
-
 @Service("userService")
 public class UserServiceImpl implements UserService {
 
-    @Resource
-    private UserMapper userMapper;
-    @Resource
-    private UserRoleMapper userRoleMapper;
-    @Resource 
-    private UserOrganMapper userOrganMapper;
-    @Resource
-    private OrganMapper organMapper;
-    
+	@Resource
+	private UserMapper userMapper;
+	@Resource
+	private UserRoleMapper userRoleMapper;
+	@Resource
+	private UserOrganMapper userOrganMapper;
+	@Resource
+	private OrganMapper organMapper;
+
 	@Override
 	public ReturnResult<User> login(String name, String pwd, boolean rememberMe) {
 		Subject subject = SecurityUtils.getSubject();
-        ReturnResult<User> res = new ReturnResult<User>();
-        try {
-            User temp = new User();
-            temp.setAccount(name);
-            temp.setUsed(Constants.USER_STATUS_EFFICTIVE); 
-            User u = this.userMapper.getUserByAccount(temp);
-            if (u == null) {
-                res.setCode(Integer.valueOf(0));
-                res.setMessage("用户[" + name + "]不存在！");
-            }
-            else{
-                ShiroUsernamePasswordToken token = new ShiroUsernamePasswordToken(
-                        u.getAccount(), pwd, u.getPwd(), u.getSalt(),
-                        null);
-//                token.setRememberMe(rememberMe);
-                subject.login(token);
-                boolean state = subject.isAuthenticated();
-                if (subject.isAuthenticated()) {
-                    res.setCode(Integer.valueOf(1));
-                    res.setMessage("登录成功！");
-                    res.setResultObject(u);
-                } else {
-                    res.setCode(Integer.valueOf(0));
-                    res.setMessage("登录失败，密码错误。");
-                }
-            }
-        }
-        catch (ExcessiveAttemptsException ex) {
-            res.setCode(Integer.valueOf(0));
-            res.setMessage("登录失败，未知错误。");
-        } catch (AuthenticationException ex) {
-            res.setCode(Integer.valueOf(0));
-            res.setMessage("登录失败，密码错误。");
-        }
-        return res;
+		ReturnResult<User> res = new ReturnResult<User>();
+		try {
+			User temp = new User();
+			temp.setAccount(name);
+			temp.setUsed(Constants.USER_STATUS_EFFICTIVE);
+			User u = this.userMapper.getUserByAccount(temp);
+			if (u == null) {
+				res.setCode(Integer.valueOf(0));
+				res.setMessage("用户[" + name + "]不存在！");
+			} else {
+				// 该账号不为空，判断是否锁定
+				if (u.getIsLocking() == 0) {// 等于0代表没有被锁定
+					ShiroUsernamePasswordToken token = new ShiroUsernamePasswordToken(
+							u.getAccount(), pwd, u.getPwd(), u.getSalt(), null);
+					// token.setRememberMe(rememberMe);
+					subject.login(token);
+					boolean state = subject.isAuthenticated();
+					if (subject.isAuthenticated()) {
+						u.setLogonTime(null);
+						u.setFailNumber(0);
+						u.setIsLocking(0);
+						userMapper.updateByPrimaryKey(u);
+						
+						res.setCode(Integer.valueOf(1));
+						res.setMessage("登录成功！");
+						res.setResultObject(u);
+					} else {
+						res.setCode(Integer.valueOf(0));
+						res.setMessage("登录失败，密码错误。");
+
+						User user = new User();
+						user.setAccount(name);
+						User userByAccount = userMapper.getUserByAccount(user);
+						if(userByAccount.getFailNumber()<=4){
+							userByAccount.setLogonTime(new Date());
+							userMapper.updateByAccount(userByAccount);
+							res.setCode(Integer.valueOf(0));
+							res.setMessage("登录失败，密码错误。");
+						}else {
+							userByAccount.setLogonTime(new Date());
+							userByAccount.setIsLocking(1);
+							userMapper.updateByAccount(userByAccount);
+							res.setCode(Integer.valueOf(0));
+							res.setMessage("你已连续5次登陆失败，该账号已被锁定，请在15分钟后再登陆");
+						}
+					}
+				} else if (u.getIsLocking() == 1) {// 等于1代表该账号已被锁定
+					long l = new Date().getTime() - u.getLogonTime().getTime();
+					long day = l / (24 * 60 * 60 * 1000);
+					long hour = (l / (60 * 60 * 1000) - day * 24);
+					long min = 15 - ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
+					if(min<=0){
+						min=0;
+					}
+					res.setCode(Integer.valueOf(0));
+					res.setMessage("该账号已被锁定，请在" + min + "分钟后登陆");
+				}
+			}
+
+		} catch (ExcessiveAttemptsException ex) {
+			res.setCode(Integer.valueOf(0));
+			res.setMessage("登录失败，未知错误。");
+		} catch (AuthenticationException ex) {
+			User user = new User();
+			user.setAccount(name);
+			User userByAccount = userMapper.getUserByAccount(user);
+			if(userByAccount.getFailNumber()<=4){
+				userByAccount.setLogonTime(new Date());
+				userMapper.updateByAccount(userByAccount);
+				res.setCode(Integer.valueOf(0));
+				res.setMessage("登录失败，密码错误！您还有"+(5-userByAccount.getFailNumber())+"次机会");
+			}else {
+				userByAccount.setLogonTime(new Date());
+				userByAccount.setIsLocking(1);
+				userMapper.updateByAccount(userByAccount);
+				res.setCode(Integer.valueOf(0));
+				res.setMessage("你已连续5次登陆失败，该账号已被锁定，请在15分钟后再登陆");
+			}
+		}
+		return res;
 	}
 
 	@Override
@@ -85,16 +129,16 @@ public class UserServiceImpl implements UserService {
 		user.setAccount(username);
 		return userMapper.getUserByAccount(user);
 	}
-	
-	
+
 	/**
 	 * 获取用户列表
 	 */
 	@Override
 	public List<User> getUserList(User user) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		return userMapper.getUserList(user);
 	}
+
 	/**
 	 * 获取用户记录数
 	 */
@@ -126,69 +170,71 @@ public class UserServiceImpl implements UserService {
 	 * 新增用户/修改用户
 	 */
 	@Override
-	public boolean saveOrUpdateUser(User user, List<Integer> roleIds, List<Integer> orgIds,Integer postId) {
+	public boolean saveOrUpdateUser(User user, List<Integer> roleIds,
+			List<Integer> orgIds, Integer postId) {
 		boolean isSuccess = false;
-		try{			
-			//id存在则为修改操作
-			if(user.getId()>0){
-				//修改用户的数据
+		try {
+			// id存在则为修改操作
+			if (user.getId() > 0) {
+				// 修改用户的数据
 				userMapper.updateByPrimaryKeySelective(user);
-				//根据用户id删除用户-机构表中用户id对应的数据
+				// 根据用户id删除用户-机构表中用户id对应的数据
 				userOrganMapper.deleteByUserId(user.getId());
-				//根据用户id删除用户-角色表中用户id对应的数据
+				// 根据用户id删除用户-角色表中用户id对应的数据
 				userRoleMapper.deleteByUserId(user.getId());
 				for (Integer roleId : roleIds) {
-					UserRole userRole=new UserRole();
+					UserRole userRole = new UserRole();
 					userRole.setId(0);
 					userRole.setUserId(user.getId());
-					userRole.setRoleId(roleId);					
-					userRoleMapper.insert(userRole);				
+					userRole.setRoleId(roleId);
+					userRoleMapper.insert(userRole);
 				}
 				for (Integer orgId : orgIds) {
-					UserOrgan userOrg=new UserOrgan();
+					UserOrgan userOrg = new UserOrgan();
 					userOrg.setId(0);
 					userOrg.setUserId(user.getId());
 					userOrg.setOrgId(orgId);
 					userOrg.setPostId(postId);
 					userOrganMapper.insert(userOrg);
 				}
-						
+
 				isSuccess = true;
-			}else{//新增用户
-				//insert返回用户主键
-				int userId =0;
-				User u = EndecryptUtils.md5Password(user.getAccount(), user.getPwd());
-	            if (u != null) {
-	                user.setPwd(u.getPwd());
-	                user.setSalt(u.getSalt());
-	                userMapper.insert(user); 
-	                userId= user.getId();
-	                System.out.println("返回的userID"+userId);
-	            }
-				if(userId !=0 ){
+			} else {// 新增用户
+					// insert返回用户主键
+				int userId = 0;
+				User u = EndecryptUtils.md5Password(user.getAccount(),
+						user.getPwd());
+				if (u != null) {
+					user.setPwd(u.getPwd());
+					user.setSalt(u.getSalt());
+					userMapper.insert(user);
+					userId = user.getId();
+					System.out.println("返回的userID" + userId);
+				}
+				if (userId != 0) {
 					for (Integer roleId : roleIds) {
-						UserRole userRole=new UserRole();
+						UserRole userRole = new UserRole();
 						userRole.setId(0);
 						userRole.setUserId(userId);
-						userRole.setRoleId(roleId);					
-						userRoleMapper.insert(userRole);				
+						userRole.setRoleId(roleId);
+						userRoleMapper.insert(userRole);
 					}
 					for (Integer orgId : orgIds) {
-						UserOrgan userOrg=new UserOrgan();
+						UserOrgan userOrg = new UserOrgan();
 						userOrg.setId(0);
 						userOrg.setUserId(userId);
 						userOrg.setOrgId(orgId);
 						userOrg.setPostId(postId);
 						userOrganMapper.insert(userOrg);
-					}							
+					}
 					isSuccess = true;
 				}
 			}
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return isSuccess;
-		
+
 	}
 
 	/**
@@ -197,30 +243,29 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean deleteUserById(Integer id) {
 		boolean isSuccess = false;
-		try{
+		try {
 			userMapper.deleteUserById(id);
-			//根据用户id删除用户-机构表中用户id对应的数据
+			// 根据用户id删除用户-机构表中用户id对应的数据
 			userOrganMapper.deleteByUserId(id);
-			//根据用户id删除用户-角色表中用户id对应的数据
+			// 根据用户id删除用户-角色表中用户id对应的数据
 			userRoleMapper.deleteByUserId(id);
 			isSuccess = true;
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return isSuccess;
 	}
 
-	
 	/**
 	 * 修改用户状态
 	 */
 	@Override
 	public boolean updateUserUsedById(User user) {
 		boolean isSuccess = false;
-		try{
-			userMapper.updateUserUsedById(user);	
+		try {
+			userMapper.updateUserUsedById(user);
 			isSuccess = true;
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return isSuccess;
@@ -231,22 +276,21 @@ public class UserServiceImpl implements UserService {
 	 */
 	@Override
 	public boolean updateByPrimaryKey(User user) {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		boolean isSuccess = false;
-		try{
-			User u = EndecryptUtils.md5Password(user.getAccount(), user.getPwd());
+		try {
+			User u = EndecryptUtils.md5Password(user.getAccount(),
+					user.getPwd());
 			user.setPwd(u.getPwd());
 			user.setSalt(u.getSalt());
-			userMapper.updateByPrimaryKey(user);	
+			userMapper.updateByPrimaryKey(user);
 			isSuccess = true;
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
 		return isSuccess;
 	}
 
-	
-	
 	@Override
 	public List<User> getUserListByOrgId(User lgUser) {
 		// TODO Auto-generated method stub
@@ -319,6 +363,17 @@ public class UserServiceImpl implements UserService {
 		// TODO Auto-generated method stub
 		userMapper.updateByPrimaryKeySelective(user);
 	}
-	
-	
+
+	@Override
+	public int updateByAccount(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.updateByAccount(user);
+	}
+
+	@Override
+	public List<User> getUserByisLocking(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByisLocking(user);
+	}
+
 }
