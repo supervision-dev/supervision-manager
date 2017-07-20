@@ -12,12 +12,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.rmbank.supervision.common.DataListResult;
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.StringUtil;
+import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.SystemLog;
+import com.rmbank.supervision.model.User;
+import com.rmbank.supervision.service.OrganService;
 import com.rmbank.supervision.service.SysLogService;
 
 @Scope("prototype")
@@ -28,6 +32,8 @@ public class SysLogController {
 	
 	@Resource
 	private SysLogService logService;
+	@Resource
+	private OrganService organService;
 	/**
 	 * 实时监察日志列表
 	 * 
@@ -233,4 +239,27 @@ public class SysLogController {
 		dr.setDatalist(logList); 
 		return dr;
 	}
+	
+	/**
+	 * 条件查询机构的父机构
+	 * @param id
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping(value = "/loadPorgName.do")
+	public Organ loadPorgName(
+			@RequestParam(value = "orgId", required = false) Integer orgId,
+			HttpServletRequest request, HttpServletResponse response) {
+		Organ organ =new Organ();
+		Organ thisOrgan = organService.selectByPrimaryKey(orgId);
+		if(thisOrgan.getPid()!=0){
+//			List<Organ> organByPId = organService.getOrganByPId(organ.getPid());
+//			organ =organByPId.get(0);
+			organ = organService.selectByPrimaryKey(thisOrgan.getPid());
+		}
+		
+		return organ;// json.toString();
+	}  
 }

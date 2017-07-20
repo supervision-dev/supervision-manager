@@ -251,14 +251,14 @@ function saveOrUpdateScdDetail(){
 		return;
 	}
 	obj.name = name;
-	var gradeId = $("#slt_model_scd").val();
+	var gradeId = $("#slt_modle_scd").val();
 	if(gradeId == null || gradeId == ""){
 		$("#showmessage").html("请选择该指标所属模型！");
 		$("#confirm_tip").fadeIn(200);
 		return;
 	}
 	obj.gradeId = gradeId;
-	var pid = $("#slt_model_scd_level1").val();
+	var pid = $("#slt_modle_scd_level1").val();
 	if(pid == null || pid == ""){
 		$("#showmessage").html("请选择该二级指标所属一级指标！");
 		$("#confirm_tip").fadeIn(200);
@@ -295,7 +295,7 @@ function saveOrUpdateThdDetail(){
 		return;
 	}
 	obj.name = name;
-	var gradeId = $("#slt_model_thd").val();
+	var gradeId = $("#slt_modle_thd").val();
 	if(gradeId == null || gradeId == ""){
 		$("#showmessage").html("请选择该指标所属模型！");
 		$("#confirm_tip").fadeIn(200);

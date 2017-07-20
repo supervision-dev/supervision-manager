@@ -44,7 +44,13 @@ function fillDataList(req){
 	       		logHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			logHtml +="<tr>";
-				    logHtml +="<td>"+req.datalist[i].description+"</td>";
+				    if(req.datalist[i].description.length >28){
+				    	var names = req.datalist[i].description.substring(0,27)+"…"
+				    	logHtml +="<td title=\""+req.datalist[i].description+"\">"+names+"</td>";
+				    }else{
+				    	logHtml +="<td>"+req.datalist[i].description+"</td>";
+				    }
+				    //logHtml +="<td>"+req.datalist[i].description+"</td>";
 				    if(req.datalist[i].operation ==1){
 				    	logHtml +="<td>新增</td>";
 				    }else if(req.datalist[i].operation ==2){
@@ -55,8 +61,20 @@ function fillDataList(req){
 				    	logHtml +="<td>系统日志</td>";
 				    }
 				    logHtml +="<td>"+req.datalist[i].operTimes+"</td>";
-				    logHtml +="<td>"+req.datalist[i].orgName+"</td>";
-				    logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
+				    if(req.datalist[i].orgName.length >13){
+				    	var names = req.datalist[i].orgName.substring(0,12)+"…"
+				    	logHtml +="<td title=\""+req.datalist[i].orgName+"\">"+names+"</td>";
+				    }else{
+				    	logHtml +="<td>"+req.datalist[i].orgName+"</td>";
+				    }
+				    //logHtml +="<td>"+req.datalist[i].orgName+"</td>";
+				    if(req.datalist[i].operName.length >13){
+				    	var names = req.datalist[i].operName.substring(0,12)+"…"
+				    	logHtml +="<td title=\""+req.datalist[i].operName+"\">"+names+"</td>";
+				    }else{
+				    	logHtml +="<td>"+req.datalist[i].operName+"</td>";
+				    }
+				    //logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
 				    logHtml +="<td>"+req.datalist[i].ip+"</td>"; 
 			        logHtml +="</tr>";
 	       		}
@@ -233,8 +251,22 @@ function clickOrganName(orgId,orgName){
 	$("#slt_orgName").text(orgName);
 	$("#ipt_organname").val(orgName);
 	$("#hid_orgId").val(orgId);
+	showPorgName(orgId);
 }
-
+function showPorgName(orgId){
+	$.ajax({ 
+		type: "POST", //请求类型
+		url: "/supervision/system/log/loadPorgName.do?orgId="+orgId, 
+		dataType:"json", //响应数据类型      
+		success: function(req) {
+			if(req.name!=null && req.name!=""){
+				$("#s_org").text("所属机构： "+req.name);
+			}else{
+				$("#s_org").text("所属机构： 当前机构为根机构！");
+			}
+		}
+	});
+}
 function showItem(subId,tag){ 
 	loadSubOrgListByPId(subId);
 	if(tag == 0){
@@ -296,6 +328,7 @@ function clearForm(){
     <li><a href="#">日志管理</a></li>
     <li><a href="#">实时监察模块日志</a></li>
     </ul>
+    <sapn id="s_org" style="line-height: 20px; float: right; margin-right:30px; width: 530px; height: 20px; margin-top: 10px;  font-size: 14px; font-weight: 900;"></span>
     </div>
     
     <div class="rightinfo">
