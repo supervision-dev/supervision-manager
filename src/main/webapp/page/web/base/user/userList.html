@@ -77,7 +77,7 @@ function getDataList(pageNo){
 	       		$("#i_pageNo").text(req.data.pageNo);
 	       		$("#i_totalcountA").text(req.data.totalCount);
 	       		$("#i_pageNoA").text(req.data.pageNo);
-	       		var count = Math.ceil(req.data.totalCount/10);
+	       		var count = Math.ceil(req.data.totalCount/120);
 	       		$("#ul_pageList").html("");
 	       		var ulHtml = "";
 	       		if(req.data.roleId==11){
@@ -194,9 +194,9 @@ function reSetUserAction(){
 };
 function showAddTip(){
 	$("#add_tip").fadeIn(200);
-	if($("#tr_account").hasClass("displaynone")){
+	/* if($("#tr_account").hasClass("displaynone")){
 		$("#tr_account").removeClass("displaynone");
-	}
+	} */
 	if($("#tr_pwd").hasClass("displaynone")){
 		$("#tr_pwd").removeClass("displaynone");
 	}
@@ -213,11 +213,12 @@ function showDataField(){
        		if(req != null){      
 				$("#hid_userId").val(req.id);
 				$("#ipt_name").val(req.name); 
+				$("#ipt_account").val(req.account); 
 				$("#hid_orgId").val(req.orgId);
 				$("#ipt_organname").val(req.orgName);
 				$("#slt_postId").val(req.postId);
 				$("#slt_roleId").val(req.roleId); 
-				$("#tr_account").addClass("displaynone");
+				/* $("#tr_account").addClass("displaynone"); */
 				$("#tr_pwd").addClass("displaynone");
 				$("#tr_rePassword").addClass("displaynone"); 
 			 }
@@ -369,12 +370,12 @@ function saveOrUpdateUserInfo(){
 	}
 	obj.name = name;
 	if(obj.id  == 0){
-		var account = $("#ipt_account").val();
+		/* var account = $("#ipt_account").val();
 		if(account == "" || account.length== 0){
 			$("#showmessage").html("请输入用户登录账号！");
 			$("#confirm_tip").fadeIn(200);
 			return;
-		}
+		} */
 		var pwd = $("#ipt_pwd").val();
 		if(pwd == "" || pwd.length== 0){
 			$("#showmessage").html("请输入用户登录密码！");
@@ -397,9 +398,15 @@ function saveOrUpdateUserInfo(){
 			$("#confirm_tip").fadeIn(200);
 			return;
 		}
-		obj.account = account;
+		//obj.account = account;
 		obj.pwd = pwd;
 		obj.rePassword = rePwd
+	}
+	var account = $("#ipt_account").val();
+	if(account == "" || account.length== 0){
+		$("#showmessage").html("请输入用户登录账号！");
+		$("#confirm_tip").fadeIn(200);
+		return;
 	}
 	var orgId = $("#hid_orgId").val();
 	if(orgId == "" || orgId.length== 0){
@@ -419,6 +426,7 @@ function saveOrUpdateUserInfo(){
 		$("#confirm_tip").fadeIn(200);
 		return;
 	}
+	obj.account = account;
 	obj.orgId = orgId;
 	obj.roleId = roleId;
 	obj.postId = postId; 

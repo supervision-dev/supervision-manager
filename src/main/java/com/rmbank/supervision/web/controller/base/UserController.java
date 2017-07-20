@@ -77,7 +77,7 @@ public class UserController extends SystemAction {
 		//设置页面初始值及页面大小
 		if (user.getPageNo() == null)
 			user.setPageNo(1);
-		user.setPageSize(Constants.DEFAULT_PAGE_SIZE);  
+		user.setPageSize(120);  
 		int totalCount =  0;
 		//分页集合
 		List<User> userList = new ArrayList<User>();
@@ -121,10 +121,10 @@ public class UserController extends SystemAction {
 				session.setAttribute("userOrgIds", userOrgIds); 
 				
 				//根据机构ID查询用户
-				List<User> userByOrgids = userService.getUserByOrgids(userOrgIds);					
-				int countByOrgId = userService.getUserCountByOrgId(lgUser);
+				/*List<User> userByOrgids = userService.getUserByOrgids(userOrgIds);					
+				//int countByOrgId = userService.getUserCountByOrgId(lgUser);
 				userList.addAll(userByOrgids);
-				totalCount+=countByOrgId;
+				totalCount+=userByOrgids.size();*/
 			}catch(Exception ex){ 
 				ex.printStackTrace();
 			}	 
