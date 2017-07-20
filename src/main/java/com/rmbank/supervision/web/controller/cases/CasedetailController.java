@@ -162,7 +162,8 @@ public class CasedetailController extends SystemAction {
 				User loginUser = this.getLoginUser();
 				String ip = IpUtil.getIpAddress(request);		
 				logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，保存了量化模型指标："+gradeSchemeDetail.getName() , 2, loginUser.getId(), loginUser.getUserOrgID(), ip);
-
+				js.setCode(0);
+				js.setMessage("量化指标保存成功");
 			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
