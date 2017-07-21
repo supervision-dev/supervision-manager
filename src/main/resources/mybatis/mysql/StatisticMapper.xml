@@ -20,31 +20,61 @@
 	FROM
 		t_item t1
 	WHERE t1.`status` != 9 and t1.`status` != 0
-	AND	t1.item_type = 0) as totalCount,
+	AND	t1.item_type = 0
+	<if test="orgIds != null and orgIds.size()>0">
+   		and t1.supervision_org_id in  
+	    <foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+	    	#{item}  
+	    </foreach>  
+	</if>) as totalCount,
 	
 		(SELECT count(t2.id)
 	FROM
 		t_item t2
 	WHERE t2.`status` = 4
-	AND	t2.item_type = 0 ) as comCount,
+	AND	t2.item_type = 0 
+	<if test="orgIds != null and orgIds.size()>0">
+   		and t2.supervision_org_id in  
+	    <foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+	    	#{item}  
+	    </foreach>  
+	</if>) as comCount,
 	
 		(SELECT count(*)
 	FROM
 		t_item
 	WHERE (`status` = 1 or `status` = 2)
-	AND	item_type = 0 ) as unComCount,
+	AND	item_type = 0 
+	<if test="orgIds != null and orgIds.size()>0">
+   		and supervision_org_id in  
+	    <foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+	    	#{item}  
+	    </foreach>  
+	</if>) as unComCount,
 	
 		(SELECT count(*)
 	FROM
 		t_item
 	WHERE `status` = 3
-	AND	item_type = 0 ) as overUnComCount,
+	AND	item_type = 0 
+	<if test="orgIds != null and orgIds.size()>0">
+   		and supervision_org_id in  
+	    <foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+	    	#{item}  
+	    </foreach>  
+	</if>) as overUnComCount,
 	
 		(SELECT count(*)
 	FROM
 		t_item
 	WHERE `status` = 5
-	AND	item_type = 0 ) as overComCount from t_item
+	AND	item_type = 0 
+	<if test="orgIds != null and orgIds.size()>0 and orgIds.size()>0 ">
+   		and supervision_org_id in  
+	    <foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
+	    	#{item}  
+	    </foreach>  
+	</if>) as overComCount from t_item
   </select> 
   
   <select id="loadTotalStatistisList"  resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Item" >
@@ -59,7 +89,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
 	                       #{item}  
@@ -80,7 +110,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
 	                       #{item}  
@@ -102,7 +132,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
 	                       #{item}  
@@ -123,7 +153,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
 	                       #{item}  
@@ -148,7 +178,7 @@
   	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
      	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
      </if>
-     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
      	and t.supervision_org_id in  
      		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                        #{item}  
@@ -296,7 +326,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -323,7 +353,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -350,7 +380,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -377,7 +407,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -406,7 +436,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -439,7 +469,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t1.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t1.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -464,7 +494,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t2.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t2.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -490,7 +520,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t3.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t3.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -515,7 +545,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t4.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t4.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  
@@ -542,7 +572,7 @@
 	  	 <if test="schBeginTime != null and schEndTime !='' and schBeginTime !='' and schEndTime != null">
 	     	and t.preparer_time  between #{schBeginTime,jdbcType=DATE}  and #{schEndTime,jdbcType=DATE}  
 	     </if>
-	     <if test="supervisionOrgId == null and orgIds != null and orgIds !=''">
+	     <if test="supervisionOrgId == null and orgIds != null and orgIds.size()>0 and orgIds !=''">
 	     	and t.supervision_org_id in  
 	     		<foreach item="item" index="index" collection="orgIds" open="(" separator="," close=")">     
                         #{item}  

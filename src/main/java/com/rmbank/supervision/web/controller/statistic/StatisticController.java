@@ -61,9 +61,10 @@ public class StatisticController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		List<Integer> orgIds=new ArrayList<Integer>();
 		if(userOrg.getOrgtype() == 42){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
-			List<Integer> orgIds =new ArrayList<Integer>();
+			orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
 				orgIds.add(organ.getId());
 			}
@@ -96,7 +97,9 @@ public class StatisticController extends SystemAction {
 		 
 		item.setSupervisionTypeId(Constants.SUPERVISION_TYPE_ID_XL);  
 		 try{
-			 statisticModel = statisticService.loadTotalCount(new Item());
+			 Item newItem=new Item();
+			 newItem.setOrgIds(orgIds);
+			 statisticModel = statisticService.loadTotalCount(newItem);
 			 totalList = statisticService.loadTotalStatistisList(item);    
 			 for(StatisticModel sm : totalList){
 				 totalCount = totalCount + sm.getTotalCount(); 

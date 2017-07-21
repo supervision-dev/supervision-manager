@@ -394,4 +394,10 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public List<User> getUserAll() {
+		// TODO Auto-generated method stub
+		return userMapper.getUserAll();
+	}
+
 }

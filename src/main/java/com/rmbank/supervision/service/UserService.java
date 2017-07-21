@@ -55,4 +55,5 @@ public interface UserService {
 	List<User> getUserByisLocking(User user);
 
 	void resetPwd(User user); 
+	List<User> getUserAll();
 }
