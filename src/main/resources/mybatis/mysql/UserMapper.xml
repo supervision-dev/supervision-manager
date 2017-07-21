@@ -291,4 +291,17 @@
   <select id="getUserByisLocking" parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
   	select * from t_user where isLocking=#{isLocking,jdbcType=INTEGER}
   </select>
+  <update id="resetPwd" parameterType="com.rmbank.supervision.model.User">
+  	update t_user
+  	set pwd = #{pwd,jdbcType=VARCHAR},
+      salt = #{salt,jdbcType=VARCHAR},
+      isChangePwd = #{isChangePwd,jdbcType=INTEGER},
+      failNumber = #{failNumber,jdbcType=INTEGER},
+      isLocking = #{isLocking,jdbcType=INTEGER},
+      logonTime = #{logonTime,jdbcType=TIMESTAMP}
+  </update>
+  
+  <select id="getUserAll" resultMap="BaseResultMap">
+  	SELECT * FROM t_user
+  </select>
 </mapper>

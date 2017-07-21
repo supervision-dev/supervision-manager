@@ -19,6 +19,10 @@ public interface UserMapper {
 
 	User getUserByAccount(User temp);
 	
+	void resetPwd(User user); 
+	
+	List<User> getUserAll();
+	
 	/**
 	 * 获取用户列表
 	 * @return
