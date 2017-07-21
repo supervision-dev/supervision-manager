@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
@@ -124,6 +125,8 @@ public class StatisticController extends SystemAction {
 		 
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("XNJC_TJ", smList);
 		return smList;
 	}
 
@@ -206,6 +209,8 @@ public class StatisticController extends SystemAction {
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("LZJC_TJ", smList);
 		return smList;
 	}
 
@@ -288,6 +293,8 @@ public class StatisticController extends SystemAction {
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("ZFJC_TJ", smList);
 		return smList;
 	}
 
@@ -353,6 +360,8 @@ public class StatisticController extends SystemAction {
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("FHLXFHWC_TJ", smList);
 		return smList;
 	}
 
@@ -432,6 +441,8 @@ public class StatisticController extends SystemAction {
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("FHLXZZWC_TJ", smList);
 		return smList;
 	}
 	/**
@@ -511,6 +522,8 @@ public class StatisticController extends SystemAction {
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 HttpSession session = request.getSession();
+		 session.setAttribute("ZZLXZZWC_TJ", smList);
 		return smList;
 	}
 }

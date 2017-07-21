@@ -8,6 +8,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -132,7 +133,11 @@ public class ExportExcelController extends SystemAction{
 		 smList.setItem(item);		 
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
-		 eevo.setSml(smList);
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("XNJC_TJ");
+		 eevo.setSml(attribute);
+		 
 		 eevo.setResponse(response);
 		 eevo.setItemTdA("效能监察项目");
 		 eevo.setItemTdB("实时监察项目");
@@ -225,8 +230,12 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
-		 smList.setTotalList(totalList); eevo.setSml(smList);
-		 eevo.setSml(smList);
+		 smList.setTotalList(totalList); 
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("LZJC_TJ");
+		 eevo.setSml(attribute);
+		 
 		 eevo.setResponse(response);
 		 eevo.setItemTdA("廉政监察项目");
 		 eevo.setItemTdB("实时监察项目");
@@ -320,7 +329,11 @@ public class ExportExcelController extends SystemAction{
 		 smList.setItem(item);
 		 smList.setSubStatisticModel(subStatisticModel);
 		 smList.setTotalList(totalList);
-		 eevo.setSml(smList);
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("ZFJC_TJ");
+		 eevo.setSml(attribute);
+		 
 		 eevo.setResponse(response);
 		 eevo.setItemTdA("执法监察项目");
 		 eevo.setItemTdB("实时监察项目");
@@ -392,9 +405,13 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("FHLXFHWC_TJ");
+		 eevo.setSml(attribute);
+		 
 		 eevo.setOrgName("成都分行监察室");
 		 eevo.setTitle(title);
-		 eevo.setSml(smList);
 		 eevo.setResponse(response);
 		 eevo.setItemTdA(null);
 		 eevo.setItemTdB("分行立项分行完成项目");
@@ -482,9 +499,13 @@ public class ExportExcelController extends SystemAction{
 		 smList.setTotalList(totalList);
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("FHLXZZWC_TJ");
+		 eevo.setSml(attribute);
+		 
 		 eevo.setOrgName("成都分行监察室");
 		 eevo.setTitle(title);
-		 eevo.setSml(smList);
 		 eevo.setResponse(response);
 		 eevo.setItemTdA(null);
 		 eevo.setItemTdB("分行立项中支完成项目");
@@ -575,7 +596,11 @@ public class ExportExcelController extends SystemAction{
 		 }
 		 smList.setItem(item);
 		 smList.setTotalList(totalList);
-		 eevo.setSml(smList);
+		 
+		 HttpSession session = request.getSession();
+		 StatisticModelList attribute = (StatisticModelList)session.getAttribute("ZZLXZZWC_TJ");
+		 eevo.setSml(attribute);
+
 		 eevo.setResponse(response);
 		 eevo.setItemTdA(null);
 		 eevo.setItemTdB("中支立项中支完成项目");
