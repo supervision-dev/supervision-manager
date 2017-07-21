@@ -92,7 +92,7 @@ public class UserServiceImpl implements UserService {
 					long hour = (l / (60 * 60 * 1000) - day * 24);
 					long min = 15 - ((l / (60 * 1000)) - day * 24 * 60 - hour * 60);
 					if(min<=0){
-						min=0;
+						min=1;
 					}
 					res.setCode(Integer.valueOf(0));
 					res.setMessage("该账号已被锁定，请在" + min + "分钟后登陆");

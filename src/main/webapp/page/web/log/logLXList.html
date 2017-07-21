@@ -140,6 +140,9 @@ function fillDataList(req){
 		$('.tablelist tbody tr:odd').addClass('odd');
 }
 function search(pageNo){
+	if($("#hid_orgId").val() ==null || $("#hid_orgId").val() ==""){
+		$("#s_org").text("");
+	}
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
 		$("#showmessage").html("请选择起始日期！");
 		$("#confirm_tip").fadeIn(200);
@@ -260,11 +263,16 @@ function showPorgName(orgId){
 		url: "/supervision/system/log/loadPorgName.do?orgId="+orgId, 
 		dataType:"json", //响应数据类型      
 		success: function(req) {
-			if(req.name!=null && req.name!=""){
-				$("#s_org").text("所属机构： "+req.name);
+			if($("#ipt_organname").val() !=null){
+				if(req.name!=null && req.name!=""){
+					$("#s_org").text("所属机构： "+req.name);
+				}else{
+					$("#s_org").text("所属机构： 当前机构为根机构！");
+				}
 			}else{
-				$("#s_org").text("所属机构： 当前机构为根机构！");
+				$("#s_org").text("");
 			}
+			
 		}
 	});
 }

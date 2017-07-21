@@ -314,6 +314,7 @@ public class UserController extends SystemAction {
 		User userById = userService.getUserById(id);
 		//重置用户密码
 		userById.setPwd(Constants.DEFAULT_USER_PASSWORD);
+		userById.setIsChangePwd(null);
 		try{
 			boolean state = userService.updateByPrimaryKey(userById);
 			if(state){

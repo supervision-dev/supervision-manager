@@ -140,6 +140,9 @@ function fillDataList(req){
 		$('.tablelist tbody tr:odd').addClass('odd');
 }
 function search(pageNo){
+	if($("#hid_orgId").val() ==null || $("#hid_orgId").val() ==""){
+		$("#s_org").text("");
+	}
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
 		$("#showmessage").html("请选择起始日期！");
 		$("#confirm_tip").fadeIn(200);
