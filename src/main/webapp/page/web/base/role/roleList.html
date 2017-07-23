@@ -20,7 +20,7 @@ function search(pageNo){
 function getPermisssionList(){
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/role/getPermissionList.do",
+       url: "/supervision/system/role/getPermissionList.do?date="+new Date(),
        dataType:"json", //响应数据类型      
        async:false,
        success: function(req) {
@@ -200,7 +200,7 @@ function showAssignTip(rId,rName){
 function loadPermissionListByroleId(rId){
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/role/jsonloadPermitList.do?id="+rId, 
+       url: "/supervision/system/role/jsonloadPermitList.do?id="+rId+"&date="+new Date(), 
        dataType:"json", //响应数据类型       
        success: function(req) {
        		if(req != null && req.length >0){
@@ -239,7 +239,7 @@ function saveOrUpdateAssignPerAction(){
 	obj.permissionIds = perIds; 
 	 $.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/system/role/jsonSaveOrUpdateRolePermission.do", 
+       url: "/supervision/system/role/jsonSaveOrUpdateRolePermission.do?date="+new Date(), 
        dataType:"json", //响应数据类型       
        data:obj,
        success: function(req) {
