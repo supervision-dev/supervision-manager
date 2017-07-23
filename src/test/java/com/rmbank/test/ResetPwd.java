@@ -26,8 +26,9 @@ import com.rmbank.supervision.service.UserService;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration 
-@ContextConfiguration(locations = { "classpath:/spring/spring-*.xml"})
-@Transactional
+@ContextConfiguration(locations = {"classpath:/spring/spring-config-shiro.xml",
+		"classpath:/spring/spring-config.xml"})
+
 public class ResetPwd extends TestCase  {
 	
 	@Resource
@@ -37,9 +38,11 @@ public class ResetPwd extends TestCase  {
 	public void test() {
 		List<User> userAll = userService.getUserAll();
 		System.out.println("用户数为："+userAll.size());
-		/*for (User user : userAll) {
+		for (User user : userAll) {
 			userService.resetPwd(user);
-		}*/
+			System.out.println("Hello World！");
+		}
+		//System.out.println("Hello World！");
 	}
 
 }

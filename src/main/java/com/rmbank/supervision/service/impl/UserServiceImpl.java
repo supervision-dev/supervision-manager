@@ -380,14 +380,15 @@ public class UserServiceImpl implements UserService {
 	public void resetPwd(User user) {
 		// TODO Auto-generated method stub
 		try {
-			User u = EndecryptUtils.md5Password(user.getAccount(),user.getPwd());	
+			User u = EndecryptUtils.md5Password(user.getAccount(),"123456");	
 			user.setPwd(u.getPwd());
 			user.setSalt(u.getSalt());
 			user.setIsChangePwd(null);
 			user.setFailNumber(0);
 			user.setIsLocking(0);
 			user.setLogonTime(null);
-			userMapper.resetPwd(user);
+			//userMapper.resetPwd(user);
+			userMapper.updateByPrimaryKey(user);
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
