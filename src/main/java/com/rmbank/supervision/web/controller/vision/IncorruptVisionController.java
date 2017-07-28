@@ -117,8 +117,8 @@ public class IncorruptVisionController extends SystemAction {
 		try {
 			// 成都分行监察室和超级管理员加载所有的项目
 			if (userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
-					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
-						userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
+//					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
+//						userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 							userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
 								userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser
@@ -130,14 +130,13 @@ public class IncorruptVisionController extends SystemAction {
 				itemList = itemService.getItemListByType(item);
 				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountBySSJC(item);
-			} else {// 其他用户获取当前用户需要完成的项目
+			} else {
+				// 其他用户获取当前用户需要完成的项目
 				item.setSupervisionTypeId(3);
 				item.setPreparerOrgId(userOrg.getId());
 				item.setSupervisionOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION);
-				// 取满足要求的参数数据
 				itemList = itemService.getItemListByTypeAndLogOrg(item);
-				// 取满足要求的记录总数
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
 			
 				//如果是中支监察室需要加载当前中支下其他所有部门包括县支行的录入的工作事项
