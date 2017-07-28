@@ -1,6 +1,7 @@
 package com.rmbank.supervision.web.controller.base;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -71,8 +72,8 @@ public class UserController extends SystemAction {
     	DataListResult<User> dr = new DataListResult<User>();
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(user.getSearchName() != null && user.getSearchName() != ""){
-			String searchName =  new String(user.getSearchName().getBytes(
-					"iso8859-1"), "utf-8");
+			String searchName =  URLDecoder
+					.decode(user.getSearchName(), "utf-8");
 			user.setSearchName(searchName);
 		}
 		//设置页面初始值及页面大小

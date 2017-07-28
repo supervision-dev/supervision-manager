@@ -40,9 +40,8 @@ public class ResetPwd extends TestCase  {
 		System.out.println("用户数为："+userAll.size());
 		for (User user : userAll) {
 			userService.resetPwd(user);
-			System.out.println("Hello World！");
+			System.out.println("为id："+user.getId()+"的用户重置密码了！");
 		}
-		//System.out.println("Hello World！");
 	}
 
 }

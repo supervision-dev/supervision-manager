@@ -72,8 +72,9 @@ public class VisionTodoController  extends  SystemAction {
 			//成都分行和超级管理员获取所有项目
 			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
-							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
+//							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
+											userOrg.getOrgtype()==Constants.ORG_TYPE_12 ||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
@@ -81,6 +82,7 @@ public class VisionTodoController  extends  SystemAction {
 			}else {
 				//当前登录用户只加载自己完成的项目				
 				item.setSupervisionOrgId(userOrg.getId());
+				item.setPreparerOrgId(userOrg.getId());
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 				itemList = itemService.getItemListToListByLogOrg(item);	
 				
