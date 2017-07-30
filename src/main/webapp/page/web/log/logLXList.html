@@ -139,10 +139,23 @@ function fillDataList(req){
 	       $("#tb_logList").html(logHtml);
 		$('.tablelist tbody tr:odd').addClass('odd');
 }
-function search(pageNo){
-	if($("#hid_orgId").val() ==null || $("#hid_orgId").val() ==""){
-		$("#s_org").text("");
+
+function is_Ok(){
+	var evalue1 =$("#stTime").val();		
+	var evalue2 =$("#edTime").val();		
+	
+	var date1 = new Date(evalue1.replace(/\-/g, "\/")); 
+	var date2 = new Date(evalue2.replace(/\-/g, "\/"));
+	if(date1>date2){
+		$("#showmessage").html("截止时间不能小于起始时间！");
+		$("#confirm_tip").fadeIn(200);
+		return false;
 	}
+}
+function search(pageNo){
+	/* if($("#hid_orgId").val() ==null || $("#hid_orgId").val() ==""){
+		$("#s_org").text("");
+	} */
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
 		$("#showmessage").html("请选择起始日期！");
 		$("#confirm_tip").fadeIn(200);
@@ -161,15 +174,18 @@ function search(pageNo){
 	obj.orgName = $("#ipt_organname").val();
 	obj.moudleId = $("#slt_moudleId").val();
 	obj.pageNo = pageNo;
-	$.ajax({ 
-       type: "POST", //请求类型
-       data:obj,
-       url: "/supervision/system/log/logLXList.do",
-       dataType:"json", //响应数据类型    
-       success: function(req) {
-       		fillDataList(req);
-       }
-    }); 
+	if(is_Ok()!=false){
+		$.ajax({ 
+	       type: "POST", //请求类型
+	       data:obj,
+	       url: "/supervision/system/log/logLXList.do",
+	       dataType:"json", //响应数据类型    
+	       success: function(req) {
+	       		fillDataList(req);
+	       }
+	    }); 
+	}
+	
 }
 
 function showOrgTip(){
@@ -254,7 +270,7 @@ function clickOrganName(orgId,orgName){
 	$("#slt_orgName").text(orgName);
 	$("#ipt_organname").val(orgName);
 	$("#hid_orgId").val(orgId);
-	showPorgName(orgId);
+	//showPorgName(orgId);
 }
 
 function showPorgName(orgId){
@@ -344,8 +360,8 @@ function clearForm(){
     <div class="rightinfo">
     
     <div class="tools">
-    	<span style="float:left;line-height:22px;">监察类型：</span>
-		<select id="slt_moudleId" name="moudleId" style="height:22px;float:left;border:1px solid #C6C6C6;" >
+    	<span style="float:left;line-height:22px; display: none;">监察类型：</span>
+		<select id="slt_moudleId" name="moudleId" style=" display: none; height:22px;float:left;border:1px solid #C6C6C6;" >
 			<option value="">--选择监察类型进行查询--</option>
 			<option value="1">效能监察</option>
 			<option value="2">廉政监察</option>

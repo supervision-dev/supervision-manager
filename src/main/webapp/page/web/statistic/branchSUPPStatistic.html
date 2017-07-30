@@ -38,12 +38,19 @@ function loadStatisticData(){
 
 function search(){
 	var obj = {};
-	if($("#stTime").val()==null || $("#stTime").val()==""){  
-	} else{
+	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
+		$("#showmessage").html("请选择起始日期！");
+		$("#confirm_tip").fadeIn(200);
+		return;
+	}else{
 		obj.schBeginTime = $("#stTime").val();
 	}
-	if($("#edTime").val()==null || $("#edTime").val()==""){  
-	} else{
+	
+	if(($("#edTime").val()==null || $("#edTime").val()=="") && $("#stTime").val()!=null && $("#stTime").val()!=""){ 
+		$("#showmessage").html("请选择截止日期！");
+		$("#confirm_tip").fadeIn(200); 
+		return;
+	}else{
 		obj.schEndTime = $("#edTime").val();
 	}
 	if($.trim($("#sch_searchname").val()).length == 0 ||$.trim($("#sch_searchname").val()) == ""){

@@ -87,6 +87,14 @@ public class SysLogController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+		
+		if(!StringUtil.isEmpty(systemLog.getSchBeginTime()) && systemLog.getSchBeginTime().length()>9){ 
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime().substring(0,systemLog.getSchBeginTime().length() -9));
+		}
+		if(!StringUtil.isEmpty(systemLog.getSchEndTime()) && systemLog.getSchEndTime().length()>9){ 
+			systemLog.setSchEndTime(systemLog.getSchEndTime().substring(0,systemLog.getSchEndTime().length() -9));
+		}
+		 
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
 		dr.setData(systemLog);
@@ -142,6 +150,14 @@ public class SysLogController {
 			totalCount = logService.getLogCount(systemLog);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+		
+
+		if(!StringUtil.isEmpty(systemLog.getSchBeginTime()) && systemLog.getSchBeginTime().length()>9){ 
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime().substring(0,systemLog.getSchBeginTime().length() -9));
+		}
+		if(!StringUtil.isEmpty(systemLog.getSchEndTime()) && systemLog.getSchEndTime().length()>9){ 
+			systemLog.setSchEndTime(systemLog.getSchEndTime().substring(0,systemLog.getSchEndTime().length() -9));
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
@@ -200,6 +216,13 @@ public class SysLogController {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+
+		if(!StringUtil.isEmpty(systemLog.getSchBeginTime()) && systemLog.getSchBeginTime().length()>9){ 
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime().substring(0,systemLog.getSchBeginTime().length() -9));
+		}
+		if(!StringUtil.isEmpty(systemLog.getSchEndTime()) && systemLog.getSchEndTime().length()>9){ 
+			systemLog.setSchEndTime(systemLog.getSchEndTime().substring(0,systemLog.getSchEndTime().length() -9));
+		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);
 		dr.setData(systemLog);
@@ -256,6 +279,13 @@ public class SysLogController {
 			totalCount = logService.getLogCount(systemLog);
 		} catch (Exception ex) {
 			ex.printStackTrace();
+		}
+
+		if(!StringUtil.isEmpty(systemLog.getSchBeginTime()) && systemLog.getSchBeginTime().length()>9){ 
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime().substring(0,systemLog.getSchBeginTime().length() -9));
+		}
+		if(!StringUtil.isEmpty(systemLog.getSchEndTime()) && systemLog.getSchEndTime().length()>9){ 
+			systemLog.setSchEndTime(systemLog.getSchEndTime().substring(0,systemLog.getSchEndTime().length() -9));
 		}
 		// 通过request对象传值到前台
 		systemLog.setTotalCount(totalCount);

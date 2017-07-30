@@ -129,6 +129,19 @@ function fillDataList(req){
 	       $("#tb_logList").html(logHtml);
 		$('.tablelist tbody tr:odd').addClass('odd');
 }
+
+function is_Ok(){
+	var evalue1 =$("#stTime").val();		
+	var evalue2 =$("#edTime").val();		
+	
+	var date1 = new Date(evalue1.replace(/\-/g, "\/")); 
+	var date2 = new Date(evalue2.replace(/\-/g, "\/"));
+	if(date1>date2){
+		$("#showmessage").html("截止时间不能小于起始时间！");
+		$("#confirm_tip").fadeIn(200);
+		return false;
+	}
+}
 function search(pageNo){
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
 		$("#showmessage").html("请选择起始日期！");
@@ -145,15 +158,18 @@ function search(pageNo){
 	obj.schBeginTime = $("#stTime").val();
 	obj.schEndTime = $("#edTime").val();
 	obj.pageNo = pageNo;
-	$.ajax({ 
-       type: "POST", //请求类型
-       data:obj,
-       url: "/supervision/system/log/logJCList.do",
-       dataType:"json", //响应数据类型    
-       success: function(req) {
-       		fillDataList(req);
-       }
+	if(is_Ok()!=false){
+		$.ajax({ 
+	       type: "POST", //请求类型
+	       data:obj,
+	       url: "/supervision/system/log/logJCList.do",
+	       dataType:"json", //响应数据类型    
+	       success: function(req) {
+	       		fillDataList(req);
+	       }
     }); 
+	}
+	
 }
 </script>
 
