@@ -13,6 +13,7 @@ $(document).ready(function(){
 	});  
    getModelTreeList();
 }); 
+
 function getModelTreeList(){
 	$.ajax({ 
        type: "POST", //请求类型
@@ -55,6 +56,9 @@ function showItem(subId,tag){
 		$("#img_exp_"+subId).addClass("displaynone");
 	}  
 }
+var temp_Mid = 0;
+var temp_Level= 0;
+
 var constants_detail_id = 0;
 var constants_detail_name = "";
 var constants_detail_grade = "";
@@ -62,6 +66,14 @@ function loadFstDetail(mid,level){
 	var obj = {};
 	obj.gradeId = mid;
 	obj.level = level;
+	if(mid != null ){
+		temp_Mid = mid;
+		temp_Level = level; 
+	}else if(mid == null){
+		obj.gradeId =temp_Mid;
+		obj.level = temp_Level;
+	}
+	
 	$.ajax({ 
        type: "POST", //请求类型
        url: "/supervision/manage/casedetail/loadDetailByGradeIdAndLevel.do", 
@@ -69,7 +81,7 @@ function loadFstDetail(mid,level){
        data:obj,
        success: function(req) {
        		$("#tb_detailList").html("");
-       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\"  colspan=\"5\" >未获取到相关量化指标！</td></tr>";
+       		var tbHtml = "<tr><td colspan=\"5\" >未获取到相关量化指标！</td></tr>";
        		if(req != null && req.length >0){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){  
@@ -192,6 +204,7 @@ function deleteDetailAction(){
        success: function(req) {
        		 if(req.code == 0){   
        		 	getModelTreeList();
+       		 	loadFstDetail(temp_Mid,temp_Level);
 				$("#showmessage").html("量化指标删除成功！");
 				$("#confirm_tip").fadeIn(200);
 				constants_detail_id = 0;
