@@ -229,8 +229,13 @@ function returnPage(){
 		var sdate = date.getFullYear()+"-"+MM+"-"+date.getDate(); 
 		
 		var date1 = new Date(evalue.replace(/\-/g, "\/")); 
-		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
 		var date2 = new Date(sdate.replace(/\-/g, "\/")); 
+		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
+		
+		if(date3<date2){
+			layer.alert('立项时间不能小于当前时间！');	
+			return false;
+		}
 		if(date1<date2){
 			layer.alert('规定完成时间不能小于当前时间！');	
 			return false;
@@ -523,7 +528,7 @@ function saveSelectOrg(obj){
 			<tr>
        		<td width="12%" align="right">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案说明：</span></td>
        		<td colspan="3">
-       			<textarea rows="3" cols="5" style="width:80%;height:58px;" name="content"></textarea>			
+       			<textarea rows="3" cols="5" style="width:81%;height:58px;" name="content"></textarea>			
        		</td>
        	</tr>
        	<tr>

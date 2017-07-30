@@ -215,9 +215,14 @@ function returnPage(){
 		var MM = date.getMonth()+1;
 		var sdate = date.getFullYear()+"-"+MM+"-"+date.getDate(); 
 		
-		var date1 = new Date(evalue.replace(/\-/g, "\/")); 
+		var date1 = new Date(evalue.replace(/\-/g, "\/"));
+		var date2 = new Date(sdate.replace(/\-/g, "\/"));  
 		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
-		var date2 = new Date(sdate.replace(/\-/g, "\/")); 
+		
+		if(date3<date2){
+			layer.alert('立项时间不能小于当前时间！');	
+			return false;
+		}
 		if(date1<date2){
 			layer.alert('规定完成时间不能小于当前时间！');	
 			return false;
@@ -275,7 +280,7 @@ function loadOrganTree(){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tbl_orgList").html("");
-       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		var tbHtml = "<tr><td colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
        		if(req != null && req.length >0){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){

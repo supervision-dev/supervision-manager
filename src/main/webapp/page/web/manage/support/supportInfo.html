@@ -215,9 +215,14 @@ function returnPage(){
 		var MM = date.getMonth()+1;
 		var sdate = date.getFullYear()+"-"+MM+"-"+date.getDate(); 
 		
-		var date1 = new Date(evalue.replace(/\-/g, "\/")); 
-		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
+		var date1 = new Date(evalue.replace(/\-/g, "\/"));
 		var date2 = new Date(sdate.replace(/\-/g, "\/")); 
+		var date3 = new Date(stTme.replace(/\-/g, "\/")); 
+		 
+		if(date3<date2){
+			layer.alert('立项时间不能小于当前时间！');	
+			return false;
+		}
 		if(date1<date2){
 			layer.alert('规定完成时间不能小于当前时间！');	
 			return false;
@@ -275,13 +280,13 @@ function loadOrganTree(){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tbl_orgList").html("");
-       		var tbHtml = "<tr><td style=\"height:25px;width:18px;\" colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
+       		var tbHtml = "<tr><td colspan=\"2\">加载机构数据失败，请联系管理员~</td></tr>";
        		if(req != null && req.length >0){
     			tbHtml = "";
        			for(var i = 0; i<req.length;i++){
-       				if(req[i].childrenCount ==0){
+       				if(req[i].childrenCount ==0 && $.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\" type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img src=\"/supervision/source/images/unnext.png\" /></td><td>"+req[i].name+"</td></tr>";
-       				}else{
+       				}else if($.trim(req[i].name) != "行领导"){
        					tbHtml += "<tr><td style=\"width:10px;\"><input id=\"chk_org_"+req[i].id+"\"  type=\"checkbox\" value=\""+req[i].id+"\" doc=\""+req[i].name+"\"  /></td><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" class=\"displaynone\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
        					tbHtml += "<tr id=\"tr_"+req[i].id+"\" class=\"displaynone\"><td style=\"height:25px;\"></td><td colspan=\"2\">";
        					tbHtml += "<table id=\"tb_sub_"+req[i].id+"\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:100%;\">";
@@ -534,7 +539,7 @@ function saveSelectOrg(obj){
        		<td width="12%" align="right">被监察对象：</td>
        		<td colspan="3">
        			<input id="orgIds" type="hidden" name="supervisionOrgIds" ></div>
-       			<div class="simpletipinfo" style="margin-left:-10px;width:80%;">   
+       			<div class="simpletipinfo" style="margin-left:10px;width:80%;">   
 			       <div style="height:280px;width:99%;overflow-x:hidden;"> 
 		        		<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
 		        		<tr><td></td></tr>  
