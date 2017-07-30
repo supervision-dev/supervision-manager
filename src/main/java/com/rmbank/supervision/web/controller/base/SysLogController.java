@@ -61,12 +61,18 @@ public class SysLogController {
 //		if(systemLog.getMoudleId()==null){
 //			
 //		}
+		
 		if(StringUtil.isEmpty(systemLog.getSchBeginTime())){
 			systemLog.setSchBeginTime(null);
+		}else{
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime()+" 00:00:00");
 		}		
 		if(StringUtil.isEmpty(systemLog.getSchEndTime())){
 			systemLog.setSchEndTime(null);
+		}else{
+			systemLog.setSchEndTime(systemLog.getSchEndTime()+" 23:59:59");
 		}
+		
 		int totalCount = 0;
 		// 分页集合
 		List<SystemLog> logList = new ArrayList<SystemLog>();
@@ -111,12 +117,18 @@ public class SysLogController {
 			systemLog.setPageNo(1);
 		systemLog.setPageSize(Constants.DEFAULT_PAGE_SIZE);
 		systemLog.setMoudleId(Constants.LOG_TYPE_LXGL);
+		
 		if(StringUtil.isEmpty(systemLog.getSchBeginTime())){
 			systemLog.setSchBeginTime(null);
+		}else{
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime()+" 00:00:00");
 		}		
 		if(StringUtil.isEmpty(systemLog.getSchEndTime())){
 			systemLog.setSchEndTime(null);
+		}else{
+			systemLog.setSchEndTime(systemLog.getSchEndTime()+" 23:59:59");
 		}
+		
 		int totalCount = 0;
 		// 分页集合
 		List<SystemLog> logList = new ArrayList<SystemLog>();
@@ -162,12 +174,18 @@ public class SysLogController {
 			systemLog.setPageNo(1);
 		systemLog.setPageSize(Constants.DEFAULT_PAGE_SIZE);
 		systemLog.setMoudleId(Constants.LOG_TYPE_BASE_DATA);
+		
 		if(StringUtil.isEmpty(systemLog.getSchBeginTime())){
 			systemLog.setSchBeginTime(null);
+		}else{
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime()+" 00:00:00");
 		}		
 		if(StringUtil.isEmpty(systemLog.getSchEndTime())){
 			systemLog.setSchEndTime(null);
+		}else{
+			systemLog.setSchEndTime(systemLog.getSchEndTime()+" 23:59:59");
 		}
+		
 		int totalCount = 0;
 		// 分页集合
 		List<SystemLog> logList = new ArrayList<SystemLog>();
@@ -213,12 +231,18 @@ public class SysLogController {
 			systemLog.setPageNo(1);
 		systemLog.setPageSize(500);
 		systemLog.setMoudleId(Constants.LOG_TYPE_SYS);
+		
 		if(StringUtil.isEmpty(systemLog.getSchBeginTime())){
 			systemLog.setSchBeginTime(null);
+		}else{
+			systemLog.setSchBeginTime(systemLog.getSchBeginTime()+" 00:00:00");
 		}		
 		if(StringUtil.isEmpty(systemLog.getSchEndTime())){
 			systemLog.setSchEndTime(null);
+		}else{
+			systemLog.setSchEndTime(systemLog.getSchEndTime()+" 23:59:59");
 		}
+		
 		int totalCount = 0;
 		// 分页集合
 		List<SystemLog> logList = new ArrayList<SystemLog>();

@@ -49,7 +49,7 @@ function loadItemInfo(){
         		 		if(boj.fileList != null && boj.fileList.length >0){
         		 			var fHtml = "";
         		 			for(var i = 0; i< boj.fileList.length; i++){
-        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a>";
+        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a><br/>";
         		 			}
         		 			$("#td_fileList").html(fHtml);
         		 		}
@@ -61,7 +61,7 @@ function loadItemInfo(){
 	        		 		if(obj1.fileList != null && obj1.fileList.length >0){
 	        		 			var fHtml = "";
 	        		 			for(var i = 0; i< obj1.fileList.length; i++){
-	        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+obj1.fileList[i].filePath+"\',\'"+obj1.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ obj1.fileList[i].fileName+"</a>";
+	        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+obj1.fileList[i].filePath+"\',\'"+obj1.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ obj1.fileList[i].fileName+"</a><br/>";
 	        		 			}
 	        		 			$("#td_fileList1").html(fHtml);
 	        		 		}

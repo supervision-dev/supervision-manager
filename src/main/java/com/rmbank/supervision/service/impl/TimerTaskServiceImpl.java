@@ -42,7 +42,7 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 					item.setStatus(Constants.ITEM_STATUS_OVERLINE);
 					String modulename =  item.getSupervisionTypeId()==2?"效能监察":item.getSupervisionTypeId()==3?"廉政监察":"执法监察";
 					itemService.updateByPrimaryKeySelective(item);
-					logService.writeLog(Constants.LOG_TYPE_SYS, modulename+"项目"+item.getName() +"已经逾期"+betDay+"天，请及时处理完成", 4, 1, 15, "127.0.0.1");
+					//logService.writeLog(Constants.LOG_TYPE_SYS, modulename+"项目"+item.getName() +"已经逾期"+betDay+"天，请及时处理完成", 4, 1, 15, "127.0.0.1");
 				}
 			}
 		}
@@ -61,7 +61,7 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 					int betDay = DateUtil.getBetweenDays(nowDate, item.getEndTime());
 					item.setStatus(Constants.ITEM_STATUS_OVERLINE);
 					itemService.updateByPrimaryKeySelective(item);
-					logService.writeLog(Constants.LOG_TYPE_SYS, "综合管理项目"+item.getName() +"已经逾期"+betDay+"天，请及时处理完成", 4, 1, 15, "127.0.0.1");
+					//logService.writeLog(Constants.LOG_TYPE_SYS, "综合管理项目"+item.getName() +"已经逾期"+betDay+"天，请及时处理完成", 4, 1, 15, "127.0.0.1");
 				}
 			}
 		}
