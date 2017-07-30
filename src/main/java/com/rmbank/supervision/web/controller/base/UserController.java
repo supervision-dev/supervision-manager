@@ -383,12 +383,12 @@ public class UserController extends SystemAction {
 			List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 			//获取当前用户对应的第一个机构
 			Organ userOrg=userOrgList.get(0);
-			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){
+			if(userOrg.getOrgtype() == Constants.ORG_TYPE_4){//分行监察室
 				organ.setPid(0);
-			}else if(userOrg.getOrgtype() == Constants.ORG_TYPE_6){
+			}else if(userOrg.getOrgtype() == Constants.ORG_TYPE_6){//中支机构 
 				organ.setPid(userOrg.getId());
 				thisOrg = organService.selectByPrimaryKey(userOrg.getId());
-			}else{
+			}else{//中支监察室 
 				organ.setPid(userOrg.getPid());
 			}
 		} 

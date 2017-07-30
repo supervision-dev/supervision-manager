@@ -7,7 +7,8 @@
 <link href="/supervision/source/jqueryui/themes/base/jquery-ui.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 	<script src="/supervision/source/laydate/laydate.js"></script>
-
+<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+<script src="/supervision/source/js/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
 	loadStatisticData();
@@ -53,16 +54,29 @@ function search(){
 	}else{
 		obj.supervisionOrgId = $.trim($("#hid_orgId").val());
 	}
+	if(is_Ok()!=false){
+		$.ajax({ 
+	       type: "POST", //请求类型
+	       data:obj,
+	       url: "/supervision/statistic/branch/branchSUPPStatistic.do", 
+	       dataType:"json", //响应数据类型    
+	       success: function(req) { 
+	       		fillDataList(req);
+	       }
+	    }); 
+	}
 	
-	$.ajax({ 
-       type: "POST", //请求类型
-       data:obj,
-       url: "/supervision/statistic/branch/branchSUPPStatistic.do", 
-       dataType:"json", //响应数据类型    
-       success: function(req) { 
-       		fillDataList(req);
-       }
-    }); 
+}
+function is_Ok(){
+	var evalue1 =$("#stTime").val();		
+	var evalue2 =$("#edTime").val();		
+	
+	var date1 = new Date(evalue1.replace(/\-/g, "\/")); 
+	var date2 = new Date(evalue2.replace(/\-/g, "\/"));
+	if(date1>date2){
+		layer.alert('截止时间不能小于起始时间！');	
+		return false;
+	}
 }
 function exportExcel(){
 	/* $.ajax({ 
