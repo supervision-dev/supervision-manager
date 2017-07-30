@@ -66,7 +66,7 @@ public class ExportExcelController extends SystemAction{
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);		
 		String title ="中国人民银行成都分行电子监察平台效能监察项目统计汇总表";
-		if(userOrg.getOrgtype() == 42){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -74,8 +74,9 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
-			title+="（"+userOrg.getName()+"）";
-			eevo.setOrgName(userOrg.getName()+"监察室");
+			Organ Porgan = organService.selectByPrimaryKey(userOrg.getPid());
+			title+="（"+Porgan.getName()+"）";
+			eevo.setOrgName(userOrg.getName());
 		}else{
 			title+="（全辖）";
 			eevo.setOrgName(userOrg.getName());
@@ -166,7 +167,7 @@ public class ExportExcelController extends SystemAction{
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		String title ="中国人民银行成都分行电子监察平台廉政监察项目统计汇总表";
-		if(userOrg.getOrgtype() == 42){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -174,8 +175,9 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
-			title+="（"+userOrg.getName()+"）";
-			eevo.setOrgName(userOrg.getName()+"监察室");
+			Organ Porgan = organService.selectByPrimaryKey(userOrg.getPid());
+			title+="（"+Porgan.getName()+"）";
+			eevo.setOrgName(userOrg.getName());
 		}else{
 			title+="（全辖）";
 			eevo.setOrgName(userOrg.getName());
@@ -264,7 +266,7 @@ public class ExportExcelController extends SystemAction{
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		String title ="中国人民银行成都分行电子监察平台执法监察项目统计汇总表";
-		if(userOrg.getOrgtype() == 42){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -272,8 +274,9 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
-			title+="（"+userOrg.getName()+"）";
-			eevo.setOrgName(userOrg.getName()+"监察室");
+			Organ Porgan = organService.selectByPrimaryKey(userOrg.getPid());
+			title+="（"+Porgan.getName()+"）";
+			eevo.setOrgName(userOrg.getName());
 		}else{
 			title+="（全辖）";
 			eevo.setOrgName(userOrg.getName());
@@ -438,7 +441,7 @@ public class ExportExcelController extends SystemAction{
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
-		if(userOrg.getOrgtype() == 42){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -446,7 +449,8 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
-			title+="("+userOrg.getName()+")";
+			Organ Porgan = organService.selectByPrimaryKey(userOrg.getPid());
+			title+="（"+Porgan.getName()+"）";
 		}
 		
 		int totalCount = 0;
@@ -531,7 +535,7 @@ public class ExportExcelController extends SystemAction{
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		String title ="中国人民银行成都分行电子监察平台综合管理项目统计汇总表（中支立项中支完成）";
-		if(userOrg.getOrgtype() == 42){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getId());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -539,8 +543,9 @@ public class ExportExcelController extends SystemAction{
 			}
 			orgIds.add(userOrg.getId());
 			item.setOrgIds(orgIds);
-			title+="（"+userOrg.getName()+"）";
-			eevo.setOrgName(userOrg.getName()+"监察室");
+			Organ Porgan = organService.selectByPrimaryKey(userOrg.getPid());
+			title+="（"+Porgan.getName()+"）";
+			eevo.setOrgName(userOrg.getName());
 		}else{
 			title+="（全辖）";
 			eevo.setOrgName(userOrg.getName());

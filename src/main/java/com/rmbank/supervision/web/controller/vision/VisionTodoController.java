@@ -71,7 +71,7 @@ public class VisionTodoController  extends  SystemAction {
 		try {
 			//成都分行和超级管理员获取所有项目
 			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
-					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
+//					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 //							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
 											userOrg.getOrgtype()==Constants.ORG_TYPE_12 ||
