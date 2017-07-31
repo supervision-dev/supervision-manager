@@ -80,4 +80,6 @@ public interface UserMapper {
 	int updateByAccount(User user);
 	
 	List<User> getUserByisLocking(User user);
+
+	User getUserBySearchName(User user);
 }

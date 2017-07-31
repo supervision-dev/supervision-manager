@@ -57,4 +57,6 @@ public interface UserService {
 	void resetPwd(User user); 
 	
 	List<User> getUserAll();
+
+	User getUserBySearchName(User user);
 }

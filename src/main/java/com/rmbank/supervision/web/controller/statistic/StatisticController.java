@@ -64,7 +64,7 @@ public class StatisticController extends SystemAction {
 		List<Integer> orgIds=new ArrayList<Integer>();
 		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
-			orgIds =new ArrayList<Integer>();
+			//orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
 				orgIds.add(organ.getId());
 			}
@@ -152,9 +152,9 @@ public class StatisticController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		List<Integer> orgIds=new ArrayList<Integer>();
 		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
-			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
 				orgIds.add(organ.getId());
 			}
@@ -184,7 +184,9 @@ public class StatisticController extends SystemAction {
 		}
 		item.setSupervisionTypeId(Constants.SUPERVISION_TYPE_ID_LZ); 
 		 try{
-			 statisticModel = statisticService.loadTotalCount(new Item());
+			 Item newItem=new Item();
+			 newItem.setOrgIds(orgIds);
+			 statisticModel = statisticService.loadTotalCount(newItem);
 			 totalList = statisticService.loadTotalStatistisList(item);  
 			 for(StatisticModel sm : totalList){
 				 totalCount = totalCount + sm.getTotalCount(); 
@@ -236,9 +238,10 @@ public class StatisticController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
+		List<Integer> orgIds =new ArrayList<Integer>();
 		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
-			List<Integer> orgIds =new ArrayList<Integer>();
+			
 			for (Organ organ : organByPId) {
 				orgIds.add(organ.getId());
 			}
@@ -268,7 +271,9 @@ public class StatisticController extends SystemAction {
 		}
 		item.setSupervisionTypeId(Constants.SUPERVISION_TYPE_ID_ZF); 
 		 try{
-			 statisticModel = statisticService.loadTotalCount(new Item());
+			 Item newItem=new Item();
+			 newItem.setOrgIds(orgIds);
+			 statisticModel = statisticService.loadTotalCount(newItem);
 			 totalList = statisticService.loadTotalStatistisList(item);  
 			 for(StatisticModel sm : totalList){
 				 totalCount = totalCount + sm.getTotalCount(); 

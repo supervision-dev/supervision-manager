@@ -25,6 +25,7 @@ function getModelTreeList(){
        		var mHmtl = "<option value=\"\">--请选择所属模型--</option>";
        		if(req != null && req.length >0){
     			tbHtml = "";
+    			//mHmtl = "";
        			for(var i = 0; i<req.length;i++){  
    					tbHtml += "<tr><td style=\"height:25px;width:18px;\"><img id=\"img_coll_"+req[i].id+"\" src=\"/supervision/source/images/next.gif\"  class=\"displaynone\" onclick=\"showItem("+req[i].id+",0)\"/><img id=\"img_exp_"+req[i].id+"\" src=\"/supervision/source/images/down.png\" onclick=\"showItem("+req[i].id+",1)\" /></td><td>"+req[i].name+"</td></tr>";
    					tbHtml += "<tr id=\"tr_"+req[i].id+"\" ><td style=\"height:25px;\"></td><td>";

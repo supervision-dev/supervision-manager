@@ -229,11 +229,8 @@
     select <include refid="Base_Column_List" />			
 	from t_user 
 	where 1=1	
-	<if test="name != null">
-		and name = #{name,jdbcType=VARCHAR} 
-	</if> 
 	<if test="account != null">
-		or account = #{account,jdbcType=VARCHAR} 
+		and account = #{account,jdbcType=VARCHAR} 
 	</if> 
   </select>
   <delete id="deleteUserById" parameterType="java.lang.Integer">
@@ -301,8 +298,25 @@
       logonTime = #{logonTime,jdbcType=TIMESTAMP}
       WHERE id=#{id,jdbcType=INTEGER}
   </update>
+  <select id="getUserBySearchName"  parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
+  	select u.*,(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id`
+	WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id`
+	WHERE ur.`user_id` = u.id) AS roleName
+	from t_user u
+  	<if test="searchName != null and searchName != ''">
+	 WHERE u.id=#{id,jdbcType=INTEGER} 
+	 	and (
+			u.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			or u.account like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+  </select>
   
   <select id="getUserAll" resultMap="BaseResultMap">
   	SELECT * FROM t_user
   </select>
+  
 </mapper>

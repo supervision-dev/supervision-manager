@@ -401,4 +401,10 @@ public class UserServiceImpl implements UserService {
 		return userMapper.getUserAll();
 	}
 
+	@Override
+	public User getUserBySearchName(User user) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserBySearchName(user);
+	}
+
 }

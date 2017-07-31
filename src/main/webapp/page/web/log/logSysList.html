@@ -68,13 +68,13 @@ function fillDataList(req){
 				    	logHtml +="<td>"+req.datalist[i].orgName+"</td>";
 				    }
 				    //logHtml +="<td>"+req.datalist[i].orgName+"</td>";
-				    if(req.datalist[i].operName.length >13){
+				    /* if(req.datalist[i].operName.length>13){
 				    	var names = req.datalist[i].operName.substring(0,12)+"…"
 				    	logHtml +="<td title=\""+req.datalist[i].operName+"\">"+names+"</td>";
 				    }else{
 				    	logHtml +="<td>"+req.datalist[i].operName+"</td>";
-				    }
-				    //logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
+				    } */
+				    logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
 				    logHtml +="<td>"+req.datalist[i].ip+"</td>"; 
 			        logHtml +="</tr>";
 	       		}

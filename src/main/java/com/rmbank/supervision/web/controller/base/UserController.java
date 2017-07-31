@@ -110,11 +110,28 @@ public class UserController extends SystemAction {
 				if(userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_6){
 					Organ organ = userOrgList.get(0);
 					List<Organ> organByPId = organService.getOrganByPId(organ.getId());
-					for (Organ organ2 : organByPId) {
-						List<User> userListByOrgId = userService.getUserListByOrgId(organ2.getId());
-						userList.addAll(userListByOrgId);
-						totalCount+=userListByOrgId.size();
+					if(user.getSearchName() != null && user.getSearchName() != ""){
+						List<User> searchUserList = new ArrayList<User>();
+						for (Organ organ2 : organByPId) {
+								List<User> userListByOrgId = userService.getUserListByOrgId(organ2.getId());
+								searchUserList.addAll(userListByOrgId);
+						}
+						for (User user2 : searchUserList) {
+							user2.setSearchName(user.getSearchName());
+							User searchUser= userService.getUserBySearchName(user2);
+							if(searchUser!=null){
+								userList.add(searchUser);
+							}
+						}
+						totalCount+=userList.size();
+					}else {
+						for (Organ organ2 : organByPId) {
+							List<User> userListByOrgId = userService.getUserListByOrgId(organ2.getId());
+							userList.addAll(userListByOrgId);
+							totalCount+=userListByOrgId.size();
+						}
 					}
+					
 				}
 				//获取当前登录用户所属的机构ID
 				List<Integer> userOrgIds=userService.getUserOrgIdsByUserId(lgUser.getId());
@@ -242,7 +259,7 @@ public class UserController extends SystemAction {
 			}
 			//根据id去数据库匹配，如编辑，则可以直接保存；如新增，则需匹配该账号是否重复
 			List<User> lc = userService.getExistUser(u);
-			if (/*lc.size() == 0*/true) {  
+			if (lc.size() == 0) {  
 				State = userService.saveOrUpdateUser(user,roleIds,orgIds,postId);
 				if(State){
 					User loginUser = this.getLoginUser();
@@ -255,7 +272,7 @@ public class UserController extends SystemAction {
 					return js;
 				}
 			} else {
-				js.setMessage("该用户已存在!");
+				js.setMessage("该用户账号已存在!");
 				return js;
 			} 
 		}catch(Exception ex){
