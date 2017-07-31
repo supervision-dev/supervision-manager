@@ -208,6 +208,7 @@ function deleteDetailAction(){
        		 	loadFstDetail(temp_Mid,temp_Level);
 				$("#showmessage").html("量化指标删除成功！");
 				$("#confirm_tip").fadeIn(200);
+				$(".DIS_SET").fadeOut(100);
 				constants_detail_id = 0;
 			 }
 			else{
@@ -477,7 +478,7 @@ function clearForm(){
 	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
 	        				<input type="text" class="dfinput" id="ipt_fst_name" /></td></tr> 
 	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
-	        				<select id="slt_modle"  class="dfinput" >
+	        				<select id="slt_modle"  class="dfinput DIS_SET" >
 							</select></td></tr> 
 						<tr><td style="height:30px;width:80px;"><span>指标权重：</span></td><td>
 	        				<input type="text" class="dfinput" id="ipt_grade_fst"  /></td></tr> 
@@ -502,7 +503,7 @@ function clearForm(){
 	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
 	        				<input type="text" class="dfinput" id="ipt_scd_name"  /></td></tr> 
 	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
-	        				<select id="slt_modle_scd"  class="dfinput" onchange="loadlevel('slt_modle_scd','slt_modle_scd_level1',0);" >
+	        				<select id="slt_modle_scd"  class="dfinput DIS_SET" onchange="loadlevel('slt_modle_scd','slt_modle_scd_level1',0);" >
 							</select></td></tr> 
 	        			<tr><td style="height:30px;width:80px;"><span>所属一级指标：</span></td><td>
 	        				<select id="slt_modle_scd_level1"  class="dfinput" >
@@ -532,7 +533,7 @@ function clearForm(){
 	        			<tr><td style="height:30px;width:80px;"><span>指标名称：</span></td><td>
 	        				<input type="text" class="dfinput" id="ipt_thd_name" /></td></tr> 
 	        			<tr><td style="height:30px;width:80px;"><span>所属模型：</span></td><td>
-	        				<select id="slt_modle_thd"  class="dfinput"  onchange="loadlevel('slt_modle_thd','slt_detal_level1',0);">
+	        				<select id="slt_modle_thd"  class="dfinput DIS_SET"  onchange="loadlevel('slt_modle_thd','slt_detal_level1',0);">
 							</select></td></tr> 
 	        			<tr><td style="height:30px;width:80px;"><span>所属一级指标：</span></td><td>
 	        				<select id="slt_detal_level1"  class="dfinput"  onchange="loadlevelT(this,'slt_detal_level2');" >
