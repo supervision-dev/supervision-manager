@@ -14,6 +14,13 @@ $(document).ready(function(){
    getModelTreeList();
 }); 
 
+function showControl(){
+     $("#is_iframe").remove();
+     $("#confirm_tip").fadeOut(100);
+}
+function addifm(){
+	$("#confirm_tip").prepend("<iframe id=\"is_iframe\" style=\"position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;\"></iframe>");
+}
 function getModelTreeList(){
 	$.ajax({ 
        type: "POST", //请求类型
@@ -181,7 +188,9 @@ function showAlertTip(type){
 	if(type == 'edit'){
 		if(constants_detail_id == 0){
 			$("#showmessage").html("请选择要编辑的指标！");
+			addifm();
 			$("#confirm_tip").fadeIn(200);
+			setTimeout("showControl()",3000);
 		}else{
 			$("#edit_tip").fadeIn(200);  
 			$("#ipt_edit_name").val(constants_detail_name);
@@ -190,7 +199,9 @@ function showAlertTip(type){
 	}else if(type == "delete"){
 		if(constants_detail_id == 0){
 			$("#showmessage").html("请选择要删除的指标！");
+			addifm();
 			$("#confirm_tip").fadeIn(200);
+			setTimeout("showControl()",3000);
 		}else{
 			$("#delete_confirm_tip").fadeIn(200);
 		}
@@ -204,16 +215,22 @@ function deleteDetailAction(){
        dataType:"json", //响应数据类型      
        success: function(req) {
        		 if(req.code == 0){   
-       		 	getModelTreeList();
-       		 	loadFstDetail(temp_Mid,temp_Level);
+       		 	
 				$("#showmessage").html("量化指标删除成功！");
+				$("#confirm_tip").prepend("<iframe id=\"is_iframe\" style=\"position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;\"></iframe>");
 				$("#confirm_tip").fadeIn(200);
-				$(".DIS_SET").fadeOut(100);
+				setTimeout("showControl()",3000);
 				constants_detail_id = 0;
+				//getModelTreeList();
+				clearForm();
+       		 	loadFstDetail(temp_Mid,temp_Level);
 			 }
 			else{
 				$("#showmessage").html(req.message);
+				addifm();
 				$("#confirm_tip").fadeIn(200);
+				setTimeout("showControl()",3000);
+
 			}
        }
     });
@@ -224,31 +241,41 @@ function saveOrUpdateFstDetail(){
 	var name = $("#ipt_fst_name").val();
 	if(name == null || name == ""){
 		$("#showmessage").html("请输入一级指标名称！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.name = name;
 	var gradeId = $("#slt_modle").val();
 	if(gradeId == null || gradeId == ""){
 		$("#showmessage").html("请选择该一级指标所属模型！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.gradeId = gradeId;
 	var grade = $("#ipt_grade_fst").val();
 	if(grade == null || grade == ""){
 		$("#showmessage").html("请输入该一级指标权重值，只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(isNaN(grade)){
 		$("#showmessage").html("指标权重只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(parseInt(grade) > 100 ){
 		$("#showmessage").html("单项指标权重不能超过100 ！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.grade = grade;
@@ -262,38 +289,50 @@ function saveOrUpdateScdDetail(){
 	var name = $("#ipt_scd_name").val();
 	if(name == null || name == ""){
 		$("#showmessage").html("请输入二级指标名称！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.name = name;
 	var gradeId = $("#slt_modle_scd").val();
 	if(gradeId == null || gradeId == ""){
 		$("#showmessage").html("请选择该指标所属模型！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.gradeId = gradeId;
 	var pid = $("#slt_modle_scd_level1").val();
 	if(pid == null || pid == ""){
 		$("#showmessage").html("请选择该二级指标所属一级指标！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.pid = pid;
 	var grade = $("#ipt_grade_scd").val();
 	if(grade == null || grade == ""){
 		$("#showmessage").html("请输入该二级指标权重值，只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(isNaN(grade)){
 		$("#showmessage").html("指标权重只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(parseInt(grade) > 100 ){
 		$("#showmessage").html("单项指标权重不能超过100 ！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.grade = grade; 
@@ -306,44 +345,58 @@ function saveOrUpdateThdDetail(){
 	var name = $("#ipt_thd_name").val();
 	if(name == null || name == ""){
 		$("#showmessage").html("请输入三级指标名称！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.name = name;
 	var gradeId = $("#slt_modle_thd").val();
 	if(gradeId == null || gradeId == ""){
 		$("#showmessage").html("请选择该指标所属模型！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.gradeId = gradeId;
 	var fst = $("#slt_detal_level1").val();
 	if(fst == null || fst == ""){
 		$("#showmessage").html("请选择该三级指标所属一级指标！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	var scd = $("#slt_detal_level2").val();
 	if(scd == null || scd == ""){
 		$("#showmessage").html("请选择该三级指标所属二级指标！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.pid = scd;
 	var grade = $("#ipt_grade_thd").val();
 	if(grade == null || grade == ""){
 		$("#showmessage").html("请输入该三级指标标准分，只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(isNaN(grade)){
 		$("#showmessage").html("指标标准分只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(parseInt(grade) > 100 ){
 		$("#showmessage").html("单项指标标准分不能超过100 ！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	obj.grade = grade; 
@@ -355,23 +408,31 @@ function saveOrUpdateEditDetail(){
 	var gradeName = $("#ipt_edit_name").val();
 	if(gradeName == null || gradeName == ""){
 		$("#showmessage").html("请输入指标名称！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	var grade = $("#ipt_grade_edit").val();
 	if(grade == null || grade == ""){
 		$("#showmessage").html("请输入该指标标准分，只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(isNaN(grade)){
 		$("#showmessage").html("指标标准分只能输入数字！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	}
 	if(parseInt(grade) > 100 ){
 		$("#showmessage").html("单项指标标准分不能超过100 ！");
+		addifm();
 		$("#confirm_tip").fadeIn(200);
+		setTimeout("showControl()",3000);
 		return;
 	} 
 	obj.id = constants_detail_id;
@@ -399,12 +460,16 @@ function saveOrUpdateAction(obj,lev){
 				}
        		 	loadFstDetail(obj.gradeId,lev);
 				$("#showmessage").html("量化指标保存成功！");
+				addifm();
 				$("#confirm_tip").fadeIn(200);
+				setTimeout("showControl()",3000);
 				constants_detail_id = 0;
 			 }
 			else{
 				$("#showmessage").html(req.message);
+				addifm();
 				$("#confirm_tip").fadeIn(200);
+				setTimeout("showControl()",3000);
 			}
        }
     });
@@ -580,6 +645,8 @@ function clearForm(){
         </div> 
     </div> 
     <div class="tip" id="confirm_tip">
+    	<!-- <iframe id="is_iframe" style="position:absolute;width:100%;height:100%;_filter:alpha(opacity=0);opacity=0;border-style:none;"></iframe> --> 
+   		
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
         
 	    <div class="tipinfo">
@@ -590,7 +657,7 @@ function clearForm(){
       	</div>
         
         <div class="tipbtn">
-        	<input type="button" class="sure" value="确定" /> 
+        	<!-- <input type="button" class="sure" value="确定" />  -->
         </div> 
     </div> 
     <div class="tip" id="delete_confirm_tip">
@@ -599,7 +666,7 @@ function clearForm(){
 	    <div class="tipinfo">
 	        <span><img src="/supervision/source/images/ticon1.png" /></span>
 	        <div class="tipright">
-	        	<p id="showmessage">确认删除当前选择指标？</p> 
+	        	<p>确认删除当前选择指标？</p> 
 	        	<cite>如果确认删除，请点击确定按钮 ，否则请点取消。</cite>
 	        </div> 
       	</div>
