@@ -242,7 +242,7 @@ public class CasemanageController extends SystemAction {
 					
 					User loginUser = this.getLoginUser();
 					String ip = IpUtil.getIpAddress(request);		
-					logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，执行修改量化模型“"+gradeScheme.getName()+"”的信息", 2, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，执行修改量化模型“"+gradeScheme.getName()+"”的信息", 2, loginUser.getId(), loginUser.getUserOrgID(), ip);
 					js.setCode(new Integer(0));
 					js.setMessage("保存成功!");
 					return js;
@@ -258,7 +258,7 @@ public class CasemanageController extends SystemAction {
 				if (state) {				
 					User loginUser = this.getLoginUser();
 					String ip = IpUtil.getIpAddress(request);		
-					logService.writeLog(Constants.LOG_TYPE_BASE_DATA, "用户："+loginUser.getName()+"，新增了“"+gradeScheme.getName()+"”量化模型", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
+					logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，新增了“"+gradeScheme.getName()+"”量化模型", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
 					js.setCode(new Integer(0));
 					js.setMessage("保存成功!");
 					return js;
@@ -268,7 +268,7 @@ public class CasemanageController extends SystemAction {
 			}  
 		} catch (Exception ex) {
 			ex.printStackTrace();
-			js.setMessage("机构信息保存出现异常!");
+			js.setMessage("量化模型信息保存出现异常!");
 		}
 		return js;
 	}
