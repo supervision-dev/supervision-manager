@@ -197,14 +197,14 @@ function loadItemInfo(){
 		        		 			}
 	        		 			}	        		 			
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">资料说明：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "</td></tr><tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
 	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传资料时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 33){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室监察意见：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察室整改意见：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].changeContent+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].changeContent+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
@@ -215,7 +215,7 @@ function loadItemInfo(){
 	        		 			phtml += "<td colspan=\"3\"  title=\"分行监察给出监察意见时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 34){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况说明：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">整改情况附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
@@ -227,13 +227,13 @@ function loadItemInfo(){
         		 			}else if(req.resultItemProcess[i].contentTypeId == 91){
         		 				if(isFirst_tag){
         		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪意见：</td>";
-		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">提交时间：</td>";
 		        		 			phtml += "<td colspan=\"3\"  title=\"分行监察室对项目监察是否跟踪时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
 		        		 			isFirst_tag = false;
         		 				}else{
         		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察意见：</td>";
-		        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+		        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
 		        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 		        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
@@ -245,7 +245,7 @@ function loadItemInfo(){
         		 				}
         		 			}else if(req.resultItemProcess[i].contentTypeId == 35){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
@@ -256,7 +256,7 @@ function loadItemInfo(){
 	        		 			phtml += "<td colspan=\"3\"  title=\"被监察对象上传跟踪整改情况时间\">"+formatTime(req.resultItemProcess[i].preparerTime,true)+"</td></tr>";
         		 			}else if(req.resultItemProcess[i].contentTypeId == 93){
         		 				phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论：</td>";
-	        		 			phtml += "<td colspan=\"3\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
+	        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
 	        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察结论附件：</td><td colspan=\"3\">";
 	        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 	        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
@@ -434,7 +434,7 @@ function returnPage(){
     <table class="itemTable" id="tbl_viewTable" >
     	<tr>
        		<td width="15%" align="right" >项目名称：</td> 
-       		<td colspan="3">
+       		<td colspan="3" style="word-break:break-all;">
        			<label id="lbl_name"></label> 	
        		</td>
        	</tr>
@@ -461,7 +461,7 @@ function returnPage(){
        	</tr>
        	<tr>
        		<td width="12%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案说明：</span></td>
-       		<td colspan="3">
+       		<td colspan="3" style="word-break:break-all;">
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
@@ -476,7 +476,7 @@ function returnPage(){
        	<tr>
        		<td width="15%" align="right" style="height:35px;">监察室意见：</td>
        		<td colspan="3">
-       			 <textarea id="content_opinion" rows="3" cols="5" style="width:81%;height:38px;" ></textarea>	
+       			 <textarea id="content_opinion" rows="3" cols="5" style="width:81%;height:38px;word-break:break-all;"></textarea>	
        		</td>
        	</tr> 
     	<tr>
@@ -495,7 +495,7 @@ function returnPage(){
        	<tr id="tr_ssss" class="displaynone">
        		<td width="12%" align="right" style="height:35px;">整改意见：</td>
        		<td colspan="3">
-       			 <textarea id="content_change_opinion" rows="3" cols="5" style="width:81%;height:38px;" ></textarea>	
+       			 <textarea id="content_change_opinion" rows="3" cols="5" style="width:81%;height:38px;word-break:break-all;" ></textarea>	
        		</td>
        	</tr> 
        	<tr>
