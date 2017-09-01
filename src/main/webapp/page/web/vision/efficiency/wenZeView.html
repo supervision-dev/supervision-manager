@@ -224,7 +224,12 @@ function returnPage(){
 		});
 		
 	}
-
+	
+function downLoadFile(path,name){
+	var filePath = encodeURI(encodeURI(path));
+	var fileName = encodeURI(encodeURI(name));
+	window.open("/supervision/system/upload/downLoadFile.do?filePath="+filePath+"&fileName="+fileName);
+}
 
 function getDataList(pageNo){
 	var obj = {};
