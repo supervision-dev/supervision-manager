@@ -62,7 +62,8 @@ public class StatisticController extends SystemAction {
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		List<Integer> orgIds=new ArrayList<Integer>();
-		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ||
+				userOrg.getOrgtype() == Constants.ORG_TYPE_12){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 			//orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -153,7 +154,8 @@ public class StatisticController extends SystemAction {
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		List<Integer> orgIds=new ArrayList<Integer>();
-		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ||
+				userOrg.getOrgtype() == Constants.ORG_TYPE_12){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 			for (Organ organ : organByPId) {
 				orgIds.add(organ.getId());
@@ -239,7 +241,8 @@ public class StatisticController extends SystemAction {
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
 		List<Integer> orgIds =new ArrayList<Integer>();
-		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ||
+				userOrg.getOrgtype() == Constants.ORG_TYPE_12){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 			
 			for (Organ organ : organByPId) {
@@ -391,7 +394,8 @@ public class StatisticController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
-		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ||
+				userOrg.getOrgtype() == Constants.ORG_TYPE_12){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
@@ -471,7 +475,8 @@ public class StatisticController extends SystemAction {
 		User loginUser = this.getLoginUser();
 		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
 		Organ userOrg=userOrgList.get(0);
-		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7){
+		if(userOrg.getOrgtype() == Constants.ORG_TYPE_7 ||
+				userOrg.getOrgtype() == Constants.ORG_TYPE_12){
 			List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 			List<Integer> orgIds =new ArrayList<Integer>();
 			for (Organ organ : organByPId) {
