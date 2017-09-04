@@ -120,7 +120,7 @@ public class IncorruptVisionController extends SystemAction {
 //					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 //						userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 							userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
-								userOrg.getOrgtype()==Constants.ORG_TYPE_12||
+//								userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser
 							.getAccount())) {
 				// 取满足要求的参数数据
@@ -139,10 +139,11 @@ public class IncorruptVisionController extends SystemAction {
 				itemList = itemService.getItemListByTypeAndLogOrg(item);
 				totalCount = itemService.getItemCountByLogOrgSSJC(item);
 			
-				//如果是中支监察室需要加载当前中支下其他所有部门包括县支行的录入的工作事项
+				//如果是中支监察室或中支领导需要加载当前中支下其他所有部门包括县支行的录入的工作事项
 				List<Item> BMItem = new ArrayList<Item>();
 				int BMItemCount = 0;
-				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7 ||
+						userOrg.getOrgtype()==Constants.ORG_TYPE_12){
 					//获取和当前登录的中支监察室在同一个中支下的所有部门。
 					List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 					for (Organ organ : organByPId) {

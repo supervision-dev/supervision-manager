@@ -119,7 +119,7 @@ public class EfficiencyVisionController extends SystemAction {
 					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 //							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
-											userOrg.getOrgtype()==Constants.ORG_TYPE_12||
+//											userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setSupervisionTypeId(2); //2代表效能监察
@@ -162,6 +162,26 @@ public class EfficiencyVisionController extends SystemAction {
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
 					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+				}else if(userOrg.getOrgtype()== Constants.ORG_TYPE_12){
+					//如果是中支行领导则加载该中支下办公室和中支监察室录入的事项
+					
+					//获取当前中支行领导所在中支的办公室的机构信息
+					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
+					//获取当前中支行领导所在中支的中支监察室的机构信息
+					Organ ZZJCS = organService.getOrganByPidAndName(userOrg.getPid(), "中支监察室");
+					
+					item.setSupervisionTypeId(2); //2代表效能监察
+					item.setPreparerOrgId(BGS.getId());
+					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+					itemList = itemService.getItemListByTypeAndLogOrg(item);
+					totalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+					
+					item.setSupervisionTypeId(2); //2代表效能监察
+					item.setPreparerOrgId(ZZJCS.getId());
+					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
+					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+					
 				}else{
 					//普通机构用户只加载自己完成的项目
 					item.setSupervisionTypeId(2); //2代表效能监察

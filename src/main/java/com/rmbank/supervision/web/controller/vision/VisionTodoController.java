@@ -74,7 +74,7 @@ public class VisionTodoController  extends  SystemAction {
 //					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 //							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
-											userOrg.getOrgtype()==Constants.ORG_TYPE_12 ||
+//											userOrg.getOrgtype()==Constants.ORG_TYPE_12 ||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
@@ -89,7 +89,8 @@ public class VisionTodoController  extends  SystemAction {
 				//如果是中支监察还要加载当前中支监察录入的事项和办公室录入事项
 				List<Item> JCSitemList = new ArrayList<Item>();
 				List<Item> BGSitemList = new ArrayList<Item>();
-				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
+				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7 || 
+						userOrg.getOrgtype()== Constants.ORG_TYPE_12){
 					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
 					item.setPreparerOrgId(BGS.getId());
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块

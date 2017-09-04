@@ -121,7 +121,7 @@ public class EnforcementVisionController extends SystemAction {
 //					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 						userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
 							userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
-									userOrg.getOrgtype()==Constants.ORG_TYPE_12||
+//									userOrg.getOrgtype()==Constants.ORG_TYPE_12||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())) {
 							
 				// 取满足要求的参数数据
@@ -136,7 +136,8 @@ public class EnforcementVisionController extends SystemAction {
 				//如果是中支监察室，需要获取到和当前中支监察在同一个中支下的依法行政领导小组录入的
 				List<Item> YFXZitemList = new ArrayList<Item>();
 				int YFXZtotalCount = 0;
-				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7){
+				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7 ||
+						userOrg.getOrgtype()==Constants.ORG_TYPE_12){
 					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "依法行政领导小组办公室");
 					item.setSupervisionTypeId(4); //4代表执法监察
 					item.setSupervisionOrgId(BGS.getId());
