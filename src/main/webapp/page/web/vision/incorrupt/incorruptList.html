@@ -119,7 +119,7 @@ function getDataList(pageNo){
 						}
 				    	
 				    	
-				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==-1 && req.datalist[i].status!=0){
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==89 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",72);\"  target=\"rightFrame\">录入项目方案</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].lasgTag==0 && req.datalist[i].status!=0){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"incorruptFile("+req.datalist[i].id+",72);\"  target=\"rightFrame\">录入项目方案</button></td>";

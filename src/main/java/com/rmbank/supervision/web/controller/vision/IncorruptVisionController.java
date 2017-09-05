@@ -321,11 +321,15 @@ public class IncorruptVisionController extends SystemAction {
 					if (itemList.size() > 0) {
 						ItemProcess itemProcess = itemList.get(0);
 						itemProcess.setContent(item.getName());
-						itemProcess.setContentTypeId(Constants.INCORRUPT_VISION_0);								
+						//itemProcess.setContentTypeId(Constants.INCORRUPT_VISION_0);	
+						itemProcess.setContentTypeId(Constants.INCORRUPT_VISION_LX);	
+						
 						//itemProcessService.updateByPrimaryKeySelective(itemProcess);
 						itemProcess.setUuid(item.getUuid());
 						itemProcess.setId(0);
 						itemProcessService.insert(itemProcess);	
+						
+						
 						User loginUser = this.getLoginUser();
 						String ip = IpUtil.getIpAddress(request);		
 						logService.writeLog(Constants.LOG_TYPE_LZJC, "用户："+loginUser.getName()+"，对廉政监察的项目进行了立项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
@@ -789,6 +793,8 @@ public class IncorruptVisionController extends SystemAction {
 				
 				if (ip.getContentTypeId() == Constants.INCORRUPT_VISION_0) {
 					drIPList.add(ip);//录入工作事项
+				}else if (ip.getContentTypeId() == Constants.INCORRUPT_VISION_LX) {
+					drIPList.add(ip); //已经立项
 				}else if (ip.getContentTypeId() == Constants.INCORRUPT_VISION_1) {
 					drIPList.add(ip); //已经录入方案
 				}else if (ip.getContentTypeId() == Constants.INCORRUPT_VISION_2) {
