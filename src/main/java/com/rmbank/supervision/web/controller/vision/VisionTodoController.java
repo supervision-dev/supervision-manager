@@ -29,7 +29,7 @@ import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 /**
- * 效能监察待办事项控制器
+ * 实时监察待办事项控制器
  * @author DELL
  *
  */ 
@@ -49,7 +49,7 @@ public class VisionTodoController  extends  SystemAction {
 	private OrganService organService;
 
 	/**
-     * 效能监察待办事项列表展示
+     * 实时监察待办事项列表展示
      *
      * @param request
      * @param response
@@ -69,7 +69,7 @@ public class VisionTodoController  extends  SystemAction {
 		// 分页集合
 		List<Item> itemList = new ArrayList<Item>();
 		try {
-			//成都分行和超级管理员获取所有项目
+			//成都分行监察室和分行领导加载各个模块的所有待办事项
 			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
 //					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
 //							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
@@ -86,22 +86,28 @@ public class VisionTodoController  extends  SystemAction {
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 				itemList = itemService.getItemListToListByLogOrg(item);	
 				
-				//如果是中支监察还要加载当前中支监察录入的事项和办公室录入事项
-				List<Item> JCSitemList = new ArrayList<Item>();
-				List<Item> BGSitemList = new ArrayList<Item>();
-				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7 || 
-						userOrg.getOrgtype()== Constants.ORG_TYPE_12){
-					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
-					item.setPreparerOrgId(BGS.getId());
-					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
-					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
-					
-					item.setPreparerOrgId(userOrg.getId());
-					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
-					JCSitemList = itemService.getItemListByTypeAndLogOrg(item);
+				//效能监察待办事项
+				if(item.getSupervisionTypeId()==Constants.SUPERVISION_TYPE_ID_XL){
+					//如果是中支监察还要加载当前中支监察录入的事项和办公室录入事项
+					List<Item> JCSitemList = new ArrayList<Item>();
+					List<Item> BGSitemList = new ArrayList<Item>();
+					if(userOrg.getOrgtype()== Constants.ORG_TYPE_7 || 
+							userOrg.getOrgtype()== Constants.ORG_TYPE_12){
+						Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
+						item.setPreparerOrgId(BGS.getId());
+						item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+						BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
+						
+						item.setPreparerOrgId(userOrg.getId());
+						item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+						JCSitemList = itemService.getItemListByTypeAndLogOrg(item);
+					}
+					itemList.addAll(JCSitemList);
+					itemList.addAll(BGSitemList);
 				}
-				itemList.addAll(JCSitemList);
-				itemList.addAll(BGSitemList);
+				
+				
+				
 			}			
 		} catch (Exception ex) {
 			ex.printStackTrace();
