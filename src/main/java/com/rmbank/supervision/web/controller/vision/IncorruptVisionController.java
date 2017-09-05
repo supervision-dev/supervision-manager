@@ -305,6 +305,7 @@ public class IncorruptVisionController extends SystemAction {
 				if (temp != null) {
 					temp.setSuperItemType(item.getSuperItemType());
 					temp.setStatus(1);	
+					
 					if (end_time != null && end_time != "") {
 						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 						Date date = sdf.parse(end_time);
@@ -321,8 +322,10 @@ public class IncorruptVisionController extends SystemAction {
 						ItemProcess itemProcess = itemList.get(0);
 						itemProcess.setContent(item.getName());
 						itemProcess.setContentTypeId(Constants.INCORRUPT_VISION_0);								
-						itemProcessService.updateByPrimaryKeySelective(itemProcess);
-								
+						//itemProcessService.updateByPrimaryKeySelective(itemProcess);
+						itemProcess.setUuid(item.getUuid());
+						itemProcess.setId(0);
+						itemProcessService.insert(itemProcess);	
 						User loginUser = this.getLoginUser();
 						String ip = IpUtil.getIpAddress(request);		
 						logService.writeLog(Constants.LOG_TYPE_LZJC, "用户："+loginUser.getName()+"，对廉政监察的项目进行了立项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);

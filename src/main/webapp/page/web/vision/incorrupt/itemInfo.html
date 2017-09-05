@@ -137,8 +137,8 @@ $(document).ready(function(){
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
-				window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyList.do";
-			});	  
+				window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+			});	   
 		 }
      });
      $("#uploader_browse").removeAttr("style");
@@ -214,12 +214,23 @@ function returnPage(){
 			        dataType:"json", //响应数据类型      
 			        success: function(data) {
 			        	if(data.code==0){   	    	
-			        		layer.confirm('立项成功！', {
+			        		/* layer.confirm('立项成功！', {
 								btn: ['确认'] //按钮
 							}, function(){//点击确认按钮调用
 								layer.close(layer.confirm());//关闭当前弹出层
 								window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
-							});	        		
+							});	 */
+							var uploader = $('#uploader').plupload('getUploader');
+							if(uploader.files.length>0){
+				        		$("#uploader_start").click(); //上传文件
+				        	}else{
+				        		layer.confirm('立项成功！', {
+									btn: ['确认'] //按钮
+								}, function(){//点击确认按钮调用
+									layer.close(layer.confirm());//关闭当前弹出层
+									window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptList.do";
+								});	        		
+				        	}	        		
 				        		
 			        	}else{
 			        		layer.alert(data.message);	        	
@@ -257,7 +268,7 @@ function returnPage(){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">实时监察</a></li>
-    <li><a href="#">效能监察</a></li>
+    <li><a href="#">廉政监察</a></li>
     </ul>
     </div>
     
@@ -273,7 +284,19 @@ function returnPage(){
 				<input type="hidden" id="hid_uuid" name="uuid" />	
        		</td>
        	</tr>
-   		
+   		<tr>
+			<td width="17%" align="right" height="129px;" style="padding-right: 1px;">上传附件：</td>
+			<td colspan="3">
+				 <div id="themeswitcher" class="pull-right" ></div>
+	                <script>
+	                    $(function() {
+	                        $.fn.themeswitcher && $('#themeswitcher').themeswitcher({cookieName:''});
+	                    });
+	                </script>
+	                <div id="uploader" >
+	                </div>
+			 </td>	
+		</tr>
        	<tr>
        		<td width="15%" align="right">项目类别：</td>
        		<td>

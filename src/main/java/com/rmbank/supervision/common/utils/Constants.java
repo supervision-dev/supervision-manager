@@ -161,6 +161,7 @@ public class Constants
   //廉政监察流程
   public static final Integer INCORRUPT_VISION_0=-1; //新增项目时的初始状态
   public static final Integer INCORRUPT_VISION_00=0; //新增项目时的初始状态
+  public static final Integer INCORRUPT_VISION_LX=89; //已立项
   public static final Integer INCORRUPT_VISION_1=72; //被监察对象录入项目方案
   public static final Integer INCORRUPT_VISION_2=73; //被监察对象录入决策内容
   public static final Integer INCORRUPT_VISION_3=74; //监察室提出监察意见  

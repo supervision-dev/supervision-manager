@@ -50,7 +50,17 @@ function getDataList(pageNo){
 	       				itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">项目名称：</td>";  	
 					    itemHtml +="<td style=\"text-align: left;\">"+req.ResultItemProcess[i].content+"</td>";			       
-				        itemHtml +="</tr>";		        
+				        itemHtml +="</tr>";	
+				        	        
+				        /* itemHtml +="<tr>";
+				        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关附件：</td>";
+				        itemHtml +="<td style=\"text-align: left;\">";
+				        for(var i = 0;i<req.ResultItemProcess[i].fileList.length;i++){
+						    itemHtml +="<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[i].filePath+"\',\'"+req.ResultItemProcess[i].fileList[i].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[0].fileList[i].fileName+"</a><br/>";			       
+				        }
+				        itemHtml +="</td>";
+				        itemHtml +="</tr>"; */
+				        
 				        
 				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">项目类别：</td>";  	
@@ -397,7 +407,7 @@ function returnPage(){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">实时监察</a></li>
-    <li><a href="#">效能监察</a></li>
+    <li><a href="#">廉政监察</a></li>
     </ul>
     </div>
     
