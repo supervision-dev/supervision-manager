@@ -11,7 +11,7 @@ $(document).ready(function(){
 
 	getDataListA();
 	getDataListB();
-	getDataListC();
+	//getDataListC();
 });
 
 function getDataListA(){
@@ -32,7 +32,7 @@ function getDataListB(){
 	obj.supervisionTypeId = 3; 
 	$.ajax({ 
        type: "POST", //请求类型
-       url: "/supervision/vision/todoList.do",
+       url: "/supervision/vision/LZJCtodoList.do",
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {

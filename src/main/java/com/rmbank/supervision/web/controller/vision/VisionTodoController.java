@@ -71,10 +71,7 @@ public class VisionTodoController  extends  SystemAction {
 		try {
 			//成都分行监察室和分行领导加载各个模块的所有待办事项
 			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
-//					userOrg.getOrgtype()==Constants.ORG_TYPE_2 ||
-//							userOrg.getOrgtype()==Constants.ORG_TYPE_3 ||
-									userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
-//											userOrg.getOrgtype()==Constants.ORG_TYPE_12 ||
+				userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||
 					Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
@@ -105,6 +102,69 @@ public class VisionTodoController  extends  SystemAction {
 					itemList.addAll(JCSitemList);
 					itemList.addAll(BGSitemList);
 				}
+				
+				
+				
+			}			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		} 
+    	return itemList;
+    }
+	
+	
+	/**
+	 * 廉政监察待办事项
+	 * @param item
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	@ResponseBody
+    @RequestMapping(value = "/LZJCtodoList.do")
+    public List<Item> LZJC_DBSX(Item item, 
+            HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { 
+		//获取当前登录用户
+		User loginUser = this.getLoginUser();
+		//获取当前用户对应的机构列表
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		//获取当前用户对应的第一个机构
+		Organ userOrg=userOrgList.get(0);
+		// 分页集合
+		List<Item> itemList = new ArrayList<Item>();
+		try {
+			//成都分行监察室和分行领导加载各个模块的所有待办事项
+			if(userOrg.getOrgtype()==Constants.ORG_TYPE_1 ||
+					userOrg.getOrgtype()==Constants.ORG_TYPE_4 ||			
+						Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
+				
+				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+				itemList = itemService.getItemListXNJCToList(item);	
+			}else {
+				//当前登录用户只加载自己完成的项目				
+				item.setSupervisionOrgId(userOrg.getId());
+				item.setPreparerOrgId(userOrg.getId());
+				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
+				itemList = itemService.getItemListToListByLogOrg(item);	
+				
+				//如果是中支监察室或中支领导需要加载当前中支下其他所有部门包括县支行的录入的工作事项
+				List<Item> BMItem = new ArrayList<Item>();
+				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+					//获取和当前登录的中支监察室在同一个中支下的所有部门。
+					List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
+					for (Organ organ : organByPId) {
+						item.setPreparerOrgId(organ.getId());
+						item.setSupervisionOrgId(organ.getId());
+						BMItem = itemService.getItemListByTypeAndLogOrg(item);
+						
+						
+						itemList.addAll(BMItem);
+
+					}
+				}
+				
+			
 				
 				
 				
