@@ -146,8 +146,10 @@ public class EfficiencyVisionController extends SystemAction {
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
 					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+					
+					
 				}else if(userOrg.getOrgtype()== Constants.ORG_TYPE_10){
-					//如果是中支办公室，需要获取到和当前中支办公室在同一个中支下的监察室的录入的事项
+					//如果是中支办公室，需要获取到和当前中支办公室在同一个中支下的监察室的录入的事项和自己做为分行监察室或分行办公室被监察对象的项目
 					item.setSupervisionTypeId(2); //2代表效能监察
 					//item.setSupervisionOrgId(userOrg.getId());
 					item.setPreparerOrgId(userOrg.getId());
@@ -162,6 +164,8 @@ public class EfficiencyVisionController extends SystemAction {
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
 					BGStotalCount = itemService.getItemCountByLogOrgSSJC(item); //实时监察分页
+					
+			
 				}else if(userOrg.getOrgtype()== Constants.ORG_TYPE_12){
 					//如果是中支行领导则加载该中支下办公室和中支监察室录入的事项
 					
