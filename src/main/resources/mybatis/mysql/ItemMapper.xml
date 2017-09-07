@@ -838,6 +838,7 @@
      	)
 	</if>
   </select>
+  <!-- 获取待办事项 -->
   <select id="getItemListToListByLogOrg" parameterType="com.rmbank.supervision.model.Item" resultMap="BaseResultMap">
   	SELECT i.*,o.name as orgName,m.name as itemCategory,ip.content as itemNmae,ip1.content as itemName,
   	(SELECT COUNT(*) FROM t_item_process AS tip WHERE i.id=tip.item_id) AS isSign
@@ -848,8 +849,13 @@
 	LEFT JOIN t_item_process AS ip1 ON ip1.item_id=i.`id` and ip1.content_type_id=130
 	WHERE 
 	 i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
-	and i.item_type=#{itemType,jdbcType=INTEGER}
-	and i.`supervision_org_id`= #{supervisionOrgId,jdbcType=INTEGER} and status in (1,2,3)
+	and i.item_type=#{itemType,jdbcType=INTEGER} and i.`status` in (1,2,3)
+	<if test="supervisionOrgId !=null and supervisionOrgId">
+		and i.`supervision_org_id`= #{supervisionOrgId,jdbcType=INTEGER} 
+	</if>
+	<if test="preparerOrgId !=null and preparerOrgId>0">
+		and i.`preparer_org_id`= #{preparerOrgId,jdbcType=INTEGER}
+	</if>
 	<if test="searchName != null and searchName != ''">
 		and (i.name like
 		CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
