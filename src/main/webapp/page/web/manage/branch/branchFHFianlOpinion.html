@@ -184,7 +184,7 @@ function loadItemInfo(){
         		 	$("#hid_itemId").val(req.resultItem.id);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
         		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
-        		 	$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
+        		 	//$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
         		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 }
         		 if(req.resultItemProcess != null &&　req.resultItemProcess.length >0){
@@ -438,11 +438,11 @@ function returnPage(){
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
-       	<tr>
+       	<!-- <tr>
        		<td width="15%" align="right" style="height:35px;">提交时间：</td>
        		<td colspan="3" id="td_fstTime"  title="分行监察室提交立项时间">
        		</td>
-       	</tr> 
+       	</tr>  -->
     </table>
     </form> 
      <table class="input_Table" >
