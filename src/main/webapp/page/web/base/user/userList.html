@@ -5,6 +5,9 @@
 <title>用户列表</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<!-- 引入分页插件js和样式 -->
+<script src="/supervision/source//kkpager/kkpager.js"></script>
+<link href="/supervision/source/kkpager/kkpager_blue.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -74,6 +77,23 @@ function getDataList(pageNo){
 	       		}
 	       }
 	       if(req.data != null){
+	       		kkpager.generPageHtml({
+                   //当前页码
+                   pno: req.data.pageNo,
+                   //总页码
+                   total: Math.ceil(req.data.totalCount/10),
+                   //总数据条数
+                   totalRecords: req.data.totalCount,
+				   
+                   mode: 'click',
+                   click: function (n) {
+                       search(n)
+                       //手动选中按钮
+                       this.selectPage(n);
+                       return false;
+                   }
+                }, true);
+	       
 	       		$("#i_totalcount").text(req.data.totalCount);
 	       		$("#i_pageNo").text(req.data.pageNo);
 	       		$("#i_totalcountA").text(req.data.totalCount);
@@ -505,7 +525,7 @@ function clearForm(){
     </div>
    
    
-    <div class="pagin" id="pagin">
+    <!-- <div class="pagin" id="pagin">
     	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
         <ul class="paginList" id="ul_pageList">
         
@@ -521,7 +541,10 @@ function clearForm(){
     </div>
     <div class="pagin" id="paginA" style="display: none;">
    		<div class="message">共<i id="i_totalcountA" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNoA" class="blue">&nbsp;</i>页</div>
-    </div>
+    </div> -->
+    
+    <!-- 分页容器 -->
+    <div id="kkpager"></div>
     
     <div class="tip" id="confirm_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>

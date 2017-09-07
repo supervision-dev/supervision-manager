@@ -112,8 +112,13 @@
     </if>
   </select>
   <select id="getResourceCount" resultType="java.lang.Integer" parameterType="com.rmbank.supervision.model.ResourceConfig">
-  	select count(*) 
-  	<include refid="sql_query"></include>
+  	select count(*)   	
+  	FROM t_resource r, t_function f WHERE r.`moudle_id`=f.`id`
+  	<if test="searchName != null and searchName != ''">
+		and (r.name like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')
+			OR r.resource like CONCAT('%',#{searchName,jdbcType=VARCHAR},'%')				
+		)
+	</if>  	
   </select>
   <select id="getResourceById" parameterType="java.lang.Integer" resultMap="BaseResultMap">
   	select r.*, f.name AS functionName   	

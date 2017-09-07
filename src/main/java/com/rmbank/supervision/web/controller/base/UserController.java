@@ -79,7 +79,7 @@ public class UserController extends SystemAction {
 		//设置页面初始值及页面大小
 		if (user.getPageNo() == null)
 			user.setPageNo(1);
-		user.setPageSize(120);  
+		user.setPageSize(Constants.DEFAULT_PAGE_SIZE);  
 		int totalCount =  0;
 		//分页集合
 		List<User> userList = new ArrayList<User>();
