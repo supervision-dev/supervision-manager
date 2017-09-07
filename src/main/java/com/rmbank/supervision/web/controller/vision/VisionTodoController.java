@@ -158,16 +158,10 @@ public class VisionTodoController  extends  SystemAction {
 						item.setSupervisionOrgId(organ.getId());
 						BMItem = itemService.getItemListByTypeAndLogOrg(item);
 						
-						
 						itemList.addAll(BMItem);
-
 					}
 				}
-				
-			
-				
-				
-				
+
 			}			
 		} catch (Exception ex) {
 			ex.printStackTrace();

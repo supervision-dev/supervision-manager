@@ -5,7 +5,55 @@
 <title>实时监察模块日志</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
-	<script src="/supervision/source/laydate/laydate.js"></script>
+<script src="/supervision/source/laydate/laydate.js"></script>
+<!-- 
+<script src="/supervision/source/layui/layui.js"></script>
+<link href="/supervision/source/layui/css/layui.css" rel="stylesheet" type="text/css" />
+ -->
+<!-- <script src="/supervision/source/js/paging.js"></script>
+<style type="">
+.page_div a {
+	min-width: 30px;
+	height: 28px;
+	border: 1px solid #dce0e0!important;
+	text-align: center;
+	margin: 0 4px;
+	cursor: pointer;
+	line-height: 28px;
+	color: #666666;
+	font-size: 13px;
+	display: inline-block;
+}
+#firstPage,
+#lastPage {
+	width: 50px;
+	color: #0073A9;
+	border: 1px solid #0073A9!important;
+}
+#prePage,
+#nextPage {
+	width: 70px;
+	color: #0073A9;
+	border: 1px solid #0073A9!important;
+}
+.page_div .current {
+	background-color: #0073A9;
+	border-color: #0073A9;
+	color: #FFFFFF;
+}
+.totalPages {
+	margin: 0 10px;
+}
+.totalPages span,
+.totalSize span {
+	color: #0073A9;
+	margin: 0 5px;
+}
+</style> -->
+
+<script src="/supervision/source//kkpager/kkpager.js"></script>
+<link href="/supervision/source/kkpager/kkpager_blue.css" rel="stylesheet" type="text/css" />
+
 
 <script type="text/javascript">
 $(document).ready(function(){ 
@@ -80,6 +128,26 @@ function fillDataList(req){
 	       		}
 	       }
 	       if(req.data != null){
+				kkpager.generPageHtml({
+                   //当前页码
+                   pno: req.data.pageNo,
+                   //总页码
+                   total: Math.ceil(req.data.totalCount/10),
+                   //总数据条数
+                   totalRecords: req.data.totalCount,
+				   
+                   mode: 'click',
+                   click: function (n) {
+                       search(n)
+                       //手动选中按钮
+                       this.selectPage(n);
+                       return false;
+                   }
+                }, true);
+			
+			
+			
+			
 	       		$("#i_totalcount").text(req.data.totalCount);
 	       		$("#i_pageNo").text(req.data.pageNo);
 	       		var count = Math.ceil(req.data.totalCount/10);
@@ -389,7 +457,7 @@ function clearForm(){
     </table>
     
    
-    <div class="pagin">
+   <!--  <div class="pagin">
     	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
         <ul class="paginList" id="ul_pageList">
         
@@ -403,8 +471,12 @@ function clearForm(){
         <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
         </ul>
     </div>
+     -->
+    <div id="page" class="page_div"></div>
+   	
+    <div id="kkpager"></div>
     
-    
+	
     <div class="tip" id="confirm_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
         
