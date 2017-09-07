@@ -97,7 +97,8 @@ public class VisionTodoController  extends  SystemAction {
 					item.setSupervisionOrgId(null); //查询条件不加完成机构id
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 					JCSitemList = itemService.getItemListByTypeAndLogOrg(item);
-				}else if (userOrg.getOrgtype()== Constants.ORG_TYPE_10) {
+					itemList=new ArrayList<Item>();
+				}/*else if (userOrg.getOrgtype()== Constants.ORG_TYPE_10) {
 					//中支办公室
 					Organ JCS = organService.getOrganByPidAndName(userOrg.getPid(), "中支监察室");
 					item.setPreparerOrgId(JCS.getId());
@@ -110,7 +111,7 @@ public class VisionTodoController  extends  SystemAction {
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 					BGSitemList = itemService.getItemListByTypeAndLogOrg(item);
 					itemList=new ArrayList<Item>();
-				}
+				}*/
 				itemList.addAll(JCSitemList);
 				itemList.addAll(BGSitemList);
 				
@@ -205,12 +206,10 @@ public class VisionTodoController  extends  SystemAction {
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
 				itemList = itemService.getItemListXNJCToList(item);	
 			}else {
-				
-				
-				//如果是中支监察室则或中支依法行政领导小组办公室则需要加载当前中支下的依法行政领导小组办公室录入的工作事项
+				//如果是中支监察室或中支领导需要加载当前中支下的依法行政领导小组办公室录入的工作事项
 				List<Item> BMItem = new ArrayList<Item>();
 				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7 || 
-						userOrg.getOrgtype()==Constants.ORG_TYPE_11){
+						userOrg.getOrgtype()==Constants.ORG_TYPE_12){
 					//获取和当前登录的中支监察室在同一个中支下的所有部门。
 					Organ YFLDXZBGS = organService.getOrganByPidAndName(userOrg.getPid(), "依法行政领导小组办公室");
 					item.setPreparerOrgId(YFLDXZBGS.getId());
