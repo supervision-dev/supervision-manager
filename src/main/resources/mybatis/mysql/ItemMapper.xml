@@ -609,7 +609,7 @@
 	LEFT JOIN t_item_process AS ip1 ON ip1.item_id=i.`id` and ip1.content_type_id=130
 	WHERE 
 	 i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
-	and i.item_type=#{itemType,jdbcType=INTEGER}
+	and i.item_type=#{itemType,jdbcType=INTEGER} and i.`status` in (1,2,3)
 	and i.`supervision_org_id`= #{supervisionOrgId,jdbcType=INTEGER} and status &lt;&gt;9
 	<if test="searchName != null and searchName != ''">
 		and (i.name like
@@ -617,7 +617,7 @@
 		)
 	</if>
 	or i.`supervision_type_id`= #{supervisionTypeId,jdbcType=INTEGER}
-	and i.item_type=#{itemType,jdbcType=INTEGER}
+	and i.item_type=#{itemType,jdbcType=INTEGER} and i.`status` in (1,2,3)
 	and i.`preparer_org_id`= #{preparerOrgId,jdbcType=INTEGER} and status &lt;&gt;9
 	<if test="searchName != null and searchName != ''">
 		and (i.name like

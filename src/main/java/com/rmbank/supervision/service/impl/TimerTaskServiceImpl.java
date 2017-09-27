@@ -89,7 +89,7 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 				userService.updateByPrimaryKey(user2);
 			}
 		}
-		System.out.println("人生又少一分钟！");
+		//System.out.println("人生又少一分钟！");
 	}
 
 }
