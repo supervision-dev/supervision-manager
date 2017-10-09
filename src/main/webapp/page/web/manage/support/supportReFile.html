@@ -63,7 +63,6 @@ $(document).ready(function(){
          for(i=0;i<len;i++){
              uuid[i]=chars[0|Math.random()*radix];
          }
-     }else{
          var r;
          uuid[8]=uuid[13]=uuid[18]=uuid[23]='-';
          uuid[14]='4';
@@ -133,7 +132,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('被监察对象上传资料成功，当前项目完结！', {
+         	layer.confirm('监察室上传资料成功，当前项目完结！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -251,7 +250,7 @@ function ajaxPost(){
 	        	if(uploader.files.length>0){
 	        		$("#uploader_start").click(); //上传文件
 	        	}else{
-	        		layer.confirm('被监察对象上传资料成功，当前项目完结！', {
+	        		layer.confirm('监察室上传资料成功，当前项目完结！', {
 						btn: ['确认'] //按钮
 					}, function(){//点击确认按钮调用
 						layer.close(layer.confirm());//关闭当前弹出层

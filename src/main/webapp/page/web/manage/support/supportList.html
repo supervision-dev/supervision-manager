@@ -93,8 +93,13 @@ function getDataList(pageNo){
 	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			manageHtml +="<tr>";
-				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
-				     if(req.datalist[i].name.length >8){
+	       			if(req.loginOrganRoleType == 43){
+	       				manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+	       			}else{
+						manageHtml +="<td></td>";	       				
+	       			}
+				    
+				    if(req.datalist[i].name.length >8){
 				    	var names = req.datalist[i].name.substring(0,8)+"……"
 				    	manageHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
 				    }else{
@@ -122,7 +127,7 @@ function getDataList(pageNo){
 				    		manageHtml +="<td>量化中…</td>";
 				    	}
 				    }else if(req.datalist[i].lasgTag ==998){
-				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
 				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(998,"+req.datalist[i].id+");\"  class=\"button-action\">继续录入资料</button></td>";
 				    	}else{
 				    		manageHtml +="<td>资料上传中…</td>";
