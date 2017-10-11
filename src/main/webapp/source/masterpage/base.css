@@ -2443,10 +2443,11 @@
 	float: left;
 	display: inline;
 	margin-right: 2%;
+	
 }
 
 .yw-clear {
-	zoom: 1;
+	
 }
 
 .yw-row .yw-span3 {
@@ -3043,7 +3044,7 @@
 }
 
 .plan-2017 .cell {
-	background-color: #f8f8f8;
+	background-color: #DADADA;
 	padding: 30px;
 	height: 150px;
 	margin-bottom: 24px;
@@ -3935,4 +3936,7 @@
 .dddd:hover{ 
 	text-decoration:underline;
 	 cursor:pointer;
+}
+.addie6width{
+	width: 48%;
 }
