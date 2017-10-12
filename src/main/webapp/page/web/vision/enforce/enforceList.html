@@ -49,7 +49,12 @@ function getDataList(pageNo){
 	       		itemHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			itemHtml +="<tr>";
-				    itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+	       			if(LogOrgType == 40 || LogOrgType == 43){
+	       				itemHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+	       			}else{
+						itemHtml +="<td></td>";	       				
+	       			}
+				    
 				    if(req.datalist[i].status == 0){
 				    	 itemHtml +="<td><span style=\"color:red;\">未立项</sapn></td>";
 				    }else {
