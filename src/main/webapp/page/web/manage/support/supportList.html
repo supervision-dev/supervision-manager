@@ -28,9 +28,17 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		if(req != null && req.loginOrganRoleType != 43){
-       			$("#div_toolbars").remove();
+       		if(req != null && req.loginOrganRoleType == 40){
+       			//$("#div_toolbars").remove();
+       			$("#div_toolbars").show();
+       			$("#liAdd").hide();
+       		}else if(req != null && req.loginOrganRoleType == 43){
+       			$("#div_toolbars").show();
+       			$("#liDel").hide();
+       		}else{
+       			//$("#div_toolbars").remove();
        		}
+       		
        		$("#tb_userList").html("");
        		var manageHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
        		
@@ -93,7 +101,7 @@ function getDataList(pageNo){
 	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			manageHtml +="<tr>";
-	       			if(req.loginOrganRoleType == 43){
+	       			if(req.loginOrganRoleType == 40){
 	       				manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
 	       			}else{
 						manageHtml +="<td></td>";	       				
@@ -212,10 +220,10 @@ function deleteItemAction(){
     
     <div class="rightinfo">
     
-    <div id="div_toolbars" class="tools">
+    <div id="div_toolbars" style="display: none;" class="tools">
     	<ul class="toolbar">
-	        <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/support/supportInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
-	        <li onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
+	        <li id="liAdd" class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/support/supportInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
+	        <li id="liDel" onclick="showAlertTip();"><span><img src="/supervision/source/images/t03.png" /></span>删除</li>
         </ul> 
     
     </div>

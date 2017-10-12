@@ -28,8 +28,8 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
-       		if(req != null && req.loginOrganRoleType != 40){
-       			$("#div_toolbars").remove();
+       		if(req != null && req.loginOrganRoleType == 40){
+       			$("#div_toolbars").show();
        		}
        		$("#tb_userList").html("");
        		var manageHtml = "<tr><td colspan=\"8\">没有获取到相关数据</td></tr>";
@@ -193,7 +193,7 @@ function deleteItemAction(){
     
     <div class="rightinfo">
     
-    <div id="div_toolbars" class="tools">
+    <div id="div_toolbars" style="display: none;" class="tools">
     
     	<ul class="toolbar">
         <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/branch/branchZZInfo.do'"><span><img src="/supervision/source/images/t01.png" /></span>添加项目</li>
