@@ -37,7 +37,12 @@ function getDataList(pageNo){
 	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			manageHtml +="<tr>";
-				    manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+	       			if(req.loginOrganRoleType == 40){
+	       				manageHtml +="<td><input name=\"userChk\" type=\"checkbox\" value=\""+req.datalist[i].id+"\" /></td>";
+	       			}else{
+						manageHtml +="<td></td>";	       				
+	       			}
+				    
 				    if(req.datalist[i].name.length >8){
 				    	var names = req.datalist[i].name.substring(0,8)+"……"
 				    	manageHtml +="<td title=\""+req.datalist[i].name+"\">"+names+"</td>";
