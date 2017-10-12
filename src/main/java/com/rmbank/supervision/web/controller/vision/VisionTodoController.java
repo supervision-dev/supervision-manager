@@ -49,7 +49,7 @@ public class VisionTodoController  extends  SystemAction {
 	private OrganService organService;
 
 	/**
-     * 实时监察待办事项列表展示
+     * 效能监察待办事项列表展示
      *
      * @param request
      * @param response
@@ -87,6 +87,8 @@ public class VisionTodoController  extends  SystemAction {
 				List<Item> BGSitemList = new ArrayList<Item>();
 				if(userOrg.getOrgtype()== Constants.ORG_TYPE_7 || 
 						userOrg.getOrgtype()== Constants.ORG_TYPE_12){
+					item.setOrgType(43); //用于在xml加条件
+					
 					Organ BGS = organService.getOrganByPidAndName(userOrg.getPid(), "办公室");
 					item.setPreparerOrgId(BGS.getId());
 					item.setSupervisionOrgId(null); //查询条件不加完成机构id
@@ -96,7 +98,7 @@ public class VisionTodoController  extends  SystemAction {
 					item.setPreparerOrgId(userOrg.getId());
 					item.setSupervisionOrgId(null); //查询条件不加完成机构id
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
-					JCSitemList = itemService.getItemListByTypeAndLogOrg(item);
+					JCSitemList = itemService.getItemListToListByLogOrg(item);
 					itemList=new ArrayList<Item>();
 				}/*else if (userOrg.getOrgtype()== Constants.ORG_TYPE_10) {
 					//中支办公室
@@ -160,11 +162,13 @@ public class VisionTodoController  extends  SystemAction {
 				//如果是中支监察室需要加载当前中支下其他所有部门包括县支行的录入的工作事项
 				List<Item> BMItem = new ArrayList<Item>();
 				if(userOrg.getOrgtype()==Constants.ORG_TYPE_7){
+					item.setOrgType(43); //用于在xml加条件
+					
 					//获取和当前登录的中支监察室在同一个中支下的所有部门。
 					List<Organ> organByPId = organService.getOrganByPId(userOrg.getPid());
 					for (Organ organ : organByPId) {
 						item.setPreparerOrgId(organ.getId());
-						BMItem = itemService.getItemListByTypeAndLogOrg(item);
+						BMItem = itemService.getItemListToListByLogOrg(item);
 						itemList.addAll(BMItem);
 					}
 				}
@@ -212,6 +216,8 @@ public class VisionTodoController  extends  SystemAction {
 						userOrg.getOrgtype()==Constants.ORG_TYPE_12){
 					//获取和当前登录的中支监察室在同一个中支下的所有部门。
 					Organ YFLDXZBGS = organService.getOrganByPidAndName(userOrg.getPid(), "依法行政领导小组办公室");
+					item.setOrgType(43); //用于在xml加条件
+					
 					item.setPreparerOrgId(YFLDXZBGS.getId());
 					item.setSupervisionOrgId(null); //查询条件不加完成机构id
 					item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
