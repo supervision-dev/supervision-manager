@@ -93,6 +93,8 @@ public interface OrganService {
 	
 	List<Organ> getOrganByPId(Integer pid);
 
+	List<Integer> getOrganIdByPid(Integer id);
+
 	
     
 

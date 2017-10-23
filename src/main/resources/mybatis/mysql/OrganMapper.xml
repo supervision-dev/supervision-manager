@@ -213,7 +213,10 @@
 		LEFT JOIN t_org o1 ON o.pid=o1.id
 		WHERE o.pid=#{pid,jdbcType=INTEGER}
 	</select>
-	
+	<select id="getOrganIdByPid" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+		SELECT o.id from t_org o
+		WHERE o.pid=#{pid,jdbcType=INTEGER}
+	</select>
 	<select id="getOrganByPId" resultMap="BaseResultMap" parameterType="com.rmbank.supervision.model.Organ">
 		select
 		<include refid="Query_Column_List" />, 

@@ -2,6 +2,7 @@ package com.rmbank.supervision.service.impl;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 
@@ -405,6 +406,18 @@ public class UserServiceImpl implements UserService {
 	public User getUserBySearchName(User user) {
 		// TODO Auto-generated method stub
 		return userMapper.getUserBySearchName(user);
+	}
+
+	@Override
+	public List<User> getUserByOrgidsAndSearchUser(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserByOrgidsAndSearchUser(map);
+	}
+
+	@Override
+	public int getUserCountByOrgidsAndSearchUser(Map<String, Object> map) {
+		// TODO Auto-generated method stub
+		return userMapper.getUserCountByOrgidsAndSearchUser(map);
 	}
 
 }

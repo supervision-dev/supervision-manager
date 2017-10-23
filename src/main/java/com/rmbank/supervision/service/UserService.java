@@ -1,6 +1,7 @@
 package com.rmbank.supervision.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.rmbank.supervision.common.ReturnResult;
 import com.rmbank.supervision.model.Organ;
@@ -59,4 +60,8 @@ public interface UserService {
 	List<User> getUserAll();
 
 	User getUserBySearchName(User user);
+
+	List<User> getUserByOrgidsAndSearchUser(Map<String, Object> map);
+
+	int getUserCountByOrgidsAndSearchUser(Map<String, Object> map);
 }

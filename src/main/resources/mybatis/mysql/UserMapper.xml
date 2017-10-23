@@ -274,6 +274,46 @@
 		</foreach>  
 	)
   </select>
+  
+  <select id="getUserByOrgidsAndSearchUser" resultMap="BaseResultMap">
+  	SELECT u.*,(SELECT GROUP_CONCAT(org.name SEPARATOR "," ) FROM t_org org
+	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id` WHERE uo.`user_id` = u.id) AS orgName ,
+	(SELECT GROUP_CONCAT( role.name SEPARATOR "," ) FROM t_role role
+	LEFT JOIN t_user_role ur ON role.`id` = ur.`role_id` WHERE ur.`user_id` = u.id) AS roleName	
+	FROM t_user AS u WHERE u.id IN(
+	SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id IN
+		<foreach item="item" index="index" collection="orgIdList" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>  
+	)
+	<if test="user.searchName != null and user.searchName != ''">
+		and (
+			u.name like CONCAT('%',#{user.searchName,jdbcType=VARCHAR},'%')
+			or u.account like CONCAT('%',#{user.searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+	order by u.id DESC 
+	<if test="user.pageStart != null and user.pageSize != null and user.pageStart>-1 and user.pageSize>-1">
+        limit #{user.pageStart}, #{user.pageSize}
+    </if>
+  </select>
+  
+  <select id="getUserCountByOrgidsAndSearchUser" resultType="java.lang.Integer">
+  	SELECT count(*)
+	FROM t_user AS u WHERE u.id IN(
+	SELECT uo1.user_id FROM `t_user_org` AS uo1 WHERE uo1.org_id IN
+		<foreach item="item" index="index" collection="orgIdList" open="(" separator="," close=")">  
+		  #{item}  
+		</foreach>  
+	)
+	<if test="user.searchName != null and user.searchName != ''">
+		and (
+			u.name like CONCAT('%',#{user.searchName,jdbcType=VARCHAR},'%')
+			or u.account like CONCAT('%',#{user.searchName,jdbcType=VARCHAR},'%')
+     	)
+	</if>
+  </select>
+  
   <select id="getUserListByOrgId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
   	SELECT u.*,(SELECT GROUP_CONCAT( org.name SEPARATOR "," ) FROM t_org org
 	LEFT JOIN t_user_org uo ON org.`id` = uo.`org_id` WHERE uo.`user_id` = u.id) AS orgName ,

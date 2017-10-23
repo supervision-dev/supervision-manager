@@ -6,7 +6,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -108,7 +110,7 @@ public class UserController extends SystemAction {
 				lgUser.setSearchName(user.getSearchName()); 
 				//如果当前登录机构是中支机构，则获取该中支下的所有部门和县支行
 				if(userOrgList.get(0).getOrgtype()==Constants.ORG_TYPE_6){
-					Organ organ = userOrgList.get(0);
+					/*Organ organ = userOrgList.get(0);
 					List<Organ> organByPId = organService.getOrganByPId(organ.getId());
 					if(user.getSearchName() != null && user.getSearchName() != ""){
 						List<User> searchUserList = new ArrayList<User>();
@@ -130,8 +132,14 @@ public class UserController extends SystemAction {
 							userList.addAll(userListByOrgId);
 							totalCount+=userListByOrgId.size();
 						}
-					}
-					
+					}*/
+					Organ organ = userOrgList.get(0);
+					List<Integer> orgIdList=organService.getOrganIdByPid(organ.getId());
+					Map<String, Object> map= new HashMap<String, Object>();
+					map.put("orgIdList", orgIdList);
+					map.put("user", user);
+					userList= userService.getUserByOrgidsAndSearchUser(map);
+					totalCount = userService.getUserCountByOrgidsAndSearchUser(map);
 				}
 				//获取当前登录用户所属的机构ID
 				List<Integer> userOrgIds=userService.getUserOrgIdsByUserId(lgUser.getId());

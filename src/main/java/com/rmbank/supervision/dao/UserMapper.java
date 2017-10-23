@@ -1,6 +1,9 @@
 package com.rmbank.supervision.dao;
 
 import java.util.List;
+import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
 
 import com.rmbank.supervision.model.User;
 @MyBatisRepository
@@ -82,4 +85,8 @@ public interface UserMapper {
 	List<User> getUserByisLocking(User user);
 
 	User getUserBySearchName(User user);
+
+	List<User> getUserByOrgidsAndSearchUser(Map<String, Object> map);
+
+	int getUserCountByOrgidsAndSearchUser(Map<String, Object> map);
 }
