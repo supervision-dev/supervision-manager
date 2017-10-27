@@ -747,9 +747,6 @@ public class EnforcementVisionController extends SystemAction {
 		
     	HttpSession session = request.getSession();
     	Integer itemId = (Integer) session.getAttribute("enforceItemId");
-    	if(itemId==null){
-    		itemId = (Integer) session.getAttribute("enforceItemId");
-    	}
     	
     	BaseItemResult showResult = new BaseItemResult();
     	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();

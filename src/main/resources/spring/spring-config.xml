@@ -38,7 +38,7 @@
         <property name="password" value="ycyldeveloper"/>
         <!-- <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
         <property name="username" value="root"/>  
-        <property name="password" value="root"/> -->  
+        <property name="password" value="root"/>  -->
 
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="10"/>

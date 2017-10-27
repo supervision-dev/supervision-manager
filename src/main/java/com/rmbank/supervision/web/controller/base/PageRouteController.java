@@ -476,7 +476,6 @@ public class PageRouteController extends SystemAction {
     	
     	HttpSession session = request.getSession();
     	session.setAttribute("efficiencyItemId", itemId);
-    	
     	ModelAndView mv = new ModelAndView();
     	
     	if(tag == -1){
@@ -494,7 +493,7 @@ public class PageRouteController extends SystemAction {
 			mv.setViewName("web/vision/efficiency/NoOpinion");
 		}else if(tag == 69 ){
 			mv.setViewName("web/vision/efficiency/resetView");
-		} if(tag==688){
+		}else if(tag==688){
 			mv.setViewName("web/vision/efficiency/jianChaJieLun");
 		}else if(tag==777){
 			mv.setViewName("web/vision/efficiency/wenZeView");

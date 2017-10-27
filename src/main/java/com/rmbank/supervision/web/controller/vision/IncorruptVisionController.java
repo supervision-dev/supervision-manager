@@ -767,10 +767,6 @@ public class IncorruptVisionController extends SystemAction {
 		HttpSession session = request.getSession();
     	Integer itemId = (Integer) session.getAttribute("incorruptItemId");
     	
-    	if(itemId==null){
-    		itemId = (Integer) session.getAttribute("incorruptItemId");
-    	}
-    	
     	BaseItemResult showResult = new BaseItemResult();
     	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();
     	

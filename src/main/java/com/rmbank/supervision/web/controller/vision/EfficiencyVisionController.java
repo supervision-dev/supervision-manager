@@ -780,10 +780,6 @@ public class EfficiencyVisionController extends SystemAction {
     	HttpSession session = request.getSession();
     	Integer itemId = (Integer) session.getAttribute("efficiencyItemId");
     	
-    	if(itemId==null){
-    		itemId = (Integer) session.getAttribute("efficiencyItemId");
-    	}
-    	
     	BaseItemResult showResult = new BaseItemResult();
     	List<ItemProcess> drIPList=new ArrayList<ItemProcess>();
     	
