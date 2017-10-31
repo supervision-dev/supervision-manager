@@ -56,6 +56,7 @@ public class UserServiceImpl implements UserService {
 					ShiroUsernamePasswordToken token = new ShiroUsernamePasswordToken(
 							u.getAccount(), pwd, u.getPwd(), u.getSalt(), null);
 					// token.setRememberMe(rememberMe);
+					//执行shiro登录操作，登录表单填写的登录信息错误或登录失败时，这一步会抛出异常。
 					subject.login(token);
 					boolean state = subject.isAuthenticated();
 					if (subject.isAuthenticated()) {
@@ -103,7 +104,7 @@ public class UserServiceImpl implements UserService {
 		} catch (ExcessiveAttemptsException ex) {
 			res.setCode(Integer.valueOf(0));
 			res.setMessage("登录失败，未知错误。");
-		} catch (AuthenticationException ex) {
+		} catch (AuthenticationException ex) {//AuthenticationException是所有认证时异常的父类。
 			User user = new User();
 			user.setAccount(name);
 			User userByAccount = userMapper.getUserByAccount(user);

@@ -56,6 +56,11 @@
             </util:map>
         </property>
         <property name="filterChainDefinitions">
+        	<!-- 
+        		 anon（anonymous）： 拦截器表示匿名访问（即不需要登录即可访问）。 
+        		 authc（authentication）：拦截器表示需要身份认证通过后才能访问。
+        		 注意：URL 权限采取第一次匹配优先的方式，即从头开始 使用第一个匹配的 url 模式对应的拦截器链
+        	 -->
             <value> 
                 /login.do = anon
                 /homePage.do = anon
