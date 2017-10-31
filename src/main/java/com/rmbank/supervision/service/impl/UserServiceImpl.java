@@ -40,21 +40,28 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public ReturnResult<User> login(String name, String pwd, boolean rememberMe) {
+		//创建shiro的 Subject 对象
 		Subject subject = SecurityUtils.getSubject();
 		ReturnResult<User> res = new ReturnResult<User>();
 		try {
+			//创建一个用于当做查询参数的User对象
 			User temp = new User();
+			//设置user的账号
 			temp.setAccount(name);
+			//设置改账号是否可用
 			temp.setUsed(Constants.USER_STATUS_EFFICTIVE);
+			//根据账号去数据库中查询出的User对象
 			User u = this.userMapper.getUserByAccount(temp);
+			//判断用户是否存在
 			if (u == null) {
+				//用户不存在，设置相应的响应码和响应消息。
 				res.setCode(Integer.valueOf(0));
 				res.setMessage("用户[" + name + "]不存在！");
 			} else {
-				// 该账号不为空，判断是否锁定
-				if (u.getIsLocking() == 0) {// 等于0代表没有被锁定
-					ShiroUsernamePasswordToken token = new ShiroUsernamePasswordToken(
-							u.getAccount(), pwd, u.getPwd(), u.getSalt(), null);
+				//用户存在，则判断该用户是否被锁定，user对象的isLocking属性等于0代表没有被锁定
+				if (u.getIsLocking() == 0) {
+					//创建继承了UsernamePasswordToken类的ShiroUsernamePasswordToken对象，并传入用户名、表单中获取的密码、数据库加密的密码、盐值、host 作为参数
+					ShiroUsernamePasswordToken token = new ShiroUsernamePasswordToken(u.getAccount(), pwd, u.getPwd(), u.getSalt(), null);
 					// token.setRememberMe(rememberMe);
 					//执行shiro登录操作，登录表单填写的登录信息错误或登录失败时，这一步会抛出异常。
 					subject.login(token);

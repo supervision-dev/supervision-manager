@@ -208,7 +208,13 @@ public class HomeController extends SystemAction {
 	}
 	
 	
-	
+	/**
+	 * 用户登录方法
+	 * @param user
+	 * @param request
+	 * @param response
+	 * @return
+	 */
     @ResponseBody
     @RequestMapping(value={"/userLogin.do"}, method={org.springframework.web.bind.annotation.RequestMethod.POST})
     public JsonResult<User> userLogin(User user, HttpServletRequest request, HttpServletResponse response) {
@@ -216,6 +222,7 @@ public class HomeController extends SystemAction {
         json.setCode(Constants.RESULT_FAILED);
         json.setMessage("登录失败!");
         try {
+        	//调用service中的登录方法，参数分别为：用户名、密码、是否记住我
             ReturnResult<User> res = this.userService.login(user.getAccount(), user.getPwd(),false);
             if (res.getCode().intValue() == ReturnResult.SUCCESS) {
                 User u = res.getResultObject(); 

@@ -13,8 +13,8 @@
 
     <!-- 凭证匹配器 -->
     <bean id="credentialsMatcher" class="com.rmbank.supervision.common.shiro.RetryLimitHashedCredentialsMatcher">
-        <property name="hashAlgorithmName" value="md5"/>
-        <property name="hashIterations" value="2"/>
+        <property name="hashAlgorithmName" value="md5"/><!-- 设置加密算法 -->
+        <property name="hashIterations" value="2"/><!-- 指定加密的次数，即把加密后的字符串再进行加密 -->
         <property name="storedCredentialsHexEncoded" value="true"/>
     </bean>
 

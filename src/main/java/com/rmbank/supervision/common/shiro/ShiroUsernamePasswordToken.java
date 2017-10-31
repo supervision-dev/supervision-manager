@@ -8,7 +8,9 @@ public class ShiroUsernamePasswordToken extends UsernamePasswordToken
 {
   private static final long serialVersionUID = 811630853593090492L;
   private static final Log logger = LogFactory.getLog(ShiroUsernamePasswordToken.class);
+  //盐值
   private String salt;
+  //MD5盐值加密后的密码
   private String base64Password;
 
   public ShiroUsernamePasswordToken()
