@@ -83,7 +83,7 @@ public class Item extends Page {
     private String preparerOrg;
     
     //廉政监察的项目名称
-    private String itemNmae;
+    private String itemLzName;
     
     //执法监察的项目名称
     private String itemName;
@@ -366,14 +366,6 @@ public class Item extends Page {
 		this.isFollow = isFollow;
 	}
 
-	public String getItemNmae() {
-		return itemNmae;
-	}
-
-	public void setItemNmae(String itemNmae) {
-		this.itemNmae = itemNmae;
-	}
-
 	public String getItemName() {
 		return itemName;
 	}
@@ -452,6 +444,14 @@ public class Item extends Page {
 
 	public void setOrgIds(List<Integer> orgIds) {
 		this.orgIds = orgIds;
+	}
+
+	public String getItemLzName() {
+		return itemLzName;
+	}
+
+	public void setItemLzName(String itemLzName) {
+		this.itemLzName = itemLzName;
 	}
 
 	

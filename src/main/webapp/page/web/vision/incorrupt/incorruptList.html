@@ -94,16 +94,18 @@ function getDataList(pageNo){
 					    	itemHtml +="<td>"+req.datalist[i].itemCategory+"</td>";
 					    } 
 				    }
-				  	if(req.datalist[i].itemNmae == null || req.datalist[i].itemNmae ==""){
+				    //项目名称
+				  	if(req.datalist[i].itemLzName == null || req.datalist[i].itemLzName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
-				    	if(req.datalist[i].itemNmae.length >6){
-				    	var names = req.datalist[i].itemNmae.substring(0,6)+"…"
-				    	itemHtml +="<td title=\""+req.datalist[i].itemNmae+"\">"+names+"</td>";
+				    	if(req.datalist[i].itemLzName.length >6){
+				    	var names = req.datalist[i].itemLzName.substring(0,6)+"…"
+				    	itemHtml +="<td title=\""+req.datalist[i].itemLzName+"\">"+names+"</td>";
 				    }else{
-				    	itemHtml +="<td>"+req.datalist[i].itemNmae+"</td>";
+				    	itemHtml +="<td>"+req.datalist[i].itemLzName+"</td>";
 				    }
 				    }
+				    //被监察对象
 				    if(req.datalist[i].orgName == null || req.datalist[i].orgName ==""){
 				    	itemHtml +="<td></td>";  
 				    }else{
