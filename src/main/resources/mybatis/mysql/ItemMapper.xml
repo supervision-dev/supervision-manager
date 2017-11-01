@@ -272,10 +272,11 @@
   </select>
   <!-- 获取实时监察类型的项目 -->
   <select id="getItemListByType" parameterType="com.rmbank.supervision.model.Item" resultMap="BaseResultMap">
-  	SELECT i.*,o.name as orgName,m.name as itemCategory,ip.content as itemLzName,ip1.content as itemName,
+  	SELECT i.*,o.name as orgName,o1.name AS orgPname,m.name as itemCategory,ip.content as itemLzName,ip1.content as itemName,
   	(SELECT COUNT(*) FROM t_item_process AS tip WHERE i.id=tip.item_id) AS isSign 
   	FROM t_item AS i
 	LEFT JOIN t_org AS o ON o.id=i.`supervision_org_id`
+	LEFT JOIN t_org AS o1 ON o1.id=o.`pid`
 	LEFT JOIN t_meta AS m ON m.id=i.`super_item_type`
 	LEFT JOIN t_item_process AS ip ON ip.item_id=i.`id` and ip.content_type_id=89
 	LEFT JOIN t_item_process AS ip1 ON ip1.item_id=i.`id` and ip1.content_type_id=130
@@ -323,10 +324,11 @@
   
   <!-- 查询所有中支立项中支完成的项目 -->
   <select id="getItemListByOrgType" parameterType="com.rmbank.supervision.model.Item" resultMap="BaseResultMap">
-  	SELECT i.* ,o.name AS orgName,o1.name AS preparerOrg,m.name AS sType FROM t_item AS i
-	LEFT JOIN `t_org` AS o ON o.`id`=i.`supervision_org_id`
+  	SELECT i.* ,o.name AS orgName,o1.name AS preparerOrg,o3.name AS orgPname,m.name AS sType FROM t_item AS i
+	LEFT JOIN t_org AS o ON o.`id`=i.`supervision_org_id`
 	LEFT JOIN t_org AS o1 ON o1.id =i.preparer_org_id
-	LEFT JOIN t_org o2 ON i.`preparer_org_id`=o2.`id`
+	LEFT JOIN t_org AS o2 ON i.`preparer_org_id`=o2.`id`
+	LEFT JOIN t_org AS o3 ON o3.`id`=o.`pid`
 	LEFT JOIN `t_meta` AS m ON m.`id`=i.`supervision_type_id`	
 	where 1=1 
 	<if test="searchName != null and searchName != ''">

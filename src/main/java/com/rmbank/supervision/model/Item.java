@@ -92,6 +92,9 @@ public class Item extends Page {
     //定义机构ID的List用于统计
     private List<Integer> orgIds;
     
+    //该项目完成单位的所属机构
+    private String orgPname;
+    
     /**
      * 定义字段供前台使用
      */
@@ -452,6 +455,14 @@ public class Item extends Page {
 
 	public void setItemLzName(String itemLzName) {
 		this.itemLzName = itemLzName;
+	}
+
+	public String getOrgPname() {
+		return orgPname;
+	}
+
+	public void setOrgPname(String orgPname) {
+		this.orgPname = orgPname;
 	}
 
 	
