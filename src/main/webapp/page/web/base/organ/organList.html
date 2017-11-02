@@ -85,6 +85,10 @@ function getOrgTreeList(){
        					oHtml += "<td>中支依法行政领导小组办公室</td>";
        				}else if(oObj.orgtype == 48){
        					oHtml += "<td>中支领导机构</td>";
+       				}else if(oObj.orgtype == 1){
+       					oHtml += "<td>分行机关</td>";
+       				}else if(oObj.orgtype == 0){
+       					oHtml += "<td>辖区</td>";
        				}
        				oHtml += "</tr>";
        			}
@@ -455,7 +459,7 @@ function deleteOrganAction(){
     	</div>
 	    <div class="mainleft">
     		<div class="leftinfos">
-    			<div class="infoleft">
+    			<div class="infoleft" style="height: 430px;">
     				<div class="listtitle">所有机构</div>  
     					<div style=" height:370px;_height:370px;overflow-y:auto; width:90%;">   
 	    					<table id="tbl_orgList" cellpadding="0" cellspacing="0" style="width:100%;"> 
@@ -463,7 +467,7 @@ function deleteOrganAction(){
 			        		</table> 
 		        		</div>
     				</div>
-    			<div class="inforight">
+    			<div class="inforight" style="height: 430px;">
     				<div class="listtitle">机构列表</div>
     					<div style=" height:370px;_height:370px;overflow-y:auto; width:97%;">   
 	    					<table class="tablelist">
