@@ -15,6 +15,8 @@ import com.rmbank.supervision.dao.ItemMapper;
 import com.rmbank.supervision.dao.ItemProcessMapper;
 import com.rmbank.supervision.model.Item;
 import com.rmbank.supervision.model.ItemProcess;
+import com.rmbank.supervision.model.MassageItem;
+import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.service.ItemService;
 @Service(value="itemService")
 public class ItemServiceimpl implements ItemService {
@@ -400,6 +402,12 @@ public class ItemServiceimpl implements ItemService {
 			itemProcess.setPreparerTime(item.getPreparerTime());
 			itemProcessMapper.insertSelective(itemProcess);
 		}
+	}
+
+	@Override
+	public MassageItem getItemMessage(Organ org) {
+		// TODO Auto-generated method stub
+		return itemMapper.getItemMessage(org);
 	}
 
 }  

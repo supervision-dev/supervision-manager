@@ -4,6 +4,8 @@ package com.rmbank.supervision.service;
 import java.util.List;
 
 import com.rmbank.supervision.model.Item;
+import com.rmbank.supervision.model.MassageItem;
+import com.rmbank.supervision.model.Organ;
 
 public interface ItemService {
 	
@@ -179,5 +181,10 @@ public interface ItemService {
 	 * 保存综合管理模块，立项
 	 * @param itemList
 	 */
-	void saveOrUpdateItemList(List<Integer> ids,Item item); 
+	void saveOrUpdateItemList(List<Integer> ids,Item item);
+	/**
+	 * 获取项目消息
+	 * @return
+	 */
+	MassageItem getItemMessage(Organ org); 
 } 

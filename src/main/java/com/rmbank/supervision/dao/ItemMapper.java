@@ -4,6 +4,8 @@ package com.rmbank.supervision.dao;
 import java.util.List;
 
 import com.rmbank.supervision.model.Item;
+import com.rmbank.supervision.model.MassageItem;
+import com.rmbank.supervision.model.Organ;
 @MyBatisRepository
 public interface ItemMapper {
     int deleteByPrimaryKey(Integer id);
@@ -154,6 +156,8 @@ public interface ItemMapper {
 
 	List<Item> getItemListToListByLogOrg(Item item);
 
-	int getItemCountToListByLogOrg(Item item); 
+	int getItemCountToListByLogOrg(Item item);
+
+	MassageItem getItemMessage(Organ org); 
 	
 }

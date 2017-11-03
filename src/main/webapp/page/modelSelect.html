@@ -11,7 +11,7 @@ $(function(){
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
-	 loadSessionResource();
+	loadSessionResource();
 	loadLoginUserInfo();
 });
 function loadLoginUserInfo(){
@@ -26,8 +26,10 @@ function loadLoginUserInfo(){
 	        	$("#hid_loginUser_id").val(req.id);
 	        	if(req.isChangePwd == 1){
 	        		isChangePwd = true;
+	        		showMessage();
 	        	}else{
 	        		changePwd();
+	        		showMessage();
 	        	}
 	        }else{
 				parent.window.location.href = "/supervision/logout.do";
@@ -106,6 +108,49 @@ function gotoModel(urlkey){
 	}else{
 		changePwd();
 	}
+}
+
+function getMessage(){
+	$.ajax({ 
+	    type: "POST", //请求类型
+	    url: "/supervision/vision/getItemMessage.do",
+	    dataType:"json", //响应数据类型    
+	    async:false,
+	    success: function(req) {
+	      messageHtml="";
+	      if(req.code==1 && req.resultObject!=null){
+	      	if(req.resultObject.xnjcNumber>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.xnjcNumber+"</span>条效能监察任务，请到对应模块完成！</li>";
+	      	}
+	      	if(req.resultObject.lzjcNumber>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.lzjcNumber+"</span>条廉政监察任务，请到对应模块完成！</li>";
+	      	}
+	      	if(req.resultObject.zfjcNumber>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.zfjcNumber+"</span>条执法监察任务，请到对应模块完成！</li>";
+	      	}
+	      	if(req.resultObject.fhlxfhwc>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxfhwc+"</span>条分行立项分行完成任务，请到对应模块完成！</li>";
+	      	}
+	      	if(req.resultObject.fhlxzzwc>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxzzwc+"</span>条分行立项中支完成任务，请到对应模块完成！</li>";
+	      	}
+	      	if(req.resultObject.zzlxzzwc>0){
+	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.zzlxzzwc+"</span>条中支立项中支完成任务，请到对应模块完成！</li>";
+	      	}
+	      	$("#massageUl").html(messageHtml);
+	      	if(req.resultObject.xnjcNumber>0 || req.resultObject.lzjcNumber>0 
+	      		|| req.resultObject.zfjcNumber>0 || req.resultObject.fhlxfhwc>0
+	      		|| req.resultObject.fhlxzzwc>0 || req.resultObject.zzlxzzwc>0){
+	      		if(req.resultObject.orgTypeId != 40){
+	      			$("#message_tip").fadeIn(200);
+	      		}	      			
+	      	} 	
+	      }	      
+	    }
+	});
+}
+function showMessage(){
+	getMessage();
 }
 function changePwd(){
 	$("#add_tip").fadeIn(200);
@@ -249,9 +294,22 @@ function changUserPwdAction(){
         </div> 
     </div> 
     
+    <div class="addtip" id="message_tip">
+   		<div class="tiptop"><span>温馨提示</span><a onclick="javascript:clearForm();$('#message_tip').fadeOut(100);" ></a></div>
+	    <div class="changetipinfo"> 
+	       <div style=" width:99%;">	
+	        	<ul id="massageUl">
+	        	</ul>
+	       </div>
+      	</div>
+        
+        <div class="tipbtn">        	
+        
+        </div> 
+    </div> 
     
     <div class="tip" id="confirm_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
+   		<div class="tiptop"><span>操作提示</span><a onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
         
 	    <div class="tipinfo">
 	        <span><img src="/supervision/source/images/ticon.png" /></span>

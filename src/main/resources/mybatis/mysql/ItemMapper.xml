@@ -885,4 +885,47 @@
      	)
 	</if>
   </select>
+  <select id="getItemMessage" parameterType="com.rmbank.supervision.model.Organ" resultType="com.rmbank.supervision.model.MassageItem">
+  	SELECT DISTINCT
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1 WHERE t1.status IN(1,2,3)
+		AND t1.supervision_type_id = 2 
+		AND t1.item_type=0 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+	)AS xnjcNumber,
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1 WHERE t1.status IN(1,2,3) 
+		AND t1.supervision_type_id = 3 
+		AND t1.item_type=0 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+	)AS lzjcNumber,
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1 WHERE t1.status IN(1,2,3)
+		AND t1.supervision_type_id = 4 
+		AND t1.item_type=0 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+	)AS zfjcNumber,
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1
+		LEFT JOIN `t_org` AS t2 ON t2.`id`=t1.`supervision_org_id`
+		WHERE t1.status IN(1,2,3) 
+		AND t1.item_type=1 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+		AND t1.preparer_org_id=4
+		AND t2.`org_type` IN (37,38,39,40,41)
+	)AS fhlxfhwc,
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1
+		LEFT JOIN `t_org` AS t2 ON t2.`id`=t1.`supervision_org_id`
+		WHERE t1.status IN(1,2,3) 
+		AND t1.item_type=1 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+		AND t1.preparer_org_id=4
+		AND t2.`org_type` IN(42,43,44,45,46,47)
+	)AS fhlxzzwc,
+	(SELECT COUNT(t1.`id`) FROM t_item AS t1
+		LEFT JOIN `t_org` AS t2 ON t2.`id`=t1.`supervision_org_id`
+		LEFT JOIN `t_org` AS t3 ON t3.`id`=t1.`preparer_org_id`
+		WHERE t1.status IN(1,2,3)
+		AND t1.item_type=1 
+		AND t1.supervision_org_id=#{id,jdbcType=INTEGER}
+		AND t2.`org_type` IN(42,43,44,45,46,47)
+		AND t3.`org_type`=43
+	)AS zzlxzzwc
+  </select>
 </mapper>

@@ -1,26 +1,20 @@
 package com.rmbank.supervision.web.controller.vision;
 
 import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
+import com.rmbank.supervision.common.ReturnResult;
 import com.rmbank.supervision.common.utils.Constants;
-import com.rmbank.supervision.common.utils.IpUtil;
 import com.rmbank.supervision.model.Item;
-import com.rmbank.supervision.model.ItemProcess;
+import com.rmbank.supervision.model.MassageItem;
 import com.rmbank.supervision.model.Organ;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ItemService;
@@ -37,7 +31,7 @@ import com.rmbank.supervision.web.controller.SystemAction;
 @Scope("prototype")
 @Controller
 @RequestMapping("/vision")
-public class VisionTodoController  extends  SystemAction {
+public class VisionTodoController extends SystemAction {
 
 	@Resource
 	private ItemService itemService;
@@ -208,7 +202,7 @@ public class VisionTodoController  extends  SystemAction {
 						Constants.USER_SUPER_ADMIN_ACCOUNT.equals(loginUser.getAccount())){
 				
 				item.setItemType(Constants.STATIC_ITEM_TYPE_SVISION); //实时监察模块
-				itemList = itemService.getItemListXNJCToList(item);	
+				itemList = itemService.getItemListXNJCToList(item);
 			}else {
 				//如果是中支监察室或中支领导需要加载当前中支下的依法行政领导小组办公室录入的工作事项
 				List<Item> BMItem = new ArrayList<Item>();
@@ -235,4 +229,28 @@ public class VisionTodoController  extends  SystemAction {
 		} 
     	return itemList;
     }
+	
+	@ResponseBody
+    @RequestMapping(value = "/getItemMessage.do")
+    public ReturnResult<MassageItem> getItemMessage(
+            HttpServletRequest request, HttpServletResponse response){ 
+		ReturnResult<MassageItem> result=new ReturnResult<MassageItem>();
+		try{
+			//获取当前用户对应的机构列表
+			List<Organ> userOrgList=userService.getUserOrgByUserId(this.getLoginUser().getId());
+			//获取当前用户对应的第一个机构
+			Organ userOrg=userOrgList.get(0);
+			MassageItem mi=itemService.getItemMessage(userOrg);
+			mi.setOrgTypeId(userOrg.getOrgtype());
+			result.setCode(1);
+			result.setMessage("获取系统任务成功！");
+			result.setResultObject(mi);
+		}catch(Exception e){
+			e.printStackTrace();
+			result.setCode(0);
+			result.setMessage("获取系统任务失败！");
+		}
+		
+		return result;
+	}
 }
