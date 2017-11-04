@@ -141,7 +141,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('分行监察室立项成功，待被监察对象上传资料完成项目监察 ！', {
+         	layer.confirm('分行监察室立项成功，待被监察对象上传资料 ！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -246,7 +246,7 @@ function returnPage(){
 				        	if(uploader.files.length>0){
 				        		$("#uploader_start").click(); //上传文件
 				        	}else{
-				        		layer.confirm('分行监察室立项成功，待被监察对象上传资料完成项目监察 ！', {
+				        		layer.confirm('分行监察室立项成功，待被监察对象上传资料 ！', {
 									btn: ['确认'] //按钮
 								}, function(){//点击确认按钮调用
 									layer.close(layer.confirm());//关闭当前弹出层

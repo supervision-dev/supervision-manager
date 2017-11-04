@@ -64,6 +64,12 @@ function getDataList(pageNo){
 				    	}else{
 				    		manageHtml +="<td>资料上传中…</td>";
 				    	}
+				    }if(req.datalist[i].lasgTag ==56){
+				    	if(req.data.logOrgId == req.datalist[i].supervisionOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoUpdateFile("+req.datalist[i].id+");\" class=\"button-action\">修改或补充资料</button></td>";
+				    	}else{
+				    		manageHtml +="<td>资料上传中…</td>";
+				    	}
 				    }else{
 				    	if(req.datalist[i].status == 4){
 				    		manageHtml +="<td>【已完成】</td>";
@@ -149,6 +155,9 @@ function showItem(id){
 }
 function gotoNextFlow(itemId){
 	window.location.href = "/supervision/pageRoute/manage/branch/branchZZFile.do?id="+itemId+"&s="+Math.random();
+}
+function gotoUpdateFile(itemId){
+	window.location.href = "/supervision/pageRoute/manage/branch/branchZZUpdateFile.do?id="+itemId+"&s="+Math.random();
 }
 function showAlertTip(){ 
 	if(constants_item_id == 0){

@@ -538,6 +538,9 @@ public class BranchController extends SystemAction {
 								}
 	    					}
 	    				}
+	    				if(itp.getPreparerTime() != null){
+	    					itp.setPreparerTimes(Constants.DATE_FORMAT.format(itp.getPreparerTime()));
+	    				}
 	    			}
 	    			br.setResultItemProcess(processList);
 	    		}
@@ -576,19 +579,25 @@ public class BranchController extends SystemAction {
 					itemProcess.setPreparerOrgId(organ.getId());
 					itemProcess.setPreparerId(loginUser.getId());
 					itemProcess.setPreparerTime(new Date());
-					itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ_OVER);
+					if(itemProcess.getIsOver()==1){
+						//项目全部完结
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ_OVER);
+						if(item.getStatus() == 3){
+							item.setStatus(5);
+						}else{
+							item.setStatus(4);
+						} 
+						itemService.updateByPrimaryKeySelective(item);
+					}else if(itemProcess.getIsOver()==0){
+						//项目未全部完结，可以继续上传资料
+						itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_FHZZ_NO_OVER);
+					}
 					itemProcessService.insertSelective(itemProcess);
-				 
-					if(item.getStatus() == 3){
-						item.setStatus(5);
-					}else{
-						item.setStatus(4);
-					} 
-					itemService.updateByPrimaryKeySelective(item);
+
 					String ip = IpUtil.getIpAddress(request);		
 					logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的监察资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 					js.setCode(0);
-					js.setMessage("被监察对象上传文件成功,当前项目完结");
+					js.setMessage("被监察对象上传文件成功");
 					
 				}
 			}

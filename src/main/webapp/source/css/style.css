@@ -179,7 +179,7 @@ h2{font-weight:normal;}
 
 .enterA{float:left; margin-left:35px; margin-top:20px; display:inline-block; width:70px; height:30px; color:#fff; background:#3eafe0; font-weight:bold; border-radius:2px; text-align:center; line-height:30px; cursor:pointer;}
 .enterA:hover{color:#fff; background:#d98c1d;}
-.itemTable td label {float: left;}
+.itemTable td label {float: left; font-size: 14px;}
 .itemTable td label input{ margin-top: -3px;} 
 
 /*page*/

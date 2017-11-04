@@ -248,6 +248,23 @@ public class PageRouteController extends SystemAction {
     	return mv;
     }
     /**
+     * 分行立项中支完成中支继续上传资料页面
+     *
+     * @param request
+     * @param response
+     * @return
+	 * @throws UnsupportedEncodingException 
+     */
+    @RequestMapping(value = "/manage/branch/branchZZUpdateFile.do")
+    public ModelAndView branchZZUpdateFile( HttpServletRequest request, 
+    		@RequestParam(value="id", required = false) Integer id,
+    		HttpServletResponse response) throws UnsupportedEncodingException {  
+    	HttpSession session = request.getSession();
+    	session.setAttribute("FHZZItemId", id); 
+    	ModelAndView mv = new ModelAndView("web/manage/branch/branchZZaddOrUpdate");
+    	return mv;
+    }
+    /**
      * 分行立项中支完成查看页面
      *
      * @param request

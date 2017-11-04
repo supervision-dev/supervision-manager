@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>分行立项中支完成</title>
+<title>中支立项</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <!--
 <link rel="stylesheet" type="text/css" href="styles.css">
@@ -51,10 +51,9 @@
     <script src="/supervision/source/js/plupload/html5shiv.js"></script>
     <![endif]-->
   
-
 <script type="text/javascript">
-$(document).ready(function(){  
-	 var len=32;//32长度
+$(document).ready(function(){   
+ var len=32;//32长度
      var radix=16;//16进制
      var chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
      var uuid=[],i;
@@ -133,7 +132,7 @@ $(document).ready(function(){
      //绑定文件是否全部上传完成
      uploader.bind('UploadComplete',function(uploader,files){
          if(null != files && files.length>0){ 
-         	layer.confirm('被监察对象上传资料成功 ！', {
+         	layer.confirm('补充资料录入成功 ！', {
 				btn: ['确认'] //按钮
 			}, function(){//点击确认按钮调用
 				layer.close(layer.confirm());//关闭当前弹出层
@@ -156,6 +155,7 @@ function loadItemInfo(){
         		 	$("#lbl_name").text(req.resultItem.name);
         		 	$("#lbl_supervisionType").text(req.resultItem.sType);
         		 	$("#lbl_stTime").text(formatTime(req.resultItem.preparerTime,false));
+        		 	//$("#td_fstTime").html(formatTime(req.resultItem.preparerTime,true));
         		 	$("#lbl_edTime").text(formatTime(req.resultItem.endTime,false));
         		 	$("#hid_itemid").val(req.resultItem.id);
         		 }
@@ -171,6 +171,70 @@ function loadItemInfo(){
         		 			$("#td_fileList").html(fHtml);
         		 		}
         		 	}
+        		 	if(req.resultItemProcess.length >1){ 
+	        		 	var obj1 = req.resultItemProcess[1];
+	        		 	if(obj1 != undefined && obj1 != null){
+	        		 		$("#lbl_content1").text(obj1.content);
+	        		 		if(obj1.fileList != null && obj1.fileList.length >0){
+	        		 			var fHtml = "";
+	        		 			for(var i = 0; i< obj1.fileList.length; i++){
+	        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+obj1.fileList[i].filePath+"\',\'"+obj1.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ obj1.fileList[i].fileName+"</a><br>";
+	        		 			}
+	        		 			$("#td_fileList1").html(fHtml);
+	        		 		}
+        		 			$("#td_scdTime").html(obj1.preparerTimes);
+		        		 	if($("#tr_scd1").hasClass("displaynone")){
+		        		 		$("#tr_scd1").removeClass("displaynone");
+		        		 	}
+		        		 	if($("#tr_scd2").hasClass("displaynone")){
+		        		 		$("#tr_scd2").removeClass("displaynone");
+		        		 	}
+		        		 	if($("#tr_scd3").hasClass("displaynone")){
+		        		 		$("#tr_scd3").removeClass("displaynone");
+		        		 	}if($("#tr_scd11").hasClass("displaynone")){
+		        		 		$("#tr_scd11").removeClass("displaynone");
+		        		 	}
+	        		 	}
+       		 		}
+       		 		if(req.resultItemProcess.length >2){
+	     		 		itemHtml ="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    itemHtml +="<td style=\"text-align: left;\" colspan='3'>否</td>";			       
+				        itemHtml +="</tr>";
+       		 			for(var i = 2;i<req.ResultItemProcess.length;i++){
+					        itemHtml +="<tr>";
+					        itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">补充或新增资料：</td>";
+					        itemHtml +="<td style=\"text-align: left;\" colspan='3'>";
+					        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+							    itemHtml +="<a  title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+					        }
+					        itemHtml +="</td>";
+					        itemHtml +="</tr>";
+					        
+					        itemHtml +="<tr>";				    
+						    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">相关资料说明：</td>";  	
+						    itemHtml +="<td style=\"text-align: left;\" colspan='3'>"+req.ResultItemProcess[i].content+"</td>";			       
+					        itemHtml +="</tr>";
+					        
+					        itemHtml +="<tr>";				    
+						    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">提交时间：</td>";  	
+						    itemHtml +="<td style=\"text-align: left;\" colspan='3'>"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+					        itemHtml +="</tr>";
+					        
+					        if(req.ResultItemProcess[i].contentTypeId == 55){
+					        	itemHtml +="<tr>";				    
+					    		itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    		itemHtml +="<td style=\"text-align: left;\" colspan='3'>是</td>";			       
+				        		itemHtml +="</tr>";
+					        }else{
+					        	itemHtml +="<tr>";				    
+					    		itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    		itemHtml +="<td style=\"text-align: left;\" colspan='3'>否</td>";			       
+				        		itemHtml +="</tr>";
+					        }
+       		 			}
+       		 			$("#tr_scd3").after(itemHtml);
+       		 		}
         		 }
         	}else{
         		layer.alert(data.message);	        	
@@ -178,19 +242,6 @@ function loadItemInfo(){
        }
 	});
 }
-function deleteFile(obj){
-	$("#"+obj).remove();
-	var uploader = $('#uploader').plupload('getUploader'); 
-	var flist = uploader.files;
-	if(flist.length >0){
-		for(var f = 0;f<flist.length;f++){
-			if(flist[f].id == obj){
-				flist.splice(f,1);
-			}
-		}
-	} 
-	uploader.refresh()
-} 
 function downLoadFile(path,name){
 	var filePath = encodeURI(encodeURI(path));
 	var fileName = encodeURI(encodeURI(name));
@@ -217,17 +268,6 @@ function getzf(num){
     }  
     return num;  
 }  
-function returnPage(){
-		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
-			btn: ['确认','取消'] //按钮
-		}, function(){//点击确认按钮调用
-			layer.close(layer.confirm());//关闭当前弹出层
-			window.location.href="/supervision/pageRoute/manage/branch/branchZZList.do";
-		}, function(){
-			
-		});
-}
- 
 function ajaxPost(){
     $.ajax({
         type: "POST", //请求类型
@@ -240,7 +280,7 @@ function ajaxPost(){
 	        	if(uploader.files.length>0){
 	        		$("#uploader_start").click(); //上传文件
 	        	}else{
-	        		layer.confirm('被监察对象上传资料成功！', {
+	        		layer.confirm('补充资料录入成功！', {
 						btn: ['确认'] //按钮
 					}, function(){//点击确认按钮调用
 						layer.close(layer.confirm());//关闭当前弹出层
@@ -263,7 +303,16 @@ function saveItem(obj){
 	}, function(){
 		
 	});
-	
+}
+function returnPage(){
+		layer.confirm('当前项目资料尚未提交，是否离开当前页面？', {
+			btn: ['确认','取消'] //按钮
+		}, function(){//点击确认按钮调用
+			layer.close(layer.confirm());//关闭当前弹出层
+			window.location.href="/supervision/pageRoute/manage/branch/branchZZList.do";
+		}, function(){
+			
+		});
 }
 </script>
 
@@ -277,54 +326,83 @@ function saveItem(obj){
     <span>位置：</span>
     <ul class="placeul"> 
     <li><a href="#">分行立项中支完成</a></li>
-    <li><a href="#">被监察对象上传资料</a></li>
+    <li><a href="#">项目详情查看</a></li>
     </ul>
     </div>
     
     <div class="rightinfo">
      
+    <div id="div_toolbars" class="tools">
+    	<ul class="toolbar">
+	        <li class="click" onclick="javascript:window.location.href='/supervision/pageRoute/manage/branch/branchZZList.do'"><span><img src="/supervision/source/images/t01.png" /></span>返回</li>
+        </ul> 
+    
+    </div>
     <form id="itemInfoForm" method="post">	   
     <table class="itemTable" >
     	<tr>
-       		<td width="15%" align="right" >项目名称：</td> 
+       		<td width="17%" align="right" >项目名称：</td> 
        		<td colspan="3">
-       			<label id="lbl_name"></label>
-				<input type="hidden" id="hid_uuid" name="uuid" />	
-				<input type="hidden" id="hid_itemid" name="itemId" />	
-				<input type="hidden" value="999" name="contentTypeId" />	
+       			<label id="lbl_name"></label> 	
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">项目分类：</td>
+       		<td width="17%" align="right" style="height:35px;">项目分类：</td>
        		<td colspan="3">
        			<label id="lbl_supervisionType"></label>
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项时间：</td>
+       		<td width="17%" align="right" style="height:35px;">立项时间：</td>
        		<td width="15%;">
        			<label id="lbl_stTime"></label>
        		</td>
-       		<td width="15%" align="right">规定完成时间：</td>
+       		<td width="17%" align="right">规定完成时间：</td>
        		<td>
        			<label id="lbl_edTime"></label>
        		</td>
        	</tr>       	
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案：</span></td>
+       		<td width="17%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案：</span></td>
        		<td colspan="3" id="td_fileList">
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right" style="height:35px;">立项审批表、<br/><span style="margin-top: -15px; font-size: 14px;">方案说明：</span></td>
+       		<td width="17%" align="right" style="height:35px;">相关说明：</td>
        		<td colspan="3">
        			<label id="lbl_content"></label>
        		</td>
        	</tr>
-       	</table>
-       	<table class="input_Table">
+       	<!-- <tr>
+       		<td width="17%" align="right" style="height:35px;">提交时间：</td>
+       		<td colspan="3" id="td_fstTime"  title="分行监察室提交立项时间">
+       		</td>
+       	</tr> -->
+       	
+       	<tr id="tr_scd2" class="displaynone">
+       		<td width="17%" align="right" style="height:35px;">中支录入项目资料：</td>
+       		<td colspan="3" id="td_fileList1">
+       		</td>
+       	</tr>
+       	<tr id="tr_scd11" class="displaynone">
+       		<td></td>
+       		<td colspan="3">中支录入项目资料包括（行政监察通知书、行政监察报告、整改建议书、整改报告、跟踪整改情况等）</td>
+       	</tr>
+       	<tr id="tr_scd1" class="displaynone">
+       		<td width="17%" align="right" style="height:35px;">项目资料说明：</td>
+       		<td colspan="3">
+       			<label id="lbl_content1"></label>
+       		</td>
+       	</tr>
+       	<tr id="tr_scd3" class="displaynone">
+       		<td width="17%" align="right" style="height:35px;">提交时间：</td>
+       		<td colspan="3" id="td_scdTime"  title="被监察对象上传资料时间">
+       		</td>
+       	</tr>
+    </table>
+    <table class="input_Table">
        	<tr>
-			<td width="15%" align="right" height="129px;">录入项目资料：</td>
+			<td width="17%" align="right" height="129px;">修改或补充资料：</td>
 			<td colspan="3">
 				 <div id="themeswitcher" class="pull-right" ></div>
 	                <script>
@@ -337,24 +415,21 @@ function saveItem(obj){
 			 </td>	
 		</tr> 
        	<tr>
-			<td style="height:35px;"></td>
-			<td colspan="3">
-				项目资料包括（行政监察通知书、行政监察报告、整改建议书、整改报告、跟踪整改情况等）
-			</td>
-		</tr>
-       	<tr>
-       		<td width="12%" align="right">相关资料说明：</td>
+       		<td width="17%" align="right">补充资料说明：</td>
        		<td colspan="3">
        			<textarea rows="3" cols="5" style="width:81%;height:58px;" name="content"></textarea>			
        		</td>
        	</tr>
        	<tr>
-       		<td width="12%" align="right">是否全部完成：</td>
+       		<td width="17%" align="right">是否全部完成：</td>
        		<td colspan="3">
        			<select name="isOver">
 	       			 	<option value="0">否</option>
 	       			 	<option value="1">是</option>
 	       		</select>
+	       		<input type="hidden" id="hid_uuid" name="uuid" />	
+				<input type="hidden" id="hid_itemid" name="itemId" />	
+				<input type="hidden" value="56" name="contentTypeId" />
        		</td>
        	</tr>
        	<tr>
@@ -365,25 +440,8 @@ function saveItem(obj){
 			</td>
 		</tr>
     </table>
-    </form>
-   
-    
-    
-    
-    <div class="tip" id="confirm_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
-        
-	    <div class="tipinfo">
-	        <span><img src="/supervision/source/images/ticon.png" /></span>
-	        <div class="tipright">
-	        	<p id="showmessage"></p> 
-	        </div> 
-      	</div>
-        
-        <div class="tipbtn">
-        	<input type="button"  class="sure" value="确定" /> 
-        </div> 
-    </div>  
+    </form> 
+     
     </div>  
 </body>
 
