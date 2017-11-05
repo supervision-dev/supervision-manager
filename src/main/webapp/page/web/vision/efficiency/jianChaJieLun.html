@@ -53,7 +53,6 @@
 <script type="text/javascript">
 $(document).ready(function(){ 
 	$('.tablelist tbody tr:odd').addClass('odd');
-	
 	getDataList(1); 
 	 var len=32;//32长度
      var radix=16;//16进制
@@ -194,8 +193,7 @@ function ajaxPost(){
 		        async: true, //发送异步请求	  
 		        dataType:"json", //响应数据类型      
 		        success: function(data) {
-		        	if(data.code==0){   	    	
-			        	
+		        	if(data.code==0){
 						var uploader = $('#uploader').plupload('getUploader');
 			        	if(uploader.files.length>0){
 			        		$("#uploader_start").click(); //上传文件

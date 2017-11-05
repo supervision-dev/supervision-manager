@@ -109,7 +109,7 @@ function getDataList(pageNo){
 				    	//itemHtml +="<td>"+req.datalist[i].orgName+"</td>";  
 				    }	
 				    //当登陆机构为分行监察室类型是显示被监察对象的所属单位
-				    if(LogOrgType == 40){
+				    if(LogOrgType == 40 || LogOrgType == 39){
 				    	$("#orgPname").show();
 				    	//所属单位
 					    if(req.datalist[i].orgPname == null || req.datalist[i].orgPname ==""){

@@ -51,7 +51,12 @@
     <![endif]-->
   
 <script type="text/javascript">
-$(document).ready(function(){ 
+$(document).ready(function(){
+	/* layer.msg('数据加载中，请稍后！', {
+		icon: 16,
+		time: 0,
+		shade: 0.3 
+	});  */
 	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
@@ -239,7 +244,7 @@ function getDataList(pageNo){
        type: "POST", //请求类型
        url: "/supervision/vision/efficiency/showItem.do",
        data:obj,//发送到服务器的数据，序列化后的值 
-       async:false,
+       async:true,
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#tb_userList").html("");
@@ -450,6 +455,7 @@ function getDataList(pageNo){
 		        }
 	       }	
 	       $("#tb_userList").html(itemHtml);
+	       //layer.closeAll(); 
        }
 	});
 }
