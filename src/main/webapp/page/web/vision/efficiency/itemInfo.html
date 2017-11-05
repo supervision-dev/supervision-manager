@@ -264,6 +264,11 @@ function returnPage(){
 			btn: ['确认','取消'] //按钮
 		}, function(){//点击确认按钮调用
 			layer.close(layer.confirm());//关闭当前弹出层
+			layer.msg('资料上传中，请稍后！', {
+  				icon: 16,
+  				time: 0,
+  				shade: 0.3 
+			});
 			ajaxPost();
 		}, function(){
 			

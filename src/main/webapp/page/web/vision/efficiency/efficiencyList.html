@@ -166,6 +166,10 @@ function getDataList(pageNo){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"sign("+req.datalist[i].id+");\"  target=\"rightFrame\">签收</button></td>";
 				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 66 ||req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 72){
 				    	itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",67);\"  target=\"rightFrame\">上传资料</button></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
+			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</button></td>";
+				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
+			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</button></td>";
 				    }else if(req.datalist[i].orgType == 40 || req.datalist[i].orgType == 43){
 				    	//是监察室类型的机构，再来判断添加项目的机构类型和登录机构的类型是否一致，并且流程节点为67。
 				    	/* if(req.datalist[i].isItemOrg == "true" && req.datalist[i].lasgTag == 67){
@@ -203,12 +207,7 @@ function getDataList(pageNo){
 						    }
 					    }else{
 					    	itemHtml +="<td width=\"180px;\"></td>";
-					    }
-					      
-				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 69){
-			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",69);\"  target=\"rightFrame\">录入整改情况</button></td>";
-				    }else if(req.datalist[i].logOrgId==req.datalist[i].supervisionOrgId && req.datalist[i].isSign > 3 && req.datalist[i].lasgTag == 779){
-			    		itemHtml +="<td width=\"180px;\"><button type=\"button\" class=\"button-action\" onclick=\"efficiencyFile("+req.datalist[i].id+",778);\"  target=\"rightFrame\">再次录入整改情况</button></td>";
+					    } 
 				    }else if(req.datalist[i].status == 4){
 				    	itemHtml +="<td width=\"180px;\">【已完结】</td>";
 				    }else if(req.datalist[i].status == 5){

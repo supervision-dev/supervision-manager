@@ -52,8 +52,11 @@
   
 <script type="text/javascript">
 $(document).ready(function(){ 
+	$(".sure").click(function(){
+	  	$("#confirm_tip").fadeOut(100);
+	});  
+	$('.tablelist tbody tr:odd').addClass('odd');
 	getDataList(1); 
-	  
 	 var len=32;//32长度
      var radix=16;//16进制
      var chars='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
@@ -143,15 +146,6 @@ $(document).ready(function(){
      });
      $("#uploader_browse").removeAttr("style");
      $("#uploader_browse").attr("style","z-index: 1;font-size: 12px;font-weight: normal;");	
-
-
-
-	
-  	$(".sure").click(function(){
-	  	$("#confirm_tip").fadeOut(100);
-	});  
-	$('.tablelist tbody tr:odd').addClass('odd');
-	
 });
 
 function deleteFile(obj){
@@ -220,6 +214,11 @@ function returnPage(){
 			btn: ['确认','取消'] //按钮
 		}, function(){//点击确认按钮调用
 			layer.close(layer.confirm());//关闭当前弹出层
+			layer.msg('资料上传中，请稍后！', {
+				icon: 16,
+				time: 0,
+				shade: 0.3 
+			});
 			ajaxPost();
 		}, function(){
 			
