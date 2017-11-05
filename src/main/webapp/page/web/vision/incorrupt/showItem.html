@@ -5,13 +5,20 @@
 <title>廉政监察</title>
 <link href="/supervision/source/css/style.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
-
+<!-- 以下两个引的文件用于layer -->
+<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+<script src="/supervision/source/js/layer/layer.js"></script>
 <script type="text/javascript">
 $(document).ready(function(){ 
   	$(".sure").click(function(){
 	  	$("#confirm_tip").fadeOut(100);
 	});  
 	$('.tablelist tbody tr:odd').addClass('odd');
+	layer.msg('数据加载中，请稍后！', {
+		icon: 16,
+		time: 0,
+		shade: [0.5, '#FFFFFF']
+	});
 	getDataList(1);
 });
 function getDataList(pageNo){
@@ -382,6 +389,7 @@ function getDataList(pageNo){
 		        }
 	       }
 	       $("#tb_userList").html(itemHtml);
+	       layer.closeAll();
        }
 	});
 }
