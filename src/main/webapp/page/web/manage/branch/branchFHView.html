@@ -7,18 +7,23 @@
 <!--
 <link rel="stylesheet" type="text/css" href="styles.css">
 -->
-	<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
+<script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 <script src="/supervision/source/laydate/laydate.js"></script>
-	<script src="/supervision/source/js/common/common.js"></script>
-    <!-- 以下两个引的文件用于layer -->
-	<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
-	<script src="/supervision/source/js/layer/layer.js"></script>
+<script src="/supervision/source/js/common/common.js"></script>
+<!-- 以下两个引的文件用于layer -->
+<link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
+<script src="/supervision/source/js/layer/layer.js"></script>
     
   
 
 <script type="text/javascript">
 $(document).ready(function(){   
- 	 loadItemInfo();
+	layer.msg('数据加载中，请稍后！', {
+		icon: 16,
+		time: 0,
+		shade: [0.5, '#FFFFFF']
+	});
+ 	loadItemInfo();
 });
 var isFirst_tag = true;
 function loadItemInfo(){

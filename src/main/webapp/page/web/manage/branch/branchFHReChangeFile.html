@@ -176,7 +176,7 @@ function loadItemInfo(){
         		 		if(boj.fileList != null && boj.fileList.length >0){
         		 			var fHtml = "";
         		 			for(var i = 0; i< boj.fileList.length; i++){
-        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a>";
+        		 				fHtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+boj.fileList[i].filePath+"\',\'"+boj.fileList[i].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ boj.fileList[i].fileName+"</a><br/>";
         		 			}
         		 			$("#td_fileList").html(fHtml);
         		 		}
@@ -229,7 +229,7 @@ function loadItemInfo(){
         		 				}else{
         		 					phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">监察意见：</td>";
 		        		 			phtml += "<td colspan=\"3\" style=\"word-break:break-all;\"><label>"+req.resultItemProcess[i].content+"</label></td></tr>";
-		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">跟踪整改情况附件：</td><td colspan=\"3\">";
+		        		 			phtml += "<tr><td width=\"12%\" align=\"right\" style=\"height:35px;\">相关资料附件：</td><td colspan=\"3\">";
 		        		 			if(req.resultItemProcess[i].fileList != null &&　req.resultItemProcess[i].fileList.length >0){
 		        		 				for(var j = 0; j< req.resultItemProcess[i].fileList.length; j++){
 			        		 				phtml += "<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.resultItemProcess[i].fileList[j].filePath+"\',\'"+req.resultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+ req.resultItemProcess[i].fileList[j].fileName+"</a><br/>";
@@ -328,6 +328,11 @@ function saveItem(obj){
 		btn: ['确认','取消'] //按钮
 	}, function(){//点击确认按钮调用
 		layer.close(layer.confirm());//关闭当前弹出层
+		layer.msg('资料上传中，请稍后！', {
+			icon: 16,
+			time: 0,
+			shade: 0.3 
+		});
 		ajaxPost();
 	}, function(){
 		
