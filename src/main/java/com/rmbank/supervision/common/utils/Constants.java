@@ -119,9 +119,10 @@ public class Constants
 
   //中支立项，中支完成项目进行流程
   public static final Integer CONTENT_TYPE_ID_ZZZZ= 51; 
-  public static final Integer CONTENT_TYPE_ID_ZZZZ_OVER= 52;  
-  public static final Integer CONTENT_TYPE_ID_ZZZZ_VALUE= 999;  
-  public static final Integer CONTENT_TYPE_ID_ZZZZ_RE_FILE= 998;  
+  public static final Integer CONTENT_TYPE_ID_ZZZZ_OVER= 52;  //项目全部完成
+  public static final Integer CONTENT_TYPE_ID_ZZZZ_NO_OVER= 53; //项目没有全部完成
+  public static final Integer CONTENT_TYPE_ID_ZZZZ_VALUE= 999;  //待继续录入资料
+  public static final Integer CONTENT_TYPE_ID_ZZZZ_RE_FILE= 998;  //待量化
   
   public static final Integer IS_VALUE = 1;
   public static final Integer NOT_VALUE = 0;

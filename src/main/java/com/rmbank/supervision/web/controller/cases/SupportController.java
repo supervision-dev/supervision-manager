@@ -369,6 +369,9 @@ public class SupportController extends SystemAction {
 	    						itp.setValueTypeValue(valueTypeValue);
 	    					}
 	    				}
+	    				if(itp.getPreparerTime() != null){
+	    					itp.setPreparerTimes(Constants.DATE_FORMAT.format(itp.getPreparerTime()));
+	    				}
 	    				itp.setFileList(fileList);  
 	    			}
 	    			br.setResultItemProcess(processList);
@@ -395,7 +398,7 @@ public class SupportController extends SystemAction {
 				HttpServletRequest request, HttpServletResponse response) { 
 			JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();
 			js.setCode(1);
-			js.setMessage("被监察对象上传文件失败");
+			js.setMessage("上传文件失败");
 			User loginUser = this.getLoginUser();
 			List<Organ> userOrgByUserId = userService.getUserOrgByUserId(loginUser.getId());
 			Organ organ = userOrgByUserId.get(0);
@@ -409,15 +412,22 @@ public class SupportController extends SystemAction {
 						itemProcess.setPreparerOrgId(organ.getId());
 						itemProcess.setPreparerId(loginUser.getId());
 						itemProcess.setPreparerTime(new Date());
-						itemProcessService.insertSelective(itemProcess);
-						if(itemProcess.getContentTypeId() == Constants.CONTENT_TYPE_ID_ZZZZ_OVER){
-							if(item.getStatus() == 3){
-								item.setStatus(5);
-							}else{
-								item.setStatus(4);
+						
+						if(itemProcess.getIsOver()==1){//项目全部完结
+							if(itemProcess.getContentTypeId() == Constants.CONTENT_TYPE_ID_ZZZZ_OVER){
+								if(item.getStatus() == 3){
+									item.setStatus(5);
+								}else{
+									item.setStatus(4);
+								}
+								itemService.updateByPrimaryKeySelective(item);
 							}
-							itemService.updateByPrimaryKeySelective(item);
+						}else if(itemProcess.getIsOver()==0){
+							//项目未全部完结，可以继续上传资料
+							itemProcess.setContentTypeId(Constants.CONTENT_TYPE_ID_ZZZZ_NO_OVER);
 						}
+						itemProcessService.insertSelective(itemProcess);
+						
 						String ip = IpUtil.getIpAddress(request);		
 						logService.writeLog(Constants.LOG_TYPE_LXGL, "被监察对象："+organ.getName()+"上传了 "+item.getName()+" 的监察资料", 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
 						js.setCode(0);

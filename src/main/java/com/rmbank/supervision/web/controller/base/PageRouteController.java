@@ -366,6 +366,23 @@ public class PageRouteController extends SystemAction {
     	return mv;
     }
     /**
+    * 中支新增或修改资料页面
+    *
+    * @param request
+    * @param response
+    * @return
+	* @throws UnsupportedEncodingException 
+    */
+   @RequestMapping(value = "/manage/support/supportAddOrUpdateFile.do")
+   public ModelAndView supportAddOrUpdateFile( HttpServletRequest request, 
+   		@RequestParam(value="id", required = false) Integer id,
+   		HttpServletResponse response) throws UnsupportedEncodingException {   
+   	HttpSession session = request.getSession();
+   	session.setAttribute("ZZZZItemId", id);
+   	ModelAndView mv = new ModelAndView("web/manage/support/supportAddOrUpdateFile");
+   	return mv;
+   }
+    /**
      * 中支项目查看页面
      *
      * @param request

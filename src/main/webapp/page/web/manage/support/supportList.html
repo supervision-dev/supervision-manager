@@ -160,6 +160,12 @@ function getDataList(pageNo){
 				    	}else{
 				    		manageHtml +="<td>资料上传中…</td>";
 				    	}
+				    }else if(req.datalist[i].lasgTag ==53){
+				    	if(req.data.logOrgId == req.datalist[i].preparerOrgId){
+				    		manageHtml +="<td><button type=\"button\" onclick=\"gotoNextFlow(53,"+req.datalist[i].id+");\"  class=\"button-action\">修改或补充资料</button></td>";
+				    	}else{
+				    		manageHtml +="<td>资料上传中…</td>";
+				    	}
 				    }else{
 				    	if(req.datalist[i].status == 4){
 				    		manageHtml +="<td>【已完成】</td>";
@@ -195,6 +201,8 @@ function gotoNextFlow(currentTag,itemId){
 		window.location.href = "/supervision/pageRoute/manage/support/supportValue.do?id="+itemId;
 	}else if(currentTag == 998){
 		window.location.href = "/supervision/pageRoute/manage/support/supportReFile.do?id="+itemId;
+	}else if(currentTag == 53){
+		window.location.href = "/supervision/pageRoute/manage/support/supportAddOrUpdateFile.do?id="+itemId;
 	}
 }
 function showAlertTip(){ 

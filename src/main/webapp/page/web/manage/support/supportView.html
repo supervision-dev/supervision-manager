@@ -13,16 +13,13 @@
 <!-- 以下两个引的文件用于layer -->
 <link type="text/css" rel="stylesheet" href="/supervision/source/js/layer/skin/layer.css"/>	
 <script src="/supervision/source/js/layer/layer.js"></script>
-    
-  
-
 <script type="text/javascript">
 $(document).ready(function(){   
-	layer.msg('数据加载中，请稍后！', {
+	/* layer.msg('数据加载中，请稍后！', {
 		icon: 16,
 		time: 0,
 		shade: [0.5, '#FFFFFF']
-	});
+	}); */
  	loadItemInfo();
 });
 function loadItemInfo(){
@@ -116,6 +113,44 @@ function loadItemInfo(){
 		        		 		$("#tr_fth3").removeClass("displaynone");
 		        		 	}
 	        		 	}
+       		 		}
+       		 		if(req.resultItemProcess.length >3){
+       		 			itemHtml ="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    itemHtml +="<td style=\"text-align: left;\" colspan='3'>否</td>";			       
+				        itemHtml +="</tr>";
+       		 			for(var i = 2;i<req.ResultItemProcess.length;i++){
+					        itemHtml +="<tr>";
+					        itemHtml +="<td width=\"17%\" style=\"text-align: right;\">补充或新增资料：</td>";
+					        itemHtml +="<td style=\"text-align: left;\" colspan='3'>";
+					        for(var j = 0;j<req.ResultItemProcess[i].fileList.length;j++){
+							    itemHtml +="<a title=\"点击下载\" onclick=\"downLoadFile(\'"+req.ResultItemProcess[i].fileList[j].filePath+"\',\'"+req.ResultItemProcess[i].fileList[j].fileName+"\');\" style=\"margin-left: 5px;color:blue;cursor: pointer;\">"+req.ResultItemProcess[i].fileList[j].fileName+"</a><br/>";			       
+					        }
+					        itemHtml +="</td>";
+					        itemHtml +="</tr>";
+					        itemHtml +="<tr>";				    
+						    itemHtml +="<td width=\"17%\" style=\"text-align: right;\">相关资料说明：</td>";  	
+						    itemHtml +="<td style=\"text-align: left;\" colspan='3'>"+req.ResultItemProcess[i].content+"</td>";			       
+					        itemHtml +="</tr>";
+					        
+					        itemHtml +="<tr>";				    
+						    itemHtml +="<td width=\"17%\" style=\"text-align: right;\">提交时间：</td>";  	
+						    itemHtml +="<td style=\"text-align: left;\" colspan='3'>"+req.ResultItemProcess[i].preparerTimes+"</td>";			       
+					        itemHtml +="</tr>";
+					        
+					        if(req.ResultItemProcess[i].contentTypeId == 52){
+					        	itemHtml +="<tr>";				    
+					    		itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    		itemHtml +="<td style=\"text-align: left;\" colspan='3'>是</td>";			       
+				        		itemHtml +="</tr>";
+					        }else{
+					        	itemHtml +="<tr>";				    
+					    		itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">是否全部完成：</td>";  	
+					    		itemHtml +="<td style=\"text-align: left;\" colspan='3'>否</td>";			       
+				        		itemHtml +="</tr>";
+					        }
+       		 			}
+       		 			$("#tr_fth3").after(itemHtml);
        		 		}
         		 }
         	}else{
