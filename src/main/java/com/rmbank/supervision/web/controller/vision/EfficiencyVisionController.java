@@ -579,7 +579,7 @@ public class EfficiencyVisionController extends SystemAction {
     	
     	HttpSession session = request.getSession();
     	Integer sessionItemId =(Integer) session.getAttribute("efficiencyItemId");
-    	
+    	System.out.println("效能监察控制器的jsonSaveOrUpdateFileItem（）获取效能监察项目id："+session.getAttribute("efficiencyItemId"));
     	
     	//新建一个json对象 并赋初值
 		JsonResult<ItemProcess> js = new JsonResult<ItemProcess>();

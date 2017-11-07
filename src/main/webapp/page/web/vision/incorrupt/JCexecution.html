@@ -200,7 +200,7 @@ function isNull(){
 function ajaxPost(){
 	if(isNull()!=false){
 	        $.ajax({
-		        cache: false//是否缓存当前页面
+		        cache: false, //是否缓存当前页面
 		        type: "POST", //请求类型
 		        url: "/supervision/vision/incorrupt/jsonSaveJCExecution.do",
 		        data:$('#itemInfoForm').serialize(),//发送到服务器的数据，序列化后的值
