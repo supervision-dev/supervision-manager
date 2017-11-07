@@ -75,6 +75,11 @@ function getDataList(pageNo){
 				        itemHtml +="</tr>";	
 				        
 				        itemHtml +="<tr>";				    
+					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">规定完成时间：</td>";  	
+					    itemHtml +="<td style=\"text-align: left;\">"+req.ResultItem.endTimes+"</td>";			       
+				        itemHtml +="</tr>";
+				        
+				        itemHtml +="<tr>";				    
 					    itemHtml +="<td width=\"17%\" style=\"text-align: right; padding-right:1%;\">被监察对象：</td>";  	
 					    itemHtml +="<td style=\"text-align: left;\">"+req.ResultItem.orgName+"</td>";			       
 				        itemHtml +="</tr>";		

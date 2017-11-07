@@ -757,6 +757,9 @@ public class EnforcementVisionController extends SystemAction {
 			item.setPreparerTimes(Constants.DATE_FORMAT.format(item.getPreparerTime()));
 					
 		}
+		if(item.getEndTime() != null){
+			item.setEndTimes(Constants.DATE_FORMAT1.format(item.getEndTime()));
+		}
 		// 获取流程集合
 		List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(item.getId());				
 		if (itemProcessList.size() > 0) {

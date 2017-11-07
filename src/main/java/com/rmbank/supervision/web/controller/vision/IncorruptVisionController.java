@@ -776,6 +776,9 @@ public class IncorruptVisionController extends SystemAction {
 		if (item.getPreparerTime() != null) {
 			item.setPreparerTimes(Constants.DATE_FORMAT.format(item.getPreparerTime()));		
 		}
+		if(item.getEndTime() != null){
+			item.setEndTimes(Constants.DATE_FORMAT1.format(item.getEndTime()));
+		}
 		List<ItemProcess> itemProcessList = itemProcessService.getItemProcessItemId(item.getId());
 		if (itemProcessList.size() > 0) {
 			for (ItemProcess ip : itemProcessList) {
