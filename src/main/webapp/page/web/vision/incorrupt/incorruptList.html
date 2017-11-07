@@ -315,13 +315,13 @@ function deleteItemAction(){
 	});
 } */
 function showItem(id){ 
-	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/showItem.do?id="+id+"&s="+Math.random()+"&ss="+new Date().getTime();
 } 
 function incorruptFile(itemId,tag){ 
-	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag;
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag+"&s="+new Date().getTime();
 }
 function incorruptOpinion(itemId,tag,isStept){ 
-	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept;
+	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept+"&s="+new Date().getTime();
 }
 function incorruptInfo(){
 	window.location.href = "/supervision/pageRoute/vision/incorrupt/incorruptInfo.do";

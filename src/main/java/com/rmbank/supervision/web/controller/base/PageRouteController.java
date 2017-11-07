@@ -488,7 +488,6 @@ public class PageRouteController extends SystemAction {
     		HttpServletResponse response) throws UnsupportedEncodingException {  
     	HttpSession session = request.getSession();
     	session.setAttribute("efficiencyItemId", id);
-    	System.out.println("PageRouteController的showItem（）获取效能监察项目id："+session.getAttribute("efficiencyItemId"));
     	ModelAndView mv = new ModelAndView("web/vision/efficiency/showItem");
     	return mv;
     }
@@ -511,7 +510,6 @@ public class PageRouteController extends SystemAction {
     	
     	HttpSession session = request.getSession();
     	session.setAttribute("efficiencyItemId", itemId);
-    	System.out.println("PageRouteController的efficiencyFile（）获取效能监察项目id："+session.getAttribute("efficiencyItemId"));
     	ModelAndView mv = new ModelAndView();
     	
     	if(tag == -1){

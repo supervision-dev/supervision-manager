@@ -192,17 +192,17 @@ function getDataList(pageNo){
 }
 var constants_item_id = 0;
 function showItem(id){
-	window.location.href = "/supervision/pageRoute/manage/support/supportView.do?id="+id;
+	window.location.href = "/supervision/pageRoute/manage/support/supportView.do?id="+id+"&s="+new Date().getTime();
 }
 function gotoNextFlow(currentTag,itemId){
 	if(currentTag == 51){
-		window.location.href = "/supervision/pageRoute/manage/support/supportFile.do?id="+itemId;
+		window.location.href = "/supervision/pageRoute/manage/support/supportFile.do?id="+itemId+"&s="+new Date().getTime();
 	}else if(currentTag == 999){
-		window.location.href = "/supervision/pageRoute/manage/support/supportValue.do?id="+itemId;
+		window.location.href = "/supervision/pageRoute/manage/support/supportValue.do?id="+itemId+"&s="+new Date().getTime();
 	}else if(currentTag == 998){
-		window.location.href = "/supervision/pageRoute/manage/support/supportReFile.do?id="+itemId;
+		window.location.href = "/supervision/pageRoute/manage/support/supportReFile.do?id="+itemId+"&s="+new Date().getTime();
 	}else if(currentTag == 53){
-		window.location.href = "/supervision/pageRoute/manage/support/supportAddOrUpdateFile.do?id="+itemId;
+		window.location.href = "/supervision/pageRoute/manage/support/supportAddOrUpdateFile.do?id="+itemId+"&s="+new Date().getTime();
 	}
 }
 function showAlertTip(){ 

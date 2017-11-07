@@ -151,13 +151,13 @@ function getDataList(pageNo){
 }
 var constants_item_id = 0;
 function showItem(id){
-	window.location.href = "/supervision/pageRoute/manage/branch/branchZZView.do?id="+id+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/manage/branch/branchZZView.do?id="+id+"&s="+Math.random()+"&ss="+new Date().getTime();
 }
 function gotoNextFlow(itemId){
-	window.location.href = "/supervision/pageRoute/manage/branch/branchZZFile.do?id="+itemId+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/manage/branch/branchZZFile.do?id="+itemId+"&s="+Math.random()+"&ss="+new Date().getTime();
 }
 function gotoUpdateFile(itemId){
-	window.location.href = "/supervision/pageRoute/manage/branch/branchZZUpdateFile.do?id="+itemId+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/manage/branch/branchZZUpdateFile.do?id="+itemId+"&s="+Math.random()+"&ss="+new Date().getTime();
 }
 function showAlertTip(){ 
 	if(constants_item_id == 0){

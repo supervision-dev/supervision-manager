@@ -312,10 +312,10 @@ function deleteItemAction(){
 	});
 } */
 function showItem(id){ 
-	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/vision/enforce/showItem.do?id="+id+"&s="+Math.random()+"&s="+new Date().getTime();
 } 
 function enforceFile(itemId,tag){ 
-	window.location.href = "/supervision/pageRoute/vision/enforce/enforceFile.do?itemId="+itemId+"&tag="+tag;
+	window.location.href = "/supervision/pageRoute/vision/enforce/enforceFile.do?itemId="+itemId+"&tag="+tag+"&s="+new Date().getTime();
 }
 function enforceInfo(){
 	window.location.href = "/supervision/pageRoute/vision/enforce/enforceInfo.do";

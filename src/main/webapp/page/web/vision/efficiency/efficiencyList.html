@@ -346,13 +346,13 @@ function sign(itemId){
 
 
 function showItem(id){ 
-	window.location.href = "/supervision/pageRoute/vision/efficiency/showItem.do?id="+id+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/vision/efficiency/showItem.do?id="+id+"&s="+Math.random()+"&ss="+new Date().getTime();
 } 
 function efficiencyFile(itemId,tag){ 
-	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag;
+	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag+"&s="+new Date().getTime();
 }
 function efficiencyOpinion(itemId,tag,isStept){ 
-	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept;
+	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyFile.do?itemId="+itemId+"&tag="+tag+"&isStept="+isStept+"&s="+new Date().getTime();
 }
 function efficiencyInfo(){
 	window.location.href = "/supervision/pageRoute/vision/efficiency/efficiencyInfo.do";

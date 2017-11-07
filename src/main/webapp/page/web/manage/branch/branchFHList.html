@@ -174,10 +174,10 @@ function getDataList(pageNo){
 }
 var constants_item_id = 0;
 function showItem(id){
-	window.location.href = "/supervision/pageRoute/manage/branch/branchFHView.do?id="+id+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/manage/branch/branchFHView.do?id="+id+"&s="+Math.random()+"&ss="+new Date().getTime();
 }
 function gotoNextFlow(currentTag,itemId){
-	window.location.href = "/supervision/pageRoute/manage/branch/branchNextFlow.do?id="+itemId+"&tag="+currentTag+"&s="+Math.random();
+	window.location.href = "/supervision/pageRoute/manage/branch/branchNextFlow.do?id="+itemId+"&tag="+currentTag+"&s="+Math.random()+"&ss="+new Date().getTime();
 }
 function showAlertTip(){ 
 	if(constants_item_id == 0){
