@@ -18,7 +18,7 @@ function loadLoginUserInfo(){
 	$.ajax({ 
        type: "POST", //请求类型
        url: "/supervision/loadLoginUserInfo.do", 
-       dataType:"json", //响应数据类型      
+       dataType:"json", //响应数据类型
        success: function(req) {
 	        if(req != null){
 	        	$("#lbl_orgName").text(req.orgName);
@@ -28,7 +28,7 @@ function loadLoginUserInfo(){
 	        		isChangePwd = true;
 	        		showMessage();
 	        	}else{
-	        		changePwd();
+	        		//changePwd();
 	        		showMessage();
 	        	}
 	        }else{
@@ -41,7 +41,7 @@ var isChangePwd = false;
 function loadSessionResource(){
 	$.ajax({  
        type: "POST", //请求类型
-       url: "/supervision/loadUserResourceSession.do", 
+       url: "/supervision/loadUserResourceSession.do",
        dataType:"json", //响应数据类型      
        success: function(req) {
        		$("#sltModel").html("");
@@ -95,6 +95,7 @@ function loadSessionResource(){
     });  
 };
 function gotoModel(urlkey){
+	$("#message_tip").fadeOut(200);
 	if(isChangePwd){
 		$.ajax({ 
 	       type: "POST", //请求类型
@@ -120,22 +121,22 @@ function getMessage(){
 	      messageHtml="";
 	      if(req.code==1 && req.resultObject!=null){
 	      	if(req.resultObject.xnjcNumber>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.xnjcNumber+"</span>条效能监察任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.xnjcNumber+"</span>条效能监察任务，请尽快完成！</span>";
 	      	}
 	      	if(req.resultObject.lzjcNumber>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.lzjcNumber+"</span>条廉政监察任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.lzjcNumber+"</span>条廉政监察任务，请尽快完成！</span>";
 	      	}
 	      	if(req.resultObject.zfjcNumber>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.zfjcNumber+"</span>条执法监察任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.zfjcNumber+"</span>条执法监察任务，请尽快完成！</span>";
 	      	}
 	      	if(req.resultObject.fhlxfhwc>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxfhwc+"</span>条分行立项分行完成任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxfhwc+"</span>条分行立项分行完成任务，请尽快完成！</span>";
 	      	}
 	      	if(req.resultObject.fhlxzzwc>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxzzwc+"</span>条分行立项中支完成任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.fhlxzzwc+"</span>条分行立项中支完成任务，请尽快完成！</span>";
 	      	}
 	      	if(req.resultObject.zzlxzzwc>0){
-	      		messageHtml+="<li class='modelPageMassageLi'>您有<span>"+req.resultObject.zzlxzzwc+"</span>条中支立项中支完成任务，请到对应模块完成！</li>";
+	      		messageHtml+="<span class='modelPageMassageLi'>您有<span>"+req.resultObject.zzlxzzwc+"</span>条中支立项中支完成任务，请尽快完成！</span>";
 	      	}
 	      	$("#massageUl").html(messageHtml);
 	      	if(req.resultObject.xnjcNumber>0 || req.resultObject.lzjcNumber>0 
@@ -144,10 +145,17 @@ function getMessage(){
 	      		if(req.resultObject.orgTypeId != 40){
 	      			$("#message_tip").fadeIn(200);
 	      		}	      			
+	      	}else if(isChangePwd == false){
+	      		changePwd();
 	      	} 	
 	      }	      
 	    }
 	});
+}
+function messageChangePwd(){
+	if(isChangePwd == false){
+		changePwd();
+	}
 }
 function showMessage(){
 	getMessage();
@@ -246,7 +254,11 @@ function changUserPwdAction(){
     
     <div class="rightinfo" >
    		<table id="emptyModel">
-   			<tr><td><img src="/supervision/source/images/model/empty.png" /></td></tr> 
+   			<tr>
+   				<td style="width: 160px; height: 200px; _height: 200px;">
+   					<!-- <img src="/supervision/source/images/model/empty.png" ondragstart="return false;"/> -->
+   				</td>
+   			</tr> 
 	   	</table>
 	    <table id="sltModel">
 	   	</table>
@@ -256,12 +268,12 @@ function changUserPwdAction(){
     
 
      <div class="addtip" id="add_tip">
-   		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
-        
+   		<div class="tiptop"><span>操作提示</span></span><a  onclick="javascript:clearForm();$('#add_tip').fadeOut(100);" ></a></div>
+        <p style="margin-left: 40px; margin-top:20px;color: red;">您是初次登录系统或您的密码已被重置，请修改新的密码后再操作！</p>
 	    <div class="changetipinfo"> 
 	       <div style=" width:99%;">	
 	        	<form>
-	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:160px;" id="sasd"> 
+	        		<table cellpadding="0" cellspacing="0" style="width:100%;height:160px;" id="sasd">
 	        			<tr>
 	        				<td style="height:30px;width:110px; text-align:right;">当前登录机构：</td>
 	        				<td><label id="lbl_orgName" style="margin-left:10px;"></label></td>
@@ -294,18 +306,13 @@ function changUserPwdAction(){
         </div> 
     </div> 
     
-    <div class="addtip" id="message_tip">
-   		<div class="tiptop"><span>温馨提示</span><a onclick="javascript:clearForm();$('#message_tip').fadeOut(100);" ></a></div>
-	    <div class="changetipinfo"> 
-	       <div style=" width:99%;">	
-	        	<ul id="massageUl">
-	        	</ul>
+    <div class="messagetip" id="message_tip">
+   		<div class="tiptop"><span>温馨提示</span><a onclick="javascript:clearForm();$('#message_tip').fadeOut(100);messageChangePwd();" ></a></div>
+	    <div class="changetipinfo" style="padding-top: 10px; width: 510px;"> 
+	       <div style="width:99%;" id="massageUl">	
+	        	
 	       </div>
       	</div>
-        
-        <div class="tipbtn">        	
-        
-        </div> 
     </div> 
     
     <div class="tip" id="confirm_tip">
