@@ -263,7 +263,7 @@ h2{font-weight:normal;}
 
   
 /*tip*/
-.tip{border:1px solid black;width:485px; height:260px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:222222;}
+.tip{border:1px solid black;width:485px; height:260px; position:absolute;top:10%; left:50%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:222222; margin-left: -242px;}
 .addtip{border:1px solid #C6C6C6;width:485px; height:460px; position:absolute;top:10%; left:50%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111; margin-left: -242px;}
 .messagetip{border:1px solid #C6C6C6;width: 540px; _height:160px; height:160px; max_height:160px; min-height:160px; position:absolute;left:50%; top:6%; margin-left:-270px; background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc);overflow:hidden;display:none; z-index:111111;}
 .littleaddtip{border:1px solid #C6C6C6;width:485px; height:160px; position:absolute;top:10%; left:30%;background:#fcfdfd;box-shadow:1px 8px 10px 1px #9b9b9b;border-radius:1px;behavior:url(js/pie.htc); display:none; z-index:111111;}
