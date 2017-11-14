@@ -178,10 +178,11 @@ function returnPage(){
 		});
 }
 	function isNull(){
-		if($("#content").val()==null || $("#content").val()==""){	
-		layer.alert('请录入问责资料！');				
-		return false;
-	} 
+		var uploader = $('#uploader').plupload('getUploader');
+		if(uploader.files.length<=0){	
+			layer.alert('请录入问责资料！');				
+			return false;
+		} 
 	}
 	function ajaxPost(){
 		if(isNull()!=false){

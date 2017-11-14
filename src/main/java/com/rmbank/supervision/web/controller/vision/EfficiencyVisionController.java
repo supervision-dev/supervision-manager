@@ -476,7 +476,7 @@ public class EfficiencyVisionController extends SystemAction {
 			
 			User loginUser = this.getLoginUser();
 			String ip = IpUtil.getIpAddress(request);		
-			logService.writeLog(Constants.LOG_TYPE_ZFJC, "用户："+loginUser.getName()+"，对执法监察的项目进行了立项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
+			logService.writeLog(Constants.LOG_TYPE_XLJC, "用户："+loginUser.getName()+"，对效能监察的项目进行了立项", 1, loginUser.getId(), loginUser.getUserOrgID(), ip);
 			
 			js.setCode(new Integer(0));
 			js.setMessage("保存项目信息成功!");
