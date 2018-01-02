@@ -158,7 +158,7 @@
     where account = #{account,jdbcType=INTEGER}
   </update>
   <select id="getUserByaccount" parameterType="com.rmbank.supervision.model.User" resultMap="BaseResultMap">
-  	select * from t_user where account = where account = #{account,jdbcType=INTEGER}
+  	select * from t_user where account = #{account,jdbcType=INTEGER}
   </select>
   
   <sql id="sql_query">
