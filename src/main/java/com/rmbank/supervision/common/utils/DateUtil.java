@@ -550,5 +550,17 @@ public final class DateUtil {
 			return null;
 		}
 	}
-
+	/**
+	 * 得到几天前的时间
+	 *
+	 * @param d
+	 * @param day
+	 * @return
+	 */
+	public static Date getDateBefore(Date d, int day) {
+		Calendar now = Calendar.getInstance();
+		now.setTime(d);
+		now.set(Calendar.DATE, now.get(Calendar.DATE) - day);
+		return now.getTime();
+	}
 }

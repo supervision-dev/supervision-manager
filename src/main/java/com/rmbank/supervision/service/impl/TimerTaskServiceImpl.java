@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import com.rmbank.supervision.common.utils.Constants;
 import com.rmbank.supervision.common.utils.DateUtil;
+import com.rmbank.supervision.common.utils.FileBackupOrDeleteUtil;
 import com.rmbank.supervision.model.Item;
 import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.ItemService;
@@ -71,7 +72,7 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 	 * 用户账号解锁
 	 */
 	@Override
-	@Scheduled(fixedDelay = 60000) 
+	@Scheduled(fixedDelay = 60000)		//一分钟扫描一次
 	public void isUnlock() {
 		// TODO Auto-generated method stub
 		User user = new User();
@@ -89,7 +90,17 @@ public class TimerTaskServiceImpl implements  TimeerTaskService{
 				userService.updateByPrimaryKey(user2);
 			}
 		}
-		//System.out.println("人生又少一分钟！");
+	}
+	
+	/**
+	 * 文件备份和删除
+	 */
+	@Override
+	@Scheduled(cron = "0 0 2 * * ?")	//每天凌晨两点执行
+	public void fileBackUPAndDelete() {
+		// TODO Auto-generated method stub
+		FileBackupOrDeleteUtil.backUpBeforeFile();
+		FileBackupOrDeleteUtil.deleteExpireFile();
 	}
 
 }

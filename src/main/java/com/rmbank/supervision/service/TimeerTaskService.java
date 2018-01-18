@@ -7,4 +7,6 @@ public interface TimeerTaskService {
 	void itemZHOverTimeTask();
 
 	void isUnlock();
+	
+	void fileBackUPAndDelete();
 }
