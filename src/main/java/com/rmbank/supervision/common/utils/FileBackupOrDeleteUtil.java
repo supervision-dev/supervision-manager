@@ -24,7 +24,7 @@ public class FileBackupOrDeleteUtil {
 	/**
 	 * 工程的文件目录（需要备份的文件目录）
 	 */
-	private static final String PROJECT_FILE_PATH="C:\\JSQ_WorkSpace\\file";
+	private static final String PROJECT_FILE_PATH="D:\\software\\apache-tomcat-9.0.1\\webapps\\supervision\\source\\uploadfile";
 	
 	/**
 	 * 存放备份文件的目录

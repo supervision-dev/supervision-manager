@@ -14,7 +14,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 public class ExcelUtil {
 	private static int sheetSize = 5000; //单个sheet存储的数据
 	/**
-	 * 
+	 * 将一个list转换为Excel
 	 * @param data 要导出的数据
 	 * @param out 通过输出流导出到磁盘
 	 * @param showName 实体类的属性名对应的Excel表格的中文名

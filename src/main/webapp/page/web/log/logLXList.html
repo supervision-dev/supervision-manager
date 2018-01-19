@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/supervision/source/js/jquery-1.8.2.js"></script>
 <script src="/supervision/source/laydate/laydate.js"></script>
 <!-- 引入分页插件js和样式 -->
-<script src="/supervision/source//kkpager/kkpager.js"></script>
+<script src="/supervision/source/kkpager/kkpager.js"></script>
 <link href="/supervision/source/kkpager/kkpager_blue.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript">
@@ -53,7 +53,6 @@ function fillDataList(req){
 				    }else{
 				    	logHtml +="<td>"+req.datalist[i].description+"</td>";
 				    }
-				    //logHtml +="<td>"+req.datalist[i].description+"</td>";
 				    if(req.datalist[i].operation ==1){
 				    	logHtml +="<td>新增</td>";
 				    }else if(req.datalist[i].operation ==2){
@@ -70,14 +69,12 @@ function fillDataList(req){
 				    }else{
 				    	logHtml +="<td>"+req.datalist[i].orgName+"</td>";
 				    }
-				    //logHtml +="<td>"+req.datalist[i].orgName+"</td>";
 				    if(req.datalist[i].operName.length >13){
 				    	var names = req.datalist[i].operName.substring(0,12)+"…"
 				    	logHtml +="<td title=\""+req.datalist[i].operName+"\">"+names+"</td>";
 				    }else{
 				    	logHtml +="<td>"+req.datalist[i].operName+"</td>";
 				    }
-				    //logHtml +="<td>"+req.datalist[i].operName+"</td>"; 
 				    logHtml +="<td>"+req.datalist[i].ip+"</td>"; 
 			        logHtml +="</tr>";
 	       		}
@@ -174,9 +171,6 @@ function is_Ok(){
 	}
 }
 function search(pageNo){
-	/* if($("#hid_orgId").val() ==null || $("#hid_orgId").val() ==""){
-		$("#s_org").text("");
-	} */
 	if(($("#stTime").val()==null || $("#stTime").val()=="") && $("#edTime").val()!=null && $("#edTime").val()!=""){ 
 		$("#showmessage").html("请选择起始日期！");
 		$("#confirm_tip").fadeIn(200);
@@ -291,7 +285,6 @@ function clickOrganName(orgId,orgName){
 	$("#slt_orgName").text(orgName);
 	$("#ipt_organname").val(orgName);
 	$("#hid_orgId").val(orgId);
-	//showPorgName(orgId);
 }
 
 function showPorgName(orgId){
@@ -416,26 +409,9 @@ function clearForm(){
         </tbody>
     </table>
     
-   
-    <!-- <div class="pagin">
-    	<div class="message">共<i id="i_totalcount" class="blue"></i>条记录，当前显示第&nbsp;<i id="i_pageNo" class="blue">&nbsp;</i>页</div>
-        <ul class="paginList" id="ul_pageList">
-        
-        <li class="paginItem"><a href="javascript:;">1</a></li>
-        <li class="paginItem current"><a href="javascript:;">2</a></li>
-        <li class="paginItem"><a href="javascript:;">3</a></li>
-        <li class="paginItem"><a href="javascript:;">4</a></li>
-        <li class="paginItem"><a href="javascript:;">5</a></li>
-        <li class="paginItem more"><a href="javascript:;">...</a></li>
-        <li class="paginItem"><a href="javascript:;">10</a></li>
-        <li class="paginItem"><a href="javascript:;"><span class="pagenxt"></span></a></li>
-        </ul>
-    </div> -->
-    
     <!-- 分页容器 -->
     <div id="kkpager"></div>
-    
-    
+
     <div class="tip" id="confirm_tip">
    		<div class="tiptop"><span>操作提示</span><a  onclick="javascript:$('#confirm_tip').fadeOut(100);" ></a></div>
         
