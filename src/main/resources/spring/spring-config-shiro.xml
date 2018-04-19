@@ -70,11 +70,11 @@
                 /page/** = anon
                 <!--/**=authc-->
                 <!--/login.jsp = authc-->
-                <!-- /logout.do = logout
+                /logout.do = logout
                 /vision/** = authc
                 /system/** = authc
                 /cases/** = authc
-                /manage/** = authc -->
+                /manage/** = authc
             </value>
         </property>
     </bean>

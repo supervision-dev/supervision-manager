@@ -22,22 +22,29 @@
 			expression=".service..*(..)" />
 	</context:component-scan>
 
-    <!-- 开启AOP监听 只对当前配置文件有效 -->
+    <!-- 开启AOP监听 只对当前配置文件有效。开启动态代理 -->
     <aop:aspectj-autoproxy expose-proxy="true"/>
 
+	<!-- 配置spring的定时任务 -->
 	<task:executor id="executor" pool-size="5" />  
     <task:scheduler id="scheduler" pool-size="10" />  
     <task:annotation-driven executor="executor" scheduler="scheduler" />
+    
     <!-- 数据源 -->
     <!--see https://github.com/alibaba/druid/wiki/%E9%85%8D%E7%BD%AE_DruidDataSource%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
     <!--<bean id="dataSource" class="com.rmbank.supervision.common.sqlDbInit.SqlDBInit" init-method="init">-->
         <!-- 基本属性 url、user、password -->
         
-        <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
+        <!-- 线上正式库 -->
+        <!-- <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
         <property name="username" value="root"/>  
-        <property name="password" value="123456"/>
-
+        <property name="password" value="123456"/> -->
+        
+		<!-- 开发测试库 -->
+		<property name="url" value="jdbc:mysql://118.178.58.241:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
+        <property name="username" value="developer"/>
+        <property name="password" value="ycyldeveloper"/>
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="10"/>
         <property name="minIdle" value="10"/>
@@ -85,7 +92,6 @@
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
         	<tx:method name="save*" propagation="REQUIRED" />
@@ -97,9 +103,12 @@
         </tx:attributes>
     </tx:advice>
 
+	<!-- 配置切入点和通知 -->
     <aop:config expose-proxy="true" proxy-target-class="true">
         <!-- 只对业务逻辑层实施事务 -->
+        <!-- 定义切入点 -->
         <aop:pointcut id="txPointcut" expression="execution(* com.rmbank.supervision..service..*+.*(..))"/>
+        <!-- 定义通知管理器 -->
         <aop:advisor id="txAdvisor" advice-ref="txAdvice" pointcut-ref="txPointcut"/>
     </aop:config>
 
