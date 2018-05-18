@@ -41,10 +41,15 @@
         <property name="username" value="root"/>  
         <property name="password" value="123456"/> -->
         
+        <!-- 本地测试库 -->
+        <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
+        <property name="username" value="root"/>  
+        <property name="password" value="root"/>
+        
 		<!-- 开发测试库 -->
-		<property name="url" value="jdbc:mysql://118.178.58.241:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
+		<!-- <property name="url" value="jdbc:mysql://118.178.58.241:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
         <property name="username" value="developer"/>
-        <property name="password" value="ycyldeveloper"/>
+        <property name="password" value="ycyldeveloper"/> -->
         <!-- 配置初始化大小、最小、最大 -->
         <property name="initialSize" value="10"/>
         <property name="minIdle" value="10"/>
