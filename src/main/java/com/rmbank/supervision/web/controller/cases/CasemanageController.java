@@ -117,6 +117,9 @@ public class CasemanageController extends SystemAction {
 			gradeSchemeService.deleteByPrimaryKey(id);
 			js.setCode(0);
 			js.setMessage("量化模型删除成功");
+			User loginUser = this.getLoginUser();
+			String ip = IpUtil.getIpAddress(request);		
+			logService.writeLog(Constants.LOG_TYPE_LXGL, "用户："+loginUser.getName()+"，删除了量化模型："+gradeScheme.getName() , 3, loginUser.getId(), loginUser.getUserOrgID(), ip);
 		} 
 		return js;// json.toString();
 	}  
