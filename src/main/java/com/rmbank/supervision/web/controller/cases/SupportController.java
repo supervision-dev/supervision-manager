@@ -475,10 +475,10 @@ public class SupportController extends SystemAction {
 	    			if(gsd.getLevel() == 0){
 	    				List<GradeSchemeDetail> child = new ArrayList<GradeSchemeDetail>();
 		    			for(GradeSchemeDetail a : templist){ 
-		    				if(a.getPid()==gsd.getId() && a.getLevel() == 1){
+		    				if(a.getPid().equals(gsd.getId()) && a.getLevel() == 1){
 		    					List<GradeSchemeDetail> subchild = new ArrayList<GradeSchemeDetail>();
 		    					for(GradeSchemeDetail b : templist){
-		    						if(a.getId()==b.getPid() && b.getLevel() == 2){
+		    						if(a.getId().equals(b.getPid()) && b.getLevel() == 2){
 		    							subchild.add(b); 
 		    	    				}
 		    					}
