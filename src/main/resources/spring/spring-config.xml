@@ -39,7 +39,7 @@
         <!-- 线上正式库 -->
         <!-- <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>
         <property name="username" value="root"/>  
-        <property name="password" value="123456"/> -->
+        <property name="password" value="123456"/> --> 
         
         <!-- 本地测试库 -->
         <property name="url" value="jdbc:mysql://localhost:3306/supervision?useUnicode=true&amp;characterEncoding=UTF-8&amp;useServerPrepStmts=false"/>

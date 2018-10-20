@@ -28,9 +28,13 @@ function getDataList(pageNo){
        data:obj,//发送到服务器的数据，序列化后的值 
        dataType:"json", //响应数据类型      
        success: function(req) {
+       		//只有登录机构的类型等于分行监察室是才有删除权限
+       		if(req.loginOrganRoleType == 40){
+       			$("#modelDelete").show();
+       		} 
        		$("#tb_modelList").html("");
        		var manageHtml = "<tr><td colspan=\"6\">没有获取到相关数据</td></tr>";
-	       if(req.datalist != null && req.datalist.length >0){
+	        if(req.datalist != null && req.datalist.length >0){
 	       		manageHtml = "";
 	       		for(var i = 0;i<req.datalist.length;i++){
 	       			manageHtml +="<tr>";
@@ -267,7 +271,7 @@ function LockModelAction(){
         <li class="click" onclick="showAlertTip('edit');"><span><img src="/supervision/source/images/t02.png" /></span>修改</li>
         <li class="click" onclick="showAlertTip('unlock');"><span><img src="/supervision/source/images/t012.png" /></span>启用</li>
         <li class="click" onclick="showAlertTip('lock');"><span><img src="/supervision/source/images/t011.png" /></span>禁用</li>
-        <li onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
+        <li id="modelDelete" style="display: none;"  onclick="showAlertTip('delete');"><span><img src="/supervision/source/images/t03.png" /></span>删除</li> 
         </ul> 
     
     </div>

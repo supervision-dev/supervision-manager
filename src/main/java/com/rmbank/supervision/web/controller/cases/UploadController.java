@@ -200,12 +200,12 @@ public class UploadController extends SystemAction {
                 byte[] b = new byte[100];
                 int len;
                 while ((len = inStream.read(b)) > 0) {
-                	User loginUser = this.getLoginUser();
-        			String ip = IpUtil.getIpAddress(request);		
-        			logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，下载了文件:"+fileName, 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
                     response.getOutputStream().write(b, 0, len);
                 }
+                User loginUser = this.getLoginUser();
+    			String ip = IpUtil.getIpAddress(request);	
                 inStream.close();
+                logService.writeLog(Constants.LOG_TYPE_SYS, "用户："+loginUser.getName()+"，下载了文件:"+fileName, 4, loginUser.getId(), loginUser.getUserOrgID(), ip);
             } 
         } catch (Exception e) {
             e.printStackTrace();

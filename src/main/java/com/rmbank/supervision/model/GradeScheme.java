@@ -33,7 +33,18 @@ public class GradeScheme extends Page {
     
     private List<GradeSchemeDetail> fstItemList; 
     
-    public Integer getId() {
+    //登录机构类型
+    private Integer orgType;
+    
+    public Integer getOrgType() {
+		return orgType;
+	}
+
+	public void setOrgType(Integer orgType) {
+		this.orgType = orgType;
+	}
+
+	public Integer getId() {
         return id;
     }
 

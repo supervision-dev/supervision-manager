@@ -32,6 +32,7 @@ import com.rmbank.supervision.model.User;
 import com.rmbank.supervision.service.GradeSchemeDetailService;
 import com.rmbank.supervision.service.GradeSchemeService;
 import com.rmbank.supervision.service.SysLogService;
+import com.rmbank.supervision.service.UserService;
 import com.rmbank.supervision.web.controller.SystemAction;
 
 
@@ -52,6 +53,8 @@ public class CasemanageController extends SystemAction {
 	private GradeSchemeDetailService gradeSchemeDetailService;
 	@Resource
 	private SysLogService logService;
+	@Resource
+	private UserService userService;
 	
 	/***********************************************/
 	/******************量化模型管理*********************/
@@ -67,7 +70,7 @@ public class CasemanageController extends SystemAction {
     @RequestMapping(value = "/casemanageList.do")
     public DataListResult<GradeScheme> GradeSchemeList(GradeScheme gradeScheme, 
             HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException { 
-    	DataListResult<GradeScheme> dr = new DataListResult<GradeScheme>();
+		DataListResult<GradeScheme> dr = new DataListResult<GradeScheme>();
     	//判断搜索名是否为空，不为空则转为utf-8编码 		
 		if(gradeScheme.getSearchName() != null && gradeScheme.getSearchName() != ""){
 			String searchName =  new String(gradeScheme.getSearchName().getBytes(
@@ -92,6 +95,14 @@ public class CasemanageController extends SystemAction {
 		gradeScheme.setTotalCount(totalCount);
 		dr.setData(gradeScheme);
 		dr.setDatalist(gradeSchemeList); 
+		//获取当前登录用户
+		User loginUser = this.getLoginUser();
+		//获取当前用户对应的机构列表
+		List<Organ> userOrgList=userService.getUserOrgByUserId(loginUser.getId());
+		//获取当前用户对应的第一个机构
+		Organ userOrg=userOrgList.get(0);
+		//设置只有分行监察室可以删除模型
+		dr.setLoginOrganRoleType(userOrg.getOrgtype());
     	return dr;
     }
 
